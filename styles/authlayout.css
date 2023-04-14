@@ -1,0 +1,8 @@
+span:has(.slideshow-img) {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.slideshow-img {
+    display: inline-block;
+}
