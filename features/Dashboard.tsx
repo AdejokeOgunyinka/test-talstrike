@@ -193,7 +193,12 @@ const Dashboard = () => {
       </div>
       <div className="basis-[40%] pb-[100px] lg:pb-0">
         <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
-          <NextImage src={TalentAd} className="ad-img" alt="talent ad" />
+          <NextImage
+            src={TalentAd}
+            className="ad-img"
+            alt="talent ad"
+            width="380"
+          />
         </div>
 
         <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">

@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import NextImage from "next/image";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import SearchBar from "@/components/SearchBar";
 import { useGetAllCoaches } from "@/api/coaches";
@@ -15,10 +16,11 @@ const DashboardAside = () => {
 
   const { data: Coaches } = useGetAllCoaches({ token: TOKEN as string });
 
-  const { data: myFollowers } = useGetMyFollowers({
-    token: TOKEN as string,
-    id: ID as string,
-  });
+  const { data: myFollowers, isLoading: isLoadingMyFollowers } =
+    useGetMyFollowers({
+      token: TOKEN as string,
+      id: ID as string,
+    });
 
   const handleClickUser = ({ id }: { id: string }) => {
     router.push(`/profile/${id}`);
@@ -68,32 +70,45 @@ const DashboardAside = () => {
         </div>
       </div>
       <div className="flex bg-brand-500 flex-col gap-y-[14px] overflow-y-scroll h-[100%] pt-[70px] pb-[230px]">
-        {myFollowers?.results?.map((follower: any, index: number) => (
-          <div
-            key={index}
-            className="flex justify-between items-center cursor-pointer"
-            onClick={() => handleClickUser({ id: follower?.users?.id })}
+        {isLoadingMyFollowers ? (
+          <SkeletonTheme
+            baseColor="rgba(0, 116, 217, 0.18)"
+            highlightColor="#fff"
           >
-            <div className="flex gap-[20px] items-center">
-              <NextImage
-                src={follower?.users?.image}
-                alt="player"
-                width="40"
-                height="40"
-              />
-              <p className="text-brand-50 text-[11px] lg:text-[14px] 2xl:text-[15px] leading-[16px] font-semibold">
-                {follower?.users?.firstname} {follower?.users?.lastname}
-              </p>
-            </div>
-            {/* <div>
+            <section>
+              <Skeleton height={530} width="100%" />
+            </section>
+          </SkeletonTheme>
+        ) : myFollowers?.results?.length === 0 || !myFollowers ? (
+          <p className="text-[13px]">No one at the moment...</p>
+        ) : (
+          myFollowers?.results?.map((follower: any, index: number) => (
+            <div
+              key={index}
+              className="flex justify-between items-center cursor-pointer"
+              onClick={() => handleClickUser({ id: follower?.users?.id })}
+            >
+              <div className="flex gap-[20px] items-center">
+                <NextImage
+                  src={follower?.users?.image}
+                  alt="player"
+                  width="40"
+                  height="40"
+                />
+                <p className="text-brand-50 text-[11px] lg:text-[14px] 2xl:text-[15px] leading-[16px] font-semibold">
+                  {follower?.users?.firstname} {follower?.users?.lastname}
+                </p>
+              </div>
+              {/* <div>
               {player.lastSeen === 'active' ? (
                 <div className="w-[8px] h-[8px] rounded-[50%] bg-brand-1100"></div>
               ) : (
                 <p className="font-medium text-brand-1050 text-[10px]">{player.lastSeen}</p>
               )}
             </div> */}
-          </div>
-        ))}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
