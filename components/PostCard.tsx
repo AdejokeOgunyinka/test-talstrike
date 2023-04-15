@@ -245,7 +245,7 @@ const PostCard = ({
                 <p className="text-[11px]">
                   {comment?.author?.firstname} {comment?.author?.lastname}
                 </p>
-                <p className="text-[13px]">{comment?.body}</p>
+                <p className="text-[18px]">{comment?.body}</p>
               </div>
             </div>
           ))}
@@ -264,7 +264,7 @@ const PostCard = ({
         <div className="w-[80%] relative h-[30px] bg-brand-1600 rounded-[6px] flex">
           <div className="w-[83%]">
             <input
-              className="focus:outline-0 w-full rounded-[6px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[11px] placeholder:text-[9px] md:placeholder:text-[11px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
+              className="focus:outline-0 w-full rounded-[6px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[19px] placeholder:text-[9px] md:placeholder:text-[13px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
               placeholder="Write a comment.."
               onChange={(e) => setInputComment(e?.target?.value)}
               value={inputComment}
