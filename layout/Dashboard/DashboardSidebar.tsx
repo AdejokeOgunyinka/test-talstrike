@@ -38,7 +38,7 @@ const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
         "flex items-center transition mb-[17px] py-[9px] w-[133px]  duration-200 text-brand-100",
         active
           ? "pl-[23px] border-3 border-l-brand-1750 border-r-transparent border-y-transparent"
-          : "pl-[25px] hover:border-3 hover:border-l-brand-1750 border-r-transparent border-y-transparent"
+          : "pl-[25px] hover:pl-[22px] hover:py-[6px] hover:border-3 hover:border-l-brand-1750 border-r-transparent border-y-transparent"
       )}
     >
       <Image
