@@ -21,7 +21,7 @@ export default NextAuth({
     // maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
-    signIn: "/auth/login",
+    signIn: "/",
     newUser: "/auth/signup",
   },
   debug: process.env.NODE_ENV === "development",
