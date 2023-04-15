@@ -168,8 +168,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
   const [likeInput, setLikeInput] = useState("");
 
-  console.log({ userInfo });
-
   return (
     <ModalContainer>
       <FormikProvider value={formik}>
