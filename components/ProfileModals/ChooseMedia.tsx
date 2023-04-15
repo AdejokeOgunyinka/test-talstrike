@@ -31,7 +31,8 @@ const ChooseMedia = ({
           src="/closeIcon.svg"
           className="cursor-pointer"
           alt="close"
-          style={{ width: "50px", height: "50px" }}
+          width="50"
+          height="50"
         />
       </div>
       <label
@@ -45,7 +46,8 @@ const ChooseMedia = ({
               : "/videoVector.svg"
           }
           alt="vector"
-          style={{ width: "43px", height: "38px" }}
+          width="43"
+          height="38"
         />
         <p className="cursor-pointer">
           Select {fileType?.toLowerCase() === "image" ? "Image" : "Video"}
