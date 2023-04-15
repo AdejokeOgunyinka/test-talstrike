@@ -40,66 +40,8 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       phoneCode: country?.phonecode,
     };
   });
-  const [chosenCountryCode, setChosenCountryCode] = useState(
-    countries?.filter(
-      (country) =>
-        country?.name?.toLowerCase() === formik?.values?.country?.toLowerCase()
-    )[0]?.code
-  );
 
   const [phoneCode, setPhoneCode] = useState("+234");
-  useEffect(() => {
-    setPhoneCode(
-      `+${
-        countries?.filter(
-          (country) =>
-            country?.name?.toLowerCase() ===
-            formik?.values?.country?.toLowerCase()
-        )[0]?.phoneCode
-      }`
-    );
-
-    // eslint-disable-next-line
-  }, [chosenCountryCode]);
-
-  const [states, setStates] = useState<any>(
-    State.getStatesOfCountry(chosenCountryCode)?.map((state) => {
-      return { name: state?.name, code: state?.isoCode };
-    })
-  );
-
-  useEffect(() => {
-    setStates(
-      State.getStatesOfCountry(chosenCountryCode)?.map((state) => {
-        return { name: state?.name, code: state?.isoCode };
-      })
-    );
-  }, [chosenCountryCode]);
-
-  const [chosenStateCode, setChosenStateCode] = useState(
-    states?.filter(
-      (state: any) =>
-        state.name?.toLowerCase() === formik?.values?.state?.toLowerCase()
-    )[0]?.code
-  );
-
-  useEffect(() => {
-    setChosenStateCode(states[0]?.code);
-    //eslint-disable-next-line
-  }, [chosenCountryCode, states]);
-
-  const [cities, setCities] = useState<any>([]);
-
-  useEffect(() => {
-    setCities(
-      City.getCitiesOfState(chosenCountryCode, chosenStateCode)?.map((city) => {
-        return { name: city?.name };
-      })
-    );
-  }, [chosenCountryCode, chosenStateCode]);
-
-  const [updatingProfile, setUpdatingProfile] = useState(false);
-  const queryClient = useQueryClient();
 
   const formik = useFormik({
     initialValues: {
@@ -164,6 +106,66 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     validateOnBlur: true,
   });
 
+  const [chosenCountryCode, setChosenCountryCode] = useState(
+    countries?.filter(
+      (country) =>
+        country?.name?.toLowerCase() === formik?.values?.country?.toLowerCase()
+    )[0]?.code
+  );
+
+  useEffect(() => {
+    setPhoneCode(
+      `+${
+        countries?.filter(
+          (country) =>
+            country?.name?.toLowerCase() ===
+            formik?.values?.country?.toLowerCase()
+        )[0]?.phoneCode
+      }`
+    );
+
+    // eslint-disable-next-line
+  }, [chosenCountryCode]);
+
+  const [states, setStates] = useState<any>(
+    State.getStatesOfCountry(chosenCountryCode)?.map((state) => {
+      return { name: state?.name, code: state?.isoCode };
+    })
+  );
+
+  useEffect(() => {
+    setStates(
+      State.getStatesOfCountry(chosenCountryCode)?.map((state) => {
+        return { name: state?.name, code: state?.isoCode };
+      })
+    );
+  }, [chosenCountryCode]);
+
+  const [chosenStateCode, setChosenStateCode] = useState(
+    states?.filter(
+      (state: any) =>
+        state.name?.toLowerCase() === formik?.values?.state?.toLowerCase()
+    )[0]?.code
+  );
+
+  useEffect(() => {
+    setChosenStateCode(states[0]?.code);
+    //eslint-disable-next-line
+  }, [chosenCountryCode, states]);
+
+  const [cities, setCities] = useState<any>([]);
+
+  useEffect(() => {
+    setCities(
+      City.getCitiesOfState(chosenCountryCode, chosenStateCode)?.map((city) => {
+        return { name: city?.name };
+      })
+    );
+  }, [chosenCountryCode, chosenStateCode]);
+
+  const [updatingProfile, setUpdatingProfile] = useState(false);
+  const queryClient = useQueryClient();
+
   const [likeInput, setLikeInput] = useState("");
 
   console.log({ userInfo });
@@ -182,7 +184,8 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 className="cursor-pointer"
                 onClick={onClose}
                 alt="close"
-                style={{ width: "66px", height: "61px" }}
+                width="66"
+                height="61"
               />
             </div>
             <div className="w-full px-[20px] md:px-[61px] flex flex-col gap-y-[25px] py-[30px] h-[900px]">

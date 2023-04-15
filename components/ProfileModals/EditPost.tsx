@@ -120,7 +120,8 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
                   className="cursor-pointer"
                   onClick={onClose}
                   alt="close"
-                  style={{ width: "66px", height: "61px" }}
+                  width="66"
+                  height="61"
                 />
               </div>
               {isLoadingPostDetail ? (
@@ -140,7 +141,8 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
                         <NextImage
                           src={(session?.user?.image as string) || ProfileImg}
                           alt="profile"
-                          style={{ width: "50px", height: "50px" }}
+                          width="50"
+                          height="50"
                         />
                       </div>
                       <div>
@@ -204,7 +206,8 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
                         <NextImage
                           src="/image.svg"
                           alt="img"
-                          style={{ width: "19.25px", height: "16.25px" }}
+                          width="19"
+                          height="16"
                         />
                         <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
                           Photo
@@ -220,7 +223,8 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
                         <NextImage
                           src="/video.svg"
                           alt="video"
-                          style={{ width: "22.22px", height: "16.67px" }}
+                          width="22"
+                          height="16"
                         />
                         <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
                           Video
