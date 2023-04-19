@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import styled from "styled-components";
 
-import DashboardLogo from "@/assets/dashboardLogo.svg";
+import DashboardLogo from "@/assets/TalstrikeLogo.svg";
 
 const Image = styled.img``;
 
@@ -132,7 +132,7 @@ export const DashboardSidebar = () => {
   return (
     <Fragment>
       <div className="bg-brand-500  absolute md:relative md:translate-x-0 transform -translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-y-0 left-0">
-        <div className="mt-[52px] mb-[28px] pl-[20px] pr-[20px]">
+        <div className="mt-[37px] mb-[28px] pl-[20px] pr-[20px]">
           <NextImage src={DashboardLogo} alt="logo" />
         </div>
         <nav>

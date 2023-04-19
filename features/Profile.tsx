@@ -10,6 +10,8 @@ import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import EditProfile from "@/components/ProfileModals/EditProfile";
 import AboutMe from "./ProfileSections/AboutMe";
+import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
+import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -45,6 +47,8 @@ const Index = () => {
 
   const [currentSection, setCurrentSection] = useState(1);
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
+  const [viewProfilePicture, setViewProfilePicture] = useState(false);
+  const [viewEditProfilePicture, setViewEditProfilePicture] = useState(false);
 
   return (
     <DashboardLayout>
@@ -57,7 +61,7 @@ const Index = () => {
           <div className="flex h-[100%] flex-col lg:flex-row ">
             <div className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px]">
               <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
-                <div className="w-[161px] h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
+                <div className="relative w-[161px] profile-pic h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <NextImage
                     src={(session?.user?.image as string) || ProfileImg}
                     width="161"
@@ -65,6 +69,15 @@ const Index = () => {
                     alt="profile"
                     className="profile-img"
                   />
+
+                  <div
+                    onClick={() => setViewProfilePicture(true)}
+                    className="profile-pic__overlay bg-brand-100 opacity-20 absolute top-0 w-full h-full flex justify-center items-center"
+                  >
+                    <p className="text-[16px] font-medium text-brand-500">
+                      View
+                    </p>
+                  </div>
                 </div>
                 <div className="w-[69px] mb-[37px] h-[30px] bg-brand-1100 rounded-[19px] flex justify-center items-center">
                   <NextImage src={Star} alt="star" />
@@ -95,7 +108,7 @@ const Index = () => {
                   online
                 </p>
                 <div
-                  onClick={() => setOpenEditProfileModal(true)}
+                  onClick={() => setViewEditProfilePicture(true)}
                   className="cursor-pointer"
                 >
                   <NextImage
@@ -164,6 +177,16 @@ const Index = () => {
 
           {openEditProfileModal && (
             <EditProfile onClose={() => setOpenEditProfileModal(false)} />
+          )}
+
+          {viewProfilePicture && (
+            <ViewProfileImg onClose={() => setViewProfilePicture(false)} />
+          )}
+
+          {viewEditProfilePicture && (
+            <EditProfileAndExperience
+              onClose={() => setViewEditProfilePicture(false)}
+            />
           )}
         </div>
       )}

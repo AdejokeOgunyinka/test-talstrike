@@ -6,14 +6,16 @@ const InputBox = ({
   id,
   placeholder,
   disabled,
+  className,
 }: {
-  onChange: any;
-  onBlur: any;
-  value: any;
+  onChange?: any;
+  onBlur?: any;
+  value?: any;
   title: string;
   id: string;
   placeholder: string;
-  disabled: boolean;
+  disabled?: boolean;
+  className?: string;
 }) => {
   return (
     <div className="w-[100%]">
@@ -22,7 +24,7 @@ const InputBox = ({
       </label>
       <input
         placeholder={placeholder}
-        className="w-[100%] mt-[11px] h-[46px] rounded-[4px] border-2 border-brand-2850 pl-[10px] placeholder:text-brand-200 placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
+        className={`${className} w-[100%] mt-[11px] h-[46px] rounded-[4px] border-2 border-brand-2850 pl-[10px] placeholder:text-brand-200 placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0`}
         id={id}
         onChange={onChange}
         onBlur={onBlur}
