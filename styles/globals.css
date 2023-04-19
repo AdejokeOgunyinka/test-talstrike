@@ -146,3 +146,12 @@ span:has(.ad-img), span:has(.post-img), .span:has(.profile-img) {
   -ms-overflow-style: none;
   scrollbar-width: none; /* Firefox */
 }
+
+.profile-pic__overlay {
+  display: none;
+}
+
+.profile-pic:hover .profile-pic__overlay {
+  display: flex;
+  cursor: pointer;
+}
