@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable no-unused-vars */
 import { Fragment, useState } from "react";
 import NextImage from "next/image";
@@ -133,7 +134,9 @@ export const DashboardSidebar = () => {
     <Fragment>
       <div className="bg-brand-500  absolute md:relative md:translate-x-0 transform -translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-y-0 left-0">
         <div className="mt-[37px] mb-[28px] pl-[20px] pr-[20px]">
-          <NextImage src={DashboardLogo} alt="logo" />
+          <a href="/dashboard">
+            <NextImage src={DashboardLogo} alt="logo" />
+          </a>
         </div>
         <nav>
           <SideBarLink
