@@ -18,7 +18,11 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       icon: "/album.svg",
       onClick: () => setModal("change-profile"),
     },
-    { name: "Delete", icon: "/deleteBlue.svg" },
+    {
+      name: "Delete",
+      icon: "/deleteBlue.svg",
+      onClick: () => setModal("delete-profile"),
+    },
   ];
 
   return (
@@ -100,6 +104,39 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
             <button className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500">
               Upload
             </button>
+          </div>
+        </div>
+      )}
+      {modal === "delete-profile" && (
+        <div className="w-[592px] h-[273px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+          <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
+            <p className="text-[20px] text-brand-600 leading-[30px]">
+              Delete Profile Picture
+            </p>
+            <NextImage
+              src="/blueCloseIcon.svg"
+              alt="close"
+              width="60"
+              height="61"
+              className="cursor-pointer"
+              onClick={() => setModal("initial-edit")}
+            />
+          </div>
+          <div className="pt-[28px] px-[100px] ">
+            <p className="text-center text-[20px] leading-[162%] text-[#343D45]">
+              Are you sure you want to delete your profile picture?
+            </p>
+            <div className="flex justify-center gap-[20px] mt-[34px]">
+              <button
+                onClick={() => setModal("initial-edit")}
+                className="border border-[2px] font-medium w-[135px] h-[41px] rounded-[4px] border-brand-600 text-brand-600"
+              >
+                No
+              </button>
+              <button className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500">
+                Yes
+              </button>
+            </div>
           </div>
         </div>
       )}
