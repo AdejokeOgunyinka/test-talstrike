@@ -47,13 +47,10 @@ export const nextAuthOauthLogin = async ({
   });
 };
 
-export const getUserByProviderAndProviderAccountId = async ({
-  providerAccountId,
-  provider,
-}: {
-  providerAccountId: any;
-  provider: any;
-}) => {
+export const getUserByProviderAndProviderAccountId = async (
+  providerAccountId: any,
+  provider: any
+) => {
   return await axios.post("/auth/signin/provider", {
     providerAccountId,
     provider,

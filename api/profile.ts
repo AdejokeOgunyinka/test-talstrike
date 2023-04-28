@@ -10,6 +10,34 @@ export const updateProfile = async (data: ProfileBody) => {
   return await axios.post("/auth/users/profile/", data);
 };
 
+export const useUpdateMyProfile = () =>
+  useMutation(({ token, data }: { data: any; token: string }) =>
+    axios
+      .patch(`/auth/users/profile/me/`, data, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useUpdateMyProfileImage = () =>
+  useMutation(
+    ({ token, data, userId }: { token: string; userId: string; data: any }) =>
+      axios
+        .patch(`/auth/users/${userId}/`, data, {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        })
+  );
+
 interface IGetPosts {
   token: string;
   userId: string;

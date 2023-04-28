@@ -16,6 +16,7 @@ import GifIcon from "@/assets/gifIcon.svg";
 import SmallImageIcon from "@/assets/smallImgIcon.svg";
 import SmileyIcon from "@/assets/smileyIcon.svg";
 import SendIcon from "@/assets/paperPlane.svg";
+import ProfileImg from "@/assets/profileIcon.svg";
 
 import {
   useLikeUnlikePost,
@@ -90,7 +91,7 @@ const PostCard = ({
         <div className="flex justify-between">
           <div className="flex items-center">
             <NextImage
-              src={postImage}
+              src={postImage !== null ? postImage : ProfileImg}
               alt="post image"
               width="40"
               height="40"
@@ -236,7 +237,11 @@ const PostCard = ({
           {commentsOnPost?.results?.map((comment: any, index: number) => (
             <div className="flex items-center" key={index}>
               <NextImage
-                src={comment?.author?.image}
+                src={
+                  comment?.author?.image !== null
+                    ? comment?.author?.image
+                    : ProfileImg
+                }
                 alt="author"
                 width="40"
                 height="40"
@@ -254,7 +259,11 @@ const PostCard = ({
       <div className="w-full pt-[9px] flex items-center justify-between">
         <div className="w-[40px] h-[40px]">
           <NextImage
-            src={session?.user?.image as string}
+            src={
+              session?.user?.image !== null
+                ? (session?.user?.image as string)
+                : ProfileImg
+            }
             alt="session image"
             width="40"
             height="40"

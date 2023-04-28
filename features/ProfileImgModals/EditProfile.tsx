@@ -1,14 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ErrorMessage, FormikProvider, useFormik } from "formik";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
+import * as yup from "yup";
+import BeatLoader from "react-spinners/BeatLoader";
+import { useQueryClient } from "@tanstack/react-query";
 
 import ModalContainer from "@/components/Modal";
 import InputBox from "@/components/ProfileModals/InputBox";
 import ProfileImg from "@/assets/profileIcon.svg";
+import { useTypedSelector } from "@/hooks/hooks";
+import { useUpdateMyProfile, useUpdateMyProfileImage } from "@/api/profile";
+import notify from "@/libs/toast";
 
 const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
+  const TOKEN = session?.user?.access;
+
   const [modal, setModal] = useState("");
 
   const editProfilePictureControl = [
@@ -24,6 +33,109 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       onClick: () => setModal("delete-profile"),
     },
   ];
+
+  const { userInfo } = useTypedSelector((state) => state.profile);
+
+  const { mutate, isLoading: isUpdatingMyProfile } = useUpdateMyProfile();
+  const { mutate: updateMyImage, isLoading: isUpdatingMyImage } =
+    useUpdateMyProfileImage();
+
+  const experienceValidationSchema = yup.object().shape({
+    years_of_experience: yup
+      .number()
+      .min(1, "years of experience cannot be less than 1")
+      .required("Please enter your years of experience"),
+  });
+
+  const queryClient = useQueryClient();
+
+  const experienceFormik = useFormik({
+    initialValues: {
+      years_of_experience: userInfo?.profile?.years_of_experience,
+    },
+    validationSchema: experienceValidationSchema,
+    onSubmit: (values: any) => {
+      mutate(
+        { token: TOKEN as string, data: values },
+        {
+          onSuccess: () => {
+            notify({
+              type: "success",
+              text: "You have successfully updated your years of experience",
+            });
+            queryClient.invalidateQueries(["getMyProfile"]);
+            onClose();
+          },
+        }
+      );
+    },
+  });
+
+  const imageValidationSchema = yup.object().shape({
+    image: yup.mixed().required("Image is required"),
+  });
+
+  const [fileImg, setFileImg] = useState<any>(null);
+
+  const reloadSession = () => {
+    const event = new Event("visibilitychange");
+    document.dispatchEvent(event);
+  };
+
+  const imageFormik = useFormik({
+    initialValues: {
+      image: session?.user?.image !== null ? session?.user?.image : ProfileImg,
+    },
+    validationSchema: imageValidationSchema,
+    onSubmit: (values) => {
+      updateMyImage(
+        {
+          token: TOKEN as string,
+          data: values,
+          userId: session?.user?.id as string,
+        },
+        {
+          onSuccess: () => {
+            notify({
+              type: "success",
+              text: "You have successfully updated your profile image",
+            });
+            queryClient.invalidateQueries(["getMyProfile"]);
+            reloadSession();
+            onClose();
+          },
+        }
+      );
+    },
+  });
+
+  const handleDeleteProfilePicture = () => {
+    updateMyImage(
+      {
+        token: TOKEN as string,
+        data: { image: "" },
+        userId: session?.user?.id as string,
+      },
+      {
+        onSuccess: () => {
+          notify({
+            type: "success",
+            text: "You have successfully deleted your profile image",
+          });
+          queryClient.invalidateQueries(["getMyProfile"]);
+          reloadSession();
+          onClose();
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (fileImg) {
+      imageFormik?.setFieldValue("image", fileImg);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileImg]);
 
   return (
     <ModalContainer>
@@ -45,7 +157,11 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
           <div className="w-full h-[calc(100%-61px)] pt-[18px] px-[21px]">
             <div className="w-full h-[282px] rounded-[8px]">
               <img
-                src={(session?.user?.image as string) || ProfileImg}
+                src={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
                 alt="profile"
                 className="object-cover w-full h-full"
               />
@@ -74,37 +190,76 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       )}
       {modal === "change-profile" && (
         <div className="w-[584px] h-[505px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
-          <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
-            <p className="text-[20px] text-brand-600 leading-[30px]">
-              Change Profile Picture
-            </p>
-            <NextImage
-              src="/blueCloseIcon.svg"
-              alt="close"
-              width="60"
-              height="61"
-              className="cursor-pointer"
-              onClick={() => setModal("initial-edit")}
-            />
-          </div>
-          <div className="w-full h-[calc(100%-173px)] px-[20px]">
-            <div className="w-full h-full rounded-[8px] flex items-center">
-              <img
-                src={(session?.user?.image as string) || ProfileImg}
-                alt="profile"
-                className="object-cover w-full h-[282px]"
-              />
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-[24px] w-full h-[93px] mb-[19px] border border-t border-b-transparent border-[#E3E2E2]">
-            <button className="border border-[2px] font-medium w-[135px] h-[41px] rounded-[4px] border-brand-600 text-brand-600">
-              {" "}
-              Edit Image
-            </button>
-            <button className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500">
-              Upload
-            </button>
-          </div>
+          <FormikProvider value={imageFormik}>
+            <form onSubmit={imageFormik.handleSubmit} className="w-full h-full">
+              <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
+                <p className="text-[20px] text-brand-600 leading-[30px]">
+                  Change Profile Picture
+                </p>
+                <NextImage
+                  src="/blueCloseIcon.svg"
+                  alt="close"
+                  width="60"
+                  height="61"
+                  className="cursor-pointer"
+                  onClick={() => setModal("initial-edit")}
+                />
+              </div>
+              <div className="w-full h-[calc(100%-173px)] px-[20px]">
+                <div className="relative w-full h-full rounded-[8px] flex items-center">
+                  <img
+                    src={
+                      fileImg !== null
+                        ? URL.createObjectURL(fileImg)
+                        : imageFormik?.values?.image || ProfileImg
+                    }
+                    alt="profile"
+                    className="object-cover w-full h-[282px]"
+                  />
+                  <div className="absolute w-full h-[282px] rounded-[8px] bg-brand-100 opacity-20 flex justify-center items-center">
+                    <NextImage
+                      src="/album2.svg"
+                      alt="album"
+                      width="49"
+                      height="49"
+                      className="cursor-pointer"
+                      onClick={() => document.getElementById("file")?.click()}
+                    />
+                    <input
+                      type="file"
+                      className="hidden h-full w-full"
+                      accept="image/*"
+                      id="file"
+                      onChange={(e) =>
+                        e?.target?.files && setFileImg(e?.target?.files[0])
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-[24px] w-full h-[93px] mb-[19px] border border-t border-b-transparent border-[#E3E2E2]">
+                <button className="border border-[2px] font-medium w-[135px] h-[41px] rounded-[4px] border-brand-600 text-brand-600">
+                  {" "}
+                  Edit Image
+                </button>
+                <button
+                  type="submit"
+                  className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500"
+                >
+                  {isUpdatingMyImage ? (
+                    <BeatLoader
+                      color={"white"}
+                      size={10}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  ) : (
+                    "Upload"
+                  )}
+                </button>
+              </div>
+            </form>
+          </FormikProvider>
         </div>
       )}
       {modal === "delete-profile" && (
@@ -133,15 +288,27 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               >
                 No
               </button>
-              <button className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500">
-                Yes
+              <button
+                onClick={handleDeleteProfilePicture}
+                className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500"
+              >
+                {isUpdatingMyImage ? (
+                  <BeatLoader
+                    color={"white"}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  "Yes"
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
       {modal === "" && (
-        <div className="w-[429px] h-[239px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[429px] h-[280px]   bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[49px] justify-between items-center pl-[30px]">
             <p className="text-[20px] text-brand-600 leading-[30px]">
               Edit Profile
@@ -156,9 +323,13 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
             />
           </div>
           <div className="flex gap-[18px] justify-center w-full h-[calc(100%-49px)] px-[30px] py-[27px]">
-            <div className="relative w-[134px] h-full border-[3.82857px] border-brand-500 rounded-[9.6px] shadow shadow-[0px_0.812121px_4.87273px_0.812121px_rgba(0, 0, 0, 0.15)]">
+            <div className="relative w-[160px] h-full border-[3.82857px] border-brand-500 rounded-[9.6px] shadow shadow-[0px_0.812121px_4.87273px_0.812121px_rgba(0, 0, 0, 0.15)]">
               <img
-                src={(session?.user?.image as string) || ProfileImg}
+                src={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
                 alt="profile"
                 className="object-cover w-full h-full"
               />
@@ -172,15 +343,37 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               />
             </div>
             <div className="w-[217px]">
-              <InputBox
-                id="years_of_experience"
-                title="Years of Experience"
-                onChange={() => console.log("")}
-                placeholder="Enter years of experience"
-              />
-              <button className="w-full mt-[12px] h-[41px] text-brand-500 rounded-[4px] bg-brand-600">
-                Save Changes
-              </button>
+              <FormikProvider value={experienceFormik}>
+                <form onSubmit={experienceFormik.handleSubmit}>
+                  <InputBox
+                    id="years_of_experience"
+                    title="Years of Experience"
+                    onChange={experienceFormik.handleChange}
+                    placeholder="Enter years of experience"
+                    value={experienceFormik.values.years_of_experience}
+                  />
+                  <ErrorMessage
+                    name="years_of_experience"
+                    component="p"
+                    className="text-brand-warning text-[12px]"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full mt-[12px] h-[41px] text-brand-500 rounded-[4px] bg-brand-600"
+                  >
+                    {isUpdatingMyProfile ? (
+                      <BeatLoader
+                        color={"white"}
+                        size={10}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
+                </form>
+              </FormikProvider>
             </div>
           </div>
         </div>

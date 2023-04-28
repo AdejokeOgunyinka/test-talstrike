@@ -70,7 +70,11 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               >
                 <div className="rounded-[7px] overflow-hidden flex justify-center items-center cursor-pointer">
                   <NextImage
-                    src={(session?.user?.image as string) || ProfileImg}
+                    src={
+                      session?.user?.image !== null
+                        ? (session?.user?.image as string)
+                        : ProfileImg
+                    }
                     alt="me"
                     width="35"
                     height="35"

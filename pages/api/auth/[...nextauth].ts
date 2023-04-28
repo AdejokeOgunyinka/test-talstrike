@@ -22,7 +22,7 @@ export default NextAuth({
   },
   pages: {
     signIn: "/",
-    newUser: "/auth/signup",
+    newUser: "/signup",
   },
   debug: process.env.NODE_ENV === "development",
   // Configure one or more authentication providers
@@ -90,10 +90,10 @@ export default NextAuth({
         account.providerAccountId &&
         account.provider
       ) {
-        const response = await getUserByProviderAndProviderAccountId({
-          providerAccountId: account.providerAccountId,
-          provider: account.provider,
-        });
+        const response = await getUserByProviderAndProviderAccountId(
+          account.providerAccountId,
+          account.provider
+        );
 
         const { user: userExists, token: userExistsToken } =
           response?.data?.data;

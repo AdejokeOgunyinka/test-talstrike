@@ -1,63 +1,77 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable no-unused-vars */
 
 import { useFormik } from "formik";
 import { useState } from "react";
 import NextImage from "next/image";
 import * as yup from "yup";
-import { useRouter } from "next/router";
-import { getCsrfToken, signIn } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
+// import {getProviders} from "next-auth/react"
 
+import GmailIcon from "@/assets/gmailIcon.svg";
+import FacebookIcon from "@/assets/facebookIcon.svg";
 import TalstrikeLogo from "@/assets/TalstrikeLogo.svg";
 import EmailIcon from "@/assets/emailIcon.svg";
 import HiddenPasswordIcon from "@/assets/hiddenPasswordIcon.svg";
-import GmailIcon from "@/assets/gmailIcon.svg";
-import FacebookIcon from "@/assets/facebookIcon.svg";
+import { createUser } from "@/api/auth";
 import notify from "@/libs/toast";
-import { LoginInfo } from "@/libs/types/user";
+import { useRouter } from "next/router";
+import { User } from "@/libs/types/user";
+import { setAuthUser } from "@/store/slices/authSlice";
+import { useTypedDispatch } from "@/hooks/hooks";
 import CustomInputBox from "@/components/Inputbox";
-import { CtxOrReq } from "next-auth/client/_utils";
 
-type LoginProps = {
-  providers?: any;
-  csrfToken?: string;
-};
-
-const Index = ({ providers, csrfToken }: LoginProps) => {
+const Index = ({ providers }: { providers: any }) => {
   const router = useRouter();
+  const dispatch = useTypedDispatch();
 
-  const loginSchema = yup.object().shape({
+  const signupSchema = yup.object().shape({
+    firstname: yup
+      .string()
+      .min(2, "Minimum of 2 characters")
+      .max(15, "Maximum of 15 characters")
+      .required("Please enter your first name"),
+    lastname: yup
+      .string()
+      .min(2, "Minimum of 2 characters")
+      .max(15, "Maximum of 15 characters")
+      .required("Please enter your last name"),
     email: yup
       .string()
       .email("Invalid email address")
       .required("Please enter your email address"),
-    password: yup.string().required("Please enter your password"),
+    password: yup
+      .string()
+      .required("Please enter your password")
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])/,
+        "password must contain one uppercase character (A-Z), one lowercase character (a-z)"
+      )
+      .matches(/\W|_/g, "password must contain one special case character")
+      .matches(/^(?=.{8,})/, "password must contain at least 8 characters")
+      .matches(/^(?=.{6,20}$)\D*\d/, "password must contain one number (0-9)"),
   });
 
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
+      firstname: "",
+      lastname: "",
       email: "",
       password: "",
     },
+    validationSchema: signupSchema,
     validateOnBlur: true,
-    validationSchema: loginSchema,
-    onSubmit: async (values: LoginInfo) => {
+    onSubmit: async (values: User, { setErrors }) => {
       try {
         setLoading(true);
-
-        const response = await signIn("credentials", {
-          redirect: false,
-          email: values.email,
-          password: values.password,
-          callbackUrl: "/dashboard",
-        });
-
-        if (response?.ok) {
-          router.push("/dashboard");
+        const response = await createUser(values);
+        if (response.data.user) {
+          dispatch(setAuthUser(response.data));
+          router.push("/auth/confirm-email");
         } else {
-          notify({ type: "error", text: response?.error as string });
+          notify({ type: "error", text: response.data.message });
         }
       } catch (error) {
         const { data } = (error as any).response;
@@ -70,47 +84,67 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
 
   const [hidePassword, setHidePassword] = useState(true);
 
-  const GoogleHandlerFunction = async () => {
-    return signIn("google", { callbackUrl: "https://app.talstrike.com/" });
-  };
-
   return (
     <div className="max-w-md pt-[50px] w-full lg:pt-[102px] pl-[20px] lg:pl-[50px] pr-[20px] lg:pr-[unset]">
       <div className="w-full">
-        <div className="w-[74px] h-[48px]">
-          <NextImage src={TalstrikeLogo} alt="talstrike" />
-        </div>
+        <NextImage src={TalstrikeLogo} alt="talstrike" width="74" height="48" />
         <div className="mt-[47px] text-[32px] leading-[48px] text-brand-70 font-bold">
-          Hey, Hello 👋
+          Create an account
         </div>
         <p className="text-[11px] text-brand-50 font-light">
           Lorem Ipsum is simply dummy text of the printing{" "}
         </p>
         <div className="flex mt-[24px] mb-[29px] gap-x-[16px] w-full">
-          <div
-            onClick={() => GoogleHandlerFunction()}
-            className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]"
-          >
+          <div className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]">
             <NextImage src={GmailIcon} alt="gmail" />
             <p className="ml-[7px] text-brand-50 text-[10px] font-light leading-[15px]">
-              Sign in with Google
+              Sign up with Google
             </p>
           </div>
           <div className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]">
             <NextImage src={FacebookIcon} alt="gmail" />
             <p className="ml-[7px] text-brand-50 text-[10px] font-light leading-[15px]">
-              Sign in with Facebook
+              Sign up with Facebook
             </p>
           </div>
         </div>
         <div className="relative w-full border-b-[rgba(217, 217, 217, 0.97)] border border-t-0 border-l-0 border-r-0">
           <p className="text-center absolute pl-[20px] pr-[20px] -top-[10px] bg-white left-[25%] text-[12px] leading-[18px] text-brand-50 font-normal">
-            or Login with Email
+            or Get started with Email
           </p>
         </div>
         <form onSubmit={formik.handleSubmit}>
-          {/* <input name="csrfToken" type="hidden" defaultValue={csrfToken} /> */}
-          <div className="mt-[27px]">
+          <div className="flex mt-[23px] gap-x-[13px]">
+            <div className="basis-1/2">
+              <CustomInputBox
+                label="First name"
+                placeholder="Enter your First name"
+                name="firstname"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.errors.firstname && formik.touched.firstname && (
+                <p className="text-brand-warning text-[10px]">
+                  {formik.errors.firstname}
+                </p>
+              )}
+            </div>
+            <div className="basis-1/2">
+              <CustomInputBox
+                label="Last name"
+                placeholder="Enter your Last name"
+                name="lastname"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.errors.lastname && formik.touched.lastname && (
+                <p className="text-brand-warning text-[10px]">
+                  {formik.errors.lastname}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="mt-[30px]">
             <CustomInputBox
               label="Email"
               placeholder="Enter your email"
@@ -125,11 +159,11 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
               </p>
             )}
           </div>
-          <div className="mt-[27px] mb-[22px]">
+          <div className="mt-[30px] mb-[25px]">
             <CustomInputBox
               label="Password"
               type={hidePassword ? "password" : "text"}
-              placeholder="Password (minimum of 6 characters)"
+              placeholder="Password (minimum of 8 characters)"
               icon={
                 <NextImage
                   src={HiddenPasswordIcon}
@@ -148,12 +182,6 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
               </p>
             )}
           </div>
-          <div className="flex justify-between w-full mb-[20px]">
-            <CustomInputBox label="Keep me logged in" type="checkbox" />
-            <a className="underline decoration-solid text-brand-100 text-[11px] font-light basis-1/2 text-right">
-              Forgot my password?
-            </a>
-          </div>
           <button
             type="submit"
             className="h-[40px] bg-brand-600 rounded-[7px] w-full font-light text-[11px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
@@ -166,16 +194,13 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
                 data-testid="loader"
               />
             ) : (
-              "Login"
+              "Sign up"
             )}
           </button>
           <p className="text-[11px] text-center text-brand-50 text-light">
-            {`Don't have an account?`}{" "}
-            <a
-              href="/signup"
-              className="underline decoration-solid text-brand-100"
-            >
-              Sign up
+            Already have an account?{" "}
+            <a href="/" className="underline decoration-solid text-brand-100">
+              Login
             </a>
           </p>
         </form>
@@ -185,11 +210,3 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
 };
 
 export default Index;
-
-export async function getServerSideProps(context: CtxOrReq | undefined) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  };
-}

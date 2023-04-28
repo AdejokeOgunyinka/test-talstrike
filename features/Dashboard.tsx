@@ -89,7 +89,11 @@ const Dashboard = () => {
           <div className="flex items-center">
             <div className="w-[40px] h-[40px] overflow-hidden">
               <NextImage
-                src={(session?.user?.image as string) || ProfileImg}
+                src={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
                 alt="profile"
                 width="40"
                 height="40"

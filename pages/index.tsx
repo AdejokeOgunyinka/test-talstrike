@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ProviderType } from "next-auth/providers";
 
 import AuthLayout from "@/layout/Auth/AuthLayout";

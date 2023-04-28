@@ -63,7 +63,11 @@ const Index = () => {
               <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
                 <div className="relative w-[161px] profile-pic h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <NextImage
-                    src={(session?.user?.image as string) || ProfileImg}
+                    src={
+                      session?.user?.image !== null
+                        ? (session?.user?.image as string)
+                        : ProfileImg
+                    }
                     width="161"
                     height="161"
                     alt="profile"
