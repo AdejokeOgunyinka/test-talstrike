@@ -481,14 +481,19 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     className="object-cover w-full h-[282px]"
                   />
                   <div className="absolute w-full h-[282px] rounded-[8px] bg-brand-100 opacity-20 flex justify-center items-center">
-                    <NextImage
-                      src="/album2.svg"
-                      alt="album"
-                      width="49"
-                      height="49"
-                      className="cursor-pointer"
+                    <div
+                      className="flex flex-col items-center cursor-pointer"
                       onClick={() => document.getElementById("file")?.click()}
-                    />
+                    >
+                      <NextImage
+                        src="/album2.svg"
+                        alt="album"
+                        width="49"
+                        height="49"
+                        className="cursor-pointer"
+                      />
+                      <p className="text-brand-500 mt-[25px]">Select Image</p>
+                    </div>
                     <input
                       type="file"
                       className="hidden h-full w-full"
