@@ -17,6 +17,8 @@ import CropIcon from "@/assets/crop.svg";
 import { useTypedSelector } from "@/hooks/hooks";
 import { useUpdateMyProfile, useUpdateMyProfileImage } from "@/api/profile";
 import notify from "@/libs/toast";
+import getCroppedImg from "@/libs/utils";
+import { toast } from "react-hot-toast";
 
 const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -149,12 +151,72 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
 
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState<any>(null);
+
   const onCropComplete = useCallback(
     (croppedArea: any, croppedAreaPixels: any) => {
-      console.log(croppedArea, croppedAreaPixels);
+      setCroppedAreaPixels(croppedAreaPixels);
     },
     []
   );
+
+  const [isCroppingImage, setIsCroppingImage] = useState(false);
+
+  const showCroppedImage = useCallback(async () => {
+    try {
+      setIsCroppingImage(true);
+      const croppedImage: any = await getCroppedImg(
+        session?.user?.image !== null
+          ? (session?.user?.image as string)
+          : ProfileImg,
+        croppedAreaPixels,
+        rotation
+      );
+      setCroppedImage(croppedImage);
+      setModal("cropped-image");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCroppingImage(false);
+    }
+  }, [croppedAreaPixels, rotation]);
+
+  const uploadCroppedImage = async () => {
+    let blob = await fetch(croppedImage).then((r) => r.blob());
+    const newFile = new File(
+      [blob],
+      `${session?.user?.firstname}-cropped-image.png`,
+      {
+        lastModified: new Date().getTime(),
+        type: croppedImage.type,
+      }
+    );
+
+    if (blob && newFile) {
+      updateMyImage(
+        {
+          token: TOKEN as string,
+          data: { image: newFile },
+          userId: session?.user?.id as string,
+        },
+        {
+          onSuccess: () => {
+            notify({
+              type: "success",
+              text: "You have successfully uploaded your edited profile image",
+            });
+            queryClient.invalidateQueries(["getMyProfile"]);
+            reloadSession();
+            onClose();
+          },
+          onError: (err: any) => {
+            toast(err?.message);
+          },
+        }
+      );
+    }
+  };
 
   return (
     <ModalContainer marginTop="md:mt-[70px]">
@@ -207,6 +269,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
           </div>
         </div>
       )}
+
       {modal === "edit" && (
         <div className="w-[717px] h-[675px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
@@ -224,17 +287,6 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
           </div>
           <div className="w-full h-[calc(100%-290px)] border-b border-[#E3E2E2] py-[18px] px-[21px]">
             <div className="w-full relative h-[350px] rounded-[8px] box-border">
-              {/* <img
-                src={
-                  session?.user?.image !== null
-                    ? (session?.user?.image as string)
-                    : ProfileImg
-                }
-                alt="profile"
-                className="object-cover w-full h-full"
-                style={{ borderRadius: "8px" }}
-              /> */}
-
               <Cropper
                 cropShape="round"
                 image={
@@ -329,26 +381,77 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     }}
                   />
                 </div>
-                <div className="flex gap-[13px] cursor-pointer items-center">
-                  <NextImage src={CropIcon} width="28" height="28" alt="crop" />
-                  <p className="text-brand-600 font-medium text-[25px] leading-[38px]">
-                    Crop
-                  </p>
-                </div>
               </div>
 
               <div>
                 <button
                   type="submit"
-                  className="w-[174px] h-[53px] font-medium rounded-[4px] bg-brand-600 text-brand-500"
+                  onClick={showCroppedImage}
+                  disabled={isCroppingImage}
+                  className="w-[174px] h-[53px] font-medium rounded-[4px] border border-[2px] border-brand-600 text-brand-500"
                 >
-                  Save Changes
+                  {isCroppingImage ? (
+                    <BeatLoader
+                      color={"blue"}
+                      size={10}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  ) : (
+                    <div className="flex gap-[20px]  items-center justify-center w-full h-full">
+                      <NextImage
+                        src={CropIcon}
+                        width="28"
+                        height="28"
+                        alt="crop"
+                      />
+                      <p className="text-brand-600 font-medium text-[25px] leading-[38px]">
+                        Crop
+                      </p>
+                    </div>
+                  )}
                 </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {modal === "cropped-image" && (
+        <div className="w-[592px] max-h-[400px] py-[20px] flex justify-center items-center relative bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+          <img
+            src={croppedImage as unknown as string}
+            alt="croppedImage"
+            className="pb-[100px]"
+          />
+
+          <div className="flex px-[30px] py-[25px] justify-between w-[inherit] h-[100px] px-[59px] bg-brand-500 flex justify-end absolute bottom-0 border-t border-[#E3E2E2] ">
+            <button
+              onClick={() => setModal("edit")}
+              className="border border-[2px] font-medium w-[159px] h-[54px] rounded-[4px] border-brand-600 text-brand-600"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-brand-600 text-brand-500 rounded-[4px] w-[159px] p-[13px] h-[54px]"
+              onClick={() => uploadCroppedImage()}
+            >
+              {isUpdatingMyImage ? (
+                <BeatLoader
+                  color={"white"}
+                  size={10}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Upload image"
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {modal === "change-profile" && (
         <div className="w-[584px] h-[505px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <FormikProvider value={imageFormik}>
