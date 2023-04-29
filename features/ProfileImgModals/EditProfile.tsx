@@ -1,15 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ErrorMessage, FormikProvider, useFormik } from "formik";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import * as yup from "yup";
+import Cropper from "react-easy-crop";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useQueryClient } from "@tanstack/react-query";
 
 import ModalContainer from "@/components/Modal";
 import InputBox from "@/components/ProfileModals/InputBox";
 import ProfileImg from "@/assets/profileIcon.svg";
+import RotateLeftIcon from "@/assets/rotateL.svg";
+import RotateRightIcon from "@/assets/rotateR.svg";
+import CropIcon from "@/assets/crop.svg";
 import { useTypedSelector } from "@/hooks/hooks";
 import { useUpdateMyProfile, useUpdateMyProfileImage } from "@/api/profile";
 import notify from "@/libs/toast";
@@ -21,7 +25,11 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const [modal, setModal] = useState("");
 
   const editProfilePictureControl = [
-    { name: "Edit", icon: "/editBlue.svg" },
+    {
+      name: "Edit",
+      icon: "/editBlue.svg",
+      onClick: () => setModal("edit"),
+    },
     {
       name: "Change",
       icon: "/album.svg",
@@ -137,8 +145,19 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileImg]);
 
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+
+  const onCropComplete = useCallback(
+    (croppedArea: any, croppedAreaPixels: any) => {
+      console.log(croppedArea, croppedAreaPixels);
+    },
+    []
+  );
+
   return (
-    <ModalContainer>
+    <ModalContainer marginTop="md:mt-[70px]">
       {modal === "initial-edit" && (
         <div className="w-[584px] h-[462px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
@@ -184,6 +203,148 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+      {modal === "edit" && (
+        <div className="w-[717px] h-[675px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+          <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
+            <p className="text-[20px] text-brand-600 leading-[30px]">
+              Edit Profile Picture
+            </p>
+            <NextImage
+              src="/blueCloseIcon.svg"
+              alt="close"
+              width="60"
+              height="61"
+              className="cursor-pointer"
+              onClick={() => setModal("")}
+            />
+          </div>
+          <div className="w-full h-[calc(100%-290px)] border-b border-[#E3E2E2] py-[18px] px-[21px]">
+            <div className="w-full relative h-[350px] rounded-[8px] box-border">
+              {/* <img
+                src={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
+                alt="profile"
+                className="object-cover w-full h-full"
+                style={{ borderRadius: "8px" }}
+              /> */}
+
+              <Cropper
+                cropShape="round"
+                image={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
+                crop={crop}
+                zoom={zoom}
+                zoomSpeed={4}
+                maxZoom={3}
+                zoomWithScroll={true}
+                showGrid={true}
+                aspect={4 / 3}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onRotationChange={setRotation}
+                onCropComplete={onCropComplete}
+                rotation={rotation}
+                objectFit="auto-cover"
+              />
+            </div>
+          </div>
+          <div className="w-full h-full py-[31px] px-[38px]">
+            <div className="flex gap-[30px]">
+              <div className="flex flex-col items-center basis-[50%]">
+                <p>Zoom</p>
+                <div className="flex gap-[12px]">
+                  <p className="text-[40px] leading-[65px]">-</p>
+                  <input
+                    type="range"
+                    min="1"
+                    max="100"
+                    value={zoom}
+                    step={0.1}
+                    aria-labelledby="Zoom"
+                    onChange={(e) => {
+                      setZoom(parseInt(e.target.value));
+                    }}
+                  />
+                  <p className="text-[40px] leading-[65px]">+</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center basis-[50%]">
+                <p>Straighten</p>
+                <div className="flex gap-[12px]">
+                  <p className="text-[40px] leading-[65px]">-</p>
+                  <input
+                    type="range"
+                    min="-180"
+                    max="0"
+                    value={rotation}
+                    onChange={(e) => {
+                      setRotation(parseInt(e.target.value));
+                    }}
+                  />
+                  <p className="text-[40px] leading-[65px]">+</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="flex gap-[40px] items-center">
+                <div className="flex gap-[15px]">
+                  <NextImage
+                    src={RotateLeftIcon}
+                    width="58"
+                    height="52"
+                    alt="rotateL"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (rotation <= 0) {
+                        setRotation(0);
+                      } else {
+                        setRotation(rotation - 25);
+                      }
+                    }}
+                  />
+                  <NextImage
+                    src={RotateRightIcon}
+                    width="58"
+                    height="52"
+                    alt="rotateR"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (rotation >= 180) {
+                        setRotation(180);
+                      } else {
+                        setRotation(rotation + 25);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex gap-[13px] cursor-pointer items-center">
+                  <NextImage src={CropIcon} width="28" height="28" alt="crop" />
+                  <p className="text-brand-600 font-medium text-[25px] leading-[38px]">
+                    Crop
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="w-[174px] h-[53px] font-medium rounded-[4px] bg-brand-600 text-brand-500"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </div>
         </div>

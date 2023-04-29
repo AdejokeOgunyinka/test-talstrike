@@ -3,7 +3,13 @@ import NextImage from "next/image";
 
 import { useTypedSelector } from "@/hooks/hooks";
 
-const AboutMe = ({ onClickEditBtn }: { onClickEditBtn: any }) => {
+const AboutMe = ({
+  onClickEditProfile,
+  onClickEditCareer,
+}: {
+  onClickEditProfile: any;
+  onClickEditCareer: any;
+}) => {
   const { data: session } = useSession();
   const { userInfo } = useTypedSelector((state) => state.profile);
   const teamsPlayedWith = [
@@ -34,7 +40,7 @@ const AboutMe = ({ onClickEditBtn }: { onClickEditBtn: any }) => {
             width="104"
             height="45"
             className="cursor-pointer"
-            onClick={onClickEditBtn}
+            onClick={onClickEditProfile}
           />
         </div>
         <h3 className="text-brand-2250 font-semibold text-[24px] leading-[36px]">
@@ -162,6 +168,7 @@ const AboutMe = ({ onClickEditBtn }: { onClickEditBtn: any }) => {
             width="104"
             height="45"
             className="cursor-pointer"
+            onClick={onClickEditCareer}
           />
         </div>
         <div className="mt-[30px]">

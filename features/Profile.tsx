@@ -9,6 +9,7 @@ import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import EditProfile from "@/components/ProfileModals/EditProfile";
+import EditCareerProgress from "@/components/ProfileModals/EditCareerProgress";
 import AboutMe from "./ProfileSections/AboutMe";
 import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
@@ -47,6 +48,8 @@ const Index = () => {
 
   const [currentSection, setCurrentSection] = useState(1);
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
+  const [openEditCareerProgressModal, setOpenEditCareerProgressModal] =
+    useState(false);
   const [viewProfilePicture, setViewProfilePicture] = useState(false);
   const [viewEditProfilePicture, setViewEditProfilePicture] = useState(false);
 
@@ -162,7 +165,10 @@ const Index = () => {
               <div className="lg:ml-[26px] pt-[28px]  lg:mt-[28px] xl:mt-0">
                 {currentSection === 1 ? (
                   <AboutMe
-                    onClickEditBtn={() => setOpenEditProfileModal(true)}
+                    onClickEditProfile={() => setOpenEditProfileModal(true)}
+                    onClickEditCareer={() =>
+                      setOpenEditCareerProgressModal(true)
+                    }
                   />
                 ) : currentSection === 2 ? (
                   <MyPosts />
@@ -181,6 +187,12 @@ const Index = () => {
 
           {openEditProfileModal && (
             <EditProfile onClose={() => setOpenEditProfileModal(false)} />
+          )}
+
+          {openEditCareerProgressModal && (
+            <EditCareerProgress
+              onClose={() => setOpenEditCareerProgressModal(false)}
+            />
           )}
 
           {viewProfilePicture && (
