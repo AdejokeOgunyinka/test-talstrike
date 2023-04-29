@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import dynamic from "next/dynamic";
 
@@ -12,21 +12,22 @@ import {
   hockeyPositions,
   baseballPositions,
 } from "@/libs/authSelections";
+import { useGetSports } from "@/api/auth";
 
-import FootballIcon1 from "@/assets/footballIcon1.svg";
-import FootballIcon2 from "@/assets/footballIcon2.svg";
-import BasketballIcon1 from "@/assets/basketballIcon1.svg";
-import BasketballIcon2 from "@/assets/basketballIcon2.svg";
-import AthleticsIcon1 from "@/assets/athleticsIcon1.svg";
-import AthleticsIcon2 from "@/assets/athleticsIcon2.svg";
-import RugbyIcon1 from "@/assets/rugbyIcon1.svg";
-import RugbyIcon2 from "@/assets/rugbyIcon2.svg";
-import CyclingIcon1 from "@/assets/cyclingIcon1.svg";
-import CyclingIcon2 from "@/assets/cyclingIcon2.svg";
-import HockeyIcon1 from "@/assets/hockeyIcon1.svg";
-import HockeyIcon2 from "@/assets/hockeyIcon2.svg";
-import BaseballIcon1 from "@/assets/baseballIcon1.svg";
-import BaseballIcon2 from "@/assets/baseballIcon2.svg";
+// import FootballIcon1 from "@/assets/footballIcon1.svg";
+// import FootballIcon2 from "@/assets/footballIcon2.svg";
+// import BasketballIcon1 from "@/assets/basketballIcon1.svg";
+// import BasketballIcon2 from "@/assets/basketballIcon2.svg";
+// import AthleticsIcon1 from "@/assets/athleticsIcon1.svg";
+// import AthleticsIcon2 from "@/assets/athleticsIcon2.svg";
+// import RugbyIcon1 from "@/assets/rugbyIcon1.svg";
+// import RugbyIcon2 from "@/assets/rugbyIcon2.svg";
+// import CyclingIcon1 from "@/assets/cyclingIcon1.svg";
+// import CyclingIcon2 from "@/assets/cyclingIcon2.svg";
+// import HockeyIcon1 from "@/assets/hockeyIcon1.svg";
+// import HockeyIcon2 from "@/assets/hockeyIcon2.svg";
+// import BaseballIcon1 from "@/assets/baseballIcon1.svg";
+// import BaseballIcon2 from "@/assets/baseballIcon2.svg";
 
 const PersonalInfo = dynamic(() => import("./personalInfo"));
 
@@ -45,50 +46,50 @@ const Setup = ({ providers }: { providers: any }) => {
 
   const [chosenSportIndex, setChosenSportIndex] = useState(1);
 
-  const sports = [
-    {
-      name: "Football",
-      initialIcon: FootballIcon1,
-      chosenIcon: FootballIcon2,
-      bgImg: "lg:bg-player",
-    },
-    {
-      name: " Basketball",
-      initialIcon: BasketballIcon1,
-      chosenIcon: BasketballIcon2,
-      bgImg: "lg:bg-basketball",
-    },
-    {
-      name: "Athletics",
-      initialIcon: AthleticsIcon1,
-      chosenIcon: AthleticsIcon2,
-      bgImg: "lg:bg-athletics",
-    },
-    {
-      name: "Rugby",
-      initialIcon: RugbyIcon1,
-      chosenIcon: RugbyIcon2,
-      bgImg: "lg:bg-rugby",
-    },
-    {
-      name: "Cycling",
-      initialIcon: CyclingIcon1,
-      chosenIcon: CyclingIcon2,
-      bgImg: "lg:bg-cycling",
-    },
-    {
-      name: "Hockey",
-      initialIcon: HockeyIcon1,
-      chosenIcon: HockeyIcon2,
-      bgImg: "lg:bg-hockey",
-    },
-    {
-      name: "Baseball",
-      initialIcon: BaseballIcon1,
-      chosenIcon: BaseballIcon2,
-      bgImg: "lg:bg-baseball",
-    },
-  ];
+  // const sports = [
+  //   {
+  //     name: "Football",
+  //     initialIcon: FootballIcon1,
+  //     chosenIcon: FootballIcon2,
+  //     bgImg: "lg:bg-player",
+  //   },
+  //   {
+  //     name: " Basketball",
+  //     initialIcon: BasketballIcon1,
+  //     chosenIcon: BasketballIcon2,
+  //     bgImg: "lg:bg-basketball",
+  //   },
+  //   {
+  //     name: "Athletics",
+  //     initialIcon: AthleticsIcon1,
+  //     chosenIcon: AthleticsIcon2,
+  //     bgImg: "lg:bg-athletics",
+  //   },
+  //   {
+  //     name: "Rugby",
+  //     initialIcon: RugbyIcon1,
+  //     chosenIcon: RugbyIcon2,
+  //     bgImg: "lg:bg-rugby",
+  //   },
+  //   {
+  //     name: "Cycling",
+  //     initialIcon: CyclingIcon1,
+  //     chosenIcon: CyclingIcon2,
+  //     bgImg: "lg:bg-cycling",
+  //   },
+  //   {
+  //     name: "Hockey",
+  //     initialIcon: HockeyIcon1,
+  //     chosenIcon: HockeyIcon2,
+  //     bgImg: "lg:bg-hockey",
+  //   },
+  //   {
+  //     name: "Baseball",
+  //     initialIcon: BaseballIcon1,
+  //     chosenIcon: BaseballIcon2,
+  //     bgImg: "lg:bg-baseball",
+  //   },
+  // ];
 
   const sportOptions = [
     footballPositions,
@@ -100,6 +101,21 @@ const Setup = ({ providers }: { providers: any }) => {
     baseballPositions,
   ];
   const [chosenPosition, setChosenPosition] = useState("");
+  const { data: sports } = useGetSports();
+  const [chosenSport, setChosenSport] = useState("");
+
+  const [sportPositions, setChosenSportPositions] = useState([]);
+
+  useEffect(() => {
+    if (chosenSport) {
+      setChosenSportPositions(
+        sports?.results?.filter((sport: any) => sport?.name === chosenSport)[0]
+          ?.positions
+      );
+    } else {
+      setChosenSportPositions(sports?.results[0]?.positions);
+    }
+  }, [sports, chosenSport]);
 
   return (
     <>
@@ -166,26 +182,26 @@ const Setup = ({ providers }: { providers: any }) => {
                 industry.{" "}
               </p>
             </div>
-            {specialties[clicked - 1] === "Player" && (
-              <div className="w-full pl-[20px] pr-[20px] lg:pl-0 lg:pr-0 lg:w-[256px] mt-[59px] mb-[52px]">
-                <CustomSelectDropdown
-                  label="Select position"
-                  options={sportOptions[chosenSportIndex]}
-                  onChange={(e) => {
-                    setProgressValue(100);
-                    setChosenPosition(e?.target?.value);
-                    // userInfo && chosenPosition && onUpdateProfile(userInfo.access);
-                    setTimeout(() => {
-                      setStep(3);
-                    }, 1000);
-                  }}
-                />
-              </div>
-            )}
             <div
               className={`w-full flex flex-wrap justify-center items-center pl-[30px] lg:pl-[unset] pr-[30px] lg:pr-[unset] gap-x-[30px] lg:gap-x-[unset] gap-y-[30px] lg:gap-y-[unset]`}
             >
-              {sports.map((sport, index) => (
+              <div className="w-full">
+                <CustomSelectDropdown
+                  label="Select sport"
+                  options={sports?.results?.map((sport: any) => sport?.name)}
+                  onChange={(e) => {
+                    setChosenSport(e?.target?.value);
+                    specialties[clicked - 1] !== "Player" &&
+                      setProgressValue(100);
+
+                    specialties[clicked - 1] !== "Player" &&
+                      setTimeout(() => {
+                        setStep(3);
+                      }, 1000);
+                  }}
+                />
+              </div>
+              {/* {sports.map((sport, index) => (
                 <div
                   key={index}
                   onClick={() => {
@@ -227,8 +243,25 @@ const Setup = ({ providers }: { providers: any }) => {
                     {sport.name}
                   </p>
                 </div>
-              ))}
+              ))} */}
             </div>
+            {specialties[clicked - 1] === "Player" && (
+              <div className="w-full pl-[20px] pr-[20px] lg:pl-0 lg:pr-0 lg:w-[256px] mt-[59px] mb-[52px]">
+                <CustomSelectDropdown
+                  label="Select position"
+                  options={sportPositions}
+                  onChange={(e) => {
+                    setProgressValue(100);
+                    setChosenPosition(e?.target?.value);
+                    // userInfo && chosenPosition && onUpdateProfile(userInfo.access);
+                    setTimeout(() => {
+                      setStep(3);
+                    }, 1000);
+                  }}
+                />
+              </div>
+            )}
+
             <div className="w-full flex justify-center">
               <div className="relative mt-[67px] mb-[30px] lg:mb-0 lg:absolute lg:bottom-[110px] w-3/4 lg:w-[650px]">
                 <AuthProgressBar progress={progressValue} />
@@ -241,8 +274,8 @@ const Setup = ({ providers }: { providers: any }) => {
           chosenPosition={chosenPosition}
           specialties={specialties}
           clicked={clicked}
-          sports={sports}
-          chosenSportIndex={chosenSportIndex}
+          sports={sports?.results}
+          chosenSport={chosenSport}
         />
       )}
     </>

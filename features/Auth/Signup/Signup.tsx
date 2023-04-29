@@ -69,7 +69,7 @@ const Index = ({ providers }: { providers: any }) => {
         const response = await createUser(values);
         if (response.data.user) {
           dispatch(setAuthUser(response.data));
-          router.push("/auth/confirm-email");
+          router.push("/confirm-email");
         } else {
           notify({ type: "error", text: response.data.message });
         }

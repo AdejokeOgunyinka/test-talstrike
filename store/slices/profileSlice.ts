@@ -36,6 +36,7 @@ type IProfileResponse = {
   phone_number: string;
   trainings: string;
   achievements: { title: string; year: string; description: string }[];
+  teams: string[];
   interests: string[];
   date_of_birth: string;
   abilities: string[];

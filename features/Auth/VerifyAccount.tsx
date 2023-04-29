@@ -74,7 +74,7 @@ const Index = () => {
         {showContinueBtn && (
           <a
             type="submit"
-            className="h-[40px] bg-brand-600 rounded-[7px] w-full md:w-[232px] font-light text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+            className="h-[40px] bg-brand-600 flex justify-center items-center rounded-[7px] w-full md:w-[232px] font-light text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
             href={"/signup/setup"}
           >
             Setup your profile

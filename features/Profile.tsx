@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -13,6 +14,7 @@ import EditCareerProgress from "@/components/ProfileModals/EditCareerProgress";
 import AboutMe from "./ProfileSections/AboutMe";
 import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
+import { useGetUserPhotos } from "@/api/profile";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -29,7 +31,14 @@ const MyPolls = dynamic(() => import("../features/ProfileSections/Polls"));
 
 const Index = () => {
   const { data: session } = useSession();
+  const TOKEN = session?.user?.access;
+  const USERID = session?.user?.id;
   const { userInfo } = useTypedSelector((state) => state.profile);
+
+  const { data: media } = useGetUserPhotos({
+    token: TOKEN as string,
+    userId: USERID as string,
+  });
 
   const profileIcons = [
     { icon: "/chatbox.svg", onClick: "" },
@@ -131,10 +140,33 @@ const Index = () => {
                   <p className="font-semibold text-[14px] leading-[21px] text-brand-50">
                     Photos
                   </p>
-                  <p className="text-brand-300 text-[12px]">25 pictures</p>
+                  <p className="text-brand-300 text-[12px]">
+                    {media?.count} pictures
+                  </p>
                 </div>
                 <div className="w-full h-[26px]">
-                  <NextImage src={profilePhotos1} alt="profile photos 1" />
+                  {media?.photos ? (
+                    <div className="w-full h-full flex flex-wrap gap-[2px]">
+                      {media?.photos?.map((photo: string, index: number) => (
+                        <div key={index} className="basis-[33%] relative">
+                          <img
+                            src={photo}
+                            alt="nail"
+                            className="rounded-[4px]"
+                          />
+                          {index === media?.count - 1 && (
+                            <div className="absolute top-0 bottom-0 w-full h-full flex justify-center items-center bg-[rgba(0, 0, 0, 0.5)]">
+                              <p className="text-brand-500 text-[10px]">
+                                View all
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <NextImage src={profilePhotos1} alt="profile photos 1" />
+                  )}
                 </div>
               </div>
             </div>

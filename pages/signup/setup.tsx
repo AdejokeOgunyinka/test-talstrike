@@ -1,15 +1,10 @@
-import Setup from '@/features/Auth/Setup/setupFlow';
+import Setup from "@/features/Auth/Setup/setupFlow";
 
-import { MainLayout } from '@components/Layout/MainLayout/MainLayout';
-import { GetServerSidePropsContext, GetServerSideProps } from 'next';
-import { getProviders } from 'next-auth/react';
+import { GetServerSidePropsContext, GetServerSideProps } from "next";
+import { getProviders } from "next-auth/react";
 
-const SetupPage = ({ providers }) => {
-  return (
-    <MainLayout>
-      <Setup providers={Object.values(providers)} />
-    </MainLayout>
-  );
+const SetupPage = ({ providers }: { providers: any }) => {
+  return <Setup providers={Object.values(providers)} />;
 };
 
 export default SetupPage;

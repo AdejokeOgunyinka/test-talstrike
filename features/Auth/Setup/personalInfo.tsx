@@ -22,13 +22,13 @@ const PersonalInfo = ({
   specialties,
   clicked,
   sports,
-  chosenSportIndex,
+  chosenSport,
 }: {
   chosenPosition?: string;
   specialties?: any;
   clicked?: any;
   sports?: any;
-  chosenSportIndex?: number;
+  chosenSport?: string;
 }) => {
   const router = useRouter();
   const [updatingProfile, setUpdatingProfile] = useState(false);
@@ -89,7 +89,8 @@ const PersonalInfo = ({
         ...(chosenPosition && { position: chosenPosition }),
         biography: "",
         years_of_experience: valuesToBeUpdated?.years_of_experience,
-        sport: chosenSportIndex && sports[chosenSportIndex]?.name,
+        sport: sports?.filter((sport: any) => sport?.name === chosenSport)[0]
+          ?.id,
         location: [
           valuesToBeUpdated?.country,
           valuesToBeUpdated?.state,
@@ -745,12 +746,12 @@ const PersonalInfo = ({
   const ProfessionalGoal = () => {
     const achievementOptions = [
       {
-        label: `To become one of the best ${
-          chosenSportIndex && sports[chosenSportIndex]?.name
-        } ${specialties[clicked - 1]}(s/es) in the history of mankind`,
-        value: `To become one of the best ${
-          chosenSportIndex && sports[chosenSportIndex]?.name
-        } ${specialties[clicked - 1]}(s/es) in the history of mankind`,
+        label: `To become one of the best ${chosenSport} ${
+          specialties[clicked - 1]
+        }(s/es) in the history of mankind`,
+        value: `To become one of the best ${chosenSport} ${
+          specialties[clicked - 1]
+        }(s/es) in the history of mankind`,
       },
       {
         label: "To make my children proud of me",
@@ -761,12 +762,8 @@ const PersonalInfo = ({
         value: "To make my family proud of me",
       },
       {
-        label: `To win ${chosenSportIndex && sports[chosenSportIndex]?.name} ${
-          specialties[clicked - 1]
-        } of the year`,
-        value: `To win ${chosenSportIndex && sports[chosenSportIndex]?.name} ${
-          specialties[clicked - 1]
-        } of the year`,
+        label: `To win ${chosenSport} ${specialties[clicked - 1]} of the year`,
+        value: `To win ${chosenSport} ${specialties[clicked - 1]} of the year`,
       },
     ];
 
