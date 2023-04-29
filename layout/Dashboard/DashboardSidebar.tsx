@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { Fragment, useState } from "react";
 import NextImage from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 import styled from "styled-components";
@@ -28,6 +28,7 @@ const ActiveIcons: Record<string, string> = {
   Messages: "/messagesActiveIcon.svg",
   Explore: "/exploreActiveIcon.svg",
   Agents: "/agentsActiveIcon.svg",
+  Trophies: "/trophyActive.svg",
 };
 
 const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
@@ -188,6 +189,12 @@ export const DashboardSidebar = () => {
             active={isActivePath("/explore", router.pathname)}
             Icon={"/exploreInactiveIcon.svg"}
             title="Explore"
+          />
+          <SideBarLink
+            path="/achievements"
+            active={isActivePath("/achievements", router.pathname)}
+            Icon="/trophyInactive.svg"
+            title="Trophies"
           />
           {/* <NewSideBarLink
             path="/players"

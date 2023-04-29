@@ -24,7 +24,11 @@ const ViewProfileImg = ({ onClose }: { onClose: () => void }) => {
         </div>
         <img
           className="w-full h-[calc(100%-54px)] object-cover"
-          src={(session?.user?.image as string) || ProfileImg}
+          src={
+            session?.user?.image !== null
+              ? (session?.user?.image as string)
+              : ProfileImg
+          }
           alt="profile"
         />
       </div>

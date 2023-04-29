@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
@@ -16,6 +17,7 @@ import GifIcon from "@/assets/gifIcon.svg";
 import SmallImageIcon from "@/assets/smallImgIcon.svg";
 import SmileyIcon from "@/assets/smileyIcon.svg";
 import SendIcon from "@/assets/paperPlane.svg";
+import ProfileImg from "@/assets/profileIcon.svg";
 
 import {
   useLikeUnlikePost,
@@ -89,11 +91,10 @@ const PostCard = ({
       <div>
         <div className="flex justify-between">
           <div className="flex items-center">
-            <NextImage
-              src={postImage}
+            <img
+              src={postImage !== null ? postImage : ProfileImg}
               alt="post image"
-              width="40"
-              height="40"
+              className="w-[40px] h-[40px] rounded-[50%]"
               style={{ borderRadius: "50%" }}
             />
 
@@ -153,7 +154,11 @@ const PostCard = ({
           <div className="flex">
             {postLikedAvatars?.slice(0, 3)?.map((like: any, index: number) => (
               <div className="-ml-[7px]" key={index}>
-                <NextImage src={like} alt="icons" width="20" height="20" />
+                <img
+                  src={like}
+                  alt="icons"
+                  className="w-[20px] h-[20px] rounded-[50%]"
+                />
               </div>
             ))}
             {postLikeCount > 3 ? (
@@ -235,11 +240,14 @@ const PostCard = ({
         <div className="w-full h-[125px] overflow-x-scroll bg-brand-1000 flex flex-col gap-y-[10px] pt-[10px] px-[12px] py-[12px]">
           {commentsOnPost?.results?.map((comment: any, index: number) => (
             <div className="flex items-center" key={index}>
-              <NextImage
-                src={comment?.author?.image}
+              <img
+                src={
+                  comment?.author?.image !== null
+                    ? comment?.author?.image
+                    : ProfileImg
+                }
                 alt="author"
-                width="40"
-                height="40"
+                className="w-[40px] h-[40px] rounded-[50%]"
               />
               <div className="pl-[15px]">
                 <p className="text-[11px]">
@@ -253,11 +261,14 @@ const PostCard = ({
       )}
       <div className="w-full pt-[9px] flex items-center justify-between">
         <div className="w-[40px] h-[40px]">
-          <NextImage
-            src={session?.user?.image as string}
+          <img
+            src={
+              session?.user?.image !== null
+                ? (session?.user?.image as string)
+                : ProfileImg
+            }
             alt="session image"
-            width="40"
-            height="40"
+            className="w-[40px] h-[40px] rounded-[50%]"
           />
         </div>
 

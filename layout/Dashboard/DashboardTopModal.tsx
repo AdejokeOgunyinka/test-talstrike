@@ -1,8 +1,8 @@
-import NextImage from 'next/image';
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import NextImage from "next/image";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
-import ProfileImg from '@/assets/profileIcon.svg';
+import ProfileImg from "@/assets/profileIcon.svg";
 
 const DashboardTopBarModal = () => {
   const { data: session } = useSession();
@@ -21,7 +21,11 @@ const DashboardTopBarModal = () => {
       </div>
       <div className="w-[64.75px] h-[64.75px] mb-[11.25px] border-4 border-brand-500 rounded-[50%] overflow-hidden shadow shadow-[0px_1.6087px_4.02174px_1.18265px_rgba(0, 0, 0, 0.07)]">
         <NextImage
-          src={(session?.user?.image as string) || ProfileImg}
+          src={
+            session?.user?.image !== null
+              ? (session?.user?.image as string)
+              : ProfileImg
+          }
           width="161"
           height="161"
           alt="profile"
@@ -31,9 +35,11 @@ const DashboardTopBarModal = () => {
       <h3 className="font-medium text-brand-1800 text-[16px] leading-[24px]">
         {session?.user?.firstname} {session?.user?.lastname}
       </h3>
-      <p className="text-brand-2000 text-[11px] font-normal mb-[17px]">{session?.user?.email}</p>
+      <p className="text-brand-2000 text-[11px] font-normal mb-[17px]">
+        {session?.user?.email}
+      </p>
       <button
-        onClick={() => router.push('/profile')}
+        onClick={() => router.push("/profile")}
         className="w-[102px] bg-brand-2050 rounded-[19px] h-[29px] text-brand-600 mb-[21px] text-[10px] font-semibold"
       >
         View Profile
@@ -41,10 +47,16 @@ const DashboardTopBarModal = () => {
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
         Achievements
       </p>
-      <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">Appearances</p>
+      <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
+        Appearances
+      </p>
       <div className="w-[100%] h-[75px] border-t-[0.5px] border-brand-2100 flex items-center justify-center gap-x-[20px]">
-        <p className="text-[10px] text-brand-1800 cursor-pointer font-semibold">Settings</p>
-        <p className="text-[10px] text-brand-1800 cursor-pointer font-semibold">Help</p>
+        <p className="text-[10px] text-brand-1800 cursor-pointer font-semibold">
+          Settings
+        </p>
+        <p className="text-[10px] text-brand-1800 cursor-pointer font-semibold">
+          Help
+        </p>
         <p
           onClick={handleSignOut}
           className="text-[10px] cursor-pointer text-brand-1800 font-semibold"

@@ -186,7 +186,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 height="61"
               />
             </div>
-            <div className="w-full px-[20px] md:px-[61px] flex flex-col gap-y-[25px] py-[30px] h-[900px]">
+            <div className="w-full px-[20px] md:px-[61px] flex flex-col gap-y-[25px] pt-[30px] pb-[170px]">
               <InputBox
                 id="lastname"
                 placeholder="Enter your firstname"
@@ -242,16 +242,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 Phone number *
               </label>
               <div className="flex">
-                {/* <SetupDropdown
-                  options={[phoneCode]}
-                  placeholder="Phone number"
-                  classname="w-[20%]"
-                  blueBg
-                  id="country_code"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.country_code}
-                /> */}
                 <input
                   placeholder="phone number"
                   className="w-full h-[46px] border-2 border-brand-1850  pl-[10px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
@@ -268,7 +258,16 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 value={formik.values.biography as string}
                 placeholder="About me..."
                 onBlur={formik.handleBlur}
-                title="About Me"
+                title="About Me *"
+              />
+
+              <TextBox
+                id="career_goal"
+                onChange={formik.handleChange}
+                // value={formik.values.career_goal as string}
+                placeholder="Career Goal"
+                onBlur={formik.handleBlur}
+                title="My Career Goal *"
               />
 
               <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
@@ -280,7 +279,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                   <div>
                     <div className="flex gap-[15px]">
                       <input
-                        placeholder={`Enter a maximum of 5 things you desire as a ${userInfo?.profile?.user?.roles[0]?.toLowerCase()}`}
+                        placeholder={`Enter a maximum of 5 topics that are interesting to you`}
                         className="w-[100%] h-[46px] border-2 border-brand-2850 pl-[10px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
                         id="likes"
                         onChange={(e) => setLikeInput(e?.target?.value)}
@@ -303,7 +302,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                         {formik.values.likes?.map((like, index) => (
                           <div
                             key={index}
-                            className="flex py-[5px] items-center px-[11px] rounded-[2px] bg-brand-2950"
+                            className="flex py-[5px] items-center px-[11px] rounded-[2px]"
                           >
                             <p
                               className="text-[14px] text-brand-1800"
@@ -312,7 +311,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                               {like}
                             </p>
                             <p
-                              className="text-[16px] ml-[9px] cursor-pointer"
+                              className="text-[16px] ml-[14px] cursor-pointer"
                               onClick={() => arrayHelpers.remove(index)}
                             >
                               x
@@ -325,23 +324,75 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 )}
               />
 
-              <div className="w-full flex justify-end pb-[30px]">
-                <button
-                  type="submit"
-                  className="bg-brand-600 text-brand-500 rounded-[4px] p-[13px]"
-                >
-                  {updatingProfile ? (
-                    <BeatLoader
-                      color={"white"}
-                      size={10}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                    />
-                  ) : (
-                    "Save changes"
-                  )}
-                </button>
+              <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
+                Social Profiles
+              </label>
+              <p className="text-[#343D45]">
+                Please enter the url of your social profiles
+              </p>
+              <div className="flex  gap-[20px]">
+                <InputBox
+                  id="linkedin"
+                  placeholder="Linkedin url"
+                  title="Linkedin"
+                  // value={formik.values.linkedin}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  disabled={false}
+                />
+                <InputBox
+                  id="Facebook"
+                  placeholder="Facebook url"
+                  title="Facebook"
+                  // value={formik.values.facebook}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  disabled={false}
+                />
               </div>
+              <div className="flex gap-[20px]">
+                <InputBox
+                  id="Twitter"
+                  placeholder="Twitter url"
+                  title="Twitter"
+                  // value={formik.values.twitter}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  disabled={false}
+                />
+                <InputBox
+                  id="Instagram"
+                  placeholder="Instagram url"
+                  title="Instagram"
+                  // value={formik.values.instagram}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  disabled={false}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between w-[inherit] px-[59px] h-[100px] bg-brand-500 flex justify-end pt-[25px] fixed bottom-0 border-t border-[#E3E2E2] ">
+              <button
+                onClick={onClose}
+                className="border border-[2px] font-medium w-[159px] h-[54px] rounded-[4px] border-brand-600 text-brand-600"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="bg-brand-600 text-brand-500 rounded-[4px] p-[13px] h-[54px]"
+              >
+                {updatingProfile ? (
+                  <BeatLoader
+                    color={"white"}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  "Save changes"
+                )}
+              </button>
             </div>
           </div>
         </form>

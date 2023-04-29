@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
@@ -88,11 +89,14 @@ const Dashboard = () => {
         <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
           <div className="flex items-center">
             <div className="w-[40px] h-[40px] overflow-hidden">
-              <NextImage
-                src={(session?.user?.image as string) || ProfileImg}
+              <img
+                src={
+                  session?.user?.image !== null
+                    ? (session?.user?.image as string)
+                    : ProfileImg
+                }
                 alt="profile"
-                width="40"
-                height="40"
+                className="w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
               />
             </div>
             <div className="ml-[10px] h-[30px] bg-brand-1250 rounded-[6px] w-[calc(100%-50px)]">

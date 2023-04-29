@@ -172,7 +172,7 @@ const Index = ({ providers, csrfToken }: LoginProps) => {
           <p className="text-[11px] text-center text-brand-50 text-light">
             {`Don't have an account?`}{" "}
             <a
-              href="/auth/signup"
+              href="/signup"
               className="underline decoration-solid text-brand-100"
             >
               Sign up

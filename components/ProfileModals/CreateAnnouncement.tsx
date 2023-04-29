@@ -113,7 +113,11 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
                 <div className="flex items-center gap-x-[8px] mb-[36px]">
                   <div className="w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]">
                     <NextImage
-                      src={(session?.user?.image as string) || ProfileImg}
+                      src={
+                        session?.user?.image !== null
+                          ? (session?.user?.image as string)
+                          : ProfileImg
+                      }
                       alt="profile"
                       width="50"
                       height="50"

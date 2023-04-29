@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { axios } from "@/libs/axios";
 import { User } from "@/libs/types/user";
 import { ProfileApi } from "@/libs/axios";
@@ -47,13 +47,10 @@ export const nextAuthOauthLogin = async ({
   });
 };
 
-export const getUserByProviderAndProviderAccountId = async ({
-  providerAccountId,
-  provider,
-}: {
-  providerAccountId: any;
-  provider: any;
-}) => {
+export const getUserByProviderAndProviderAccountId = async (
+  providerAccountId: any,
+  provider: any
+) => {
   return await axios.post("/auth/signin/provider", {
     providerAccountId,
     provider,
@@ -74,6 +71,23 @@ export const useResendVerification = () =>
       .catch((err) => {
         throw err.response.data;
       })
+  );
+
+export const useGetSports = () =>
+  useQuery(
+    ["getSports"],
+    () =>
+      axios
+        .get(`/auth/sport/`)
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        }),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    }
   );
 
 export const useVerifyEmail = () =>
