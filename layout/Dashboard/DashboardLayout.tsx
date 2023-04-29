@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -69,15 +70,14 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 }}
               >
                 <div className="rounded-[7px] overflow-hidden flex justify-center items-center cursor-pointer">
-                  <NextImage
+                  <img
                     src={
                       session?.user?.image !== null
                         ? (session?.user?.image as string)
                         : ProfileImg
                     }
                     alt="me"
-                    width="35"
-                    height="35"
+                    className="w-[35px] h-[35px]"
                   />
                 </div>
                 {showSignOutButton && <DashboardTopBarModal />}
