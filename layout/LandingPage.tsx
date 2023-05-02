@@ -68,7 +68,7 @@ const LandingPageLayout = () => {
   }, [activeIndex, slideShowImages.length]);
   return (
     <div className="w-full h-screen flex justify-center">
-      <div className="w-full 2xl:w-[70vw] relative h-screen 2xl:h-[85vh] flex 2xl:mx-auto 2xl:my-auto 2xl:rounded-[29px] overflow-hidden">
+      <div className="w-full 2xl:w-[85vw] relative h-screen 2xl:h-[85vh] flex 2xl:mx-auto 2xl:my-auto 2xl:rounded-[29px] overflow-hidden">
         <div className="absolute top-[134px] w-full flex justify-center z-[999]">
           <NextImage
             src="/white-logo.svg"
@@ -106,7 +106,7 @@ const LandingPageLayout = () => {
             {slideShowImages[activeIndex].sloganText}
           </p>
         </div>
-        <div className="absolute bottom-[150px] w-full flex flex-col items-center z-[999]">
+        <div className="absolute bottom-[150px] md:bottom-[180px] w-full flex flex-col items-center z-[999]">
           <div className="w-full flex justify-center gap-[13px]">
             <a href="/login">
               <button className="w-[141px] h-[40px] text-brand-500 text-[14px] border-[1.5px] border-brand-500 rounded-[4px] ">
@@ -124,7 +124,7 @@ const LandingPageLayout = () => {
             Reserved.
           </p>
         </div>
-        <div className="mx-auto absolute bottom-2 w-full flex justify-center">
+        <div className="mx-auto absolute bottom-[85px] w-full flex justify-center">
           {slideShowImages.map((_, index) => (
             <div
               key={index}
