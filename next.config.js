@@ -18,6 +18,8 @@ const nextConfig = {
     BUCKET_URL: process.env.BUCKET_URL,
     SECRET: process.env.SECRET,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    GOOGLE_ID: process.env.GOOGLE_ID,
+    GOOGLE_SECRET: process.env.GOOGLE_SECRET,
   },
   images: {
     domains: [

@@ -6,6 +6,7 @@ import { useState } from "react";
 import NextImage from "next/image";
 import * as yup from "yup";
 import BeatLoader from "react-spinners/BeatLoader";
+import { signIn } from "next-auth/react";
 // import {getProviders} from "next-auth/react"
 
 import GmailIcon from "@/assets/gmailIcon.svg";
@@ -95,7 +96,10 @@ const Index = ({ providers }: { providers: any }) => {
           Lorem Ipsum is simply dummy text of the printing{" "}
         </p>
         <div className="flex mt-[24px] mb-[29px] gap-x-[16px] w-full">
-          <div className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]">
+          <div
+            onClick={() => signIn("google")}
+            className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]"
+          >
             <NextImage src={GmailIcon} alt="gmail" />
             <p className="ml-[7px] text-brand-50 text-[10px] font-light leading-[15px]">
               Sign up with Google
