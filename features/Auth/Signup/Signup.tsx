@@ -203,7 +203,10 @@ const Index = ({ providers }: { providers: any }) => {
           </button>
           <p className="text-[11px] text-center text-brand-50 text-light">
             Already have an account?{" "}
-            <a href="/" className="underline decoration-solid text-brand-100">
+            <a
+              href="/login"
+              className="underline decoration-solid text-brand-100"
+            >
               Login
             </a>
           </p>

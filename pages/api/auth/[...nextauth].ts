@@ -15,13 +15,13 @@ export default NextAuth({
   secret: process.env.SECRET,
   session: {
     strategy: "jwt",
-    // maxAge: 30 * 24 * 60 * 60,
+    maxAge: 7 * 24 * 60 * 60,
   },
   jwt: {
-    // maxAge: 30 * 24 * 60 * 60,
+    maxAge: 7 * 24 * 60 * 60,
   },
   pages: {
-    signIn: "/",
+    signIn: "/login",
     newUser: "/signup",
   },
   debug: process.env.NODE_ENV === "development",
@@ -56,6 +56,7 @@ export default NextAuth({
       },
     }),
     GoogleProvider({
+      name: "Next auth 13",
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
       authorization: {
