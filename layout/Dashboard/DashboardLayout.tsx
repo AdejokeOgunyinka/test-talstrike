@@ -99,7 +99,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             {router.pathname !== "/explore" &&
               router.pathname !== "/profile" &&
               router.pathname !== "/profile/[id]" && (
-                <aside className="fixed right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden">
+                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden">
                   <DashboardAside />
                 </aside>
               )}

@@ -3,10 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 
-// type LandingPageLayoutProps = {
-//   children?: React.ReactNode;
-// };
-
 const LandingPageLayout = () => {
   const slideShowImages = [
     {

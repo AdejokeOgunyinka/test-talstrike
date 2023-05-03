@@ -27,7 +27,7 @@ const DashboardAside = () => {
   };
 
   return (
-    <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline h-[100%]  lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
+    <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline h-[100%] lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
       <div className="sticky z-[99] top-[70px] bg-brand-500">
         <div className="h-[40px] mb-[13px]">
           <SearchBar placeholder="Search for players" />
