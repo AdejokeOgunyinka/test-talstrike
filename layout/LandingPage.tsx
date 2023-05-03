@@ -109,7 +109,7 @@ const LandingPageLayout = () => {
                 Login
               </button>
             </a>
-            <a href="/signup">
+            <a href="/auth/signup">
               <button className="w-[141px] h-[40px] text-brand-500 text-[14px] rounded-[4px] bg-brand-600">
                 Get Started
               </button>
