@@ -115,7 +115,7 @@ const PersonalInfo = ({
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        router.push("/");
+        router.push("/login");
       } else {
         notify({
           type: "error",

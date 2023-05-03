@@ -1,8 +1,8 @@
+import { useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 import SlideShowImg1 from "@/assets/AuthLayoutImage1.png";
 import SlideShowImg2 from "@/assets/AuthLayoutImage2.png";
 import SlideShowImg3 from "@/assets/AuthLayoutImage4.png";
-import { useEffect, useRef, useState } from "react";
 
 const AuthSlideShow = () => {
   const slideshowImages = [SlideShowImg1, SlideShowImg2, SlideShowImg3];

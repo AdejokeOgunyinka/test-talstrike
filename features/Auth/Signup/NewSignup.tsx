@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 
 import GmailIcon from "@/assets/gmailIcon.svg";
 import FacebookIcon from "@/assets/facebookIcon.svg";
-import TalstrikeLogo from "@/assets/TalstrikeLogo.svg";
+import LinkedinIcon from "@/assets/linkedinIcon.svg";
 import EmailIcon from "@/assets/emailIcon.svg";
 import HiddenPasswordIcon from "@/assets/hiddenPasswordIcon.svg";
 import { createUser } from "@/api/auth";
@@ -20,9 +20,18 @@ import { useRouter } from "next/router";
 import { User } from "@/libs/types/user";
 import { setAuthUser } from "@/store/slices/authSlice";
 import { useTypedDispatch } from "@/hooks/hooks";
-import CustomInputBox from "@/components/Inputbox";
+import CustomInputBox from "@/components/AuthInputbox";
+import SignupIndicators from "./SignupIndicators";
 
-const Index = ({ providers }: { providers: any }) => {
+const Index = ({
+  providers,
+  goBack,
+  continueSignup,
+}: {
+  providers: any;
+  goBack?: () => void;
+  continueSignup?: () => void;
+}) => {
   const router = useRouter();
   const dispatch = useTypedDispatch();
 
@@ -70,7 +79,7 @@ const Index = ({ providers }: { providers: any }) => {
         const response = await createUser(values);
         if (response.data.user) {
           dispatch(setAuthUser(response.data));
-          router.push("/confirm-email");
+          continueSignup && continueSignup();
         } else {
           notify({ type: "error", text: response.data.message });
         }
@@ -86,39 +95,19 @@ const Index = ({ providers }: { providers: any }) => {
   const [hidePassword, setHidePassword] = useState(true);
 
   return (
-    <div className="max-w-md pt-[50px] w-full lg:pt-[102px] pl-[20px] lg:pl-[50px] pr-[20px] lg:pr-[unset]">
-      <div className="w-full">
-        <NextImage src={TalstrikeLogo} alt="talstrike" width="74" height="48" />
-        <div className="mt-[47px] text-[32px] leading-[48px] text-brand-70 font-bold">
+    <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[61px] xl:px-[140px] px-[20px]">
+      <div className="w-full relative h-[unset] md:h-full">
+        <div className="text-[32px] leading-[48px] text-brand-70 font-bold text-center mb-[31px]">
           Create an account
         </div>
-        <p className="text-[11px] text-brand-50 font-light">
-          Lorem Ipsum is simply dummy text of the printing{" "}
+        <SignupIndicators active={0} />
+        <p className=" mt-[71px] mb-[40px] text-[16px] text-brand-600 font-medium text-center">
+          Great! You’ve taken the first step to creating your account. Please
+          fill in your basic information to begin.
         </p>
-        <div className="flex mt-[24px] mb-[29px] gap-x-[16px] w-full">
-          <div
-            onClick={() => signIn("google")}
-            className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]"
-          >
-            <NextImage src={GmailIcon} alt="gmail" />
-            <p className="ml-[7px] text-brand-50 text-[10px] font-light leading-[15px]">
-              Sign up with Google
-            </p>
-          </div>
-          <div className="flex items-center basis-1/2 cursor-pointer rounded-[18px] border py-[9px] px-[19px] border-[rgba(217, 217, 217, 0.97)]">
-            <NextImage src={FacebookIcon} alt="gmail" />
-            <p className="ml-[7px] text-brand-50 text-[10px] font-light leading-[15px]">
-              Sign up with Facebook
-            </p>
-          </div>
-        </div>
-        <div className="relative w-full border-b-[rgba(217, 217, 217, 0.97)] border border-t-0 border-l-0 border-r-0">
-          <p className="text-center absolute pl-[20px] pr-[20px] -top-[10px] bg-white left-[25%] text-[12px] leading-[18px] text-brand-50 font-normal">
-            or Get started with Email
-          </p>
-        </div>
+
         <form onSubmit={formik.handleSubmit}>
-          <div className="flex mt-[23px] gap-x-[13px]">
+          <div className="flex gap-x-[13px]">
             <div className="basis-1/2">
               <CustomInputBox
                 label="First name"
@@ -148,7 +137,7 @@ const Index = ({ providers }: { providers: any }) => {
               )}
             </div>
           </div>
-          <div className="mt-[30px]">
+          <div className="mt-[15px]">
             <CustomInputBox
               label="Email"
               placeholder="Enter your email"
@@ -163,7 +152,7 @@ const Index = ({ providers }: { providers: any }) => {
               </p>
             )}
           </div>
-          <div className="mt-[30px] mb-[25px]">
+          <div className="mt-[15px] mb-[25px]">
             <CustomInputBox
               label="Password"
               type={hidePassword ? "password" : "text"}
@@ -186,30 +175,60 @@ const Index = ({ providers }: { providers: any }) => {
               </p>
             )}
           </div>
-          <button
-            type="submit"
-            className="h-[40px] bg-brand-600 rounded-[7px] w-full font-light text-[11px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
-          >
-            {loading ? (
-              <BeatLoader
-                color={"white"}
-                size={10}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            ) : (
-              "Sign up"
-            )}
-          </button>
-          <p className="text-[11px] text-center text-brand-50 text-light">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="underline decoration-solid text-brand-100"
+          <div className="flex flex-col md:flex-row gap-[15px]">
+            <button
+              onClick={goBack}
+              className="md:basis-1/2 border-[1.5px] border-brand-1650 h-[37px] rounded-[4px] text-brand-1650 font-medium text-[14px]"
             >
-              Login
-            </a>
-          </p>
+              Back
+            </button>
+            <button
+              type="submit"
+              className="h-[37px] bg-brand-600 rounded-[4px] md:basis-1/2 font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+            >
+              {loading ? (
+                <BeatLoader
+                  color={"white"}
+                  size={10}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                "Continue"
+              )}
+            </button>
+          </div>
+          <div className="mt-[44px] w-full">
+            <p className="text-center text-[#94AEC5] text-[14px] mb-[24px]">
+              Or sign up with
+            </p>
+            <div className="flex w-full justify-center items-center gap-[20px] mb-[25px] md:mb-[unset]">
+              <NextImage
+                src={GmailIcon}
+                alt="gmail"
+                onClick={() => signIn("google")}
+                className="cursor-pointer"
+              />
+              <NextImage
+                src={LinkedinIcon}
+                alt="linkedin"
+                className="cursor-pointer"
+              />
+              <NextImage
+                src={FacebookIcon}
+                alt="facebook"
+                className="cursor-pointer"
+              />
+            </div>
+          </div>
+          <div className="relative md:absolute md:bottom-[62px] w-full">
+            <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
+              Already have an account?{" "}
+              <a href="/login" className="text-[#003D72] underline">
+                Login
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>
