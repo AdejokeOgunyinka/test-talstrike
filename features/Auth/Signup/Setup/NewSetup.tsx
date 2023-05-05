@@ -332,6 +332,21 @@ const Index = ({ providers }: any) => {
 
   const [goalInput, setGoalInput] = useState("");
 
+  const monthOfBirth: Record<string, string> = {
+    Jan: "01",
+    Feb: "02",
+    Mar: "03",
+    Apr: "04",
+    May: "05",
+    Jun: "06",
+    Jul: "07",
+    Aug: "08",
+    Sep: "09",
+    Oct: "10",
+    Nov: "11",
+    Dec: "12",
+  };
+
   const router = useRouter();
   const [updatingProfile, setUpdatingProfile] = useState(false);
 
@@ -345,7 +360,9 @@ const Index = ({ providers }: any) => {
             sport?.name?.toLowerCase() ===
             step2Formik?.values?.sport?.toLowerCase()
         )[0]?.id,
-        date_of_birth: `${step3Formik?.values?.year}-${step3Formik?.values?.month}-${step3Formik?.values?.day}`,
+        date_of_birth: `${step3Formik?.values?.year}-${
+          monthOfBirth[step3Formik?.values?.month]
+        }-${step3Formik?.values?.day}`,
         ...step4Formik.values,
         ...step5Formik.values,
         location: [
@@ -363,7 +380,11 @@ const Index = ({ providers }: any) => {
       const updateUserRole = await updateUserInfo(
         token as string,
         {
-          roles: [chosenSpecialty?.toUpperCase()],
+          roles: [
+            chosenSpecialty === "Player"
+              ? "TALENT"
+              : chosenSpecialty?.toUpperCase(),
+          ],
         },
         localStorage.getItem("verifiedUserID") as string
       );
@@ -648,28 +669,30 @@ const Index = ({ providers }: any) => {
                   </p>{" "}
                   <FormikProvider value={step4Formik}>
                     <form onSubmit={step4Formik.handleSubmit}>
-                      <div className="w-full">
-                        <Dropdown
-                          placeholder="Gender"
-                          options={[
-                            { value: "Male", label: "Male" },
-                            { value: "Female", label: "Female" },
-                          ]}
-                          name="gender"
-                          className="auth-dropdown"
-                          onChange={(val: any) =>
-                            step4Formik?.setFieldValue("gender", val?.value)
-                          }
-                          value={{
-                            value: step4Formik.values.gender,
-                            label: step4Formik.values.gender,
-                          }}
-                        />
-                        <ErrorMessage
-                          name="gender"
-                          component="p"
-                          className="text-brand-warning text-[12px]"
-                        />
+                      <div className="w-full flex justify-center">
+                        <div className="w-[60%]">
+                          <Dropdown
+                            placeholder="Gender"
+                            options={[
+                              { value: "Male", label: "Male" },
+                              { value: "Female", label: "Female" },
+                            ]}
+                            name="gender"
+                            className="auth-dropdown"
+                            onChange={(val: any) =>
+                              step4Formik?.setFieldValue("gender", val?.value)
+                            }
+                            value={{
+                              value: step4Formik.values.gender,
+                              label: step4Formik.values.gender,
+                            }}
+                          />
+                          <ErrorMessage
+                            name="gender"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
                       </div>
                       <SubstepController />
                     </form>
@@ -683,13 +706,17 @@ const Index = ({ providers }: any) => {
                   </p>{" "}
                   <FormikProvider value={step5Formik}>
                     <form onSubmit={step5Formik.handleSubmit}>
-                      <Inputbox
-                        placeholder="Enter your Phone number..."
-                        type="text"
-                        name="phone_number"
-                        value={step5Formik.values.phone_number}
-                        onChange={step5Formik.handleChange}
-                      />
+                      <div className="w-full flex justify-center">
+                        <div className="w-[60%]">
+                          <Inputbox
+                            placeholder="Enter your Phone number..."
+                            type="text"
+                            name="phone_number"
+                            value={step5Formik.values.phone_number}
+                            onChange={step5Formik.handleChange}
+                          />
+                        </div>
+                      </div>
                       <SubstepController />
                     </form>
                   </FormikProvider>
