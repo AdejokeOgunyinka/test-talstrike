@@ -1,3 +1,5 @@
+import React from "react";
+
 /* eslint-disable @next/next/no-img-element */
 const SignupIndicators = ({ active }: { active: number }) => {
   const indicators = ["Sign Up", "Confirm Email", "Set Up"];
@@ -5,7 +7,7 @@ const SignupIndicators = ({ active }: { active: number }) => {
     <div className="w-full">
       <div className="flex w-full gap-[16px] justify-between">
         {indicators?.map((_, index) => (
-          <>
+          <React.Fragment key={index}>
             <div className="flex w-full flex-col gap-[16px] items-center">
               <div
                 className="flex justify-center items-center w-[36.14px] h-[36.14px] rounded-[50%]"
@@ -48,14 +50,14 @@ const SignupIndicators = ({ active }: { active: number }) => {
                 }`}
               />
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
       <div
-        className={`flex w-full ${
+        className={`flex w-full mt-[10px] md:mt-[16px] ${
           active === 2
             ? "px-[0px]  md:px-[30px] lg:px-[0px]"
-            : "px-[unset] md:px-[10px] lg:px-[30px]"
+            : "px-[unset] md:px-[10px] lg:px-[15px]"
         } justify-between`}
       >
         {indicators?.map((indicator, index) => (
@@ -74,13 +76,26 @@ const SignupIndicators = ({ active }: { active: number }) => {
   );
 };
 
-export const SetupIndicator = ({ active }: { active: number }) => {
-  const indicators = ["Date of Birth", "Gender", "Phone Number", "Location"];
+export const SetupIndicator = ({
+  active,
+  isExperience,
+}: {
+  active: number;
+  isExperience?: boolean;
+}) => {
+  const indicators = isExperience
+    ? ["Experience", "Skill", "Interest", "Goal"]
+    : ["Date of Birth", "Gender", "Phone Number", "Location"];
+
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex w-[full] md:w-[93%] gap-[16px] justify-between mb-[10px]">
+    <div className="w-full hidden md:inline-flex flex flex-col items-center">
+      <div
+        className={`flex w-[full] ${
+          isExperience ? "md:w-[80%]" : "md:w-[93%]"
+        } gap-[16px] justify-between mb-[10px]`}
+      >
         {indicators?.map((_, index) => (
-          <>
+          <React.Fragment key={index}>
             <div className="flex flex-col items-center">
               <div
                 className="flex justify-center items-center w-[16.7px] h-[16.7px] rounded-[50%]"
@@ -121,11 +136,15 @@ export const SetupIndicator = ({ active }: { active: number }) => {
                 }`}
               />
             )}
-          </>
+          </React.Fragment>
         ))}
       </div>
       <div
-        className={`flex w-full px-[unset] md:px-[10px] lg:px-[0px] justify-between`}
+        className={`flex px-[unset] md:px-[10px] ${
+          isExperience
+            ? "w-[98%] lg:pl-[45px] lg:pr-[70px]"
+            : "w-full lg:px-[0px]"
+        }  justify-between`}
       >
         {indicators?.map((indicator, index) => (
           <p
