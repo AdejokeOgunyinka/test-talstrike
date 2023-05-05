@@ -24,12 +24,13 @@ export const isActivePath = (
 };
 
 export const getYears = (startYear: number) => {
-  let currentYear = new Date().getFullYear();
+  let currentYear = new Date().getFullYear() - 17;
   let years: string[] = [];
   startYear = startYear || 1980;
   while (startYear <= currentYear) {
     years.push((startYear++)?.toString());
   }
+  years = years?.sort((a, b) => parseInt(b) - parseInt(a));
   return years;
 };
 

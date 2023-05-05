@@ -97,7 +97,7 @@ const Index = ({
   return (
     <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[61px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
-        <div className="text-[32px] leading-[48px] text-brand-70 font-bold text-center mb-[31px]">
+        <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
           Create an account
         </div>
         <SignupIndicators active={0} />
