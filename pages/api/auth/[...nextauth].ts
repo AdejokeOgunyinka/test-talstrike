@@ -21,8 +21,8 @@ export default NextAuth({
     maxAge: 7 * 24 * 60 * 60,
   },
   pages: {
-    signIn: "/login",
-    newUser: "/signup",
+    signIn: "/auth/login",
+    newUser: "/auth/signup",
   },
   debug: process.env.NODE_ENV === "development",
   // Configure one or more authentication providers

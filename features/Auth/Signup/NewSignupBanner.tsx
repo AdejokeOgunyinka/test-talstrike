@@ -116,7 +116,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
           <div className="absolute bottom-[62px]">
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px]">
               Already have an account?{" "}
-              <a href="/login" className="text-[#003D72] underline">
+              <a href="/auth/login" className="text-[#003D72] underline">
                 Login
               </a>
             </p>

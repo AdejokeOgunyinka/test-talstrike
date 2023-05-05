@@ -397,7 +397,7 @@ const Index = ({ providers }: any) => {
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        router.push("/login");
+        router.push("/auth/login");
       } else {
         notify({
           type: "error",
