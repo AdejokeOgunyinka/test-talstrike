@@ -2,19 +2,20 @@
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DashboardLayout } from "@/layout/Dashboard";
 import Star from "@/assets/star.svg";
 import profilePhotos1 from "@/assets/profilePhotos1.png";
-import { useTypedSelector } from "@/hooks/hooks";
+import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import EditProfile from "@/components/ProfileModals/EditProfile";
 import EditCareerProgress from "@/components/ProfileModals/EditCareerProgress";
 import AboutMe from "./ProfileSections/AboutMe";
 import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
-import { useGetUserPhotos } from "@/api/profile";
+import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
+import { setProfile } from "@/store/slices/profileSlice";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -39,6 +40,16 @@ const Index = () => {
     token: TOKEN as string,
     userId: USERID as string,
   });
+
+  const dispatch = useTypedDispatch();
+
+  const { data: userData } = useGetMyProfile({
+    token: TOKEN as string,
+    userId: USERID as string,
+  });
+  useEffect(() => {
+    dispatch(setProfile(userData));
+  }, [dispatch, userData]);
 
   const profileIcons = [
     { icon: "/chatbox.svg", onClick: "" },
@@ -74,14 +85,17 @@ const Index = () => {
             <div className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px]">
               <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
                 <div className="relative w-[161px] profile-pic h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
-                  <NextImage
+                  <img
                     src={
-                      session?.user?.image !== null
-                        ? (session?.user?.image as string)
+                      userInfo?.profile?.user?.image !== null
+                        ? userInfo?.profile?.user?.image
                         : ProfileImg
                     }
-                    width="161"
-                    height="161"
+                    style={{
+                      width: "161px",
+                      height: "161px",
+                      objectFit: "cover",
+                    }}
                     alt="profile"
                     className="profile-img"
                   />

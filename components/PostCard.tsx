@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import EmojiPicker from "emoji-picker-react";
 import GifPicker from "gif-picker-react";
+import styled from "styled-components";
 
 import HeartIcon from "@/assets/heartIcon.svg";
 import ShareIcon from "@/assets/shareIcon.svg";
@@ -24,7 +25,7 @@ import {
   useCommentOnPost,
   useGetAllCommentsOnPost,
 } from "@/api/dashboard";
-import styled from "styled-components";
+import { useTypedSelector } from "@/hooks/hooks";
 
 const Image = styled.img``;
 
@@ -63,6 +64,8 @@ const PostCard = ({
 }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
+
+  const { userInfo } = useTypedSelector((state) => state.profile);
 
   const { mutate: likeUnlikePost, isLoading: isLikingOrUnlikingPost } =
     useLikeUnlikePost();
@@ -263,8 +266,8 @@ const PostCard = ({
         <div className="w-[40px] h-[40px]">
           <img
             src={
-              session?.user?.image !== null
-                ? (session?.user?.image as string)
+              userInfo?.profile?.user?.image !== null
+                ? userInfo?.profile?.user?.image
                 : ProfileImg
             }
             alt="session image"

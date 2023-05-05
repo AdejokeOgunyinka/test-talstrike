@@ -2,15 +2,12 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import NextImage from "next/image";
 
 import { DashboardSidebar, MobileMenu } from "./DashboardSidebar";
 import SearchBar from "@/components/SearchBar";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
-import { useGetMyProfile } from "@/api/profile";
-import { setProfile } from "@/store/slices/profileSlice";
-import { useTypedDispatch } from "@/hooks/hooks";
+import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import { isActivePath } from "@/libs/utils";
 import { MobileSideBarLink } from "./DashboardSidebar";
@@ -20,23 +17,14 @@ type LayoutProps = {
 };
 
 export const DashboardLayout = ({ children }: LayoutProps) => {
-  const dispatch = useTypedDispatch();
   const router = useRouter();
   const [showSignOutButton, setShowSignOutButton] = useState(false);
 
   const { data: session } = useSession();
-  const TOKEN = session?.user?.access;
-  const USER_ID = session?.user?.id;
 
-  const { data: userData } = useGetMyProfile({
-    token: TOKEN as string,
-    userId: USER_ID as string,
-  });
+  const { userInfo } = useTypedSelector((state) => state.profile);
+
   const [showMore, setShowMore] = useState(false);
-
-  useEffect(() => {
-    dispatch(setProfile(userData));
-  }, [dispatch, userData]);
 
   useEffect(() => {
     document.body.addEventListener("click", () => {
@@ -72,8 +60,8 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 <div className="rounded-[7px] overflow-hidden flex justify-center items-center cursor-pointer">
                   <img
                     src={
-                      session?.user?.image !== null
-                        ? (session?.user?.image as string)
+                      userInfo?.profile?.user?.image !== null
+                        ? userInfo?.profile?.user?.image
                         : ProfileImg
                     }
                     alt="me"

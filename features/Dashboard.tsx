@@ -21,10 +21,12 @@ import CreatePost from "@/components/ProfileModals/CreatePost";
 import CreateArticle from "@/components/ProfileModals/CreateArticle";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
-import { useGetPostsByType } from "@/api/profile";
+import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import { useFollowUser } from "@/api/players";
 import { useGetNewsfeed, useGetSuggestedFollows } from "@/api/dashboard";
 import notify from "@/libs/toast";
+import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
+import { setProfile } from "@/store/slices/profileSlice";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -35,9 +37,22 @@ export const postWidgets = [
 const Dashboard = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const dispatch = useTypedDispatch();
+
+  const { userInfo } = useTypedSelector((state) => state.profile);
 
   const TOKEN = session?.user?.access;
+
   const USER_ID = session?.user?.id;
+
+  const { data: userData } = useGetMyProfile({
+    token: TOKEN as string,
+    userId: USER_ID as string,
+  });
+
+  useEffect(() => {
+    dispatch(setProfile(userData));
+  }, [dispatch, userData]);
 
   const { data: NewsFeedData, isLoading: isLoadingNewsFeed } = useGetNewsfeed(
     TOKEN as string
@@ -91,8 +106,8 @@ const Dashboard = () => {
             <div className="w-[40px] h-[40px] overflow-hidden">
               <img
                 src={
-                  session?.user?.image !== null
-                    ? (session?.user?.image as string)
+                  userInfo?.profile?.user?.image !== null
+                    ? userInfo?.profile?.user?.image
                     : ProfileImg
                 }
                 alt="profile"

@@ -3,9 +3,11 @@ import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import ModalContainer from "@/components/Modal";
 import ProfileImg from "@/assets/profileIcon.svg";
+import { useTypedSelector } from "@/hooks/hooks";
 
 const ViewProfileImg = ({ onClose }: { onClose: () => void }) => {
-  const { data: session } = useSession();
+  const { userInfo } = useTypedSelector((state) => state.profile);
+
   return (
     <ModalContainer>
       <div className="w-[664px] h-[490px] bg-brand-500 border rounded-[8px]">
@@ -25,8 +27,8 @@ const ViewProfileImg = ({ onClose }: { onClose: () => void }) => {
         <img
           className="w-full h-[calc(100%-54px)] object-cover"
           src={
-            session?.user?.image !== null
-              ? (session?.user?.image as string)
+            userInfo?.profile?.user?.image !== null
+              ? userInfo?.profile?.user?.image
               : ProfileImg
           }
           alt="profile"
