@@ -17,71 +17,47 @@ import HiddenPasswordIcon from "@/assets/hiddenPasswordIcon.svg";
 import { createUser } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useRouter } from "next/router";
-import { User } from "@/libs/types/user";
+import { LoginInfo, User } from "@/libs/types/user";
 import { setAuthUser } from "@/store/slices/authSlice";
 import { useTypedDispatch } from "@/hooks/hooks";
 import CustomInputBox from "@/components/AuthInputbox";
-import SignupIndicators from "./SignupIndicators";
 
-const Index = ({
-  providers,
-  goBack,
-  continueSignup,
-}: {
-  providers: any;
-  goBack?: () => void;
-  continueSignup?: () => void;
-}) => {
+const Index = ({ providers }: { providers: any }) => {
   const router = useRouter();
   const dispatch = useTypedDispatch();
 
-  const signupSchema = yup.object().shape({
-    firstname: yup
-      .string()
-      .min(2, "Minimum of 2 characters")
-      .max(15, "Maximum of 15 characters")
-      .required("Please enter your first name"),
-    lastname: yup
-      .string()
-      .min(2, "Minimum of 2 characters")
-      .max(15, "Maximum of 15 characters")
-      .required("Please enter your last name"),
+  const loginSchema = yup.object().shape({
     email: yup
       .string()
       .email("Invalid email address")
       .required("Please enter your email address"),
-    password: yup
-      .string()
-      .required("Please enter your password")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])/,
-        "password must contain one uppercase character (A-Z), one lowercase character (a-z)"
-      )
-      .matches(/\W|_/g, "password must contain one special case character")
-      .matches(/^(?=.{8,})/, "password must contain at least 8 characters")
-      .matches(/^(?=.{6,20}$)\D*\d/, "password must contain one number (0-9)"),
+    password: yup.string().required("Please enter your password"),
   });
 
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      firstname: "",
-      lastname: "",
       email: "",
       password: "",
     },
-    validationSchema: signupSchema,
     validateOnBlur: true,
-    onSubmit: async (values: User, { setErrors }) => {
+    validationSchema: loginSchema,
+    onSubmit: async (values: LoginInfo) => {
       try {
         setLoading(true);
-        const response = await createUser(values);
-        if (response.data.user) {
-          dispatch(setAuthUser(response.data));
-          continueSignup && continueSignup();
+
+        const response = await signIn("credentials", {
+          redirect: false,
+          email: values.email,
+          password: values.password,
+          callbackUrl: "/dashboard",
+        });
+
+        if (response?.ok) {
+          router.push("/dashboard");
         } else {
-          notify({ type: "error", text: response.data.message });
+          notify({ type: "error", text: response?.error as string });
         }
       } catch (error) {
         const { data } = (error as any).response;
@@ -94,49 +70,22 @@ const Index = ({
 
   const [hidePassword, setHidePassword] = useState(true);
 
+  const GoogleHandlerFunction = async () => {
+    return signIn("google", { callbackUrl: "https://app.talstrike.com/" });
+  };
+
   return (
     <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[61px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
         <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
-          Create an account
+          Sign in
         </div>
-        <SignupIndicators active={0} />
-        <p className=" mt-[71px] mb-[40px] text-[16px] text-brand-600 font-medium text-center">
-          Great! You’ve taken the first step to creating your account. Please
-          fill in your basic information to begin.
+
+        <p className=" mt-[71px] mb-[100px] text-[16px] text-brand-600 font-medium text-center">
+          Welcome back to Talstrike. Login to continue.
         </p>
 
         <form onSubmit={formik.handleSubmit}>
-          <div className="flex gap-x-[13px]">
-            <div className="basis-1/2">
-              <CustomInputBox
-                label="First name"
-                placeholder="Enter your First name"
-                name="firstname"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.errors.firstname && formik.touched.firstname && (
-                <p className="text-brand-warning text-[10px]">
-                  {formik.errors.firstname}
-                </p>
-              )}
-            </div>
-            <div className="basis-1/2">
-              <CustomInputBox
-                label="Last name"
-                placeholder="Enter your Last name"
-                name="lastname"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.errors.lastname && formik.touched.lastname && (
-                <p className="text-brand-warning text-[10px]">
-                  {formik.errors.lastname}
-                </p>
-              )}
-            </div>
-          </div>
           <div className="mt-[15px]">
             <CustomInputBox
               label="Email"
@@ -175,16 +124,10 @@ const Index = ({
               </p>
             )}
           </div>
-          <div className="flex flex-col md:flex-row gap-[15px]">
-            <button
-              onClick={goBack}
-              className="md:basis-1/2 border-[1.5px] border-brand-1650 h-[37px] rounded-[4px] text-brand-1650 font-medium text-[14px]"
-            >
-              Back
-            </button>
+          <div className="flex flex-col md:flex-row gap-[15px] w-full">
             <button
               type="submit"
-              className="h-[37px] bg-brand-600 rounded-[4px] md:basis-1/2 font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+              className="w-full h-[37px] bg-brand-600 rounded-[4px] font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
             >
               {loading ? (
                 <BeatLoader
@@ -194,13 +137,13 @@ const Index = ({
                   data-testid="loader"
                 />
               ) : (
-                "Continue"
+                "Login"
               )}
             </button>
           </div>
           <div className="mt-[44px] w-full">
             <p className="text-center text-[#94AEC5] text-[14px] mb-[24px]">
-              Or sign up with
+              Or sign in with
             </p>
             <div className="flex w-full justify-center items-center gap-[20px] mb-[25px] md:mb-[unset]">
               <NextImage
@@ -223,9 +166,9 @@ const Index = ({
           </div>
           <div className="relative md:absolute md:bottom-[62px] w-full">
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
-              Already have an account?{" "}
-              <a href="/auth/login" className="text-[#003D72] underline">
-                Login
+              {"Don't yet have an account? "}
+              <a href="/auth/signup" className="text-[#003D72] underline">
+                Sign up
               </a>
             </p>
           </div>
