@@ -3,11 +3,11 @@
 import { useEffect, useState, CSSProperties } from "react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
+import BeatLoader from "react-spinners/BeatLoader";
 
-import TalstrikeLogo from "@/assets/TalstrikeLogoSetup.svg";
+import TalstrikeLogo from "@/assets/TalstrikeLogo.svg";
 import notify from "@/libs/toast";
 import { axios } from "@/libs/axios";
-import PageLoader from "@/components/Loader";
 
 const Index = () => {
   const router = useRouter();
@@ -27,7 +27,6 @@ const Index = () => {
 
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [showContinueBtn, setShowContinueBtn] = useState(false);
-  const [verifiedUser, setVerifiedUser] = useState<any>();
 
   useEffect(() => {
     if (verificationToken) {
@@ -37,7 +36,6 @@ const Index = () => {
         .then((res) => {
           const data = res?.data;
           localStorage.setItem("verificationToken", data?.access);
-          setVerifiedUser(data?.user);
           localStorage.setItem("verifiedUser", JSON.stringify(data?.user));
           localStorage?.setItem("verifiedUserID", data?.user?.id);
           notify({
@@ -54,31 +52,36 @@ const Index = () => {
   }, [verificationToken]);
 
   return (
-    <>
-      {isVerifyingEmail ? (
-        <PageLoader />
-      ) : (
-        <div className="pt-[30px] w-full h-full lg:pt-[110px] flex flex-col items-center">
-          <h3 className="mb-[50px] text-brand-600 text-[20px] leading-[168.5%] font-bold">
-            Welcome onboard, {verifiedUser?.firstname}
-          </h3>
-          <p className="text-brand-600 font-medium leading-[32px] mb-[60px]">
-            You are just one step away. Please complete your profile set up by
-            letting us know more about you as a sports professional. This
-            process should take you about{" "}
-            <b className="font-medium text-brand-1650">5 mins</b> to complete.
-          </p>
-          <a href={"/auth/signup/setup"}>
-            <button className="bg-brand-600 w-[171px] h-[37px] rounded-[4px] text-brand-500 text-[14px] leading-[21px] font-medium">
-              Proceed
-            </button>
-          </a>
-          <div className="mt-[120px] w-full flex justify-center items-center">
-            <NextImage src={TalstrikeLogo} alt="logo" />
-          </div>
+    <div className="max-w-md pt-[50px] w-full lg:pt-[102px] pl-[20px] lg:pl-[50px] pr-[20px] lg:pr-[unset]">
+      <div className="w-full">
+        <NextImage src={TalstrikeLogo} alt="talstrike" width="74" height="48" />
+        <div className="mt-[47px] text-[32px] leading-[48px] text-brand-70 font-bold">
+          Verify email
         </div>
-      )}
-    </>
+        <p className="text-[20px] text-brand-50 font-light mb-[20px]">
+          Please be patient while we verify your email. You should get a
+          notification soon about the result of our verification...
+        </p>
+        {isVerifyingEmail && (
+          <BeatLoader
+            color={"orange"}
+            cssOverride={override}
+            size={50}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        )}
+        {showContinueBtn && (
+          <a
+            type="submit"
+            className="h-[40px] bg-brand-600 flex justify-center items-center rounded-[7px] w-full md:w-[232px] font-light text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+            href={"/signup/setup"}
+          >
+            Setup your profile
+          </a>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,12 +1,12 @@
 import VerifyUserAccount from "@/features/Auth/VerifyAccount";
 
-import AuthLayout from "@/layout/Auth/AuthLayout";
+import AuthSetupLayout from "@/layout/NewAuth/AuthSetupLayout";
 
 const VerifyAccount = () => {
   return (
-    <AuthLayout>
+    <AuthSetupLayout>
       <VerifyUserAccount />
-    </AuthLayout>
+    </AuthSetupLayout>
   );
 };
 

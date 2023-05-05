@@ -4,7 +4,7 @@ const SignupIndicators = ({ active }: { active: number }) => {
   return (
     <div className="w-full">
       <div className="flex w-full gap-[16px] justify-between">
-        {indicators?.map((indicator, index) => (
+        {indicators?.map((_, index) => (
           <>
             <div className="flex w-full flex-col gap-[16px] items-center">
               <div
@@ -43,16 +43,98 @@ const SignupIndicators = ({ active }: { active: number }) => {
                     : "/signupIndicator.svg"
                 }
                 alt="indicator"
-                className="w-[70px] md:w-[100%]"
+                className={`${
+                  active === 2 ? "w-[50px] md:w-[100%]" : "w-[70px] md:w-[100%]"
+                }`}
               />
             )}
           </>
         ))}
       </div>
-      <div className="flex w-full px-[unset] md:px-[10px] justify-between">
+      <div
+        className={`flex w-full ${
+          active === 2
+            ? "px-[0px]  md:px-[30px] lg:px-[0px]"
+            : "px-[unset] md:px-[10px] lg:px-[30px]"
+        } justify-between`}
+      >
         {indicators?.map((indicator, index) => (
           <p
-            style={{ color: active === index ? "#003D72" : "#94AEC5" }}
+            style={{
+              color: active === index || active > index ? "#003D72" : "#94AEC5",
+            }}
+            key={index}
+            className="text-[14px] leading-[21px] font-medium"
+          >
+            {indicator}
+          </p>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const SetupIndicator = ({ active }: { active: number }) => {
+  const indicators = ["Date of Birth", "Gender", "Phone Number", "Location"];
+  return (
+    <div className="w-full flex flex-col items-center">
+      <div className="flex w-[full] md:w-[93%] gap-[16px] justify-between mb-[10px]">
+        {indicators?.map((_, index) => (
+          <>
+            <div className="flex flex-col items-center">
+              <div
+                className="flex justify-center items-center w-[16.7px] h-[16.7px] rounded-[50%]"
+                style={{
+                  background:
+                    active - 1 > index
+                      ? "#00B127"
+                      : active - 1 === index
+                      ? "#00B127"
+                      : "#fff",
+                  border: `1.5057px solid ${
+                    active - 1 > index
+                      ? "#00B127"
+                      : active - 1 === index
+                      ? "#ACE3B9"
+                      : "#94AEC5"
+                  }`,
+                  color:
+                    active - 1 > index
+                      ? "#fff"
+                      : active - 1 === index
+                      ? "#003D72"
+                      : "#94AEC5",
+                }}
+              ></div>
+            </div>
+
+            {index !== indicators.length - 1 && (
+              <img
+                src={
+                  active - 1 > index
+                    ? "/greenLineIndicator.svg"
+                    : "/signupIndicator.svg"
+                }
+                alt="indicator"
+                className={`${
+                  active === 2 ? "w-[50px] md:w-[100%]" : "w-[70px] md:w-[100%]"
+                }`}
+              />
+            )}
+          </>
+        ))}
+      </div>
+      <div
+        className={`flex w-full px-[unset] md:px-[10px] lg:px-[0px] justify-between`}
+      >
+        {indicators?.map((indicator, index) => (
+          <p
+            style={{
+              color:
+                active - 1 === index || active - 1 > index
+                  ? "#00B127"
+                  : "#94AEC5",
+            }}
             key={index}
             className="text-[14px] leading-[21px] font-medium"
           >

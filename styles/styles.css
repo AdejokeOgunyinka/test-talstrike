@@ -150,3 +150,28 @@ body, #__next  {
     transform:  translateX(100%) scaleX(0.5);
   }
 }
+
+.auth-dropdown .css-13cymwt-control{
+  border: 1px solid #0074D9;
+  border-radius: 4px;
+  height: 44px !important;
+}
+
+.css-13cymwt-control:hover {
+  border-color: #0074D9 !important;
+}
+
+.css-t3ipsp-control {
+  height: 44px !important;
+}
+
+.auth-dropdown .css-1jqq78o-placeholder, .auth-dropdown .css-1dimb5e-singleValue {
+  color: #0074D9;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 500;
+}
+
+.inputbox-new {
+  padding-left: 13px !important;
+}
