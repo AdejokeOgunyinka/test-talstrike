@@ -345,10 +345,14 @@ const Index = ({ providers }: any) => {
             sport?.name?.toLowerCase() ===
             step2Formik?.values?.sport?.toLowerCase()
         )[0]?.id,
-        ...step3Formik.values,
+        date_of_birth: `${step3Formik?.values?.year}-${step3Formik?.values?.month}-${step3Formik?.values?.day}`,
         ...step4Formik.values,
         ...step5Formik.values,
-        ...step6Formik.values,
+        location: [
+          step6Formik?.values?.country,
+          step6Formik?.values?.state,
+          step6Formik?.values?.city,
+        ],
         ...step7Formik.values,
         ...step8Formik.values,
         ...step9Formik.values,
@@ -359,7 +363,7 @@ const Index = ({ providers }: any) => {
       const updateUserRole = await updateUserInfo(
         token as string,
         {
-          roles: [chosenSpecialty],
+          roles: [chosenSpecialty?.toUpperCase()],
         },
         localStorage.getItem("verifiedUserID") as string
       );
