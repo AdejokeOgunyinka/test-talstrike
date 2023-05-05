@@ -7,6 +7,7 @@ import * as yup from "yup";
 import Cropper from "react-easy-crop";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 import ModalContainer from "@/components/Modal";
 import InputBox from "@/components/ProfileModals/InputBox";
@@ -18,7 +19,6 @@ import { useTypedSelector } from "@/hooks/hooks";
 import { useUpdateMyProfile, useUpdateMyProfileImage } from "@/api/profile";
 import notify from "@/libs/toast";
 import getCroppedImg from "@/libs/utils";
-import { toast } from "react-hot-toast";
 
 const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -86,15 +86,14 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   });
 
   const [fileImg, setFileImg] = useState<any>(null);
-
-  const reloadSession = () => {
-    const event = new Event("visibilitychange");
-    document.dispatchEvent(event);
-  };
+  const [successfullyUpdated, setSuccessfullyUpdated] = useState(false);
 
   const imageFormik = useFormik({
     initialValues: {
-      image: session?.user?.image !== null ? session?.user?.image : ProfileImg,
+      image:
+        userInfo?.profile?.user?.image !== null
+          ? userInfo?.profile?.user?.image
+          : ProfileImg,
     },
     validationSchema: imageValidationSchema,
     onSubmit: (values) => {
@@ -106,12 +105,12 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
         },
         {
           onSuccess: () => {
+            setSuccessfullyUpdated(true);
             notify({
               type: "success",
               text: "You have successfully updated your profile image",
             });
             queryClient.invalidateQueries(["getMyProfile"]);
-            reloadSession();
             onClose();
           },
         }
@@ -128,12 +127,12 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       },
       {
         onSuccess: () => {
+          setSuccessfullyUpdated(true);
           notify({
             type: "success",
             text: "You have successfully deleted your profile image",
           });
           queryClient.invalidateQueries(["getMyProfile"]);
-          reloadSession();
           onClose();
         },
       }
@@ -167,8 +166,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
     try {
       setIsCroppingImage(true);
       const croppedImage: any = await getCroppedImg(
-        session?.user?.image !== null
-          ? (session?.user?.image as string)
+        userInfo?.profile?.user?.image !== null
+          ? userInfo?.profile?.user?.image
           : ProfileImg,
         croppedAreaPixels,
         rotation
@@ -202,12 +201,12 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
         },
         {
           onSuccess: () => {
+            setSuccessfullyUpdated(true);
             notify({
               type: "success",
               text: "You have successfully uploaded your edited profile image",
             });
             queryClient.invalidateQueries(["getMyProfile"]);
-            reloadSession();
             onClose();
           },
           onError: (err: any) => {
@@ -217,6 +216,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       );
     }
   };
+
+  console.log({ successfullyUpdated });
 
   return (
     <ModalContainer marginTop="md:mt-[70px]">
@@ -239,8 +240,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
             <div className="w-full h-[282px] rounded-[8px]">
               <img
                 src={
-                  session?.user?.image !== null
-                    ? (session?.user?.image as string)
+                  userInfo?.profile?.user?.image !== null
+                    ? userInfo?.profile?.user?.image
                     : ProfileImg
                 }
                 alt="profile"
@@ -290,8 +291,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               <Cropper
                 cropShape="round"
                 image={
-                  session?.user?.image !== null
-                    ? (session?.user?.image as string)
+                  userInfo?.profile?.user?.image !== null
+                    ? userInfo?.profile?.user?.image
                     : ProfileImg
                 }
                 crop={crop}
@@ -595,8 +596,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
             <div className="relative w-[160px] h-full border-[3.82857px] border-brand-500 rounded-[9.6px] shadow shadow-[0px_0.812121px_4.87273px_0.812121px_rgba(0, 0, 0, 0.15)]">
               <img
                 src={
-                  session?.user?.image !== null
-                    ? (session?.user?.image as string)
+                  userInfo?.profile?.user?.image !== null
+                    ? userInfo?.profile?.user?.image
                     : ProfileImg
                 }
                 alt="profile"
