@@ -32,6 +32,9 @@ const Index = ({ providers }: { providers: any }) => {
       .email("Invalid email address")
       .required("Please enter your email address"),
     password: yup.string().required("Please enter your password"),
+    confirm_password: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords do not match"),
   });
 
   const [loading, setLoading] = useState(false);
@@ -40,6 +43,7 @@ const Index = ({ providers }: { providers: any }) => {
     initialValues: {
       email: "",
       password: "",
+      confirm_password: "",
     },
     validateOnBlur: true,
     validationSchema: loginSchema,
@@ -69,20 +73,22 @@ const Index = ({ providers }: { providers: any }) => {
   });
 
   const [hidePassword, setHidePassword] = useState(true);
+  const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
 
   const GoogleHandlerFunction = async () => {
     return signIn("google", { callbackUrl: "https://app.talstrike.com/" });
   };
 
   return (
-    <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[61px] xl:px-[140px] px-[20px]">
+    <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[112px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
         <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
-          Sign in
+          Welcome Back
         </div>
 
-        <p className=" mt-[71px] mb-[100px] text-[16px] text-brand-600 font-medium text-center">
-          Welcome back to Talstrike. Login to continue.
+        <p className=" mt-[65px] mb-[100px] text-[16px] text-brand-600 font-medium text-center">
+          Get to your feeds, explore curated inspirational videos, livestream
+          mentors and engage in self improvement challenges.
         </p>
 
         <form onSubmit={formik.handleSubmit}>
@@ -101,33 +107,65 @@ const Index = ({ providers }: { providers: any }) => {
               </p>
             )}
           </div>
-          <div className="mt-[15px] mb-[25px]">
-            <CustomInputBox
-              label="Password"
-              type={hidePassword ? "password" : "text"}
-              placeholder="Password (minimum of 8 characters)"
-              icon={
-                <NextImage
-                  src={HiddenPasswordIcon}
-                  alt="password"
-                  className="cursor-pointer"
-                  onClick={() => setHidePassword(!hidePassword)}
-                />
-              }
-              name="password"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.errors.password && formik.touched.password && (
-              <p className="text-brand-warning text-[10px]">
-                {formik.errors.password}
-              </p>
-            )}
+          <div className="mt-[15px] mb-[25px] flex flex-col md:flex-row gap-[15px]">
+            <div className="md:basis-1/2">
+              <CustomInputBox
+                label="Password"
+                type={hidePassword ? "password" : "text"}
+                placeholder="Password (minimum of 8 characters)"
+                icon={
+                  <NextImage
+                    src={HiddenPasswordIcon}
+                    alt="password"
+                    className="cursor-pointer"
+                    onClick={() => setHidePassword(!hidePassword)}
+                  />
+                }
+                name="password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.errors.password && formik.touched.password && (
+                <p className="text-brand-warning text-[10px]">
+                  {formik.errors.password}
+                </p>
+              )}
+            </div>
+            <div className="md:basis-1/2">
+              <CustomInputBox
+                label="Confirm Password"
+                type={hidePassword ? "password" : "text"}
+                placeholder="Password (minimum of 8 characters)"
+                icon={
+                  <NextImage
+                    src={HiddenPasswordIcon}
+                    alt="password"
+                    className="cursor-pointer"
+                    onClick={() => setHideConfirmPassword(!hideConfirmPassword)}
+                  />
+                }
+                name="confirm_password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.errors.confirm_password &&
+                formik.touched.confirm_password && (
+                  <p className="text-brand-warning text-[10px]">
+                    {formik.errors.confirm_password}
+                  </p>
+                )}
+            </div>
           </div>
           <div className="flex flex-col md:flex-row gap-[15px] w-full">
+            <a
+              href="/"
+              className="md:basis-1/2 flex justify-center items-center border-[1.5px] border-brand-1650 h-[37px] rounded-[4px] text-brand-1650 font-medium text-[14px]"
+            >
+              <button type="button">Back</button>
+            </a>
             <button
               type="submit"
-              className="w-full h-[37px] bg-brand-600 rounded-[4px] font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+              className="md:basis-1/2 h-[37px] bg-brand-600 rounded-[4px] font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
             >
               {loading ? (
                 <BeatLoader
@@ -143,7 +181,7 @@ const Index = ({ providers }: { providers: any }) => {
           </div>
           <div className="mt-[44px] w-full">
             <p className="text-center text-[#94AEC5] text-[14px] mb-[24px]">
-              Or sign in with
+              Or login with
             </p>
             <div className="flex w-full justify-center items-center gap-[20px] mb-[25px] md:mb-[unset]">
               <NextImage
@@ -166,7 +204,7 @@ const Index = ({ providers }: { providers: any }) => {
           </div>
           <div className="relative md:absolute md:bottom-[62px] w-full">
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
-              {"Don't yet have an account? "}
+              {"If you don’t have an account, "}
               <a href="/auth/signup" className="text-[#003D72] underline">
                 Sign up
               </a>
