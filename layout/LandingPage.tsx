@@ -65,7 +65,7 @@ const LandingPageLayout = () => {
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-full 2xl:w-[85vw] relative h-screen 2xl:h-[85vh] flex 2xl:mx-auto 2xl:my-auto 2xl:rounded-[29px] overflow-hidden">
-        <div className="absolute top-[134px] w-full flex justify-center z-[999]">
+        <div className="absolute top-[50px] md:top-[144px] w-full flex justify-center z-[999]">
           <NextImage
             src="/white-logo.svg"
             alt="white logo"
@@ -94,37 +94,37 @@ const LandingPageLayout = () => {
             </div>
           ))}
         </div>
-        <div className="absolute top-0 w-full px-[20px] lg:px-unset h-full flex flex-col justify-center items-center">
-          <h4 className="text-brand-500 text-[20px] lg:text-[36px] font-semibold mb-[24px] leading-[54px]">
+        <div className="absolute top-[0px] w-full px-[20px] lg:px-unset h-full flex flex-col justify-center items-center">
+          <h4 className="text-brand-500 text-[20px] text-center md:text-start lg:text-[36px] font-semibold mb-[24px] leading-[25px] md:leading-[54px]">
             {slideShowImages[activeIndex].sloganHeader}
           </h4>
-          <p className="text-brand-500 text-[14px] break-words lg:text-[20px] font-medium leading-[166%]">
+          <p className="text-brand-500 text-[14px] text-center md:text-start break-words lg:text-[20px] font-medium leading-[166%]">
             {slideShowImages[activeIndex].sloganText}
           </p>
-        </div>
-        <div className="absolute bottom-[150px] md:bottom-[180px] w-full flex flex-col items-center z-[999]">
-          <div className="w-full flex justify-center gap-[13px]">
-            <a href="/auth/login">
-              <button className="w-[141px] h-[40px] text-brand-500 text-[14px] border-[1.5px] border-brand-500 rounded-[4px] ">
-                Login
-              </button>
-            </a>
-            <a href="/auth/signup">
-              <button className="w-[141px] h-[40px] text-brand-500 text-[14px] rounded-[4px] bg-brand-600">
-                Get Started
-              </button>
-            </a>
-          </div>
-          <p className="mt-[30px] text-brand-500 text-[12px] md:text-[14px]">
+          <div className="mt-[60px] w-full flex flex-col items-center z-[999]">
+            <div className="w-full flex justify-center gap-[13px]">
+              <a href="/auth/login">
+                <button className="w-[141px] h-[40px] text-brand-500 text-[14px] border-[1.5px] border-brand-500 rounded-[4px] ">
+                  Login
+                </button>
+              </a>
+              <a href="/auth/signup">
+                <button className="w-[141px] h-[40px] text-brand-500 text-[14px] rounded-[4px] bg-brand-600">
+                  Get Started
+                </button>
+              </a>
+            </div>
+            {/* <p className="mt-[30px] text-brand-500 text-[12px] md:text-[14px]">
             © {new Date().getFullYear()} Talstrike Technologies. All Rights
             Reserved.
-          </p>
+          </p> */}
+          </div>
         </div>
         <div className="mx-auto absolute bottom-[85px] w-full flex justify-center">
           {slideShowImages.map((_, index) => (
             <div
               key={index}
-              className={`inline-block h-5 w-5 border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
+              className={`inline-block h-[12.23px] w-[12.23px] border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
                 activeIndex === index
                   ? "bg-brand-1100  border-brand-1100"
                   : "border-brand-500 bg-unset"
