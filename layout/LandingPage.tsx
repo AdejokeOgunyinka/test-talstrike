@@ -104,7 +104,7 @@ const LandingPageLayout = () => {
         </div>
         <div className="absolute bottom-[150px] md:bottom-[180px] w-full flex flex-col items-center z-[999]">
           <div className="w-full flex justify-center gap-[13px]">
-            <a href="/login">
+            <a href="/auth/login">
               <button className="w-[141px] h-[40px] text-brand-500 text-[14px] border-[1.5px] border-brand-500 rounded-[4px] ">
                 Login
               </button>
