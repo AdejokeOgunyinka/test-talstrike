@@ -200,9 +200,9 @@ const AboutMe = ({
                 </b>
               ))
             )}
-            {achievements?.results?.length > 5 && (
+            {/* {achievements?.results?.length > 5 && (
               <b className="font-semibold cursor-pointer">VIEW ALL</b>
-            )}
+            )} */}
           </p>
         </div>
         <div className="mt-[30px]">
@@ -222,9 +222,9 @@ const AboutMe = ({
                 </b>
               ))
             )}
-            {appearances?.results?.length > 5 && (
+            {/* {appearances?.results?.length > 5 && (
               <b className="font-semibold cursor-pointer">VIEW ALL</b>
-            )}
+            )} */}
           </p>
         </div>
         <div className="mt-[30px]">
