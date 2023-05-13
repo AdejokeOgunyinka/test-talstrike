@@ -258,7 +258,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
     <ModalContainer marginTop="md:mt-[30px]">
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit} className="w-full md:w-[unset]">
-          <div className="w-full lg:w-[975px] relative h-[90vh] overflow-y-scroll bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+          <div className="w-full md:w-[800px] lg:w-[975px] relative h-[90vh] overflow-y-scroll bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
             <div className="h-[61px] w-[100%] z-[999] sticky bg-brand-500 top-0 border border-brand-2800 border-t-transparent border-x-transparent flex justify-between items-center">
               <h3 className="text-brand-600 ml-[28px] text-[20px] leading-[30px] font-medium">
                 Edit Career Progress
@@ -892,7 +892,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                 />
               </div>
             </div>
-            <div className="flex justify-between w-[inherit] px-[59px] h-[100px] bg-brand-500 flex justify-end pt-[25px] fixed bottom-[50px] border-t border-[#E3E2E2] ">
+            <div className="flex justify-between w-[inherit] px-[20px] md:px-[59px] h-[100px] bg-brand-500 flex justify-end pt-[25px] fixed bottom-[40px] md:bottom-[50px] border-t border-[#E3E2E2] ">
               <button
                 onClick={onClose}
                 className="border border-[2px] font-medium w-[159px] h-[54px] rounded-[4px] border-brand-600 text-brand-600"
