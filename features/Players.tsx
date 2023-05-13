@@ -7,6 +7,7 @@ import PlayersSearchBar from "@/components/DashboardSearchbar";
 import PlayerDropdown from "@/components/DashboardFilterDropdown";
 import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
+import { useGetSports } from "@/api/auth";
 import { useGetAllPlayers } from "@/api/players";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
@@ -14,23 +15,28 @@ const Index = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
-  const sportFilterOptions = [
-    "no filter",
-    "Football",
-    "Basketball",
-    "Volleyball",
-    "Tennis",
-    "Running",
-    "Rugby",
-    "Long jump",
-    "Cricket",
-  ];
+  const { data: sports } = useGetSports();
+
   const [chosenSportFilters, setChosenSportFilters] = useState<string[]>([]);
 
-  const positionsFilterOptions: string[] = [];
-  const [chosenPositionFilters, setChosenPositionFilters] = useState<string[]>(
+  const [positionFilterOptions, setPositionFilterOptions] = useState<string[]>(
     []
   );
+  const [chosenPositionFilter, setChosenPositionFilter] = useState<string[]>(
+    []
+  );
+
+  useEffect(() => {
+    if (chosenSportFilters && chosenSportFilters[0] !== "no filter") {
+      setPositionFilterOptions(
+        sports?.results?.filter(
+          (sport: any) => sport?.id === chosenSportFilters[0]
+        )[0]?.positions
+      );
+    } else {
+      setPositionFilterOptions(sports?.results[0]?.positions);
+    }
+  }, [sports, chosenSportFilters]);
 
   const countries = Country.getAllCountries()?.map((country) => {
     return country?.name;
@@ -71,6 +77,7 @@ const Index = () => {
       location: chosenCountryFilters?.join(","),
       gender: chosenGenderFilters?.join(","),
       sport: chosenSportFilters?.join(","),
+      position: chosenPositionFilter?.join(","),
     });
 
   return (
@@ -86,21 +93,27 @@ const Index = () => {
               <PlayerDropdown
                 label="Sport"
                 placeholder="Select sport"
-                filterOptions={sportFilterOptions}
+                filterOptions={["no filter"]?.concat(
+                  sports?.results?.map((sport: any) => sport.name)
+                )}
                 onChange={(e) =>
                   e?.target?.value === "no filter"
                     ? setChosenSportFilters([""])
-                    : setChosenSportFilters([e?.target?.value])
+                    : setChosenSportFilters([
+                        sports?.results?.filter(
+                          (sport: any) => sport?.name === e?.target?.value
+                        )[0]?.id,
+                      ])
                 }
               />
               <PlayerDropdown
                 label="Position"
                 placeholder="Select position"
-                filterOptions={positionsFilterOptions}
+                filterOptions={["no filter"]?.concat(positionFilterOptions)}
                 onChange={(e) =>
                   e?.target?.value === "no filter"
-                    ? setChosenPositionFilters([""])
-                    : setChosenPositionFilters([e?.target?.value])
+                    ? setChosenPositionFilter([""])
+                    : setChosenPositionFilter([e?.target?.value])
                 }
               />
               <PlayerDropdown
@@ -137,12 +150,12 @@ const Index = () => {
           </PlayersSearchBar>
         </div>
         <div className="w-full mt-[23px] flex justify-center pb-[100px] lg:pb-0">
-          <div className="flex flex-wrap gap-y-[25px] gap-x-[25px]">
+          <div className="flex flex-wrap gap-y-[25px] gap-x-[25px] px-[5%] md:px-[2.5%] lg:px-[5%]">
             {isLoadingAllPlayers ? (
               <SkeletonLoader />
             ) : (
               playersData?.results?.map((player: any, index: number) => (
-                <div key={index}>
+                <div key={index} className="w-full md:w-[unset]">
                   <ProfileCard
                     id={player?.user?.id}
                     img={player?.user?.image}

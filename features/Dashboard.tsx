@@ -112,7 +112,7 @@ const Dashboard = () => {
                     : "/profileIcon.svg"
                 }
                 alt="profile"
-                className="w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
+                className="object-cover w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
                 onError={handleOnError}
               />
             </div>

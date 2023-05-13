@@ -97,8 +97,7 @@ const PostCard = ({
             <img
               src={postImage !== null ? postImage : "/profileIcon.svg"}
               alt="post image"
-              className="w-[40px] h-[40px] rounded-[50%]"
-              style={{ borderRadius: "50%" }}
+              className="object-cover w-[40px] h-[40px] rounded-[50%]"
               onError={handleOnError}
             />
 
@@ -251,7 +250,7 @@ const PostCard = ({
                     : "/profileIcon.svg"
                 }
                 alt="author"
-                className="w-[40px] h-[40px] rounded-[50%]"
+                className="object-cover w-[40px] h-[40px] rounded-[50%]"
                 onError={handleOnError}
               />
               <div className="pl-[15px]">
@@ -273,7 +272,7 @@ const PostCard = ({
                 : "/profileIcon.svg"
             }
             alt="session image"
-            className="w-[40px] h-[40px] rounded-[50%]"
+            className="object-cover w-[40px] h-[40px] rounded-[50%]"
             onError={handleOnError}
           />
         </div>

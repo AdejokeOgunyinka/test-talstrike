@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -9,6 +10,7 @@ import Star from "@/assets/star2.svg";
 import Map from "@/assets/map.svg";
 import { useFollowUser } from "@/api/players";
 import notify from "@/libs/toast";
+import { handleOnError } from "@/libs/utils";
 
 type IProfileCardProps = {
   id: string;
@@ -62,7 +64,12 @@ const ProfileCard = ({
             className="border border-[5px] border-brand-500 cursor-pointer flex justify-center items-center rounded-[50%] w-[61px] h-[61px] shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)]"
           >
             {img ? (
-              <NextImage src={img} alt="profile image" width="61" height="61" />
+              <img
+                src={img}
+                alt="profile image"
+                className="object-cover w-full h-full rounded-[50%]"
+                onError={handleOnError}
+              />
             ) : (
               <UserCircleIcon className="h-[80px] w-[65px] text-gray-500 cursor-pointer" />
             )}
@@ -101,7 +108,7 @@ const ProfileCard = ({
             {experience} year(s) experience
           </p>
           <p className="mt-[1px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
-            {appearances} game appearance(s)
+            {appearances?.length} game appearance(s)
           </p>
         </div>
       </div>

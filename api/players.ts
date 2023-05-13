@@ -7,29 +7,33 @@ export const useGetAllPlayers = ({
   gender,
   location,
   sport,
+  position,
 }: {
   token: string;
   age?: string;
   location?: string;
   gender?: string;
   sport?: string;
+  position?: string;
 }) =>
-  useQuery(["getAllPlayers", token, age, gender, location, sport], () =>
-    axios
-      .get(
-        `/auth/users/profile?roles=TALENT${age ? `&age=${age}` : ""}${
-          gender ? `&gender=${gender}` : ""
-        }${location ? `&location=${location}` : ""}${
-          sport ? `&sport=${sport}` : ""
-        }`,
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      )
-      .then((res) => res.data)
-      .catch((err) => {
-        throw err.response.data;
-      })
+  useQuery(
+    ["getAllPlayers", token, age, gender, location, sport, position],
+    () =>
+      axios
+        .get(
+          `/auth/users/profile?roles=TALENT${age ? `&age=${age}` : ""}${
+            gender ? `&gender=${gender}` : ""
+          }${location ? `&location=${location}` : ""}${
+            position ? `&position=${position}` : ""
+          }${sport ? `&sport=${sport}` : ""}`,
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        })
   );
 
 interface IUser {

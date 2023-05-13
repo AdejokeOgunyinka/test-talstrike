@@ -8,23 +8,15 @@ import AgentsDropdown from "@/components/DashboardFilterDropdown";
 import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllAgents } from "@/api/agents";
+import { useGetSports } from "@/api/auth";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 const Index = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
-  const sportFilterOptions = [
-    "no filter",
-    "Football",
-    "Basketball",
-    "Volleyball",
-    "Tennis",
-    "Running",
-    "Rugby",
-    "Long jump",
-    "Cricket",
-  ];
+  const { data: sports } = useGetSports();
+
   const [chosenSportFilters, setChosenSportFilters] = useState<string[]>([]);
 
   const countries = Country.getAllCountries()?.map((country) => {
@@ -80,11 +72,17 @@ const Index = () => {
               <AgentsDropdown
                 label="Sport"
                 placeholder="Select sport"
-                filterOptions={sportFilterOptions}
+                filterOptions={["no filter"]?.concat(
+                  sports?.results?.map((sport: any) => sport.name)
+                )}
                 onChange={(e) =>
                   e?.target?.value === "no filter"
                     ? setChosenSportFilters([""])
-                    : setChosenSportFilters([e?.target?.value])
+                    : setChosenSportFilters([
+                        sports?.results?.filter(
+                          (sport: any) => sport?.name === e?.target?.value
+                        )[0]?.id,
+                      ])
                 }
               />
               <AgentsDropdown
@@ -120,12 +118,12 @@ const Index = () => {
             </div>
           </AgentsSearchBar>
         </div>
-        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] pb-[100px] lg:pb-0">
+        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] px-[5%] md:px-[2.5%] lg:px-[5%] pb-[100px] lg:pb-0">
           {isLoadingAllAgents ? (
             <SkeletonLoader />
           ) : (
             agentsData?.results?.map((agent: any, index: number) => (
-              <div key={index}>
+              <div key={index} className="w-full md:w-[unset]">
                 <ProfileCard
                   id={agent?.user?.id}
                   img={agent.user?.image}

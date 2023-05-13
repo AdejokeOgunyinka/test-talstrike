@@ -355,7 +355,7 @@ const Index = ({ providers }: any) => {
       setUpdatingProfile(true);
       const data = {
         ...(chosenSpecialty === "Player" && {
-          position: step2Formik?.values.position,
+          position: [step2Formik?.values.position],
         }),
         sport: sports?.results?.filter(
           (sport: any) =>

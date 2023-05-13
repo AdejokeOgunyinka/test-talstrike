@@ -8,26 +8,16 @@ import TrainersDropdown from "@/components/DashboardFilterDropdown";
 import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllTrainers } from "@/api/trainers";
+import { useGetSports } from "@/api/auth";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 const Index = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
-  const specialtyFilterOptions = [
-    "no filter",
-    "Injury specialist",
-    "Body builder",
-    "Health consultant",
-    "Sport analyst",
-    "Fitness",
-    "Yoga",
-    "Diet",
-    "Physiotherapist",
-  ];
-  const [chosenSpecialtyFilters, setChosenSpecialtyFilters] = useState<
-    string[]
-  >([]);
+  const { data: sports } = useGetSports();
+
+  const [chosenSportFilters, setChosenSportFilters] = useState<string[]>([]);
 
   const countries = Country.getAllCountries()?.map((country) => {
     return country?.name;
@@ -67,7 +57,7 @@ const Index = () => {
       age: chosenAgeFilters?.join(","),
       location: chosenCountryFilters?.join(","),
       gender: chosenGenderFilters?.join(","),
-      specialty: chosenSpecialtyFilters?.join(","),
+      sport: chosenSportFilters?.join(","),
     });
 
   return (
@@ -81,13 +71,19 @@ const Index = () => {
           <TrainersSearchBar>
             <div className="w-full h-full flex flex-col md:flex-row gap-y-[13px] md:gap-x-[13px]">
               <TrainersDropdown
-                label="Specialty"
-                placeholder="Select specialty"
-                filterOptions={specialtyFilterOptions}
+                label="Sport"
+                placeholder="Select sport"
+                filterOptions={["no filter"]?.concat(
+                  sports?.results?.map((sport: any) => sport.name)
+                )}
                 onChange={(e) =>
                   e?.target?.value === "no filter"
-                    ? setChosenSpecialtyFilters([""])
-                    : setChosenSpecialtyFilters([e?.target?.value])
+                    ? setChosenSportFilters([""])
+                    : setChosenSportFilters([
+                        sports?.results?.filter(
+                          (sport: any) => sport?.name === e?.target?.value
+                        )[0]?.id,
+                      ])
                 }
               />
               <TrainersDropdown
@@ -123,12 +119,12 @@ const Index = () => {
             </div>
           </TrainersSearchBar>
         </div>
-        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] pb-[100px] lg:pb-0">
+        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start px-[5%] md:px-[2.5%] lg:px-[5%] gap-y-[25px] pb-[100px] lg:pb-0">
           {isLoadingAllTrainers ? (
             <SkeletonLoader />
           ) : (
             trainersData?.results?.map((trainer: any, index: number) => (
-              <div key={index}>
+              <div key={index} className="w-full md:w-[unset]">
                 <ProfileCard
                   id={trainer?.user?.id}
                   img={trainer.user?.image}
