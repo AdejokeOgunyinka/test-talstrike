@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { useState } from "react";
 import NextImage from "next/image";
 import { useSession, signOut } from "next-auth/react";
@@ -43,12 +44,12 @@ const DashboardTopBarModal = () => {
       <p className="text-brand-2000 text-[11px] font-normal mb-[17px]">
         {session?.user?.email}
       </p>
-      <button
-        onClick={() => router.push("/profile")}
-        className="w-[102px] bg-brand-2050 rounded-[19px] h-[29px] text-brand-600 mb-[21px] text-[10px] font-semibold"
+      <a
+        href="/profile"
+        className="w-[102px] flex justify-center items-center bg-brand-2050 rounded-[19px] h-[29px] text-brand-600 mb-[21px] text-[10px] font-semibold"
       >
         View Profile
-      </button>
+      </a>
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
         Achievements
       </p>

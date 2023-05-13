@@ -65,7 +65,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                         : "/profileIcon.svg"
                     }
                     alt="me"
-                    className="w-[35px] h-[35px]"
+                    className="object-cover w-[35px] h-[35px]"
                     onError={handleOnError}
                   />
                 </div>

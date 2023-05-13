@@ -16,13 +16,7 @@ const AboutMe = ({
   const USER_ID = session?.user?.id;
 
   const { userInfo } = useTypedSelector((state) => state.profile);
-  const teamsPlayedWith = [
-    "Barcelona",
-    "Real Madrid",
-    "Arsenal",
-    "Chelsea",
-    "Manchester United",
-  ];
+
   // const trainingCourses = ['Daily fitness', 'Webinar', 'How to score hat tricks'];
   const socialProfiles = [
     { name: "facebook", link: "#", icon: "/fbIcon.svg" },
@@ -151,23 +145,78 @@ const AboutMe = ({
             Social profiles
           </h3>
           <div className="flex gap-x-[12px]">
-            {socialProfiles?.map((profile, index) => (
+            {!userInfo?.profile?.socials?.facebook &&
+              !userInfo?.profile?.socials?.twitter &&
+              !userInfo?.profile?.socials?.instagram &&
+              !userInfo?.profile?.socials?.linkedin && (
+                <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                  No socials added yet...
+                </p>
+              )}
+            {userInfo?.profile?.socials?.facebook && (
               <a
-                key={index}
-                href={profile.link}
+                href={userInfo?.profile?.socials?.facebook}
                 target="_blank"
                 rel="noreferrer"
               >
                 <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
                   <NextImage
-                    src={profile.icon}
+                    src={socialProfiles[0].icon}
                     width="18"
                     height="18"
                     alt="profile"
                   />
                 </div>
               </a>
-            ))}
+            )}
+            {userInfo?.profile?.socials?.twitter && (
+              <a
+                href={userInfo?.profile?.socials?.twitter}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[1].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
+            {userInfo?.profile?.socials?.linkedin && (
+              <a
+                href={userInfo?.profile?.socials?.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[2].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
+            {userInfo?.profile?.socials?.instagram && (
+              <a
+                href={userInfo?.profile?.socials?.instagram}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[3].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -232,14 +281,21 @@ const AboutMe = ({
             Teams Played With
           </h3>
           <div className="flex gap-x-[12px] w-full flex-wrap">
-            {teamsPlayedWith?.map((item, index) => (
-              <div
-                key={index}
-                className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
-              >
-                {item}
-              </div>
-            ))}
+            {userInfo?.profile?.teams?.length === 0 ||
+            userInfo?.profile?.teams === null ? (
+              <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                No team yet..
+              </p>
+            ) : (
+              userInfo?.profile?.teams?.map((item, index) => (
+                <div
+                  key={index}
+                  className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
+                >
+                  {item}
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mt-[30px]">

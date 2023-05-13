@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -10,7 +11,7 @@ import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import AboutMe from "./UserProfileSections/AboutMe";
-import { useGetMyProfile } from "@/api/profile";
+import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
 import { handleOnError } from "@/libs/utils";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
@@ -31,11 +32,15 @@ const Index = () => {
 
   const TOKEN = session?.user?.access;
 
-  const { data: userProfile, isLoading: isLoadingUserProfile } =
-    useGetMyProfile({
-      token: TOKEN as string,
-      userId: id as string,
-    });
+  const { data: userProfile } = useGetMyProfile({
+    token: TOKEN as string,
+    userId: id as string,
+  });
+
+  const { data: media } = useGetUserPhotos({
+    token: TOKEN as string,
+    userId: id as string,
+  });
 
   const profileIcons = [
     { icon: "/chatbox.svg", onClick: "" },
@@ -68,8 +73,8 @@ const Index = () => {
                 <div className="w-[161px] h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <NextImage
                     src={
-                      userInfo?.profile?.user?.image !== null
-                        ? userInfo?.profile?.user?.image
+                      userProfile?.user?.image !== null
+                        ? userProfile?.user?.image
                         : ProfileImg
                     }
                     width="161"
@@ -112,10 +117,33 @@ const Index = () => {
                   <p className="font-semibold text-[14px] leading-[21px] text-brand-50">
                     Photos
                   </p>
-                  <p className="text-brand-300 text-[12px]">25 pictures</p>
+                  <p className="text-brand-300 text-[12px]">
+                    {media?.count} picture{media?.count > 1 && "s"}
+                  </p>
                 </div>
                 <div className="w-full h-[26px]">
-                  <NextImage src={profilePhotos1} alt="profile photos 1" />
+                  {media?.photos ? (
+                    <div className="w-full h-full flex flex-wrap gap-[2px]">
+                      {media?.photos?.map((photo: string, index: number) => (
+                        <div key={index} className="basis-[30%] relative">
+                          <img
+                            src={photo}
+                            alt="nail"
+                            className="rounded-[4px] w-[45px] h-[45px]"
+                          />
+                          {/* {index === media?.count - 1 && (
+                            <div className="absolute top-0 bottom-0 w-full h-full flex justify-center items-center bg-[rgba(0, 0, 0, 0.5)]">
+                              <p className="text-brand-500 text-[10px]">
+                                View all
+                              </p>
+                            </div>
+                          )} */}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <NextImage src={profilePhotos1} alt="profile photos 1" />
+                  )}
                 </div>
               </div>
             </div>

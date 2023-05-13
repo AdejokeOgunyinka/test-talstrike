@@ -2,24 +2,20 @@ import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
 
-import { useTypedSelector } from "@/hooks/hooks";
-import { useGetMyProfile } from "@/api/profile";
+// import { useTypedSelector } from "@/hooks/hooks";
+import {
+  useGetAchievements,
+  useGetAppearances,
+  useGetMyProfile,
+} from "@/api/profile";
 
 const AboutMe = () => {
   const { data: session } = useSession();
-  const { userInfo } = useTypedSelector((state) => state.profile);
-  const teamsPlayedWith = [
-    "Barcelona",
-    "Real Madrid",
-    "Arsenal",
-    "Chelsea",
-    "Manchester United",
-  ];
-  const trainingCourses = [
-    "Daily fitness",
-    "Webinar",
-    "How to score hat tricks",
-  ];
+  // const trainingCourses = [
+  //   "Daily fitness",
+  //   "Webinar",
+  //   "How to score hat tricks",
+  // ];
   const socialProfiles = [
     { name: "facebook", link: "#", icon: "/fbIcon.svg" },
     { name: "twitter", link: "#", icon: "/twIcon.svg" },
@@ -33,6 +29,16 @@ const AboutMe = () => {
   const TOKEN = session?.user?.access;
 
   const { data: userProfile } = useGetMyProfile({
+    token: TOKEN as string,
+    userId: id as string,
+  });
+
+  const { data: achievements } = useGetAchievements({
+    token: TOKEN as string,
+    userId: id as string,
+  });
+
+  const { data: appearances } = useGetAppearances({
     token: TOKEN as string,
     userId: id as string,
   });
@@ -54,7 +60,7 @@ const AboutMe = () => {
           {userProfile?.user.firstname} {userProfile?.user.lastname}
         </h3>
         <h3 className="text-brand-2000 font-semibold text-[16px] leading-[24px]">
-          {userInfo?.profile?.position}
+          {userProfile?.position?.join("")}
         </h3>
         <div className="mt-[34px]">
           <span className="flex items-start">
@@ -110,7 +116,7 @@ const AboutMe = () => {
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
             {userProfile?.career_goals && userProfile?.career_goals?.length > 0
-              ? userInfo?.profile?.career_goals?.join(", ")
+              ? userProfile?.career_goals?.join(", ")
               : "Unavailable"}
           </p>
           {userProfile && userProfile?.career_goals?.length > 100 && (
@@ -146,23 +152,79 @@ const AboutMe = () => {
             Social profiles
           </h3>
           <div className="flex gap-x-[12px]">
-            {socialProfiles?.map((profile, index) => (
+            {!userProfile?.socials?.facebook &&
+              !userProfile?.socials?.twitter &&
+              !userProfile?.socials?.instagram &&
+              !userProfile?.socials?.linkedin && (
+                <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                  No socials added yet...
+                </p>
+              )}
+
+            {userProfile?.socials?.facebook && (
               <a
-                key={index}
-                href={profile.link}
+                href={userProfile?.socials?.facebook}
                 target="_blank"
                 rel="noreferrer"
               >
                 <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
                   <NextImage
-                    src={profile.icon}
+                    src={socialProfiles[0].icon}
                     width="18"
                     height="18"
                     alt="profile"
                   />
                 </div>
               </a>
-            ))}
+            )}
+            {userProfile?.socials?.twitter && (
+              <a
+                href={userProfile?.socials?.twitter}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[1].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
+            {userProfile?.socials?.linkedin && (
+              <a
+                href={userProfile?.socials?.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[2].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
+            {userProfile?.socials?.instagram && (
+              <a
+                href={userProfile?.socials?.instagram}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="w-[35px] h-[35px] rounded-[4px] bg-brand-2300 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center">
+                  <NextImage
+                    src={socialProfiles[3].icon}
+                    width="18"
+                    height="18"
+                    alt="profile"
+                  />
+                </div>
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -177,8 +239,19 @@ const AboutMe = () => {
             Achievements & Trophies
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            Most recent achievement title with date awarded,{" "}
-            <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            {achievements?.results?.length === 0 ? (
+              <p>No achievement yet..</p>
+            ) : (
+              achievements?.results?.map((achievement: any, index: number) => (
+                <b key={index} className="font-normal">
+                  {achievement?.title}, {achievement?.month} {achievement?.year}
+                  {index !== achievements?.results?.length - 1 ? ";" : "."}{" "}
+                </b>
+              ))
+            )}
+            {/* {achievements?.results?.length > 5 && (
+              <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            )} */}
           </p>
         </div>
         <div className="mt-[30px]">
@@ -186,8 +259,21 @@ const AboutMe = () => {
             Appearances
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            Most recent tournament title with no of appearances,{" "}
-            <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            {appearances?.results?.length === 0 ? (
+              <p>No appearance yet..</p>
+            ) : (
+              appearances?.results?.map((appearance: any, index: number) => (
+                <b key={index} className="font-normal">
+                  {appearance?.tournament_title} (
+                  {appearance?.number_of_appearances} appearances),{" "}
+                  {appearance?.month} {appearance?.year}
+                  {index !== appearances?.results?.length - 1 ? ";" : "."}{" "}
+                </b>
+              ))
+            )}
+            {/* {appearances?.results?.length > 5 && (
+              <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            )} */}
           </p>
         </div>
         <div className="mt-[30px]">
@@ -195,14 +281,20 @@ const AboutMe = () => {
             Teams Played With
           </h3>
           <div className="flex gap-x-[12px] w-full flex-wrap">
-            {teamsPlayedWith?.map((item, index) => (
-              <div
-                key={index}
-                className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
-              >
-                {item}
-              </div>
-            ))}
+            {userProfile?.teams?.length === 0 || userProfile?.teams === null ? (
+              <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                No team yet..
+              </p>
+            ) : (
+              userProfile?.teams?.map((item: any, index: number) => (
+                <div
+                  key={index}
+                  className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
+                >
+                  {item}
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mt-[30px]">
@@ -210,8 +302,8 @@ const AboutMe = () => {
             Special Abilities
           </h3>
           <div className="flex gap-x-[12px]">
-            {userInfo?.profile?.abilities ? (
-              userInfo?.profile?.abilities?.map((item, index) => (
+            {userProfile?.abilities ? (
+              userProfile?.abilities?.map((item: any, index: number) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
@@ -229,8 +321,8 @@ const AboutMe = () => {
             Skills
           </h3>
           <div className="flex gap-x-[12px]">
-            {userInfo?.profile?.skills ? (
-              userInfo?.profile?.skills?.map((item, index) => (
+            {userProfile?.skills ? (
+              userProfile?.skills?.map((item: any, index: number) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
@@ -248,8 +340,8 @@ const AboutMe = () => {
             Training Courses
           </h3>
           <div className="flex gap-x-[12px]">
-            {userInfo?.profile?.trainings ? (
-              [userInfo?.profile?.trainings]?.map((item, index) => (
+            {userProfile?.trainings ? (
+              [userProfile?.trainings]?.map((item, index) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"

@@ -66,6 +66,11 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       biography: userInfo?.profile?.biography,
       likes: userInfo?.profile?.interests,
       years_of_experience: userInfo?.profile?.years_of_experience,
+      linkedin: userInfo?.profile?.socials?.linkedin,
+      facebook: userInfo?.profile?.socials?.facebook,
+      instagram: userInfo?.profile?.socials?.instagram,
+      twitter: userInfo?.profile?.socials?.twitter,
+      career_goals: userInfo?.profile?.career_goals?.join(""),
     },
     onSubmit: async (values) => {
       setUpdatingProfile(true);
@@ -77,6 +82,13 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
         biography: values.biography,
         years_of_experience: values.years_of_experience,
         location: [values.country, values.state, values.city],
+        socials: {
+          linkedin: values?.linkedin,
+          facebook: values?.facebook,
+          instagram: values?.instagram,
+          twitter: values?.twitter,
+        },
+        career_goals: [values?.career_goals],
       };
 
       try {
@@ -262,9 +274,9 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
               />
 
               <TextBox
-                id="career_goal"
+                id="career_goals"
                 onChange={formik.handleChange}
-                // value={formik.values.career_goal as string}
+                value={formik.values.career_goals as string}
                 placeholder="Career Goal"
                 onBlur={formik.handleBlur}
                 title="My Career Goal *"
@@ -335,16 +347,16 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                   id="linkedin"
                   placeholder="Linkedin url"
                   title="Linkedin"
-                  // value={formik.values.linkedin}
+                  value={formik.values.linkedin}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   disabled={false}
                 />
                 <InputBox
-                  id="Facebook"
+                  id="facebook"
                   placeholder="Facebook url"
                   title="Facebook"
-                  // value={formik.values.facebook}
+                  value={formik.values.facebook}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   disabled={false}
@@ -352,19 +364,19 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
               </div>
               <div className="flex gap-[20px]">
                 <InputBox
-                  id="Twitter"
+                  id="twitter"
                   placeholder="Twitter url"
                   title="Twitter"
-                  // value={formik.values.twitter}
+                  value={formik.values.twitter}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   disabled={false}
                 />
                 <InputBox
-                  id="Instagram"
+                  id="instagram"
                   placeholder="Instagram url"
                   title="Instagram"
-                  // value={formik.values.instagram}
+                  value={formik.values.instagram}
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   disabled={false}

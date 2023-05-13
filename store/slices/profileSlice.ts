@@ -48,6 +48,12 @@ type IProfileResponse = {
   sport: string;
   location: string[];
   created_at: string;
+  socials?: {
+    linkedin: string;
+    facebook: string;
+    twitter: string;
+    instagram: string;
+  };
 } | null;
 
 interface ProfileState {

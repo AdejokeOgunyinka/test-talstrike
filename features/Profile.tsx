@@ -157,7 +157,7 @@ const Index = () => {
                     Photos
                   </p>
                   <p className="text-brand-300 text-[12px]">
-                    {media?.count} pictures
+                    {media?.count} picture{media?.count > 1 && "s"}
                   </p>
                 </div>
                 <div className="w-full h-[26px]">
