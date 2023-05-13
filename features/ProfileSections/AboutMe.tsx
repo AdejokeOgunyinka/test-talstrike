@@ -130,14 +130,21 @@ const AboutMe = ({
             Likes to talk about
           </h3>
           <div className="flex gap-x-[12px]">
-            {userInfo?.profile?.interests?.map((item, index) => (
-              <div
-                key={index}
-                className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
-              >
-                #{item}
-              </div>
-            ))}
+            {userInfo?.profile?.interests?.length === 0 ||
+            userInfo?.profile?.interests === null ? (
+              <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                No likes added yet...
+              </p>
+            ) : (
+              userInfo?.profile?.interests?.map((item, index) => (
+                <div
+                  key={index}
+                  className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
+                >
+                  #{item}
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mt-[30px]">

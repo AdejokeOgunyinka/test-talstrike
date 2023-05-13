@@ -8,6 +8,10 @@ import {
   useGetAppearances,
   useGetMyProfile,
 } from "@/api/profile";
+import { useFollowUser } from "@/api/players";
+import { useQueryClient } from "@tanstack/react-query";
+import notify from "@/libs/toast";
+import { BeatLoader } from "react-spinners";
 
 const AboutMe = () => {
   const { data: session } = useSession();
@@ -43,6 +47,9 @@ const AboutMe = () => {
     userId: id as string,
   });
 
+  const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
+  const queryClient = useQueryClient();
+
   return (
     <div className="mt-[28px]">
       <div className="w-full bg-brand-500 rounded-[12px] px-[50px] py-[37px]">
@@ -51,8 +58,37 @@ const AboutMe = () => {
             Personal Details
           </h2>
           {!userProfile?.is_following && (
-            <button className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500">
-              Follow {userProfile?.user?.firstname}
+            <button
+              onClick={() => {
+                followUser(
+                  { token: TOKEN as string, userId: id as string },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries(["getAllPlayers"]);
+                      queryClient.invalidateQueries(["getAllCoaches"]);
+                      queryClient.invalidateQueries(["getAllTrainers"]);
+                      queryClient.invalidateQueries(["getAllAgents"]);
+                      queryClient.invalidateQueries(["getMyProfile"]);
+                      notify({
+                        type: "success",
+                        text: `You are now following ${userProfile?.user?.firstname} ${userProfile?.user?.lastname}`,
+                      });
+                    },
+                  }
+                );
+              }}
+              className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500"
+            >
+              {isFollowingPlayer ? (
+                <BeatLoader
+                  color={"orange"}
+                  size={10}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              ) : (
+                `Follow ${userProfile?.user?.firstname}`
+              )}
             </button>
           )}
         </div>
@@ -135,16 +171,21 @@ const AboutMe = () => {
             Likes to talk about
           </h3>
           <div className="flex gap-x-[12px]">
-            {userProfile?.interests && userProfile?.interests === null
-              ? "Unavailable"
-              : userProfile?.interests?.map((item: any, index: number) => (
-                  <div
-                    key={index}
-                    className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
-                  >
-                    #{item}
-                  </div>
-                ))}
+            {userProfile?.interests?.length === 0 ||
+            userProfile?.interests === null ? (
+              <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
+                No likes added yet...
+              </p>
+            ) : (
+              userProfile?.interests?.map((item: any, index: number) => (
+                <div
+                  key={index}
+                  className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
+                >
+                  #{item}
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="mt-[30px]">

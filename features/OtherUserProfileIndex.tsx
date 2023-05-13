@@ -71,7 +71,7 @@ const Index = () => {
             <div className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px]">
               <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
                 <div className="w-[161px] h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
-                  <NextImage
+                  <img
                     src={
                       userProfile?.user?.image !== null
                         ? userProfile?.user?.image
