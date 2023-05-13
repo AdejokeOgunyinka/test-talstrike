@@ -354,7 +354,9 @@ const Index = ({ providers }: any) => {
     try {
       setUpdatingProfile(true);
       const data = {
-        position: step2Formik?.values.position,
+        ...(chosenSpecialty === "Player" && {
+          position: step2Formik?.values.position,
+        }),
         sport: sports?.results?.filter(
           (sport: any) =>
             sport?.name?.toLowerCase() ===
@@ -501,27 +503,29 @@ const Index = ({ providers }: any) => {
                   />
                 </div>
 
-                <div className="w-full mt-[24px]">
-                  <Dropdown
-                    title="Position"
-                    placeholder="Select your position..."
-                    options={chosenSportPositions}
-                    className="auth-dropdown"
-                    onChange={(val: any) =>
-                      step2Formik?.setFieldValue("position", val?.value)
-                    }
-                    name="position"
-                    value={{
-                      value: step2Formik.values.position,
-                      label: step2Formik.values.position,
-                    }}
-                  />
-                  <ErrorMessage
-                    name="position"
-                    component="p"
-                    className="text-brand-warning text-[12px]"
-                  />
-                </div>
+                {chosenSpecialty === "Player" && (
+                  <div className="w-full mt-[24px]">
+                    <Dropdown
+                      title="Position"
+                      placeholder="Select your position..."
+                      options={chosenSportPositions}
+                      className="auth-dropdown"
+                      onChange={(val: any) =>
+                        step2Formik?.setFieldValue("position", val?.value)
+                      }
+                      name="position"
+                      value={{
+                        value: step2Formik.values.position,
+                        label: step2Formik.values.position,
+                      }}
+                    />
+                    <ErrorMessage
+                      name="position"
+                      component="p"
+                      className="text-brand-warning text-[12px]"
+                    />
+                  </div>
+                )}
 
                 <div className="flex gap-[16px] mt-[42px]">
                   <button
@@ -534,10 +538,12 @@ const Index = ({ providers }: any) => {
                     className="basis-1/2 w-[100%] h-[40px] rounded-[4px] bg-brand-600 text-brand-500 disabled:bg-[#E3E2E2] disabled:text-[#94AEC5]"
                     type="submit"
                     disabled={
-                      (step2Formik?.values?.sport === "" &&
-                        step2Formik?.values?.position === "") ||
-                      step2Formik?.values?.sport === "" ||
-                      step2Formik?.values?.position === ""
+                      chosenSpecialty === "Player"
+                        ? (step2Formik?.values?.sport === "" &&
+                            step2Formik?.values?.position === "") ||
+                          step2Formik?.values?.sport === "" ||
+                          step2Formik?.values?.position === ""
+                        : step2Formik?.values?.sport === ""
                     }
                   >
                     Next
@@ -556,7 +562,7 @@ const Index = ({ providers }: any) => {
         <div className="w-full h-full">
           <div className="w-full py-[30px] md:pt-[40px] md:py-[51px] flex justify-center bg-brand-500 shadow shadow-[0px_0px_16px_4px_rgba(0, 0, 0, 0.08)] rounded-[8px] pt-[38px]">
             <div className="w-[80%] flex flex-col items-center">
-              <h3 className="font-semibold text-[20px] leading-[30px] text-brand-600 mb-[30px]">
+              <h3 className="font-semibold text-[20px] leading-[30px] text-brand-600 mb-[30px] text-center">
                 {substep > 4
                   ? "Professional Expertise"
                   : "Personal Information & Location"}
@@ -814,13 +820,17 @@ const Index = ({ providers }: any) => {
                   </p>{" "}
                   <FormikProvider value={step7Formik}>
                     <form onSubmit={step7Formik.handleSubmit}>
-                      <Inputbox
-                        placeholder="Number of years"
-                        type="text"
-                        name="years_of_experience"
-                        value={step7Formik.values.years_of_experience}
-                        onChange={step7Formik.handleChange}
-                      />
+                      <div className="w-full flex justify-center">
+                        <div className="w-[60%]">
+                          <Inputbox
+                            placeholder="Number of years"
+                            type="text"
+                            name="years_of_experience"
+                            value={step7Formik.values.years_of_experience}
+                            onChange={step7Formik.handleChange}
+                          />
+                        </div>
+                      </div>
                       <SubstepController />
                     </form>
                   </FormikProvider>

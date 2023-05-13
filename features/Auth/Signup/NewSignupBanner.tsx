@@ -60,6 +60,18 @@ const SignupBanner = ({ providers }: { providers: any }) => {
   const { mutate: resendVerification, isLoading: isResendingVerification } =
     useResendVerification();
 
+  const [seconds, setSeconds] = useState(60);
+
+  useEffect(() => {
+    if (seconds > 0 && currScreen === "confirmEmail") {
+      setTimeout(() => setSeconds(seconds - 1), 1000);
+    } else if (seconds === 0 && currScreen === "confirmEmail") {
+      setCurrScreen("");
+    } else {
+      setSeconds(60);
+    }
+  });
+
   return (
     <>
       {currScreen === "" && (
@@ -167,7 +179,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
                 >
                   Resend
                 </b>{" "}
-                in 54
+                in {seconds}
               </p>
             </div>
           </div>

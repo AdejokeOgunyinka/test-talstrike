@@ -15,6 +15,7 @@ import InputBox, { TextBox } from "./InputBox";
 import ChooseMedia from "./ChooseMedia";
 import notify from "@/libs/toast";
 import { useCreatePost } from "@/api/dashboard";
+import { handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
@@ -121,6 +122,7 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
                       alt="profile"
                       width="50"
                       height="50"
+                      onError={handleOnError}
                     />
                   </div>
                   <div>

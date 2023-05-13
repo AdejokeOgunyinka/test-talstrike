@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
 import NextImage from "next/image";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import ModalContainer from "@/components/Modal";
 import ProfileImg from "@/assets/profileIcon.svg";
 import { useTypedSelector } from "@/hooks/hooks";
+import { handleOnError } from "@/libs/utils";
 
 const ViewProfileImg = ({ onClose }: { onClose: () => void }) => {
   const { userInfo } = useTypedSelector((state) => state.profile);
@@ -29,9 +31,10 @@ const ViewProfileImg = ({ onClose }: { onClose: () => void }) => {
           src={
             userInfo?.profile?.user?.image !== null
               ? userInfo?.profile?.user?.image
-              : ProfileImg
+              : "/profileIcon.svg"
           }
           alt="profile"
+          onError={handleOnError}
         />
       </div>
     </ModalContainer>

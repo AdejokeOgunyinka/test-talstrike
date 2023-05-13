@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -18,7 +18,6 @@ import GifIcon from "@/assets/gifIcon.svg";
 import SmallImageIcon from "@/assets/smallImgIcon.svg";
 import SmileyIcon from "@/assets/smileyIcon.svg";
 import SendIcon from "@/assets/paperPlane.svg";
-import ProfileImg from "@/assets/profileIcon.svg";
 
 import {
   useLikeUnlikePost,
@@ -26,6 +25,7 @@ import {
   useGetAllCommentsOnPost,
 } from "@/api/dashboard";
 import { useTypedSelector } from "@/hooks/hooks";
+import { handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
@@ -95,10 +95,11 @@ const PostCard = ({
         <div className="flex justify-between">
           <div className="flex items-center">
             <img
-              src={postImage !== null ? postImage : ProfileImg}
+              src={postImage !== null ? postImage : "/profileIcon.svg"}
               alt="post image"
               className="w-[40px] h-[40px] rounded-[50%]"
               style={{ borderRadius: "50%" }}
+              onError={handleOnError}
             />
 
             <div className="ml-[10px]">
@@ -247,10 +248,11 @@ const PostCard = ({
                 src={
                   comment?.author?.image !== null
                     ? comment?.author?.image
-                    : ProfileImg
+                    : "/profileIcon.svg"
                 }
                 alt="author"
                 className="w-[40px] h-[40px] rounded-[50%]"
+                onError={handleOnError}
               />
               <div className="pl-[15px]">
                 <p className="text-[11px]">
@@ -268,10 +270,11 @@ const PostCard = ({
             src={
               userInfo?.profile?.user?.image !== null
                 ? userInfo?.profile?.user?.image
-                : ProfileImg
+                : "/profileIcon.svg"
             }
             alt="session image"
             className="w-[40px] h-[40px] rounded-[50%]"
+            onError={handleOnError}
           />
         </div>
 

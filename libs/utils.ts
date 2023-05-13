@@ -154,3 +154,7 @@ export default async function getCroppedImg(
     }, "image/jpeg");
   });
 }
+
+export const handleOnError = (e: any) => {
+  e.target.src = "/profileIcon.svg";
+};

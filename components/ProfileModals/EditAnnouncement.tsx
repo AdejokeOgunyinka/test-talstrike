@@ -16,6 +16,7 @@ import InputBox, { TextBox } from "./InputBox";
 import ChooseMedia from "./ChooseMedia";
 import notify from "@/libs/toast";
 import { useEditPost, useGetSinglePost } from "@/api/profile";
+import { handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
@@ -152,6 +153,7 @@ const EditAnnouncement = ({
                           alt="profile"
                           width="50"
                           height="50"
+                          onError={handleOnError}
                         />
                       </div>
                       <div>

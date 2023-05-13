@@ -1,9 +1,11 @@
+import { useState } from "react";
 import NextImage from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 import ProfileImg from "@/assets/profileIcon.svg";
 import { useTypedSelector } from "@/hooks/hooks";
+import { handleOnError } from "@/libs/utils";
 
 const DashboardTopBarModal = () => {
   const { data: session } = useSession();
@@ -32,6 +34,7 @@ const DashboardTopBarModal = () => {
           height="161"
           alt="profile"
           className="profile-img"
+          onError={handleOnError}
         />
       </div>
       <h3 className="font-medium text-brand-1800 text-[16px] leading-[24px]">

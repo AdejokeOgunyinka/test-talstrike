@@ -9,7 +9,7 @@ import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
 import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
-import { isActivePath } from "@/libs/utils";
+import { handleOnError, isActivePath } from "@/libs/utils";
 import { MobileSideBarLink } from "./DashboardSidebar";
 
 type LayoutProps = {
@@ -62,10 +62,11 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                     src={
                       userInfo?.profile?.user?.image !== null
                         ? userInfo?.profile?.user?.image
-                        : ProfileImg
+                        : "/profileIcon.svg"
                     }
                     alt="me"
                     className="w-[35px] h-[35px]"
+                    onError={handleOnError}
                   />
                 </div>
                 {showSignOutButton && <DashboardTopBarModal />}
