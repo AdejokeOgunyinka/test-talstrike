@@ -190,12 +190,16 @@ const AboutMe = ({
             Achievements & Trophies
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            {achievements?.results?.map((achievement: any, index: number) => (
-              <b key={index} className="font-normal">
-                {achievement?.title}, {achievement?.month} {achievement?.year}
-                {index !== achievements?.results?.length - 1 ? ";" : "."}{" "}
-              </b>
-            ))}
+            {achievements?.results?.length === 0 ? (
+              <p>No achievement yet..</p>
+            ) : (
+              achievements?.results?.map((achievement: any, index: number) => (
+                <b key={index} className="font-normal">
+                  {achievement?.title}, {achievement?.month} {achievement?.year}
+                  {index !== achievements?.results?.length - 1 ? ";" : "."}{" "}
+                </b>
+              ))
+            )}
             {achievements?.results?.length > 5 && (
               <b className="font-semibold cursor-pointer">VIEW ALL</b>
             )}
@@ -206,14 +210,18 @@ const AboutMe = ({
             Appearances
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            {appearances?.results?.map((appearance: any, index: number) => (
-              <b key={index} className="font-normal">
-                {appearance?.tournament_title} (
-                {appearance?.number_of_appearances} appearances),{" "}
-                {appearance?.month} {appearance?.year}
-                {index !== appearances?.results?.length - 1 ? ";" : "."}{" "}
-              </b>
-            ))}
+            {appearances?.results?.length === 0 ? (
+              <p>No appearance yet..</p>
+            ) : (
+              appearances?.results?.map((appearance: any, index: number) => (
+                <b key={index} className="font-normal">
+                  {appearance?.tournament_title} (
+                  {appearance?.number_of_appearances} appearances),{" "}
+                  {appearance?.month} {appearance?.year}
+                  {index !== appearances?.results?.length - 1 ? ";" : "."}{" "}
+                </b>
+              ))
+            )}
             {appearances?.results?.length > 5 && (
               <b className="font-semibold cursor-pointer">VIEW ALL</b>
             )}
