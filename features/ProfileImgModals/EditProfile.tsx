@@ -18,7 +18,7 @@ import CropIcon from "@/assets/crop.svg";
 import { useTypedSelector } from "@/hooks/hooks";
 import { useUpdateMyProfile, useUpdateMyProfileImage } from "@/api/profile";
 import notify from "@/libs/toast";
-import getCroppedImg from "@/libs/utils";
+import getCroppedImg, { handleOnError } from "@/libs/utils";
 
 const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -217,8 +217,6 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  console.log({ successfullyUpdated });
-
   return (
     <ModalContainer marginTop="md:mt-[70px]">
       {modal === "initial-edit" && (
@@ -242,10 +240,11 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                 src={
                   userInfo?.profile?.user?.image !== null
                     ? userInfo?.profile?.user?.image
-                    : ProfileImg
+                    : "/profileIcon.svg"
                 }
                 alt="profile"
                 className="object-cover w-full h-full"
+                onError={handleOnError}
               />
             </div>
             <div className="mt-[42px] flex justify-between items-center px-[56px]">
@@ -598,10 +597,11 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                 src={
                   userInfo?.profile?.user?.image !== null
                     ? userInfo?.profile?.user?.image
-                    : ProfileImg
+                    : "/profileIcon.svg"
                 }
                 alt="profile"
                 className="object-cover w-full h-full"
+                onError={handleOnError}
               />
               <NextImage
                 src="/editCircle.svg"

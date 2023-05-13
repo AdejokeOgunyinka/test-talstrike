@@ -32,9 +32,6 @@ const Index = ({ providers }: { providers: any }) => {
       .email("Invalid email address")
       .required("Please enter your email address"),
     password: yup.string().required("Please enter your password"),
-    confirm_password: yup
-      .string()
-      .oneOf([yup.ref("password")], "Passwords do not match"),
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,7 +40,6 @@ const Index = ({ providers }: { providers: any }) => {
     initialValues: {
       email: "",
       password: "",
-      confirm_password: "",
     },
     validateOnBlur: true,
     validationSchema: loginSchema,
@@ -73,10 +69,9 @@ const Index = ({ providers }: { providers: any }) => {
   });
 
   const [hidePassword, setHidePassword] = useState(true);
-  const [hideConfirmPassword, setHideConfirmPassword] = useState(false);
 
   const GoogleHandlerFunction = async () => {
-    return signIn("google", { callbackUrl: "https://app.talstrike.com/" });
+    return signIn("google", { callbackUrl: "https://talstrike.netlify.app/" });
   };
 
   return (
@@ -108,53 +103,27 @@ const Index = ({ providers }: { providers: any }) => {
             )}
           </div>
           <div className="mt-[15px] mb-[25px] flex flex-col md:flex-row gap-[15px]">
-            <div className="md:basis-1/2">
-              <CustomInputBox
-                label="Password"
-                type={hidePassword ? "password" : "text"}
-                placeholder="Password (minimum of 8 characters)"
-                icon={
-                  <NextImage
-                    src={HiddenPasswordIcon}
-                    alt="password"
-                    className="cursor-pointer"
-                    onClick={() => setHidePassword(!hidePassword)}
-                  />
-                }
-                name="password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.errors.password && formik.touched.password && (
-                <p className="text-brand-warning text-[10px]">
-                  {formik.errors.password}
-                </p>
-              )}
-            </div>
-            <div className="md:basis-1/2">
-              <CustomInputBox
-                label="Confirm Password"
-                type={hidePassword ? "password" : "text"}
-                placeholder="Password (minimum of 8 characters)"
-                icon={
-                  <NextImage
-                    src={HiddenPasswordIcon}
-                    alt="password"
-                    className="cursor-pointer"
-                    onClick={() => setHideConfirmPassword(!hideConfirmPassword)}
-                  />
-                }
-                name="confirm_password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.errors.confirm_password &&
-                formik.touched.confirm_password && (
-                  <p className="text-brand-warning text-[10px]">
-                    {formik.errors.confirm_password}
-                  </p>
-                )}
-            </div>
+            <CustomInputBox
+              label="Password"
+              type={hidePassword ? "password" : "text"}
+              placeholder="Password (minimum of 8 characters)"
+              icon={
+                <NextImage
+                  src={HiddenPasswordIcon}
+                  alt="password"
+                  className="cursor-pointer"
+                  onClick={() => setHidePassword(!hidePassword)}
+                />
+              }
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.errors.password && formik.touched.password && (
+              <p className="text-brand-warning text-[10px]">
+                {formik.errors.password}
+              </p>
+            )}
           </div>
           <div className="flex flex-col md:flex-row gap-[15px] w-full">
             <a

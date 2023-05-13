@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import NextImage from "next/image";
@@ -26,6 +28,10 @@ const DashboardAside = () => {
     router.push(`/profile/${id}`);
   };
 
+  const handleOnError = (e: any) => {
+    e.target.src = "/profileIcon.svg";
+  };
+
   return (
     <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline h-[100%] lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
       <div className="sticky z-[99] top-[70px] bg-brand-500">
@@ -45,12 +51,16 @@ const DashboardAside = () => {
                 className="flex flex-col items-center cursor-pointer"
                 onClick={() => handleClickUser({ id: coach?.user?.id })}
               >
-                <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1px] border-brand-400 overflow-hidden">
-                  <NextImage
+                <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
+                  <img
                     src={coach?.user?.image}
                     alt="coach"
-                    width="40"
-                    height="40"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      objectFit: "cover",
+                    }}
+                    onError={handleOnError}
                   />
                 </div>
                 <p className="text-[9px] mt-[4px] lg:text-[11px] 2xl:text-[13px] leading-[14px] font-medium">
@@ -89,11 +99,15 @@ const DashboardAside = () => {
               onClick={() => handleClickUser({ id: follower?.users?.id })}
             >
               <div className="flex gap-[20px] items-center">
-                <NextImage
+                <img
                   src={follower?.users?.image}
                   alt="player"
-                  width="40"
-                  height="40"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "cover",
+                  }}
+                  onError={handleOnError}
                 />
                 <p className="text-brand-50 text-[11px] lg:text-[14px] 2xl:text-[15px] leading-[16px] font-semibold">
                   {follower?.users?.firstname} {follower?.users?.lastname}

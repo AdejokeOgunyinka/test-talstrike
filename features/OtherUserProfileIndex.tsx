@@ -11,6 +11,7 @@ import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import AboutMe from "./UserProfileSections/AboutMe";
 import { useGetMyProfile } from "@/api/profile";
+import { handleOnError } from "@/libs/utils";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("./UserProfileSections/Posts"));
@@ -66,11 +67,16 @@ const Index = () => {
               <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
                 <div className="w-[161px] h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <NextImage
-                    src={(userProfile?.user?.image as string) || ProfileImg}
+                    src={
+                      userInfo?.profile?.user?.image !== null
+                        ? userInfo?.profile?.user?.image
+                        : ProfileImg
+                    }
                     width="161"
                     height="161"
                     alt="profile"
                     className="profile-img"
+                    onError={handleOnError}
                   />
                 </div>
                 <div className="w-[69px] mb-[37px] h-[30px] bg-brand-1100 rounded-[19px] flex justify-center items-center">

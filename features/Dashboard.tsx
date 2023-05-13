@@ -27,6 +27,7 @@ import { useGetNewsfeed, useGetSuggestedFollows } from "@/api/dashboard";
 import notify from "@/libs/toast";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import { setProfile } from "@/store/slices/profileSlice";
+import { handleOnError } from "@/libs/utils";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -108,10 +109,11 @@ const Dashboard = () => {
                 src={
                   userInfo?.profile?.user?.image !== null
                     ? userInfo?.profile?.user?.image
-                    : ProfileImg
+                    : "/profileIcon.svg"
                 }
                 alt="profile"
                 className="w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
+                onError={handleOnError}
               />
             </div>
             <div className="ml-[10px] h-[30px] bg-brand-1250 rounded-[6px] w-[calc(100%-50px)]">
@@ -236,11 +238,15 @@ const Dashboard = () => {
             <div className="w-[100%] flex items-center">
               <div className="w-[40px] h-[40px] mr-[14px]">
                 {SuggestedFollows?.data && (
-                  <NextImage
+                  <img
                     src={SuggestedFollows?.data[0]?.image}
                     alt="jack"
-                    width="40"
-                    height="40"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      objectFit: "cover",
+                    }}
+                    onError={handleOnError}
                   />
                 )}
               </div>

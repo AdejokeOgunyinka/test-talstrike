@@ -16,6 +16,7 @@ import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
 import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
 import { setProfile } from "@/store/slices/profileSlice";
+import { handleOnError } from "@/libs/utils";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -89,7 +90,7 @@ const Index = () => {
                     src={
                       userInfo?.profile?.user?.image !== null
                         ? userInfo?.profile?.user?.image
-                        : ProfileImg
+                        : "/profileIcon.svg"
                     }
                     style={{
                       width: "161px",
@@ -98,6 +99,7 @@ const Index = () => {
                     }}
                     alt="profile"
                     className="profile-img"
+                    onError={handleOnError}
                   />
 
                   <div
