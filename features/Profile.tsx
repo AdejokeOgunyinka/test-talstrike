@@ -164,19 +164,19 @@ const Index = () => {
                   {media?.photos ? (
                     <div className="w-full h-full flex flex-wrap gap-[2px]">
                       {media?.photos?.map((photo: string, index: number) => (
-                        <div key={index} className="basis-[33%] relative">
+                        <div key={index} className="basis-[30%] relative">
                           <img
                             src={photo}
                             alt="nail"
-                            className="rounded-[4px]"
+                            className="rounded-[4px] w-[45px] h-[45px]"
                           />
-                          {index === media?.count - 1 && (
+                          {/* {index === media?.count - 1 && (
                             <div className="absolute top-0 bottom-0 w-full h-full flex justify-center items-center bg-[rgba(0, 0, 0, 0.5)]">
                               <p className="text-brand-500 text-[10px]">
                                 View all
                               </p>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       ))}
                     </div>
