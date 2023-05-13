@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 
 import { useTypedSelector } from "@/hooks/hooks";
+import { useGetAchievements, useGetAppearances } from "@/api/profile";
 
 const AboutMe = ({
   onClickEditProfile,
@@ -11,6 +12,9 @@ const AboutMe = ({
   onClickEditCareer: any;
 }) => {
   const { data: session } = useSession();
+  const TOKEN = session?.user?.access;
+  const USER_ID = session?.user?.id;
+
   const { userInfo } = useTypedSelector((state) => state.profile);
   const teamsPlayedWith = [
     "Barcelona",
@@ -26,6 +30,16 @@ const AboutMe = ({
     { name: "linkedin", link: "#", icon: "/linkedinIcon.svg" },
     { name: "instagram", link: "#", icon: "/instaIcon.svg" },
   ];
+
+  const { data: achievements } = useGetAchievements({
+    token: TOKEN as string,
+    userId: USER_ID as string,
+  });
+
+  const { data: appearances } = useGetAppearances({
+    token: TOKEN as string,
+    userId: USER_ID as string,
+  });
 
   return (
     <div className="mt-[28px]">
@@ -176,8 +190,15 @@ const AboutMe = ({
             Achievements & Trophies
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            Most recent achievement title with date awarded,{" "}
-            <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            {achievements?.results?.map((achievement: any, index: number) => (
+              <b key={index} className="font-normal">
+                {achievement?.title}, {achievement?.month} {achievement?.year}
+                {index !== achievements?.results?.length - 1 ? ";" : "."}{" "}
+              </b>
+            ))}
+            {achievements?.results?.length > 5 && (
+              <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            )}
           </p>
         </div>
         <div className="mt-[30px]">
@@ -185,8 +206,17 @@ const AboutMe = ({
             Appearances
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            Most recent tournament title with no of appearances,{" "}
-            <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            {appearances?.results?.map((appearance: any, index: number) => (
+              <b key={index} className="font-normal">
+                {appearance?.tournament_title} (
+                {appearance?.number_of_appearances} appearances),{" "}
+                {appearance?.month} {appearance?.year}
+                {index !== appearances?.results?.length - 1 ? ";" : "."}{" "}
+              </b>
+            ))}
+            {appearances?.results?.length > 5 && (
+              <b className="font-semibold cursor-pointer">VIEW ALL</b>
+            )}
           </p>
         </div>
         <div className="mt-[30px]">

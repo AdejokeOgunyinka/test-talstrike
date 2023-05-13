@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
-import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import { useState } from "react";
+import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -13,14 +14,19 @@ import {
   useCreateAchievement,
   useGetAppearances,
   useCreateAppearance,
+  useDeleteAchievement,
+  useDeleteAppearance,
 } from "@/api/profile";
 import notify from "@/libs/toast";
+import AchievementDummy from "@/assets/achievementDummyImg.svg";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useSession } from "next-auth/react";
+import SkeletonLoader from "../SkeletonLoader";
 
 const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
+  const USER_ID = session?.user?.id;
 
   const { userInfo } = useTypedSelector((state) => state.profile);
 
@@ -46,10 +52,22 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
     trainings: yup
       .array()
       .of(yup.string().required("Training cannot be empty"))
-      .required("*Trainings are required")
+      .optional()
       .min(1, "Minimum of 1 training is required")
       .max(5, "maximum of 5 trainings are expected"),
   });
+
+  const { data: achievements, isLoading: isLoadingAchievements } =
+    useGetAchievements({
+      token: TOKEN as string,
+      userId: USER_ID as string,
+    });
+
+  const { data: appearances, isLoading: isLoadingAppearances } =
+    useGetAppearances({
+      token: TOKEN as string,
+      userId: USER_ID as string,
+    });
 
   const formik = useFormik({
     initialValues: {
@@ -63,6 +81,12 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
       setUpdatingProfile(true);
 
       const data = {
+        achievements: achievements?.results?.map(
+          (achievement: any) => achievement?.id
+        ),
+        appearances: appearances?.results?.map(
+          (appearance: any) => appearance?.id
+        ),
         teams: values.teams,
         abilities: values.abilities,
         skills: values.skills,
@@ -104,6 +128,132 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
   const [skillInput, setSkillInput] = useState("");
   const [trainingInput, setTrainingInput] = useState("");
 
+  const { mutate: createAchievement, isLoading: isCreatingAchievement } =
+    useCreateAchievement();
+
+  const [chosenAchievementImage, setChosenAchievementImage] =
+    useState<any>(null);
+
+  const achievementValidation = yup.object().shape({
+    title: yup.string().required(),
+    image: yup.mixed().required("Image is required"),
+    description: yup.string().optional(),
+    month: yup.string().required(),
+    year: yup.string().required(),
+  });
+
+  const achievementFormik = useFormik({
+    initialValues: {
+      title: "",
+      image: null,
+      description: "",
+      month: "",
+      year: "",
+    },
+    validationSchema: achievementValidation,
+    validateOnBlur: true,
+    onSubmit: (values: any, { resetForm }) => {
+      createAchievement(
+        {
+          token: TOKEN as string,
+          body: {
+            title: values.title,
+            image: chosenAchievementImage,
+            description: values.description,
+            month: values.month,
+            year: values.year,
+          },
+        },
+        {
+          onSuccess: () => {
+            notify({
+              type: "success",
+              text: "You have successfully created an achievement",
+            });
+            queryClient.invalidateQueries(["getAchievements"]);
+            resetForm({
+              values: {
+                title: "",
+                image: null,
+                description: "",
+                month: "",
+                year: "",
+              },
+            });
+          },
+          onError: (err: any) => notify({ type: "error", text: err?.message }),
+        }
+      );
+    },
+  });
+
+  const { mutate: createAppearance, isLoading: isCreatingAppearance } =
+    useCreateAppearance();
+
+  const [chosenAppearanceImage, setChosenAppearanceImage] = useState<any>(null);
+
+  const appearanceValidation = yup.object().shape({
+    tournament_title: yup.string().required(),
+    image: yup.mixed().required("Image is required"),
+    number_of_appearances: yup.string().optional(),
+    month: yup.string().required(),
+    year: yup.string().required(),
+  });
+
+  const appearanceFormik = useFormik({
+    initialValues: {
+      tournament_title: "",
+      image: null,
+      number_of_appearances: "",
+      month: "",
+      year: "",
+    },
+    validationSchema: appearanceValidation,
+    validateOnBlur: true,
+    onSubmit: (values: any, { resetForm }) => {
+      createAppearance(
+        {
+          token: TOKEN as string,
+          body: {
+            tournament_title: values.tournament_title,
+            image: chosenAppearanceImage,
+            number_of_appearances: values.number_of_appearances,
+            month: values.month,
+            year: values.year,
+          },
+        },
+        {
+          onSuccess: () => {
+            notify({
+              type: "success",
+              text: "You have successfully created an achievement",
+            });
+            queryClient.invalidateQueries(["getAppearances"]);
+            resetForm({
+              values: {
+                tournament_title: "",
+                image: null,
+                number_of_appearances: "",
+                month: "",
+                year: "",
+              },
+            });
+          },
+          onError: (err: any) => notify({ type: "error", text: err?.message }),
+        }
+      );
+    },
+  });
+
+  const [chosenAchievementId, setChosenAchievementId] = useState("");
+  const [chosenAppearanceId, setChosenAppearanceId] = useState("");
+
+  const { mutate: deleteAchievement, isLoading: isDeletingAchievement } =
+    useDeleteAchievement();
+
+  const { mutate: deleteAppearance, isLoading: isDeletingAppearance } =
+    useDeleteAppearance();
+
   return (
     <ModalContainer marginTop="md:mt-[30px]">
       <FormikProvider value={formik}>
@@ -123,6 +273,375 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
               />
             </div>
             <div className="w-full px-[20px] md:px-[61px]  flex flex-col gap-y-[25px] pt-[30px] pb-[170px]">
+              <div className="w-full">
+                <h3 className="text-[#343D45] text-[20px] leading-[30px] font-medium mb-[20px]">
+                  Achievements & Trophies
+                </h3>
+
+                <FormikProvider value={achievementFormik}>
+                  <form onSubmit={achievementFormik.handleSubmit}>
+                    <div className="w-full">
+                      <div className="flex gap-[20px] mb-[12px]">
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="title"
+                            placeholder="Title of your achievement"
+                            title="Title *"
+                            onChange={achievementFormik.handleChange}
+                            value={achievementFormik.values.title}
+                            onBlur={achievementFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="title"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="image"
+                            type="file"
+                            accept="image/*"
+                            placeholder="Achievement image"
+                            title="Image *"
+                            onChange={(e: any) => {
+                              achievementFormik.handleChange(e);
+                              setChosenAchievementImage(e?.target?.files[0]);
+                            }}
+                            value={achievementFormik.values.image}
+                            onBlur={achievementFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="image"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+                      </div>
+
+                      <TextBox
+                        id="description"
+                        onChange={achievementFormik.handleChange}
+                        value={achievementFormik.values.description as string}
+                        placeholder="Describe your achievement..."
+                        onBlur={achievementFormik.handleBlur}
+                        title="Description"
+                      />
+
+                      <div className="flex gap-[20px] mt-[12px]">
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="month"
+                            placeholder="Enter the month in full..."
+                            title="Month*"
+                            onChange={achievementFormik.handleChange}
+                            value={achievementFormik.values.month}
+                            onBlur={achievementFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="month"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="year"
+                            placeholder="Enter the year of your achievement"
+                            title="Year*"
+                            onChange={achievementFormik.handleChange}
+                            value={achievementFormik.values.year}
+                            onBlur={achievementFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="year"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e?.preventDefault();
+                            achievementFormik?.handleSubmit();
+                          }}
+                          className="bg-brand-600 h-[46px] w-[187px] mt-[40px] text-brand-500 rounded-[4px] p-[13px]"
+                        >
+                          {isCreatingAchievement ? (
+                            <BeatLoader
+                              color={"white"}
+                              size={10}
+                              aria-label="Loading Spinner"
+                              data-testid="loader"
+                            />
+                          ) : (
+                            "Add"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </FormikProvider>
+
+                <div className="w-full bg-brand-1000 py-[34px] flex-wrap justify-center gap-x-[31px] gap-y-[20px]  px-[42px] mt-[14px] flex">
+                  {isLoadingAchievements ? (
+                    <SkeletonLoader />
+                  ) : achievements?.results?.length === 0 ? (
+                    <p>No achievement yet..</p>
+                  ) : (
+                    achievements?.results?.map(
+                      (achievement: any, index: number) => (
+                        <div
+                          key={index}
+                          className="w-[346px] relative h-[399px] border border-[#94AEC5] rounded-[4px] p-[24px]"
+                        >
+                          <div className="relative">
+                            <img
+                              src={achievement?.image || AchievementDummy}
+                              alt="achievement dummy"
+                              className="w-full h-[145px] rounded-[4px] mb-[24px]"
+                              style={{ objectFit: "cover" }}
+                            />
+                          </div>
+                          <h3 className="text-brand-100 mb-[10px] font-semibold text-[16px]">
+                            {achievement?.title}
+                          </h3>
+                          <p className="text-brand-100 mb-[10px] text-[12px]">
+                            {achievement?.description}
+                          </p>
+                          <p className="text-brand-100 mb-[19px] text-[14px]">
+                            Awarded: {achievement?.month}, {achievement?.year}
+                          </p>
+                          <div className="absolute left-0 bottom-0 w-full h-[41px]">
+                            <button
+                              onClick={() => {
+                                setChosenAchievementId(achievement?.id);
+
+                                deleteAchievement(
+                                  {
+                                    id: achievement?.id,
+                                    token: TOKEN as string,
+                                  },
+                                  {
+                                    onSuccess: () => {
+                                      queryClient.invalidateQueries([
+                                        "getAchievements",
+                                      ]);
+                                    },
+                                  }
+                                );
+                              }}
+                              className="bg-brand-600 text-brand-500 h-full w-full"
+                            >
+                              {isDeletingAchievement &&
+                              chosenAchievementId === achievement?.id ? (
+                                <BeatLoader
+                                  color={"white"}
+                                  size={10}
+                                  aria-label="Loading Spinner"
+                                  data-testid="loader"
+                                />
+                              ) : (
+                                "Remove"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    )
+                  )}
+                </div>
+              </div>
+
+              <div className="w-full">
+                <h3 className="text-[#343D45] text-[20px] leading-[30px] font-medium mb-[20px]">
+                  Appearances
+                </h3>
+
+                <FormikProvider value={appearanceFormik}>
+                  <form onSubmit={appearanceFormik.handleSubmit}>
+                    <div className="w-full">
+                      <div className="flex gap-[20px] mb-[12px]">
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="tournament_title"
+                            placeholder="Tournament Title"
+                            title="Tournament Title *"
+                            onChange={appearanceFormik.handleChange}
+                            value={appearanceFormik.values.tournament_title}
+                            onBlur={appearanceFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="tournament_title"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="image"
+                            type="file"
+                            accept="image/*"
+                            placeholder="Appearance image"
+                            title="Image *"
+                            onChange={(e: any) => {
+                              appearanceFormik.handleChange(e);
+                              setChosenAppearanceImage(e?.target?.files[0]);
+                            }}
+                            value={appearanceFormik.values.image}
+                            onBlur={appearanceFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="image"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+                      </div>
+
+                      <InputBox
+                        id="number_of_appearances"
+                        onChange={appearanceFormik.handleChange}
+                        value={appearanceFormik.values.number_of_appearances}
+                        placeholder="Number of appearances"
+                        onBlur={appearanceFormik.handleBlur}
+                        title="Number of Appearances"
+                      />
+
+                      <div className="flex gap-[20px] mt-[12px]">
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="month"
+                            placeholder="Enter the month in full..."
+                            title="Month*"
+                            onChange={appearanceFormik.handleChange}
+                            value={appearanceFormik.values.month}
+                            onBlur={appearanceFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="month"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+
+                        <div className="basis-[50%]">
+                          <InputBox
+                            id="year"
+                            placeholder="Year"
+                            title="Year*"
+                            onChange={appearanceFormik.handleChange}
+                            value={appearanceFormik.values.year}
+                            onBlur={appearanceFormik.handleBlur}
+                          />
+                          <ErrorMessage
+                            name="year"
+                            component="p"
+                            className="text-brand-warning text-[12px]"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e?.preventDefault();
+                            appearanceFormik?.handleSubmit();
+                          }}
+                          className="bg-brand-600 h-[46px] w-[187px] mt-[40px] text-brand-500 rounded-[4px] p-[13px]"
+                        >
+                          {isCreatingAppearance ? (
+                            <BeatLoader
+                              color={"white"}
+                              size={10}
+                              aria-label="Loading Spinner"
+                              data-testid="loader"
+                            />
+                          ) : (
+                            "Add"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </FormikProvider>
+
+                <div className="w-full bg-brand-1000 py-[34px] flex-wrap justify-center gap-x-[31px] gap-y-[20px]  px-[42px] mt-[14px] flex">
+                  {isLoadingAppearances ? (
+                    <SkeletonLoader />
+                  ) : appearances?.results?.length === 0 ? (
+                    <p>No appearance yet..</p>
+                  ) : (
+                    appearances?.results?.map(
+                      (appearance: any, index: number) => (
+                        <div
+                          key={index}
+                          className="w-[346px] relative h-[357px] border border-[#94AEC5] bg-[#E3E2E2] rounded-[4px] p-[24px]"
+                        >
+                          <div className="relative">
+                            <img
+                              src={appearance?.image || AchievementDummy}
+                              alt="appearance dummy"
+                              className="w-full h-[145px] rounded-[4px] mb-[24px]"
+                              style={{ objectFit: "cover" }}
+                            />
+                          </div>
+                          <h3 className="text-brand-600 mb-[11px] font-semibold text-[16px]">
+                            {appearance?.tournament_title}
+                          </h3>
+                          <div className="flex justify-between items-center">
+                            <p className="text-brand-600 mb-[10px] text-[14px]">
+                              <b className="font-semibold text-[32px]">
+                                {appearance?.number_of_appearances}
+                              </b>{" "}
+                              Appearances
+                            </p>
+                            <p className="text-brand-600 mb-[19px] text-[14px] pt-[22px]">
+                              {appearance?.month}, {appearance?.year}
+                            </p>
+                          </div>
+                          <div className="absolute left-0 bottom-0 w-full h-[41px]">
+                            <button
+                              onClick={() => {
+                                setChosenAppearanceId(appearance?.id);
+
+                                deleteAppearance(
+                                  {
+                                    id: appearance?.id,
+                                    token: TOKEN as string,
+                                  },
+                                  {
+                                    onSuccess: () => {
+                                      queryClient.invalidateQueries([
+                                        "getAppearances",
+                                      ]);
+                                    },
+                                  }
+                                );
+                              }}
+                              className="bg-brand-600 text-brand-500 h-full w-full"
+                            >
+                              {isDeletingAppearance &&
+                              chosenAppearanceId === appearance?.id ? (
+                                <BeatLoader
+                                  color={"white"}
+                                  size={10}
+                                  aria-label="Loading Spinner"
+                                  data-testid="loader"
+                                />
+                              ) : (
+                                "Remove"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    )
+                  )}
+                </div>
+              </div>
+
               <div className="w-full">
                 <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
                   Teams Played With

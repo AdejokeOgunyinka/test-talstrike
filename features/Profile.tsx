@@ -8,7 +8,7 @@ import { DashboardLayout } from "@/layout/Dashboard";
 import Star from "@/assets/star.svg";
 import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
-import ProfileImg from "@/assets/profileIcon.svg";
+// import ProfileImg from "@/assets/profileIcon.svg";
 import EditProfile from "@/components/ProfileModals/EditProfile";
 import EditCareerProgress from "@/components/ProfileModals/EditCareerProgress";
 import AboutMe from "./ProfileSections/AboutMe";
