@@ -555,7 +555,7 @@ const PostCard = ({
           )}
         </div>
         <div
-          className="flex flex-col items-center"
+          className="flex flex-col items-center cursor-pointer"
           onClick={() => setShowComments(!showComments)}
         >
           <div className="flex gap-x-[3px] mb-[5px]">
@@ -564,7 +564,6 @@ const PostCard = ({
               width="15"
               height="15"
               alt="chatbox"
-              className="cursor-pointer"
             />
             <p className="text-brand-2250 font-medium text-[13px]">
               {postCommentCount}
@@ -574,7 +573,7 @@ const PostCard = ({
             Comments
           </p>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center cursor-pointer">
           <div className="flex gap-x-[3px] mb-[5px]">
             <NextImage
               className="cursor-pointer"
@@ -631,9 +630,9 @@ const PostCard = ({
         </div>
 
         <div className="w-full relative h-[30px] bg-brand-1600 rounded-[6px] flex">
-          <div>
+          <div className="w-[80%]">
             <input
-              className="focus:outline-0 w-full rounded-[6px] h-[30px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[19px] placeholder:text-[11px] md:placeholder:text-[13px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
+              className="focus:outline-0 w-full rounded-[6px] h-[30px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[16px] placeholder:text-[11px] md:placeholder:text-[13px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
               placeholder="Write a comment.."
               onChange={(e) => setInputComment(e?.target?.value)}
               value={inputComment}
