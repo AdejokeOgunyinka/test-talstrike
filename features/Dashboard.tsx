@@ -92,7 +92,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] flex flex-col md:flex-row bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
+    <div className="w-full min-h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] flex flex-col-reverse md:flex-row bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
       {showCreatePostModal && (
         <CreatePost onClose={() => setShowCreatePostModal(false)} />
       )}
@@ -108,7 +108,7 @@ const Dashboard = () => {
         <CreateOpening onClose={() => setShowCreateOpeningModal(false)} />
       )}
 
-      <div className="basis-[60%]">
+      <div className="basis-[60%] pb-[100px] md:pb-[unset]">
         <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
           <div className="flex items-center">
             <div className="w-[40px] h-[40px] overflow-hidden">
@@ -219,7 +219,7 @@ const Dashboard = () => {
             ))
         )}
       </div>
-      <div className="basis-[40%] pb-[100px] lg:pb-0">
+      <div className="basis-[40%] pb-[20px] md:pb-[100px] lg:pb-0">
         {/* fixed right-[267px] w-[25%] overflow-y-scroll */}
         <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
           <img
@@ -231,7 +231,7 @@ const Dashboard = () => {
         <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
           <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
             <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
-              Players you might like
+              People you might like
             </h4>
             <h5
               onClick={() => router.push("/players")}

@@ -16,6 +16,18 @@ export const useGetNewsfeed = (token: string) =>
     { refetchOnMount: false, retry: 1 }
   );
 
+export const useGetPeopleNearMe = (token: string) =>
+  useQuery(["getPeopleNearMe", token], () =>
+    axios
+      .get("/auth/users/people_near_me", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
 export const useGetAllCommentsOnPost = ({
   token,
   postId,
