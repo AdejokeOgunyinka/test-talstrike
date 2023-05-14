@@ -12,7 +12,7 @@ import { useTypedSelector } from "@/hooks/hooks";
 import ProfileImg from "@/assets/profileIcon.svg";
 import AboutMe from "./UserProfileSections/AboutMe";
 import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
-import { handleOnError } from "@/libs/utils";
+import { handleMediaPostError, handleOnError } from "@/libs/utils";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("./UserProfileSections/Posts"));
@@ -129,7 +129,8 @@ const Index = () => {
                           <img
                             src={photo}
                             alt="nail"
-                            className="rounded-[4px] w-[45px] h-[45px]"
+                            className="rounded-[4px] w-[45px] h-[45px] object-cover"
+                            onError={handleMediaPostError}
                           />
                           {/* {index === media?.count - 1 && (
                             <div className="absolute top-0 bottom-0 w-full h-full flex justify-center items-center bg-[rgba(0, 0, 0, 0.5)]">

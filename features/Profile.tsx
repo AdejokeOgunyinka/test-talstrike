@@ -16,7 +16,7 @@ import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
 import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
 import { setProfile } from "@/store/slices/profileSlice";
-import { handleOnError } from "@/libs/utils";
+import { handleMediaPostError, handleOnError } from "@/libs/utils";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -168,7 +168,8 @@ const Index = () => {
                           <img
                             src={photo}
                             alt="nail"
-                            className="rounded-[4px] w-[45px] h-[45px]"
+                            className="rounded-[4px] w-[45px] h-[45px] object-cover"
+                            onError={handleMediaPostError}
                           />
                           {/* {index === media?.count - 1 && (
                             <div className="absolute top-0 bottom-0 w-full h-full flex justify-center items-center bg-[rgba(0, 0, 0, 0.5)]">
