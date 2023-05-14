@@ -828,7 +828,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                 />
               </div>
 
-              <div className="w-full">
+              {/* <div className="w-full">
                 <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
                   Training Courses
                 </label>
@@ -890,7 +890,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                   component="p"
                   className="text-brand-warning text-[12px]"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex justify-between w-[inherit] px-[20px] md:px-[59px] h-[100px] bg-brand-500 flex justify-end pt-[25px] fixed bottom-[40px] md:bottom-[50px] border-t border-[#E3E2E2] ">
               <button
