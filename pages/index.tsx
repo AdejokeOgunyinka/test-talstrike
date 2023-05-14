@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import LandingPageLayout from "@/layout/LandingPage";
 
 const Index = () => {
@@ -5,3 +6,20 @@ const Index = () => {
 };
 
 export default Index;
+
+export async function getServerSideProps({ req }: { req: any }) {
+  const session = await getSession({ req });
+
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/login",
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
