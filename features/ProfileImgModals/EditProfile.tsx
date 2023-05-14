@@ -220,7 +220,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
   return (
     <ModalContainer marginTop="md:mt-[70px]">
       {modal === "initial-edit" && (
-        <div className="w-[584px] h-[462px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] mt-[20%] md:mt-[unset] md:w-[584px] h-[462px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
             <p className="text-[20px] text-brand-600 leading-[30px]">
               Edit Profile Picture
@@ -247,7 +247,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                 onError={handleOnError}
               />
             </div>
-            <div className="mt-[42px] flex justify-between items-center px-[56px]">
+            <div className="mt-[42px] flex justify-between items-center px-[10px] md:px-[56px]">
               {editProfilePictureControl?.map((item, index) => (
                 <div
                   key={index}
@@ -271,7 +271,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       )}
 
       {modal === "edit" && (
-        <div className="w-[717px] h-[675px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] md:w-[717px] h-[630px] md:h-[675px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
             <p className="text-[20px] text-brand-600 leading-[30px]">
               Edit Profile Picture
@@ -285,7 +285,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               onClick={() => setModal("")}
             />
           </div>
-          <div className="w-full h-[calc(100%-290px)] border-b border-[#E3E2E2] py-[18px] px-[21px]">
+          <div className="w-full h-[calc(100%-230px)] md:h-[calc(100%-290px)] border-b border-[#E3E2E2] py-[18px] px-[21px]">
             <div className="w-full relative h-[350px] rounded-[8px] box-border">
               <Cropper
                 cropShape="round"
@@ -310,8 +310,8 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               />
             </div>
           </div>
-          <div className="w-full h-full py-[31px] px-[38px]">
-            <div className="flex gap-[30px]">
+          <div className="w-full h-full py-[20px] md:py-[31px] md:px-[38px]">
+            <div className="flex gap-[30px] w-full justify-between">
               <div className="flex flex-col items-center basis-[50%]">
                 <p>Zoom</p>
                 <div className="flex gap-[12px]">
@@ -326,6 +326,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     onChange={(e) => {
                       setZoom(parseInt(e.target.value));
                     }}
+                    className="w-[50px] md:w-[unset]"
                   />
                   <p className="text-[40px] leading-[65px]">+</p>
                 </div>
@@ -343,13 +344,14 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     onChange={(e) => {
                       setRotation(parseInt(e.target.value));
                     }}
+                    className="w-[50px] md:w-[unset]"
                   />
                   <p className="text-[40px] leading-[65px]">+</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between px-[20px] md:px-[unset]">
               <div className="flex gap-[40px] items-center">
                 <div className="flex gap-[15px]">
                   <NextImage
@@ -357,7 +359,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     width="58"
                     height="52"
                     alt="rotateL"
-                    className="cursor-pointer"
+                    className="cursor-pointer w-[40px] h-[40px] md:w-[58px] md:h-[52px]"
                     onClick={() => {
                       if (rotation <= 0) {
                         setRotation(0);
@@ -371,7 +373,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                     width="58"
                     height="52"
                     alt="rotateR"
-                    className="cursor-pointer"
+                    className="cursor-pointer w-[40px] h-[40px] md:w-[58px] md:h-[52px]"
                     onClick={() => {
                       if (rotation >= 180) {
                         setRotation(180);
@@ -388,7 +390,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                   type="submit"
                   onClick={showCroppedImage}
                   disabled={isCroppingImage}
-                  className="w-[174px] h-[53px] font-medium rounded-[4px] border border-[2px] border-brand-600 text-brand-500"
+                  className="w-[150px] md:w-[174px] h-[40px] md:h-[53px] font-medium rounded-[4px] border border-[2px] border-brand-600 text-brand-500"
                 >
                   {isCroppingImage ? (
                     <BeatLoader
@@ -418,17 +420,17 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       )}
 
       {modal === "cropped-image" && (
-        <div className="w-[592px] max-h-[400px] py-[20px] flex justify-center items-center relative bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] md:w-[592px] mt-[30%] md:mt-[unset] max-h-[400px] py-[20px] flex justify-center items-center relative bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <img
             src={croppedImage as unknown as string}
             alt="croppedImage"
             className="pb-[100px]"
           />
 
-          <div className="flex px-[30px] py-[25px] justify-between w-[inherit] h-[100px] px-[59px] bg-brand-500 flex justify-end absolute bottom-0 border-t border-[#E3E2E2] ">
+          <div className="flex px-[30px] py-[25px] justify-between w-[inherit] h-[100px] px-[10px] md:px-[59px] gap-x-[10px] md:gap-x-[unset] bg-brand-500 flex justify-end absolute bottom-0 border-t border-[#E3E2E2] ">
             <button
               onClick={() => setModal("edit")}
-              className="border border-[2px] font-medium w-[159px] h-[54px] rounded-[4px] border-brand-600 text-brand-600"
+              className="border border-[2px] font-medium w-[135px] md:w-[159px] h-[54px] rounded-[4px] border-brand-600 text-brand-600"
             >
               Cancel
             </button>
@@ -453,7 +455,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
       )}
 
       {modal === "change-profile" && (
-        <div className="w-[584px] h-[505px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] md:w-[584px] h-[505px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <FormikProvider value={imageFormik}>
             <form onSubmit={imageFormik.handleSubmit} className="w-full h-full">
               <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
@@ -532,7 +534,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
         </div>
       )}
       {modal === "delete-profile" && (
-        <div className="w-[592px] h-[273px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] md:w-[592px] mt-[30%] md:mt-[unset] h-[273px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[61px] justify-between items-center pl-[30px]">
             <p className="text-[20px] text-brand-600 leading-[30px]">
               Delete Profile Picture
@@ -546,7 +548,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
               onClick={() => setModal("initial-edit")}
             />
           </div>
-          <div className="pt-[28px] px-[100px] ">
+          <div className="pt-[28px] px-[30px] md:px-[100px]">
             <p className="text-center text-[20px] leading-[162%] text-[#343D45]">
               Are you sure you want to delete your profile picture?
             </p>
@@ -577,7 +579,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
         </div>
       )}
       {modal === "" && (
-        <div className="w-[429px] h-[280px]   bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="w-[95%] mt-[30%] md:mt-[unset] md:w-[429px] h-[280px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <div className="flex border-b border-[#E3E2E2] w-full h-[49px] justify-between items-center pl-[30px]">
             <p className="text-[20px] text-brand-600 leading-[30px]">
               Edit Profile
