@@ -158,3 +158,7 @@ export default async function getCroppedImg(
 export const handleOnError = (e: any) => {
   e.target.src = "/profileIcon.svg";
 };
+
+export const handleMediaPostError = (e: any) => {
+  e.target.src = "/no-image-icon.jpeg";
+};

@@ -112,19 +112,18 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
               </div>
               <div className="w-full px-[32px] pt-[28px] pb-[80px]">
                 <div className="flex items-center gap-x-[8px] mb-[36px]">
-                  <div className="w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]">
-                    <NextImage
-                      src={
-                        userInfo?.profile?.user?.image !== null
-                          ? userInfo?.profile?.user?.image
-                          : ProfileImg
-                      }
-                      alt="profile"
-                      width="50"
-                      height="50"
-                      onError={handleOnError}
-                    />
-                  </div>
+                  <NextImage
+                    src={
+                      userInfo?.profile?.user?.image !== null
+                        ? userInfo?.profile?.user?.image
+                        : ProfileImg
+                    }
+                    alt="profile"
+                    width="50"
+                    height="50"
+                    onError={handleOnError}
+                    className="object-cover w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]"
+                  />
                   <div>
                     <p className="font-semibold text-[16px] leading-[24px] text-brand-2250">
                       {session?.user?.firstname} {session?.user?.lastname}
@@ -190,7 +189,7 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
                   </div>
                 )}
               </div>
-              <div className="fixed bottom-[68px] w-[90%] lg:w-[751px] rounded-bl-[8px] rounded-br-[8px]  bg-brand-500 flex justify-between items-center fixed h-[98px] border border-brand-2800 border-b-transparent border-x-transparent">
+              <div className="fixed top-[70%] w-[90%] lg:w-[751px] rounded-bl-[8px] rounded-br-[8px]  bg-brand-500 flex justify-between items-center fixed h-[98px] border border-brand-2800 border-b-transparent border-x-transparent">
                 {fileType === "VIDEO" && isCreatingPost && (
                   <div className="absolute top-0 w-[100%]">
                     <BarLoader color="#0074D9" width="100%" />

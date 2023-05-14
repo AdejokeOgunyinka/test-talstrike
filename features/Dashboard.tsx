@@ -7,14 +7,14 @@ import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useRouter } from "next/router";
 
-import TalentAd from "@/assets/talentAd1.png";
+// import TalentAd from "@/assets/talentAd1.png";
 import InstagramIcon from "@/assets/instagramIcon.svg";
 import PhoneCallIcon from "@/assets/phoneCallIcon.svg";
 import MessageIcon from "@/assets/messageIcon.svg";
 import VideoCameraIcon from "@/assets/videoCameraIcon.svg";
 import ImageIcon from "@/assets/imageIcon.svg";
 import VideoIcon from "@/assets/videoIcon.svg";
-import ProfileImg from "@/assets/profileIcon.svg";
+// import ProfileImg from "@/assets/profileIcon.svg";
 import MoreDropdown from "@/components/DashboardMoreDropdown";
 import PostCard from "@/components/PostCard";
 import CreatePost from "@/components/ProfileModals/CreatePost";
@@ -27,7 +27,7 @@ import { useGetNewsfeed, useGetSuggestedFollows } from "@/api/dashboard";
 import notify from "@/libs/toast";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import { setProfile } from "@/store/slices/profileSlice";
-import { handleOnError } from "@/libs/utils";
+import { handleMediaPostError, handleOnError } from "@/libs/utils";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -63,6 +63,13 @@ const Dashboard = () => {
       token: TOKEN as string,
       userId: USER_ID as string,
       post_type: "OPENING",
+    });
+
+  const { data: Announcements, isLoading: isLoadingAnnouncements } =
+    useGetPostsByType({
+      token: TOKEN as string,
+      userId: USER_ID as string,
+      post_type: "ANNOUNCEMENT",
     });
   const { data: SuggestedFollows } = useGetSuggestedFollows(TOKEN as string);
 
@@ -213,15 +220,14 @@ const Dashboard = () => {
         )}
       </div>
       <div className="basis-[40%] pb-[100px] lg:pb-0">
+        {/* fixed right-[267px] w-[25%] overflow-y-scroll */}
         <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
-          <NextImage
-            src={TalentAd}
-            className="ad-img"
+          <img
+            src={"/talentAd1.png"}
+            className="w-full h-[176px] object-cover"
             alt="talent ad"
-            width="380"
           />
         </div>
-
         <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
           <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
             <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
@@ -317,7 +323,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
         <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
           <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
             <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
@@ -344,7 +349,7 @@ const Dashboard = () => {
                 ?.slice(0, 2)
                 .map((talentOpening: any, index: number) => (
                   <div
-                    className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] divide-y divide-brand-1300"
+                    className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
                     key={index}
                   >
                     <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
@@ -391,6 +396,89 @@ const Dashboard = () => {
                         <p className="text-[11px] lg:text-[12px] 2xl:text-[13px] ml-[3px] pt-[2px] text-brand-1050">
                           {talentOpening?.views?.total > 0
                             ? `+${talentOpening?.views?.total - 3}`
+                            : ""}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+            )}
+          </div>
+        </div>
+        <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+          <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
+            <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
+              Announcements
+            </h4>
+            <h4 className="font-semibold text-[20px] leading-[30px] text-brand-50">
+              ...
+            </h4>
+          </div>
+          <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
+            {Announcements?.results?.length === 0 ? (
+              <p>There are no announcements yet..</p>
+            ) : isLoadingAnnouncements ? (
+              <SkeletonTheme
+                baseColor="rgba(0, 116, 217, 0.18)"
+                highlightColor="#fff"
+              >
+                <section>
+                  <Skeleton height={100} width="100%" />
+                </section>
+              </SkeletonTheme>
+            ) : (
+              Announcements?.results
+                ?.slice(0, 2)
+                .map((announcement: any, index: number) => (
+                  <div
+                    className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                    key={index}
+                  >
+                    <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
+                      {announcement?.media && (
+                        <img
+                          src={announcement?.media}
+                          alt="announcement media"
+                          style={{
+                            overflow: "hidden",
+                            borderRadius: "10px",
+                            objectFit: "cover",
+                            width: "45px",
+                            height: "45px",
+                          }}
+                          onError={handleMediaPostError}
+                        />
+                      )}
+                      <div className="ml-[13px]">
+                        <p className="text-[11px] mb-[3px] leading-[16px] lg:text-[12px] 2xl:text-[13px] text-brand-50 font-semibold">
+                          {announcement?.title}
+                        </p>
+                        <p className="text-[10px] leading-[15px] text-brand-50 font-normal">
+                          {announcement?.body}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center pl-[15px] pt-[9px] relative">
+                      <p className="font-semibold text-brand-1350 text-[11px] lg:text-[12px] 2xl:text-[13px] leading-[16px]">
+                        {announcement?.like_count} likes
+                      </p>
+
+                      <div className="absolute -top-[10px] flex right-[14px]">
+                        {announcement.views?.icons
+                          ?.slice(0, 3)
+                          ?.map((icon: string, index: number) => (
+                            <div className="-ml-[7px]" key={index}>
+                              <NextImage
+                                src={icon}
+                                alt="icons"
+                                width="40"
+                                height="40"
+                              />
+                            </div>
+                          ))}
+                        <p className="text-[11px] lg:text-[12px] 2xl:text-[13px] ml-[3px] pt-[2px] text-brand-1050">
+                          {announcement?.views?.total > 0
+                            ? `+${announcement?.views?.total - 3}`
                             : ""}
                         </p>
                       </div>

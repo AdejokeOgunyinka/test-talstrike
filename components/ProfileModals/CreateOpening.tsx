@@ -111,19 +111,18 @@ const CreateOpening = ({ onClose }: { onClose: () => void }) => {
               </div>
               <div className="w-full px-[32px] pt-[28px] pb-[80px]">
                 <div className="flex items-center gap-x-[8px] mb-[36px]">
-                  <div className="w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]">
-                    <NextImage
-                      src={
-                        userInfo?.profile?.user?.image !== null
-                          ? userInfo?.profile?.user?.image
-                          : ProfileImg
-                      }
-                      alt="profile"
-                      width="50"
-                      height="50"
-                      onError={handleOnError}
-                    />
-                  </div>
+                  <NextImage
+                    src={
+                      userInfo?.profile?.user?.image !== null
+                        ? userInfo?.profile?.user?.image
+                        : ProfileImg
+                    }
+                    alt="profile"
+                    width="50"
+                    height="50"
+                    onError={handleOnError}
+                    className="object-cover w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]"
+                  />
                   <div>
                     <p className="font-semibold text-[16px] leading-[24px] text-brand-2250">
                       {session?.user?.firstname} {session?.user?.lastname}
