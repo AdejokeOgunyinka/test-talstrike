@@ -615,7 +615,7 @@ const PostCard = ({
           ))}
         </div>
       )}
-      <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px] flex w-full">
+      <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px] flex w-full items-center">
         <div className="mr-[9px]">
           <img
             src={
@@ -624,12 +624,12 @@ const PostCard = ({
                 : "/profileIcon.svg"
             }
             alt="session image"
-            className="object-cover w-[45px] h-[40px] rounded-[50%]"
+            className="object-cover w-[40px] h-[40px] rounded-[50%]"
             onError={handleOnError}
           />
         </div>
 
-        <div className="w-full relative h-[30px] bg-brand-1600 rounded-[6px] flex">
+        <div className="w-[calc(100%-90px)] relative h-[30px] bg-brand-1600 rounded-[6px] flex">
           <div className="w-[80%]">
             <input
               className="focus:outline-0 w-full rounded-[6px] h-[30px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[16px] placeholder:text-[11px] md:placeholder:text-[13px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
