@@ -7,7 +7,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import SearchBar from "@/components/SearchBar";
 import { useGetAllCoaches } from "@/api/coaches";
-import { useGetMyFollowers } from "@/api/dashboard";
+import { useGetMyFollowers, useGetPeopleNearMe } from "@/api/dashboard";
 
 const DashboardAside = () => {
   const { data: session } = useSession();
@@ -17,6 +17,8 @@ const DashboardAside = () => {
   const router = useRouter();
 
   const { data: Coaches } = useGetAllCoaches({ token: TOKEN as string });
+  // const { data: PeopleNearMe } = useGetPeopleNearMe(TOKEN as string);
+  // console.log({ PeopleNearMe });
 
   const { data: myFollowers, isLoading: isLoadingMyFollowers } =
     useGetMyFollowers({

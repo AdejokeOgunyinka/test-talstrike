@@ -22,6 +22,8 @@ import AchievementDummy from "@/assets/achievementDummyImg.svg";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useSession } from "next-auth/react";
 import SkeletonLoader from "../SkeletonLoader";
+import { AchievementSelectDropdown } from "../SelectDropdown";
+import { getYears, months } from "@/libs/utils";
 
 const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -330,12 +332,13 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
 
                       <div className="flex gap-[20px] mt-[12px]">
                         <div className="basis-[50%]">
-                          <InputBox
+                          <AchievementSelectDropdown
+                            options={months}
+                            label="Month*"
                             id="month"
-                            placeholder="Enter the month in full..."
-                            title="Month*"
+                            name="month"
+                            placeholder="Select Month..."
                             onChange={achievementFormik.handleChange}
-                            value={achievementFormik.values.month}
                             onBlur={achievementFormik.handleBlur}
                           />
                           <ErrorMessage
@@ -346,12 +349,13 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                         </div>
 
                         <div className="basis-[50%]">
-                          <InputBox
+                          <AchievementSelectDropdown
+                            options={getYears(1980, new Date()?.getFullYear())}
+                            label="Year*"
                             id="year"
-                            placeholder="Enter the year of your achievement"
-                            title="Year*"
+                            name="year"
+                            placeholder="Select Year..."
                             onChange={achievementFormik.handleChange}
-                            value={achievementFormik.values.year}
                             onBlur={achievementFormik.handleBlur}
                           />
                           <ErrorMessage
@@ -512,12 +516,13 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
 
                       <div className="flex gap-[20px] mt-[12px]">
                         <div className="basis-[50%]">
-                          <InputBox
+                          <AchievementSelectDropdown
+                            options={months}
+                            label="Month*"
                             id="month"
-                            placeholder="Enter the month in full..."
-                            title="Month*"
+                            name="month"
+                            placeholder="Select Month..."
                             onChange={appearanceFormik.handleChange}
-                            value={appearanceFormik.values.month}
                             onBlur={appearanceFormik.handleBlur}
                           />
                           <ErrorMessage
@@ -528,12 +533,13 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                         </div>
 
                         <div className="basis-[50%]">
-                          <InputBox
+                          <AchievementSelectDropdown
+                            options={getYears(1980, new Date()?.getFullYear())}
+                            label="Year*"
                             id="year"
-                            placeholder="Year"
-                            title="Year*"
+                            name="year"
+                            placeholder="Select Year..."
                             onChange={appearanceFormik.handleChange}
-                            value={appearanceFormik.values.year}
                             onBlur={appearanceFormik.handleBlur}
                           />
                           <ErrorMessage
@@ -828,7 +834,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                 />
               </div>
 
-              {/* <div className="w-full">
+              <div className="w-full">
                 <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
                   Training Courses
                 </label>
@@ -890,7 +896,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                   component="p"
                   className="text-brand-warning text-[12px]"
                 />
-              </div> */}
+              </div>
             </div>
             <div className="flex justify-between w-[inherit] px-[20px] md:px-[59px] h-[100px] bg-brand-500 flex justify-end pt-[25px] fixed bottom-0 border-t border-[#E3E2E2] ">
               <button

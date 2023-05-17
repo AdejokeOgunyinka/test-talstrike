@@ -10,6 +10,8 @@ import ModalContainer from "@/components/Modal";
 import notify from "@/libs/toast";
 import InputBox, { TextBox } from "../ProfileModals/InputBox";
 import { useEditAchievement, useGetSingleAchievement } from "@/api/profile";
+import { AchievementSelectDropdown } from "../SelectDropdown";
+import { getYears, months } from "@/libs/utils";
 
 const EditAchievement = ({
   onClose,
@@ -47,7 +49,7 @@ const EditAchievement = ({
   const achievementFormik = useFormik({
     initialValues: {
       title: singleAchievement?.title,
-      image: "",
+      image: singleAchievement?.image,
       description: singleAchievement?.description,
       month: singleAchievement?.month,
       year: singleAchievement?.year,
@@ -61,9 +63,7 @@ const EditAchievement = ({
           token: TOKEN as string,
           body: {
             title: values.title,
-            image: singleAchievement?.image
-              ? singleAchievement?.image
-              : chosenAchievementImage,
+            ...(chosenAchievementImage && { image: chosenAchievementImage }),
             description: values.description,
             month: values.month,
             year: values.year,
@@ -104,7 +104,7 @@ const EditAchievement = ({
         <FormikProvider value={achievementFormik}>
           <form onSubmit={achievementFormik.handleSubmit}>
             <div className="w-full px-[32px] py-[28px]">
-              <div className="flex gap-[20px] mb-[12px]">
+              <div className="w-full flex gap-[20px] mb-[12px]">
                 <div className="basis-[50%]">
                   <InputBox
                     id="title"
@@ -113,6 +113,7 @@ const EditAchievement = ({
                     onChange={achievementFormik.handleChange}
                     value={achievementFormik.values?.title}
                     onBlur={achievementFormik.handleBlur}
+                    className="w-full"
                   />
                   <ErrorMessage
                     name="title"
@@ -125,15 +126,25 @@ const EditAchievement = ({
                     id="image"
                     type="file"
                     accept="image/*"
-                    placeholder="Achievement image"
+                    placeholder={
+                      typeof achievementFormik?.values?.image === "string"
+                        ? achievementFormik?.values?.image
+                        : "Select image.."
+                    }
                     title="Image *"
                     onChange={(e: any) => {
                       achievementFormik.handleChange(e);
                       setChosenAchievementImage(e?.target?.files[0]);
                     }}
-                    value={achievementFormik.values?.image}
+                    // value={achievementFormik.values?.image}
                     onBlur={achievementFormik.handleBlur}
+                    className="w-full"
                   />
+                  {/* {typeof achievementFormik?.values?.image === "string" && (
+                    <p className="text-[11px]">
+                      {achievementFormik?.values?.image}
+                    </p>
+                  )} */}
                   <ErrorMessage
                     name="image"
                     component="p"
@@ -153,13 +164,15 @@ const EditAchievement = ({
 
               <div className="flex gap-[20px] mt-[12px]">
                 <div className="basis-[50%]">
-                  <InputBox
+                  <AchievementSelectDropdown
+                    options={months}
+                    label="Month*"
                     id="month"
-                    placeholder="Enter the month in full..."
-                    title="Month*"
+                    name="month"
+                    placeholder="Select Month..."
                     onChange={achievementFormik.handleChange}
-                    value={achievementFormik.values?.month}
                     onBlur={achievementFormik.handleBlur}
+                    value={achievementFormik.values.month}
                   />
                   <ErrorMessage
                     name="month"
@@ -169,13 +182,15 @@ const EditAchievement = ({
                 </div>
 
                 <div className="basis-[50%]">
-                  <InputBox
+                  <AchievementSelectDropdown
+                    options={getYears(1980, new Date()?.getFullYear())}
+                    label="Year*"
                     id="year"
-                    placeholder="Enter the year of your achievement"
-                    title="Year*"
+                    name="year"
+                    placeholder="Select Year..."
                     onChange={achievementFormik.handleChange}
-                    value={achievementFormik.values?.year}
                     onBlur={achievementFormik.handleBlur}
+                    value={achievementFormik.values.year}
                   />
                   <ErrorMessage
                     name="year"

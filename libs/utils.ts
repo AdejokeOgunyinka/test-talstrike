@@ -23,8 +23,8 @@ export const isActivePath = (
   return sidebarLink === currentPath;
 };
 
-export const getYears = (startYear: number) => {
-  let currentYear = new Date().getFullYear() - 17;
+export const getYears = (startYear?: number, endYear?: number) => {
+  let currentYear = endYear || new Date().getFullYear() - 17;
   let years: string[] = [];
   startYear = startYear || 1980;
   while (startYear <= currentYear) {
@@ -33,6 +33,21 @@ export const getYears = (startYear: number) => {
   years = years?.sort((a, b) => parseInt(b) - parseInt(a));
   return years;
 };
+
+export const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 export const getFileExtension = function ({ url }: { url: string }) {
   if (url === null) {

@@ -10,6 +10,8 @@ import ModalContainer from "@/components/Modal";
 import notify from "@/libs/toast";
 import InputBox, { TextBox } from "../ProfileModals/InputBox";
 import { useCreateAchievement } from "@/api/profile";
+import { AchievementSelectDropdown } from "../SelectDropdown";
+import { getYears, months } from "@/libs/utils";
 
 const CreateAchievement = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -137,12 +139,13 @@ const CreateAchievement = ({ onClose }: { onClose: () => void }) => {
 
               <div className="flex gap-[20px] mt-[12px]">
                 <div className="basis-[50%]">
-                  <InputBox
+                  <AchievementSelectDropdown
+                    options={months}
+                    label="Month*"
                     id="month"
-                    placeholder="Enter the month in full..."
-                    title="Month*"
+                    name="month"
+                    placeholder="Select Month..."
                     onChange={achievementFormik.handleChange}
-                    value={achievementFormik.values.month}
                     onBlur={achievementFormik.handleBlur}
                   />
                   <ErrorMessage
@@ -153,12 +156,13 @@ const CreateAchievement = ({ onClose }: { onClose: () => void }) => {
                 </div>
 
                 <div className="basis-[50%]">
-                  <InputBox
+                  <AchievementSelectDropdown
+                    options={getYears(1980, new Date()?.getFullYear())}
+                    label="Year*"
                     id="year"
-                    placeholder="Enter the year of your achievement"
-                    title="Year*"
+                    name="year"
+                    placeholder="Select Year..."
                     onChange={achievementFormik.handleChange}
-                    value={achievementFormik.values.year}
                     onBlur={achievementFormik.handleBlur}
                   />
                   <ErrorMessage
