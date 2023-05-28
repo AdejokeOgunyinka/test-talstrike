@@ -10,11 +10,11 @@ export default Index;
 export async function getServerSideProps({ req }: { req: any }) {
   const session = await getSession({ req });
 
-  if (!session) {
+  if (session) {
     return {
       redirect: {
         permanent: false,
-        destination: "/auth/login",
+        destination: "/dashboard",
       },
     };
   }
