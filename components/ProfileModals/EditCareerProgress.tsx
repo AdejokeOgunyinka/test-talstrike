@@ -76,7 +76,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
       teams: userInfo?.profile?.teams,
       abilities: userInfo?.profile?.abilities,
       skills: userInfo?.profile?.skills,
-      trainings: userInfo?.profile?.trainings?.split(", "),
+      trainings: userInfo?.profile?.trainings,
     },
     validationSchema: careerProgressValidationSchema,
     onSubmit: async (values) => {

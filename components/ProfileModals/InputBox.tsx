@@ -1,3 +1,6 @@
+import Select, { components } from "react-select";
+import NextImage from "next/image";
+
 const InputBox = ({
   onChange,
   onBlur,
@@ -9,23 +12,27 @@ const InputBox = ({
   className,
   type,
   accept,
+  name,
 }: {
   onChange?: any;
   onBlur?: any;
   value?: any;
-  title: string;
+  title?: string;
   id: string;
   placeholder: string;
   disabled?: boolean;
   className?: string;
   type?: string;
   accept?: any;
+  name?: string;
 }) => {
   return (
     <div className="w-[100%]">
-      <label className="text-brand-200 font-medium text-[18px] leading-[162%]">
-        {title}
-      </label>
+      {title && (
+        <label className="text-brand-3000 font-medium text-[18px] leading-[162%]">
+          {title}
+        </label>
+      )}
       <input
         placeholder={placeholder}
         type={type}
@@ -36,6 +43,7 @@ const InputBox = ({
         value={value}
         disabled={disabled}
         accept={accept}
+        name={name}
       />
     </div>
   );
@@ -63,7 +71,7 @@ export const TextBox = ({
   return (
     <div className="w-[100%]">
       {title && (
-        <label className="text-brand-200 font-medium text-[18px] leading-[162%]">
+        <label className="text-brand-3000 font-medium text-[18px] leading-[162%]">
           {title}
         </label>
       )}
@@ -76,6 +84,61 @@ export const TextBox = ({
         onChange={onChange}
         onBlur={onBlur}
         value={value}
+      />
+    </div>
+  );
+};
+
+export const Dropdown = ({
+  options,
+  title,
+  className,
+  placeholder,
+  onChange,
+  id,
+  name,
+  value,
+}: {
+  options: { value: string; label: string }[];
+  title?: string;
+  className?: string;
+  placeholder?: string;
+  onChange?: any;
+  id?: string;
+  name: string;
+  value?: { value: string; label: string };
+}) => {
+  const { Option } = components;
+
+  const DropdownIndicator = (props: any) => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <NextImage
+          src={"/chevron-down.svg"}
+          alt="icon-down"
+          width="20"
+          height="20"
+        />
+      </components.DropdownIndicator>
+    );
+  };
+
+  return (
+    <div className="w-full">
+      {title && (
+        <p className="text-brand-3000 font-medium text-[18px] leading-[162%]">
+          {title}
+        </p>
+      )}
+      <Select
+        id={id}
+        options={options}
+        className={className}
+        placeholder={placeholder}
+        components={{ DropdownIndicator, IndicatorSeparator: () => null }}
+        onChange={onChange}
+        name={name}
+        value={value?.label !== "" && value}
       />
     </div>
   );

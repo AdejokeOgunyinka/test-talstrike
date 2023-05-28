@@ -3,41 +3,49 @@ import { useSession } from "next-auth/react";
 import moment from "moment";
 
 import SkeletonLoader from "@/components/SkeletonLoader";
-import { useGetPostsByType } from "@/api/profile";
+import { useGetPollsByUserId, useVotePollChoice } from "@/api/profile";
 import { useEffect, useState } from "react";
 import PollRadioBtn from "@/components/PollRadioBtn";
 import PollProgressBar from "@/components/PollProgressBar";
+import CreatePoll from "@/components/ProfileModals/CreatePoll";
+import { handleOnError } from "@/libs/utils";
+import notify from "@/libs/toast";
 
 const MyPolls = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
+  const USER_IMG = session?.user?.image;
+  const USER_NAME = `${session?.user?.firstname} ${session?.user?.lastname}`;
 
-  const { data: userPosts, isLoading: isLoadingUserPosts } = useGetPostsByType({
-    token: TOKEN as string,
-    userId: USER_ID as string,
-    post_type: "POLL",
-  });
+  const { data: userPolls, isLoading: isLoadingUserPosts } =
+    useGetPollsByUserId({
+      token: TOKEN as string,
+      userId: USER_ID as string,
+    });
 
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(1);
 
+  const [pollIndex, setPollIndex] = useState("");
+
+  // const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const Popover = () => {
     return (
-      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] h-[92px] py-[15px] px-[15px] flex flex-col gap-y-[7px]">
+      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] h-[42px] py-[15px] px-[15px] flex flex-col gap-y-[7px]">
         <p className="text-brand-600 text-[10px] font-medium leading-[15px]">
           View Poll
         </p>
-        {/* <p className="text-brand-600 text-[10px] font-medium leading-[15px]">View Insight</p> */}
-        <p className="text-brand-600 text-[10px] font-medium leading-[15px]">
-          Edit Poll
-        </p>
-        <p className="text-brand-2600 text-[10px] font-medium leading-[15px]">
+
+        {/* <p className="text-brand-2600 text-[10px] font-medium leading-[15px]">
           Delete Poll
-        </p>
+        </p> */}
       </div>
     );
   };
+
+  const [openCreatePollModal, setOpenCreatePollModal] = useState(false);
 
   useEffect(() => {
     document.body.addEventListener("click", () => {
@@ -47,11 +55,17 @@ const MyPolls = () => {
 
   return (
     <div className="mt-[21px] w-full">
+      {openCreatePollModal && (
+        <CreatePoll onClose={() => setOpenCreatePollModal(false)} />
+      )}
       <div className="flex justify-between mb-[32px]">
         <h3 className="text-brand-600 font-semibold text-[21.25px] leading-[32px]">
           My Polls
         </h3>
-        <button className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500">
+        <button
+          onClick={() => setOpenCreatePollModal(!openCreatePollModal)}
+          className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500"
+        >
           Create Poll
         </button>
       </div>
@@ -59,10 +73,10 @@ const MyPolls = () => {
       <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
         {isLoadingUserPosts ? (
           <SkeletonLoader />
-        ) : userPosts?.results?.length === 0 || !userPosts?.results ? (
+        ) : userPolls?.results?.length === 0 || !userPolls?.results ? (
           <p>No poll available at the moment...</p>
         ) : (
-          userPosts?.results?.map((post: any, index: number) => (
+          userPolls?.results?.map((post: any, index: number) => (
             <div
               key={index}
               className="rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%]"
@@ -71,16 +85,18 @@ const MyPolls = () => {
                 <div className="flex items-center">
                   <div className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]">
                     <NextImage
-                      src={post?.author?.image}
+                      src={USER_IMG as string}
                       alt="post creator"
                       width="39"
                       height="39"
+                      className="mr-[7px] object-cover rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                      onError={handleOnError}
                     />
                   </div>
 
                   <div>
                     <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
-                      {post?.author?.firstname} {post?.author?.lastname}
+                      {USER_NAME}
                     </p>
                     <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
                       {moment(post?.created_at).format("dddd Do MMMM")}
@@ -95,6 +111,7 @@ const MyPolls = () => {
                     className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
                     onClick={() => {
                       setClickedIndex(index);
+                      setPollIndex(post?.id);
                       setShowPopover(!showPopover);
                     }}
                   >
@@ -105,7 +122,7 @@ const MyPolls = () => {
               </div>
 
               <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
-                {post?.title}
+                {post?.question_text}
               </p>
 
               <p className="font-normal  text-[10px] mb-[35px] leading-[15px] text-brand-50">
@@ -113,36 +130,11 @@ const MyPolls = () => {
               </p>
 
               <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full]">
-                {index + 1 === 1 && (
-                  <ActivePoll
-                    options={[
-                      "Real Madrid FC",
-                      "Barcelona FC",
-                      "Manchester United",
-                      "Arsenal FC",
-                    ]}
-                  />
-                )}
-                {index + 1 === 2 && (
-                  <InactivePoll
-                    options={[
-                      { value: "Real Madrid FC", percentage: "20" },
-                      { value: "Barcelona FC", percentage: "30" },
-                      { value: "Manchester United", percentage: "40" },
-                      { value: "Arsenal FC", percentage: "10" },
-                    ]}
-                  />
-                )}
-                {index + 1 === 3 && (
-                  <ActivePoll
-                    options={[
-                      "Real Madrid FC",
-                      "Barcelona FC",
-                      "Manchester United",
-                      "Arsenal FC",
-                    ]}
-                  />
-                )}
+                <ActivePoll
+                  options={post?.poll_choices}
+                  token={TOKEN as string}
+                  pollId={post?.id}
+                />
               </div>
 
               <div className="flex mb-[12px] justify-between w-full text-[14px] text-brand-2250">
@@ -187,7 +179,7 @@ const MyPolls = () => {
                       alt="chatbox"
                     />
                     <p className="text-brand-2250 font-medium text-[13px]">
-                      46
+                      {post?.comment_count}
                     </p>
                   </div>
                   <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
@@ -203,7 +195,7 @@ const MyPolls = () => {
                       alt="arrow"
                     />
                     <p className="text-brand-2250 font-medium text-[13px]">
-                      26
+                      {post?.share_count}
                     </p>
                   </div>
                   <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
@@ -223,31 +215,63 @@ const MyPolls = () => {
         )}
       </div>
 
-      {!isLoadingUserPosts &&
-        userPosts?.results &&
-        userPosts?.results?.length !== 0 && (
+      {/* {!isLoadingUserPosts &&
+        userPolls?.results &&
+        userPolls?.results?.length !== 0 && (
           <div className="mt-[45px] w-full flex justify-center items-center">
             <button className="w-[146px] bg-brand-600 h-[41px] rounded-[19px] text-brand-500 text-[14px] leading-[21px]">
               Load More
             </button>
           </div>
-        )}
+        )} */}
     </div>
   );
 };
 
-const ActivePoll = ({ options }: { options: any }) => {
+const ActivePoll = ({
+  options,
+  token,
+  pollId,
+}: {
+  options: any;
+  token: string;
+  pollId: string;
+}) => {
   const [selected, setSelected] = useState("");
+  const [chosenId, setChosenId] = useState("");
+
+  const { mutate: votePoll } = useVotePollChoice();
+
+  useEffect(() => {
+    if (chosenId) {
+      votePoll(
+        {
+          data: { voter_choice: chosenId },
+          pollId: pollId,
+          token: token,
+        },
+        {
+          onSuccess() {
+            notify({ type: "success", text: "Your vote was successful" });
+            setChosenId("");
+          },
+        }
+      );
+    }
+  }, [chosenId]);
 
   return (
     <div className="flex flex-col gap-y-[14px] w-full">
       {options?.map((option: any, index: number) => (
         <PollRadioBtn
-          name={option}
-          value={option}
+          name={option?.choice_text}
+          value={option?.choice_text}
           key={index}
           selected={selected}
-          setSelected={setSelected}
+          onChange={() => {
+            setSelected(option?.choice_text);
+            setChosenId(option?.choice_id);
+          }}
         />
       ))}
     </div>

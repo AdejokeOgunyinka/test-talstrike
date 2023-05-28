@@ -34,7 +34,7 @@ type IProfileResponse = {
   is_following: boolean;
   gender: string;
   phone_number: string;
-  trainings: string;
+  trainings: string[];
   achievements: { title: string; year: string; description: string }[];
   teams: string[];
   interests: string[];

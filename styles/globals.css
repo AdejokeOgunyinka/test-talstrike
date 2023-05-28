@@ -155,3 +155,8 @@ span:has(.ad-img), span:has(.post-img), .span:has(.profile-img) {
   display: flex;
   cursor: pointer;
 }
+
+.poll-dropdown .css-13cymwt-control {
+  border-width: 2px !important;
+  border-color: #D5D5D5 !important;
+}

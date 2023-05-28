@@ -245,7 +245,7 @@ const ActivePoll = ({ options }: { options: any }) => {
           value={option}
           key={index}
           selected={selected}
-          setSelected={setSelected}
+          onChange={() => setSelected(option)}
         />
       ))}
     </div>

@@ -22,6 +22,54 @@ export const useUpdateMyProfile = () =>
       })
   );
 
+export const useCreatePoll = () =>
+  useMutation(({ token, data }: { data: any; token: string }) =>
+    axios
+      .post("/poll/", data, {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useGetPollsByUserId = ({ token, userId }: IGetPosts) =>
+  useQuery(
+    ["getPollsByUserId", token, userId],
+    () =>
+      axios
+        .get(
+          `/poll/?author=${userId}`
+          // {
+          //   headers: { Authorization: "Bearer " + token },
+          // }
+        )
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        }),
+    { refetchOnWindowFocus: false }
+  );
+
+export const useVotePollChoice = () =>
+  useMutation(
+    ({ token, pollId, data }: { data: any; pollId: string; token: string }) =>
+      axios
+        .post(`/poll/${pollId}/vote/`, data, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        })
+  );
+
 export const useUpdateMyProfileImage = () =>
   useMutation(
     ({ token, data, userId }: { token: string; userId: string; data: any }) =>

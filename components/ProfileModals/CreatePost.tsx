@@ -95,7 +95,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
           formik={formik}
         />
       ) : (
-        <div className="relative w-[90%] lg:w-[751px] pb-[100px] overflow-y-scroll h-[450px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+        <div className="relative w-[90%] lg:w-[751px] pb-[100px] h-[450px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
           <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit}>
               <div className="h-[61px] border border-brand-2800 border-t-transparent border-x-transparent flex justify-between items-center">
@@ -111,7 +111,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                   height="61"
                 />
               </div>
-              <div className="w-full px-[32px] pt-[28px] pb-[80px]">
+              <div className="w-full px-[32px] pt-[28px] pb-[80px] overflow-y-scroll h-[350px]">
                 <div className="flex items-center gap-x-[8px] mb-[36px]">
                   <NextImage
                     src={
@@ -169,7 +169,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                   </div>
                 )}
               </div>
-              <div className="fixed bottom-[224px] w-[90%] lg:w-[751px] rounded-bl-[8px] rounded-br-[8px]  bg-brand-500 flex justify-between items-center fixed h-[98px] border border-brand-2800 border-b-transparent border-x-transparent">
+              <div className="absolute bottom-0 w-[100%] lg:w-[751px] rounded-bl-[8px] rounded-br-[8px]  bg-brand-500 flex justify-between items-center fixed h-[98px] border border-brand-2800 border-b-transparent border-x-transparent">
                 {fileType === "VIDEO" && isCreatingPost && (
                   <div className="absolute top-0 w-[100%]">
                     <BarLoader color="#0074D9" width="100%" />

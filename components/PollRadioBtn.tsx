@@ -2,12 +2,12 @@ const PollRadioBtn = ({
   name,
   value,
   selected,
-  setSelected,
+  onChange,
 }: {
   name: string;
   value: any;
   selected: any;
-  setSelected: any;
+  onChange: any;
 }) => {
   return (
     <div
@@ -19,9 +19,7 @@ const PollRadioBtn = ({
         type="radio"
         name={name}
         value={value}
-        onChange={(e) => {
-          setSelected(e?.target?.value);
-        }}
+        onChange={onChange}
         className={`absolute left-[16px] top-[10px] border ${
           selected === value ? "border-brand-500" : "border-brand-600"
         } w-[18px] h-[18px]`}

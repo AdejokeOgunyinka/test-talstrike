@@ -8,6 +8,8 @@ import {
   ArrowLeftIcon,
   HeartIcon as HeartIcon2,
 } from "@heroicons/react/24/solid";
+import { useQueryClient } from "@tanstack/react-query";
+import BounceLoader from "react-spinners/BounceLoader";
 
 import HeartIcon from "@/assets/heartIcon.svg";
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -17,7 +19,7 @@ import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditPost from "@/components/ProfileModals/EditPost";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import { TextBox } from "@/components/ProfileModals/InputBox";
-import { useGetAllCommentsOnPost } from "@/api/dashboard";
+import { useCommentOnPost, useGetAllCommentsOnPost } from "@/api/dashboard";
 
 const Image = styled.img``;
 
@@ -31,11 +33,15 @@ const MyPosts = () => {
     userId: USER_ID as string,
   });
 
+  const queryClient = useQueryClient();
+
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(1);
 
   const [postIndex, setPostIndex] = useState("");
   const [chosenPost, setChosenPost] = useState<any>(null);
+
+  const { mutate: commentOnPost, isLoading: isCommenting } = useCommentOnPost();
 
   const { data: commentsOnPost } = useGetAllCommentsOnPost({
     token: TOKEN as string,
@@ -92,6 +98,9 @@ const MyPosts = () => {
       setShowPopover(false);
     });
   }, []);
+
+  const [inputComment, setInputComment] = useState("");
+  const [emptyComment, setEmptyComment] = useState(false);
 
   return (
     <div className="mt-[21px] w-full">
@@ -267,16 +276,58 @@ const MyPosts = () => {
                   className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                   onError={handleOnError}
                 />
-                <TextBox
-                  id="comment"
-                  placeholder="What are you thoughts about this post?"
-                  onChange={(e: any) => console.log(e)}
-                  className="-mt-[0.5px]"
-                />
+                <div className="w-full">
+                  <TextBox
+                    id="comment"
+                    placeholder="What are you thoughts about this post?"
+                    className="-mt-[0.5px]"
+                    onChange={(e: any) => setInputComment(e?.target?.value)}
+                    value={inputComment}
+                  />
+                  {emptyComment && (
+                    <p className="text-[11px] text-warning">
+                      Please write a comment before you hit send
+                    </p>
+                  )}
+                </div>
               </div>
               <div className="w-full flex justify-end mt-[15px]">
-                <button className="w-[115px] h-[36px] border-[1.5px] border-brand-2250 text-[14px] text-brand-2250 rounded-[2px]">
-                  Comment
+                <button
+                  onClick={() => {
+                    setEmptyComment(false);
+                    if (!inputComment) {
+                      setEmptyComment(true);
+                    } else {
+                      inputComment &&
+                        commentOnPost(
+                          {
+                            postId: chosenPost?.id,
+                            body: inputComment,
+                            token: TOKEN as string,
+                          },
+                          {
+                            onSuccess: () => {
+                              setInputComment("");
+                              queryClient.invalidateQueries([
+                                "getAllCommentsOnPost",
+                              ]);
+                            },
+                          }
+                        );
+                    }
+                  }}
+                  className="w-[115px] h-[36px] border-[1.5px] border-brand-2250 text-[14px] text-brand-2250 rounded-[2px]"
+                >
+                  {isCommenting ? (
+                    <BounceLoader
+                      color={"blue"}
+                      size={10}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  ) : (
+                    "Comment"
+                  )}
                 </button>
               </div>
             </div>

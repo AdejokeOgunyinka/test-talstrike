@@ -45,6 +45,8 @@ const PostCard = ({
   isLoadingPost,
   postTitle,
   fileType,
+  post,
+  onClickViewPost,
 }: {
   postType: string;
   postImage: string;
@@ -61,6 +63,8 @@ const PostCard = ({
   isLoadingPost: boolean;
   postTitle: string;
   fileType: string;
+  post: any;
+  onClickViewPost: any;
 }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
@@ -90,45 +94,28 @@ const PostCard = ({
   const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
 
   const [showPopover, setShowPopover] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState(1);
-
-  const [postIndex, setPostIndex] = useState("");
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-
-  const handleClickDelete = () => {
-    setShowDeleteModal(true);
-    setShowPopover(false);
-  };
-
-  const handleClickEditModal = () => {
-    setShowEditModal(true);
-    setShowPopover(false);
-  };
 
   const Popover = () => {
     return (
-      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[113px] h-[83px] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
-        <p className="text-brand-600 text-[10px] font-medium leading-[15px]">
-          View Opening
-        </p>
-        {/* <p className="text-brand-600 text-[10px] font-medium leading-[15px]">View Insight</p> */}
+      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
         <p
-          className="text-brand-600 text-[10px] font-medium leading-[15px]"
-          onClick={handleClickEditModal}
+          onClick={() => {
+            onClickViewPost();
+            setShowPopover(false);
+          }}
+          className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
-          Edit Opening
-        </p>
-        <p
-          className="text-brand-2600 text-[10px] font-medium leading-[15px]"
-          onClick={handleClickDelete}
-        >
-          Delete Opening
+          View {postType}
         </p>
       </div>
     );
   };
+
+  useEffect(() => {
+    document.body.addEventListener("click", () => {
+      setShowPopover(false);
+    });
+  }, []);
 
   return (
     // <div className="p-[10px] relative md:p-[14px] w-[100%] divide-y divide-brand-1150 mb-[28px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
@@ -436,9 +423,20 @@ const PostCard = ({
               </h4>
             </div>
           </div>
-          {/* <div className="text-brand-2250 font-semibold text-[27.7232px]">
-            ...
-          </div> */}
+          <div
+            onClick={(e) => e?.stopPropagation()}
+            className="text-brand-2250 font-semibold text-[27.7232px] relative"
+          >
+            <p
+              onClick={() => {
+                setShowPopover(!showPopover);
+              }}
+              className="cursor-pointer"
+            >
+              ...
+            </p>
+            {showPopover && <Popover />}
+          </div>
         </div>
         <div className={`mb-[15px] ${postMedia ? "mb-[15px]" : "mb-0"}`}>
           <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">

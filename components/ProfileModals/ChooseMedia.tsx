@@ -37,7 +37,7 @@ const ChooseMedia = ({
       </div>
       <label
         htmlFor="file"
-        className="cursor-pointer flex flex-col gap-y-[18.25px]"
+        className="cursor-pointer flex flex-col gap-y-[18.25px] items-center"
       >
         <NextImage
           src={
