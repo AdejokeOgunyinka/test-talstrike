@@ -1,6 +1,8 @@
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import moment from "moment";
+import styled from "styled-components";
+import { useQueryClient } from "@tanstack/react-query";
 
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetPollsByUserId, useVotePollChoice } from "@/api/profile";
@@ -10,6 +12,8 @@ import PollProgressBar from "@/components/PollProgressBar";
 import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import { handleOnError } from "@/libs/utils";
 import notify from "@/libs/toast";
+
+const Image = styled.img``;
 
 const MyPolls = () => {
   const { data: session } = useSession();
@@ -125,24 +129,44 @@ const MyPolls = () => {
                 {post?.question_text}
               </p>
 
-              <p className="font-normal  text-[10px] mb-[35px] leading-[15px] text-brand-50">
-                {post?.body}
-              </p>
+              <div className="w-full flex justify-center">
+                {post?.image && <Image src={post?.image} alt="poll img" />}
+              </div>
 
-              <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full]">
-                <ActivePoll
-                  options={post?.poll_choices}
-                  token={TOKEN as string}
-                  pollId={post?.id}
-                />
+              <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
+                {post?.voted ? (
+                  <InactivePoll options={post?.poll_choices} />
+                ) : (
+                  <ActivePoll
+                    options={post?.poll_choices}
+                    token={TOKEN as string}
+                    pollId={post?.id}
+                  />
+                )}
               </div>
 
               <div className="flex mb-[12px] justify-between w-full text-[14px] text-brand-2250">
                 <div>
-                  <b className="font-semibold">50</b> votes
+                  <b className="font-semibold">{post?.total_vote_count}</b> vote
+                  {post?.total_vote_count > 1 && "s"}
                 </div>
                 <div className="border border-t-transparent border-b-transparent border-l-brand-2750 border-r-brand-2750 px-[40px]">
-                  <b className="font-semibold">2</b> weeks
+                  {parseInt(post?.duration?.split(" ")[0]) > 0 && (
+                    <>
+                      <b className="font-semibold">
+                        {post?.duration?.split(" ")[0]}
+                      </b>{" "}
+                      days
+                    </>
+                  )}
+                  <b className="font-semibold">
+                    {"  "} {post?.duration?.split(" ")[1]?.split(":")[0]}
+                  </b>{" "}
+                  hours
+                  <b className="font-semibold">
+                    {"  "} {post?.duration?.split(" ")[1]?.split(":")[1]}
+                  </b>{" "}
+                  mins
                 </div>
                 <div>
                   {index + 1 === 1
@@ -167,7 +191,7 @@ const MyPolls = () => {
                     </p>
                   </div>
                   <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
-                    Likes
+                    Like{post?.like_count > 1 && "s"}
                   </p>
                 </div>
                 <div className="flex flex-col items-center">
@@ -241,6 +265,7 @@ const ActivePoll = ({
   const [chosenId, setChosenId] = useState("");
 
   const { mutate: votePoll } = useVotePollChoice();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (chosenId) {
@@ -253,6 +278,7 @@ const ActivePoll = ({
         {
           onSuccess() {
             notify({ type: "success", text: "Your vote was successful" });
+            queryClient.invalidateQueries(["getPollsByUserId"]);
             setChosenId("");
           },
         }
@@ -291,10 +317,10 @@ const InactivePoll = ({ options }: { options: any }) => {
     <div className="flex flex-col w-full gap-y-[14px]">
       {options?.map((option: any, index: number) => (
         <PollProgressBar
-          bgColor="bg-brand-2700"
+          bgColor="bg-[#D7EAFB]"
           key={index}
           completed={option?.percentage}
-          option={option?.value}
+          option={option?.choice_text}
           special={index === getHighest()}
         />
       ))}

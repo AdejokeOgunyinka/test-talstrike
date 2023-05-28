@@ -38,6 +38,7 @@ import { setProfile } from "@/store/slices/profileSlice";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import { TextBox } from "@/components/ProfileModals/InputBox";
 import { useCommentOnPost, useGetAllCommentsOnPost } from "@/api/dashboard";
+import CreatePoll from "@/components/ProfileModals/CreatePoll";
 
 const Image = styled.img``;
 
@@ -94,6 +95,7 @@ const Dashboard = () => {
     useState(false);
   const [showCreateArticleModal, setShowCreateArticleModal] = useState(false);
   const [showCreateOpeningModal, setShowCreateOpeningModal] = useState(false);
+  const [showCreatePollModal, setShowCreatePollModal] = useState(false);
 
   const [openMoreDropdown, setOpenMoreDropdown] = useState(false);
 
@@ -131,6 +133,10 @@ const Dashboard = () => {
       )}
       {showCreateOpeningModal && (
         <CreateOpening onClose={() => setShowCreateOpeningModal(false)} />
+      )}
+
+      {showCreatePollModal && (
+        <CreatePoll onClose={() => setShowCreatePollModal} />
       )}
 
       {showSinglePost === true ? (
@@ -422,6 +428,7 @@ const Dashboard = () => {
                           }
                           onClickArticle={() => setShowCreateArticleModal(true)}
                           onClickOpening={() => setShowCreateOpeningModal(true)}
+                          onClickPoll={() => setShowCreatePollModal(true)}
                         />
                       </div>
                     )}

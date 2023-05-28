@@ -42,12 +42,9 @@ export const useGetPollsByUserId = ({ token, userId }: IGetPosts) =>
     ["getPollsByUserId", token, userId],
     () =>
       axios
-        .get(
-          `/poll/?author=${userId}`
-          // {
-          //   headers: { Authorization: "Bearer " + token },
-          // }
-        )
+        .get(`/poll/?author=${userId}`, {
+          headers: { Authorization: "Bearer " + token },
+        })
         .then((res) => res.data)
         .catch((err) => {
           throw err.response.data;

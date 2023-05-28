@@ -10,25 +10,29 @@ const PollProgressBar = ({
   special: boolean;
 }) => {
   const containerStyles = {
-    height: '38px',
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: '50px',
+    height: "38px",
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: "50px",
   };
 
   const fillerStyles = {
-    height: '100%',
+    height: "100%",
     width: `${completed}%`,
-    borderRadius: 'inherit',
+    borderRadius: "inherit",
   };
 
   return (
-    <div style={containerStyles} className="flex justify-between relative">
-      <div style={fillerStyles} className={`${special ? 'bg-brand-1750' : bgColor}`}>
+    <div
+      style={containerStyles}
+      className="flex justify-between items-center gap-x-[10px] relative"
+    >
+      <div
+        style={fillerStyles}
+        className={`${special ? "bg-[#D7EAFB]" : bgColor}`}
+      >
         <p
-          className={`absolute left-[33px] top-[7px] text-[16px] ${
-            special ? 'text-brand-100' : 'text-brand-2250'
-          }`}
+          className={`absolute left-[33px] top-[7px] text-[16px] text-brand-600`}
         >
           {option}
         </p>

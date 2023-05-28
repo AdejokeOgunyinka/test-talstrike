@@ -2,16 +2,18 @@ const MoreDropdown = ({
   onClickAnnouncement,
   onClickArticle,
   onClickOpening,
+  onClickPoll,
 }: {
   onClickAnnouncement?: any;
   onClickArticle?: any;
   onClickOpening?: any;
+  onClickPoll?: any;
 }) => {
   const moreOptions = [
     { name: "Announcement", onClick: onClickAnnouncement },
     { name: "Article", onClick: onClickArticle },
     { name: "Openings", onClick: onClickOpening },
-    { name: "Polls" },
+    { name: "Polls", onClick: onClickPoll },
   ];
   return (
     <div className="w-[142px] h-[133px] py-[14px] px-[27px] flex-col flex justify-between bg-brand-600 shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px]">

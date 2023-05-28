@@ -71,8 +71,6 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
         ...(fileType === "VIDEO" && { video: selectedMedia }),
       };
 
-      console.log({ initialBody });
-
       const body = new FormData();
 
       for (let key in initialBody) {
