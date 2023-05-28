@@ -445,7 +445,7 @@ const PostCard = ({
           <p className="mt-[4px] font-normal leading-[16px] text-[12px]  mb-[9px]">
             {showFullBody
               ? postBody
-              : `${slicedBody}${slicedBody?.length > 0 ? "..." : ""}`}
+              : `${slicedBody}${postBody?.length > 200 ? "..." : ""}`}
           </p>
           {postBody?.length > 200 && (
             <p
