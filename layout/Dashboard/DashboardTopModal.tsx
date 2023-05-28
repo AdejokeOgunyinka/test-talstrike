@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { useState } from "react";
 import NextImage from "next/image";
@@ -25,16 +26,14 @@ const DashboardTopBarModal = () => {
         </div>
       </div>
       <div className="w-[64.75px] h-[64.75px] mb-[11.25px] border-4 border-brand-500 rounded-[50%] overflow-hidden shadow shadow-[0px_1.6087px_4.02174px_1.18265px_rgba(0, 0, 0, 0.07)]">
-        <NextImage
+        <img
           src={
             userInfo?.profile?.user?.image !== null
               ? userInfo?.profile?.user?.image
               : ProfileImg
           }
-          width="161"
-          height="161"
           alt="profile"
-          className="profile-img"
+          className="profile-img object-cover w-full h-full rounded-[50%]"
           onError={handleOnError}
         />
       </div>
