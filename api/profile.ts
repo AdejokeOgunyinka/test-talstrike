@@ -52,6 +52,40 @@ export const useGetPollsByUserId = ({ token, userId }: IGetPosts) =>
     { refetchOnWindowFocus: false }
   );
 
+export const useCommentOnPoll = () =>
+  useMutation(
+    ({ pollId, token, body }: { token: string; body: any; pollId: string }) =>
+      axios
+        .post(`/poll/${pollId}/create_comment/`, body, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        })
+  );
+
+export const useGetAllCommentsOnPoll = ({
+  token,
+  pollId,
+}: {
+  token: string;
+  pollId: string;
+}) =>
+  useQuery(
+    ["getAllCommentsOnPoll", token, pollId],
+    () =>
+      axios
+        .get(`/poll/${pollId}/get_comments/`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        }),
+    { refetchOnMount: false }
+  );
+
 export const useVotePollChoice = () =>
   useMutation(
     ({ token, pollId, data }: { data: any; pollId: string; token: string }) =>
