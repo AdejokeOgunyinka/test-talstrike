@@ -10,7 +10,7 @@ const Index = () => {
   const [chosenVideoId, setChosenVideoId] = useState<any>("");
   const [play, setPlay] = useState(false);
 
-  let vid = document.getElementById(`explore-video-${chosenVideoId}`);
+  let vid: any = document.getElementById(`explore-video-${chosenVideoId}`);
 
   function playVid() {
     vid?.play();
