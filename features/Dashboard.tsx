@@ -136,7 +136,7 @@ const Dashboard = () => {
       )}
 
       {showCreatePollModal && (
-        <CreatePoll onClose={() => setShowCreatePollModal} />
+        <CreatePoll onClose={() => setShowCreatePollModal(false)} />
       )}
 
       {showSinglePost === true ? (
