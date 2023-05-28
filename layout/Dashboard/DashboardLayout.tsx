@@ -76,7 +76,6 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
           <div className="w-[100%] min-h-[calc(100vh-70px)] flex scrollbar-hidden">
             <div
               className={`w-[100%] ${
-                router.pathname === "/explore" ||
                 router.pathname === "/profile" ||
                 router.pathname === "/profile/[id]"
                   ? "md:w-[calc(100%-23px)]"
@@ -85,8 +84,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             >
               {children}
             </div>
-            {router.pathname !== "/explore" &&
-              router.pathname !== "/profile" &&
+            {router.pathname !== "/profile" &&
               router.pathname !== "/profile/[id]" && (
                 <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden">
                   <DashboardAside />
