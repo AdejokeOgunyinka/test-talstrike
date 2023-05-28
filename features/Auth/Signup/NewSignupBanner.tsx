@@ -30,7 +30,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const delay = 6000;
+  const delay = 3700;
 
   const timeoutRef = useRef<any>(null);
 

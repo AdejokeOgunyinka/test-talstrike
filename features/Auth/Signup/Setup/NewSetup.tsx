@@ -399,7 +399,7 @@ const Index = ({ providers }: any) => {
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        router.push("/auth/login");
+        router.push("/starter-video");
       } else {
         notify({
           type: "error",
