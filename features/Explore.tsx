@@ -56,7 +56,7 @@ const Index = () => {
             </div>
           ))}
         </div>
-        <div className="w-[100%] px-[31px] mt-[53px] flex flex-wrap gap-[12px] pb-[100px] lg:pb-0">
+        <div className="w-[100%] md:px-[31px] mt-[13px] md:mt-[53px] flex flex-wrap gap-[12px] pb-[100px] lg:pb-0">
           {[1, 1, 1, 1, 1]?.map((_, index) => (
             <div key={index} className="relative w-[100%] md:w-[47%] h-[464px]">
               <video
@@ -96,7 +96,7 @@ const Index = () => {
                     <p className="mb-[21px]">26</p>
                   </div>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <div className="flex">
                     <img
                       src={USER_IMG as string}
@@ -105,13 +105,15 @@ const Index = () => {
                       onError={handleOnError}
                     />
                     <div className="text-brand-500">
-                      <p className="mb-[5px] font-semibold">Mercy Riche</p>
+                      <p className="mb-[5px] font-semibold text-[14px]">
+                        Mercy Riche
+                      </p>
                       <p className="text-[12px] font-normal">
                         Tuesday 12 October
                       </p>
                     </div>
                   </div>
-                  <button className="border border-brand-500 px-[25px] rounded-[4px] text-brand-500">
+                  <button className="border border-brand-500 text-[14px]  rounded-[4px] text-brand-500 h-[32px] w-[78px]">
                     Follow
                   </button>
                 </div>
