@@ -129,18 +129,6 @@ export default NextAuth({
       }
       return token;
     },
-
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
-      session.expires = (Date.now() + 7 * 24 * 60 * 60)?.toString();
-
-      session.user = {
-        ...session.user,
-        ...Object(token.user),
-      };
-
-      return session;
-    },
     async signIn({ user, account }) {
       if (account?.type === "credentials") {
         account.access_token = user?.accessToken as string;

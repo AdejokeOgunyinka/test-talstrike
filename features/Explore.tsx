@@ -74,7 +74,7 @@ const Index = () => {
                     </p>
                   </div>
 
-                  <div className="absolute right-0 bottom-0 pb-[25px]">
+                  <div className="absolute right-0 bottom-0 pb-[25px] text-[17px]">
                     <img
                       src="/arrow-redo.svg"
                       alt="arrow-redo"

@@ -16,6 +16,21 @@ export const useGetNewsfeed = (token: string) =>
     { refetchOnMount: false, retry: 1 }
   );
 
+export const useGetAllPolls = (token: string) =>
+  useQuery(
+    ["getPolls", token],
+    () =>
+      axios
+        .get("/poll/", {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        }),
+    { refetchOnMount: false, retry: 1 }
+  );
+
 export const useGetPeopleNearMe = (token: string) =>
   useQuery(["getPeopleNearMe", token], () =>
     axios
