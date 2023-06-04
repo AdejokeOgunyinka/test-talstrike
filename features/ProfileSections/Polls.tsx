@@ -526,7 +526,7 @@ const MyPolls = () => {
   );
 };
 
-const ActivePoll = ({
+export const ActivePoll = ({
   options,
   token,
   pollId,
@@ -578,7 +578,7 @@ const ActivePoll = ({
   );
 };
 
-const InactivePoll = ({ options }: { options: any }) => {
+export const InactivePoll = ({ options }: { options: any }) => {
   const getHighest = () => {
     const values = options?.map((option: any) => parseInt(option?.percentage));
     const highest = Math.max(...values);
