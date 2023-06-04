@@ -8,7 +8,7 @@ import Login from "@/features/Auth/Login";
 const Index = (providers: ProviderType) => {
   return (
     <AuthLayout>
-      <Login providers={Object.values(providers)} />
+      <Login providers={providers} />
     </AuthLayout>
   );
 };
