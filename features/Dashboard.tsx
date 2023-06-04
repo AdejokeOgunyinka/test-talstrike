@@ -31,7 +31,11 @@ import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import { useFollowUser } from "@/api/players";
-import { useGetNewsfeed, useGetSuggestedFollows } from "@/api/dashboard";
+import {
+  useGetAllPolls,
+  useGetNewsfeed,
+  useGetSuggestedFollows,
+} from "@/api/dashboard";
 import notify from "@/libs/toast";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import { setProfile } from "@/store/slices/profileSlice";
@@ -39,6 +43,7 @@ import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import { TextBox } from "@/components/ProfileModals/InputBox";
 import { useCommentOnPost, useGetAllCommentsOnPost } from "@/api/dashboard";
 import CreatePoll from "@/components/ProfileModals/CreatePoll";
+import { ActivePoll, InactivePoll } from "./ProfileSections/Polls";
 
 const Image = styled.img``;
 
@@ -71,6 +76,18 @@ const Dashboard = () => {
   const { data: NewsFeedData, isLoading: isLoadingNewsFeed } = useGetNewsfeed(
     TOKEN as string
   );
+  const { data: PollsData } = useGetAllPolls(TOKEN as string);
+  console.log({ PollsData, NewsFeedData });
+
+  const newData =
+    NewsFeedData &&
+    PollsData &&
+    [...NewsFeedData?.results, ...PollsData?.results]?.sort(
+      (a, b) =>
+        new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime()
+    );
+  console.log({ newData });
+
   const { data: TalentOpenings, isLoading: isLoadingTalentOpenings } =
     useGetPostsByType({
       token: TOKEN as string,
@@ -459,37 +476,202 @@ const Dashboard = () => {
                 yet created a post...
               </p>
             ) : (
-              NewsFeedData?.results
+              newData
                 ?.sort(
                   (a: any, b: any) =>
                     new Date(a?.updated_at)?.valueOf() -
                     new Date(b?.updated_at)?.valueOf()
                 )
-                ?.map((post: any, index: number) => (
-                  <PostCard
-                    postType={post?.post_type}
-                    postImage={post?.author?.image}
-                    postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
-                    timeCreated={post?.created_at}
-                    postBody={post?.body}
-                    postMedia={post?.media}
-                    postLikedAvatars={post.liked_avatars}
-                    postLikeCount={post?.like_count}
-                    postCommentCount={post?.comment_count}
-                    postShareCount={post?.share_count}
-                    postId={post?.id}
-                    liked={post?.liked}
-                    key={index}
-                    isLoadingPost={isLoadingNewsFeed}
-                    postTitle={post?.title}
-                    fileType={post?.file_type}
-                    post={post}
-                    onClickViewPost={() => {
-                      setShowSinglePost(true);
-                      setChosenPost(post);
-                    }}
-                  />
-                ))
+                ?.map((post: any, index: number) =>
+                  post?.question_text ? (
+                    <div
+                      key={index}
+                      className="w-full mb-[25px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]"
+                    >
+                      <div className="flex items-center justify-between mb-[35px]">
+                        <div className="flex items-center">
+                          {/* <div className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]">
+                            <NextImage
+                              src={USER_IMG as string}
+                              alt="post creator"
+                              width="39"
+                              height="39"
+                              className="mr-[7px] object-cover rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                              onError={handleOnError}
+                            />
+                          </div> */}
+
+                          <div>
+                            {/* <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
+                              {USER_NAME}
+                            </p> */}
+                            <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
+                              {moment(post?.created_at).format("dddd Do MMMM")}
+                            </p>
+                          </div>
+                        </div>
+                        {/* <div
+                          className="cursor-pointer relative"
+                          onClick={(e) => e?.stopPropagation()}
+                        >
+                          <p
+                            className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+                            onClick={() => {
+                              setClickedIndex(index);
+                              setPollIndex(post?.id);
+                              setChosenPost(post);
+                              setShowPopover(!showPopover);
+                            }}
+                          >
+                            ...
+                          </p>
+                          {showPopover && clickedIndex === index && <Popover />}
+                        </div> */}
+                      </div>
+
+                      <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
+                        {post?.question_text}
+                      </p>
+
+                      <div className="w-full flex justify-center">
+                        {post?.image && (
+                          <Image src={post?.image} alt="poll img" />
+                        )}
+                      </div>
+
+                      <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
+                        {post?.voted ? (
+                          <InactivePoll options={post?.poll_choices} />
+                        ) : (
+                          <ActivePoll
+                            options={post?.poll_choices}
+                            token={TOKEN as string}
+                            pollId={post?.id}
+                          />
+                        )}
+                      </div>
+
+                      <div className="flex mb-[12px] justify-between w-full text-[14px] text-brand-2250">
+                        <div>
+                          <b className="font-semibold">
+                            {post?.total_vote_count}
+                          </b>{" "}
+                          vote
+                          {post?.total_vote_count > 1 && "s"}
+                        </div>
+                        <div className="border border-t-transparent border-b-transparent border-l-brand-2750 border-r-brand-2750 px-[40px]">
+                          {parseInt(post?.duration?.split(" ")[0]) > 0 && (
+                            <>
+                              <b className="font-semibold">
+                                {post?.duration?.split(" ")[0]}
+                              </b>{" "}
+                              days
+                            </>
+                          )}
+                          <b className="font-semibold">
+                            {"  "}{" "}
+                            {post?.duration?.split(" ")[1]?.split(":")[0]}
+                          </b>{" "}
+                          hours
+                          <b className="font-semibold">
+                            {"  "}{" "}
+                            {post?.duration?.split(" ")[1]?.split(":")[1]}
+                          </b>{" "}
+                          mins
+                        </div>
+                        <div>
+                          {index + 1 === 1
+                            ? "Ongoing"
+                            : index + 1 === 2
+                            ? "Final result"
+                            : "Ongoing"}
+                        </div>
+                      </div>
+
+                      <div className="h-[78px] px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
+                        <div className="flex flex-col items-center">
+                          <div className="flex gap-x-[3px] mb-[5px]">
+                            <NextImage
+                              src="/heart.svg"
+                              width="15"
+                              height="15"
+                              alt="heart"
+                            />
+                            <p className="text-brand-2250 font-medium text-[13px]">
+                              {post?.like_count}
+                            </p>
+                          </div>
+                          <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
+                            Like{post?.like_count > 1 && "s"}
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="flex gap-x-[3px] mb-[5px]">
+                            <NextImage
+                              src="/chatbox2.svg"
+                              width="15"
+                              height="15"
+                              alt="chatbox"
+                            />
+                            <p className="text-brand-2250 font-medium text-[13px]">
+                              {post?.comment_count}
+                            </p>
+                          </div>
+                          <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
+                            Comments
+                          </p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <div className="flex gap-x-[3px] mb-[5px]">
+                            <NextImage
+                              src="/arrow2.svg"
+                              width="15"
+                              height="15"
+                              alt="arrow"
+                            />
+                            <p className="text-brand-2250 font-medium text-[13px]">
+                              {post?.share_count}
+                            </p>
+                          </div>
+                          <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
+                            Shares
+                          </p>
+                        </div>
+                        {/* <div className="flex flex-col items-center">
+                      <div className="flex gap-x-[3px] mb-[5px]">
+                        <NextImage src="/barChart.svg" width="15px" height="15px" />
+                        <p className="text-brand-2250 font-medium text-[13px]">26</p>
+                      </div>
+                      <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">Views</p>
+                    </div> */}
+                      </div>
+                    </div>
+                  ) : (
+                    <PostCard
+                      postType={post?.post_type}
+                      postImage={post?.author?.image}
+                      postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
+                      timeCreated={post?.created_at}
+                      postBody={post?.body}
+                      postMedia={post?.media}
+                      postLikedAvatars={post.liked_avatars}
+                      postLikeCount={post?.like_count}
+                      postCommentCount={post?.comment_count}
+                      postShareCount={post?.share_count}
+                      postId={post?.id}
+                      liked={post?.liked}
+                      key={index}
+                      isLoadingPost={isLoadingNewsFeed}
+                      postTitle={post?.title}
+                      fileType={post?.file_type}
+                      post={post}
+                      onClickViewPost={() => {
+                        setShowSinglePost(true);
+                        setChosenPost(post);
+                      }}
+                    />
+                  )
+                )
             )}
           </div>
           <div className="basis-[40%] pb-[20px] md:pb-[100px] lg:pb-0">
