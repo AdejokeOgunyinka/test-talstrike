@@ -91,6 +91,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
             });
             queryClient.invalidateQueries(["getPollsByUserId"]);
             queryClient.invalidateQueries(["getNewsfeed"]);
+            queryClient.invalidateQueries(["getPolls"]);
             onClose();
           },
           onError: (err: any) =>
