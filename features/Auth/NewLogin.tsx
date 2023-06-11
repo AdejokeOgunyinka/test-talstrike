@@ -71,7 +71,7 @@ const Index = ({ providers }: { providers: any }) => {
   const [hidePassword, setHidePassword] = useState(true);
 
   const GoogleHandlerFunction = async () => {
-    return signIn("google", { callbackUrl: "https://talstrike.netlify.app/" });
+    return signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -156,7 +156,7 @@ const Index = ({ providers }: { providers: any }) => {
               <NextImage
                 src={GmailIcon}
                 alt="gmail"
-                onClick={() => signIn("google")}
+                onClick={GoogleHandlerFunction}
                 className="cursor-pointer"
               />
               <NextImage

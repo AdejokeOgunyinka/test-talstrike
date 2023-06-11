@@ -31,38 +31,6 @@ export const updateUserInfo = async (
   return await ProfileApi(accessToken).updateUserInfo({ id, data });
 };
 
-export const nextAuthOauthLogin = async ({
-  user,
-  account,
-  profile,
-}: {
-  user: any;
-  account: any;
-  profile: any;
-}) => {
-  return await axios.post("/auth/signin/oauth", {
-    user,
-    account,
-    profile,
-  });
-};
-
-export const getUserByProviderAndProviderAccountId = async (
-  providerAccountId: any,
-  provider: any
-) => {
-  return await axios.post("/auth/signin/provider", {
-    providerAccountId,
-    provider,
-  });
-};
-
-export const getUserByEmail = async (email: string) => {
-  return await axios.post("/auth/signin/email", {
-    email,
-  });
-};
-
 export const useResendVerification = () =>
   useMutation((email: string) =>
     axios
@@ -101,6 +69,15 @@ export const useVerifyEmail = () =>
         }),
     { retry: 0 }
   );
+
+export const tryGoogleSSO = async (auth_token: string) => {
+  return await axios
+    .post("/auth/users/social_login/google/", { auth_token: auth_token })
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err.response.data;
+    });
+};
 
 export const verifyToken = async (token: string) => {
   return await axios.post(`/auth/verify-email-token`, { token });
