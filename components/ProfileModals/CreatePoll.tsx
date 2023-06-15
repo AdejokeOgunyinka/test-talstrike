@@ -233,7 +233,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
                           className={`relative flex w-[100%] pr-[10px] cursor-pointer h-[46px] rounded-[4px] border-2 border-brand-2850 pl-[10px] placeholder:text-brand-200 placeholder:text-[16px]`}
                         >
                           <div className="h-full flex items-center">
-                            <p className="text-[18px] font-normal text-brand-3000">
+                            <p className="text-[14px] md:text-[18px] font-normal text-brand-3000">
                               {selected ||
                                 "How long do you want this poll to last?"}
                             </p>
@@ -249,7 +249,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
                         </div>
                         {openDurationModal && (
                           <ModalContainer marginTop="md:mt-[180px]">
-                            <div className="w-[682px]  bg-brand-500 h-[449px] rounded-[8px] shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)] px-[57px] py-[58px]">
+                            <div className="w-[682px]  bg-brand-500 md:h-[449px] rounded-[8px] shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)] px-[57px] py-[58px]">
                               <p className="mb-[65px] text-center text-brand-3000 text-[18px] md:text-[20px]">
                                 How long do you want this poll to last?
                               </p>
@@ -351,7 +351,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
                       width="19"
                       height="16"
                     />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
+                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
                       Photo
                     </p>
                   </div>
@@ -368,7 +368,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
                       width="22"
                       height="16"
                     />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
+                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
                       Video
                     </p>
                   </div>

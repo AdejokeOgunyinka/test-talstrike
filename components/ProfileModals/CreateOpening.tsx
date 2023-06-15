@@ -208,7 +208,7 @@ const CreateOpening = ({ onClose }: { onClose: () => void }) => {
                       width="19"
                       height="16"
                     />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
+                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
                       Photo
                     </p>
                   </div>
@@ -225,7 +225,7 @@ const CreateOpening = ({ onClose }: { onClose: () => void }) => {
                       width="22"
                       height="16"
                     />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600">
+                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
                       Video
                     </p>
                   </div>
