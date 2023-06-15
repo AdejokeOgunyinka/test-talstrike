@@ -61,7 +61,7 @@ export const useGetAllCommentsOnPost = ({
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnMount: false }
+    { refetchOnMount: false, enabled: !!postId }
   );
 
 interface IPost {

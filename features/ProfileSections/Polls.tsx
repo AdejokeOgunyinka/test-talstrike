@@ -25,7 +25,6 @@ import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import notify from "@/libs/toast";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import { TextBox } from "@/components/ProfileModals/InputBox";
-import { useCommentOnPost, useGetAllCommentsOnPost } from "@/api/dashboard";
 
 const Image = styled.img``;
 
@@ -71,10 +70,6 @@ const MyPolls = () => {
         >
           View Poll
         </p>
-
-        {/* <p className="text-brand-2600 text-[10px] font-medium leading-[15px]">
-          Delete Poll
-        </p> */}
       </div>
     );
   };
@@ -406,7 +401,7 @@ const MyPolls = () => {
                 </div>
 
                 <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
-                  {post?.voted ? (
+                  {post?.voted || post?.author?.id === session?.user?.id ? (
                     <InactivePoll options={post?.poll_choices} />
                   ) : (
                     <ActivePoll
@@ -553,6 +548,7 @@ export const ActivePoll = ({
           onSuccess() {
             notify({ type: "success", text: "Your vote was successful" });
             queryClient.invalidateQueries(["getPollsByUserId"]);
+            queryClient.invalidateQueries(["getPolls"]);
             setChosenId("");
           },
         }
@@ -593,7 +589,7 @@ export const InactivePoll = ({ options }: { options: any }) => {
         <PollProgressBar
           bgColor="bg-[#D7EAFB]"
           key={index}
-          completed={option?.percentage}
+          completed={option?.percentage?.toFixed(1)}
           option={option?.choice_text}
           special={index === getHighest()}
         />

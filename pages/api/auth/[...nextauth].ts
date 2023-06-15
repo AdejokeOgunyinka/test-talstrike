@@ -3,12 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import {
-  login,
-  // nextAuthOauthLogin,
-  getUserByEmail,
-  getUserByProviderAndProviderAccountId,
-} from "@/api/auth";
+import { login, tryGoogleSSO } from "@/api/auth";
 import { ProfileApi } from "@/libs/axios";
 
 export default NextAuth({
@@ -73,7 +68,7 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account, profile, session }) {
       if (user && account && account.type === "credentials") {
         if (user) {
           const { accessToken, ...rest } = user;
@@ -85,47 +80,18 @@ export default NextAuth({
         return token;
       }
 
-      if (
-        account &&
-        account.type === "oauth" &&
-        account.providerAccountId &&
-        account.provider
-      ) {
-        const response = await getUserByProviderAndProviderAccountId(
-          account.providerAccountId,
-          account.provider
-        );
-
-        const { user: userExists, token: userExistsToken } =
-          response?.data?.data;
-
-        if (!userExists) {
-          // find user by email
-          const response = await getUserByEmail(token.email as string);
-          const { user: userByEmail, token: userByEmailToken } =
-            response?.data?.data;
-
-          if (!userByEmail) {
-            return token;
+      if (account?.provider === "google") {
+        try {
+          const response = await tryGoogleSSO(account?.id_token as string);
+          if (response?.user) {
+            const { accessToken, image, ...rest } = response?.user;
+            token.accessToken = response?.access;
+            token.accessTokenExpiry = Date.now() + 7 * 24 * 60 * 60;
+            token.user = { ...rest, picture: image, access: response?.access };
           }
-          return {
-            id: userByEmail.id,
-            name: userByEmail.name,
-            username: userByEmail.username,
-            role: userByEmail.role,
-            email: userByEmail.email,
-            accessToken: userByEmailToken.accessToken,
-          };
+        } catch (err: any) {
+          console.log({ message: err?.message });
         }
-
-        return {
-          id: userExists.id,
-          name: userExists.name,
-          username: userExists.username,
-          role: userExists.role,
-          email: userExists.email,
-          accessToken: userExistsToken.accessToken,
-        };
       }
       return token;
     },
@@ -148,14 +114,9 @@ export default NextAuth({
         return true;
       }
 
-      // if (account.type === 'oauth') {
-      //   try {
-      //     const response = await nextAuthOauthLogin(user, account, profile);
-      //     return response.data.data;
-      //   } catch (error) {
-      //     return '/auth/error?error=server-error';
-      //   }
-      // }
+      if (account?.provider === "google") {
+        return true;
+      }
 
       return false;
     },

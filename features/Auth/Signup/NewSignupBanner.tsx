@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useResendVerification } from "@/api/auth";
 import { useTypedSelector } from "@/hooks/hooks";
 import Signup from "@/features/Auth/Signup/NewSignup";
@@ -87,9 +87,8 @@ const SignupBanner = ({ providers }: { providers: any }) => {
           </h5>
           <div className="h-[42px] mb-[60px] flex items-center">
             {setupInstructions?.map((setup, index) => (
-              <>
+              <React.Fragment key={index}>
                 <div
-                  key={index}
                   className="flex py-[10px] h-[58px] md:h-[unset] px-[15px] md:px-[30.5px] rounded-[100px] text-[14px] leading-[21px]"
                   style={{
                     background: index === activeIndex ? "#003D72" : "unset",
@@ -102,7 +101,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
                 {index !== setupInstructions?.length - 1 && (
                   <img src={"/signUpVector.svg"} alt="vector" className="" />
                 )}
-              </>
+              </React.Fragment>
             ))}
           </div>
           <p

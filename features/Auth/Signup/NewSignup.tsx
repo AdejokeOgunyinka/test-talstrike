@@ -206,7 +206,9 @@ const Index = ({
               <NextImage
                 src={GmailIcon}
                 alt="gmail"
-                onClick={() => signIn("google")}
+                onClick={() =>
+                  signIn("google", { callbackUrl: "/auth/signup/setup" })
+                }
                 className="cursor-pointer"
               />
               <NextImage
@@ -221,7 +223,7 @@ const Index = ({
               />
             </div>
           </div>
-          <div className="relative md:absolute md:bottom-[62px] w-full">
+          <div className="relative md:absolute md:bottom-[42px] w-full">
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
               Already have an account?{" "}
               <a href="/auth/login" className="text-[#003D72] underline">

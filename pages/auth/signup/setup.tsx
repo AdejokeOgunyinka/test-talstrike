@@ -3,8 +3,9 @@ import Setup from "@/features/Auth/Signup/Setup/NewSetup";
 
 import { GetServerSidePropsContext, GetServerSideProps } from "next";
 import { getProviders } from "next-auth/react";
+import { ProviderType } from "next-auth/providers";
 
-const SetupPage = ({ providers }: { providers: any }) => {
+const SetupPage = (providers: ProviderType) => {
   return (
     <AuthSetupLayout>
       <Setup providers={Object.values(providers)} />

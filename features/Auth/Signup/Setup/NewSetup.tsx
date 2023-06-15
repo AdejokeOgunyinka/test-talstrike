@@ -24,9 +24,24 @@ import { getYears } from "@/libs/utils";
 import notify from "@/libs/toast";
 import { useRouter } from "next/router";
 import { BeatLoader } from "react-spinners";
+import { signOut, useSession } from "next-auth/react";
 
 const Index = ({ providers }: any) => {
-  const token = localStorage?.getItem("verificationToken");
+  const session = useSession();
+  const router = useRouter();
+
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const localToken = localStorage?.getItem("verificationToken");
+
+  useEffect(() => {
+    if (session) {
+      setToken(session?.data?.user?.access as string);
+      setUserId(session?.data?.user?.id as string);
+    } else {
+      setToken(localToken as string);
+    }
+  }, [session]);
 
   const specialties = [
     {
@@ -347,7 +362,6 @@ const Index = ({ providers }: any) => {
     Dec: "12",
   };
 
-  const router = useRouter();
   const [updatingProfile, setUpdatingProfile] = useState(false);
 
   const onUpdateProfile = async () => {
@@ -388,7 +402,9 @@ const Index = ({ providers }: any) => {
               : chosenSpecialty?.toUpperCase(),
           ],
         },
-        localStorage.getItem("verifiedUserID") as string
+        userId
+          ? (userId as string)
+          : (localStorage.getItem("verifiedUserID") as string)
       );
 
       if (
@@ -399,7 +415,9 @@ const Index = ({ providers }: any) => {
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        router.push("/starter-video");
+        userId
+          ? signOut({ callbackUrl: "/starter-video" })
+          : router.push("/starter-video");
       } else {
         notify({
           type: "error",
@@ -875,7 +893,7 @@ const Index = ({ providers }: any) => {
                               step8Formik.values.skills.length > 0 && (
                                 <div className="mt-[13px] flex flex-wrap gap-[10px] rounded-[4px] w-[90%] md:w-[60%]">
                                   {step8Formik.values.skills?.map(
-                                    (skill, index) => (
+                                    (skill: any, index: number) => (
                                       <div
                                         key={index}
                                         className="flex items-center py-[5px] px-[11px] rounded-[100px] border border-brand-600 bg-[#F8FAFB]"
@@ -960,7 +978,7 @@ const Index = ({ providers }: any) => {
                               step9Formik.values.interests.length > 0 && (
                                 <div className="mt-[13px] flex flex-wrap gap-[10px] rounded-[4px] w-[90%] md:w-[60%]">
                                   {step9Formik.values.interests?.map(
-                                    (interest, index) => (
+                                    (interest: any, index: number) => (
                                       <div
                                         key={index}
                                         className="flex items-center py-[5px] px-[11px] rounded-[100px] border border-brand-600 bg-[#F8FAFB]"
@@ -1045,7 +1063,7 @@ const Index = ({ providers }: any) => {
                               step10Formik.values.career_goals.length > 0 && (
                                 <div className="mt-[13px] flex flex-col gap-[7px] w-[90%] md:w-[60%]">
                                   {step10Formik.values.career_goals?.map(
-                                    (goal, index) => (
+                                    (goal: any, index: number) => (
                                       <div
                                         key={index}
                                         className="flex items-center relative py-[11px] px-[16px] rounded-[2px] bg-[#F8FAFB]"

@@ -1,6 +1,6 @@
 type CustomInputBoxProps = {
   icon?: React.ReactNode;
-  label: string;
+  label?: string;
   placeholder?: string;
   type?: string;
   name?: string;
