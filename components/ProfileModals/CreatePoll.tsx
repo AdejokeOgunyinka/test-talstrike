@@ -248,8 +248,11 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
                           </div>
                         </div>
                         {openDurationModal && (
-                          <ModalContainer marginTop="md:mt-[230px]">
-                            <div className="w-[682px]  bg-brand-500 h-[349px] rounded-[8px] shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)] px-[57px] py-[58px]">
+                          <ModalContainer marginTop="md:mt-[180px]">
+                            <div className="w-[682px]  bg-brand-500 h-[449px] rounded-[8px] shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)] px-[57px] py-[58px]">
+                              <p className="mb-[65px] text-center text-brand-3000 text-[18px] md:text-[20px]">
+                                How long do you want this poll to last?
+                              </p>
                               <div className="flex flex-wrap gap-x-[15px] gap-y-[20px] justify-center">
                                 {durationOptions?.map(
                                   (option: any, index: number) => (
