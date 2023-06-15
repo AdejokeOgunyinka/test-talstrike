@@ -312,7 +312,7 @@ const Index = ({ providers }: { providers: any }) => {
                     src={HiddenPasswordIcon}
                     alt="c_password"
                     className="cursor-pointer"
-                    onClick={() => setHideConfirmPassword(!hidePassword)}
+                    onClick={() => setHideConfirmPassword(!hideConfirmPassword)}
                   />
                 }
                 name="password"

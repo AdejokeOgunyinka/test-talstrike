@@ -554,6 +554,7 @@ export const ActivePoll = ({
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chosenId]);
 
   return (
