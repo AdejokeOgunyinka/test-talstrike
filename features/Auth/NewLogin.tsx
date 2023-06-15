@@ -14,11 +14,11 @@ import FacebookIcon from "@/assets/facebookIcon.svg";
 import LinkedinIcon from "@/assets/linkedinIcon.svg";
 import EmailIcon from "@/assets/emailIcon.svg";
 import HiddenPasswordIcon from "@/assets/hiddenPasswordIcon.svg";
-import { createUser } from "@/api/auth";
+// import { createUser } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useRouter } from "next/router";
-import { LoginInfo, User } from "@/libs/types/user";
-import { setAuthUser } from "@/store/slices/authSlice";
+import { LoginInfo } from "@/libs/types/user";
+// import { setAuthUser } from "@/store/slices/authSlice";
 import { useTypedDispatch } from "@/hooks/hooks";
 import CustomInputBox from "@/components/AuthInputbox";
 
@@ -77,8 +77,8 @@ const Index = ({ providers }: { providers: any }) => {
   return (
     <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[112px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
-        <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
-          Welcome Back
+        <div className="text-[24px] leading-[145%] text-brand-1650 font-semibold text-center mb-[31px]">
+          Welcome Back, please Login
         </div>
 
         <p className=" mt-[65px] mb-[100px] text-[16px] text-brand-600 font-medium text-center">
@@ -102,7 +102,7 @@ const Index = ({ providers }: { providers: any }) => {
               </p>
             )}
           </div>
-          <div className="mt-[15px] mb-[25px] flex flex-col md:flex-row gap-[15px]">
+          <div className="mt-[15px] mb-[25px]">
             <CustomInputBox
               label="Password"
               type={hidePassword ? "password" : "text"}
@@ -176,6 +176,17 @@ const Index = ({ providers }: { providers: any }) => {
               {"If you don’t have an account, "}
               <a href="/auth/signup" className="text-[#003D72] underline">
                 Sign up
+              </a>
+            </p>
+          </div>
+          <div className="relative md:absolute md:bottom-[34px] w-full">
+            <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
+              {"Forgotten password? "}
+              <a
+                href="/auth/reset-password"
+                className="text-[#003D72] underline"
+              >
+                Reset Password
               </a>
             </p>
           </div>

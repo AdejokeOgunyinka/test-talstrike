@@ -41,6 +41,30 @@ export const useResendVerification = () =>
       })
   );
 
+export const useSendResetPasswordToken = () =>
+  useMutation((email: string) =>
+    axios
+      .post("/auth/users/reset_password/", { email: email })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useResetPassword = () =>
+  useMutation(
+    ({ token, new_password }: { token: string; new_password: string }) =>
+      axios
+        .post("/auth/users/reset_password/change/", {
+          token: token,
+          new_password: new_password,
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        })
+  );
+
 export const useGetSports = () =>
   useQuery(
     ["getSports"],

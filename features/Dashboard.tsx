@@ -77,7 +77,6 @@ const Dashboard = () => {
     TOKEN as string
   );
   const { data: PollsData } = useGetAllPolls(TOKEN as string);
-  console.log({ PollsData, NewsFeedData });
 
   const newData =
     NewsFeedData &&
@@ -86,7 +85,6 @@ const Dashboard = () => {
       (a, b) =>
         new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime()
     );
-  console.log({ newData });
 
   const { data: TalentOpenings, isLoading: isLoadingTalentOpenings } =
     useGetPostsByType({
@@ -490,21 +488,23 @@ const Dashboard = () => {
                     >
                       <div className="flex items-center justify-between mb-[35px]">
                         <div className="flex items-center">
-                          {/* <div className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]">
-                            <NextImage
-                              src={USER_IMG as string}
-                              alt="post creator"
-                              width="39"
-                              height="39"
-                              className="mr-[7px] object-cover rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                          <div className="mr-[7px]">
+                            <img
+                              src={
+                                post?.author?.image !== null
+                                  ? post?.author?.image
+                                  : "/profileIcon.svg"
+                              }
+                              alt="post image"
+                              className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                               onError={handleOnError}
                             />
-                          </div> */}
+                          </div>
 
                           <div>
-                            {/* <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
-                              {USER_NAME}
-                            </p> */}
+                            <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
+                              {post?.author?.firstname} {post?.author?.lastname}
+                            </p>
                             <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
                               {moment(post?.created_at).format("dddd Do MMMM")}
                             </p>
@@ -540,7 +540,8 @@ const Dashboard = () => {
                       </div>
 
                       <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
-                        {post?.voted ? (
+                        {post?.author?.id === session?.user?.id ||
+                        post?.voted ? (
                           <InactivePoll options={post?.poll_choices} />
                         ) : (
                           <ActivePoll

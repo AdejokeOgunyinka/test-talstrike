@@ -11,11 +11,12 @@ import BarLoader from "react-spinners/BarLoader";
 import ModalContainer from "@/components/Modal";
 import ProfileImg from "@/assets/profileIcon.svg";
 import { useTypedSelector } from "@/hooks/hooks";
-import InputBox, { TextBox, Dropdown } from "./InputBox";
+import InputBox from "./InputBox";
 import ChooseMedia from "./ChooseMedia";
 import notify from "@/libs/toast";
 import { useCreatePoll } from "@/api/profile";
 import { handleOnError } from "@/libs/utils";
+import PollRadioBtn from "../PollRadioBtn";
 
 const Image = styled.img``;
 
@@ -32,12 +33,10 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
     question_text: yup.string().required("Poll Question is required"),
     choices: yup
       .array()
-      .of(yup.string()?.required("Option cannot be empty"))
+      .of(yup.string().required("Option cannot be empty"))
       .min(2, "Minimum of 2 options required")
       .required("Option cannot be empty"),
-    mins: yup.string().optional(),
-    hours: yup.string().optional(),
-    days: yup.string().required(),
+    duration: yup.string().required("Duration is required"),
   });
 
   const TOKEN = session?.user?.access;
@@ -45,28 +44,18 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
   const { mutate: createPoll, isLoading: isCreatingPoll } = useCreatePoll();
   const queryClient = useQueryClient();
 
-  const time = Array.from({ length: 61 }, (v, k) => k)?.map((val) => {
-    if (val < 10) {
-      return { value: `0${val}`, label: `${val}` };
-    } else {
-      return { value: `${val}`, label: `${val}` };
-    }
-  });
-
   const formik = useFormik({
     initialValues: {
       question_text: "",
       choices: [""],
       media: selectedMedia,
-      mins: "",
-      hours: "",
-      days: "",
+      duration: "",
     },
     validationSchema: createPollValidationSchema,
     onSubmit: (values) => {
       const initialBody: Record<string, any> = {
         question_text: values?.question_text,
-        duration: `${values.days} ${values.hours}:${values.mins}:00`,
+        duration: values.duration,
         ...(fileType === "IMAGE" && { image: selectedMedia }),
         ...(fileType === "VIDEO" && { video: selectedMedia }),
       };
@@ -104,15 +93,16 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  const days = Array.from(
-    {
-      length:
-        formik?.values?.mins === "00" && formik?.values?.hours === "00" ? 7 : 6,
-    },
-    (v, k) => k + 1
-  )?.map((val) => {
-    return { value: `${val}`, label: `${val}` };
-  });
+  const [openDurationModal, setOpenDurationModal] = useState(false);
+  const durationOptions = [
+    { name: "24 hours", value: "1 00:00:00" },
+    { name: "2 days", value: "2 00:00:00" },
+    { name: "4 days", value: "4 00:00:00" },
+    { name: "1 week", value: "7 00:00:00" },
+    { name: "2 weeks", value: "14 00:00:00" },
+  ];
+
+  const [selected, setSelected] = useState("");
 
   return (
     <ModalContainer>
@@ -238,54 +228,78 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
 
                     <div className="flex gap-x-[15px]">
                       <div className="w-full">
-                        <Dropdown
-                          options={time}
-                          name="mins"
-                          id="mins"
-                          className="poll-dropdown"
-                          placeholder="Mins"
-                          onChange={(e: any) =>
-                            formik?.setFieldValue("mins", e?.value)
-                          }
-                        />
+                        <div
+                          onClick={() => setOpenDurationModal(true)}
+                          className={`relative flex w-[100%] pr-[10px] cursor-pointer h-[46px] rounded-[4px] border-2 border-brand-2850 pl-[10px] placeholder:text-brand-200 placeholder:text-[16px]`}
+                        >
+                          <div className="h-full flex items-center">
+                            <p className="text-[18px] font-normal text-brand-3000">
+                              {selected ||
+                                "How long do you want this poll to last?"}
+                            </p>
+                          </div>
+                          <div className="absolute right-[10px] h-full flex justify-center items-center">
+                            <NextImage
+                              src={"/chevron-down.svg"}
+                              alt="icon-down"
+                              width="20"
+                              height="20"
+                            />
+                          </div>
+                        </div>
+                        {openDurationModal && (
+                          <ModalContainer marginTop="md:mt-[230px]">
+                            <div className="w-[682px]  bg-brand-500 h-[349px] rounded-[8px] shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)] px-[57px] py-[58px]">
+                              <div className="flex flex-wrap gap-x-[15px] gap-y-[20px] justify-center">
+                                {durationOptions?.map(
+                                  (option: any, index: number) => (
+                                    <div
+                                      key={index}
+                                      className="min-w-[168px] h-[43px]"
+                                    >
+                                      <PollRadioBtn
+                                        name={option?.name}
+                                        value={option?.name}
+                                        selected={selected}
+                                        onChange={() => {
+                                          setSelected(option?.name);
+                                          formik.setFieldValue(
+                                            "duration",
+                                            option?.value
+                                          );
+                                        }}
+                                        borderColor="border-brand-3000"
+                                        textColor="text-brand-3000"
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                              <div className="w-full flex gap-x-[18px] justify-center items-center mt-[69px]">
+                                <button
+                                  onClick={() => setOpenDurationModal(false)}
+                                  className="border border-[2px] border-brand-600 rounded-[4px] h-[41px] w-[90px] lg:w-[136px] text-brand-600 text-[14px] lg:text-[18px] font-medium"
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  type="submit"
+                                  className="h-[41px] w-[90px] lg:w-[136px] rounded-[4px] bg-brand-600 text-brand-500 text-[14px] lg:text-[18px] font-medium"
+                                  disabled={selected === ""}
+                                  onClick={() => {
+                                    if (selected !== "") {
+                                      setOpenDurationModal(false);
+                                    }
+                                  }}
+                                >
+                                  Continue
+                                </button>
+                              </div>
+                            </div>
+                          </ModalContainer>
+                        )}
                         <ErrorMessage
-                          name="mins"
-                          component="p"
-                          className="text-brand-warning text-[12px]"
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <Dropdown
-                          options={time}
-                          name="hours"
-                          id="hours"
-                          className="poll-dropdown"
-                          placeholder="Hours"
-                          onChange={(e: any) =>
-                            formik?.setFieldValue("hours", e?.value)
-                          }
-                        />
-                        <ErrorMessage
-                          name="hours"
-                          component="p"
-                          className="text-brand-warning text-[12px]"
-                        />
-                      </div>
-
-                      <div className="w-full">
-                        <Dropdown
-                          options={days}
-                          name="days"
-                          id="days"
-                          className="poll-dropdown"
-                          placeholder="Days"
-                          onChange={(e: any) =>
-                            formik?.setFieldValue("days", e?.value)
-                          }
-                        />
-                        <ErrorMessage
-                          name="days"
+                          name="duration"
                           component="p"
                           className="text-brand-warning text-[12px]"
                         />
