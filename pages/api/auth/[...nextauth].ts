@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { login, tryGoogleSSO } from "@/api/auth";
+import { login, tryFacebookSSO, tryGoogleSSO } from "@/api/auth";
 import { ProfileApi } from "@/libs/axios";
 
 export default NextAuth({
@@ -95,6 +95,26 @@ export default NextAuth({
           token.user = {};
         }
       }
+
+      if (account?.provider === "facebook") {
+        console.log({ account });
+        try {
+          const response = await tryFacebookSSO(
+            account?.access_token as string
+          );
+          console.log({ response });
+          if (response?.user) {
+            const { accessToken, image, ...rest } = response?.user;
+            token.accessToken = response?.access;
+            token.accessTokenExpiry = Date.now() + 7 * 24 * 60 * 60;
+            token.user = { ...rest, picture: image, access: response?.access };
+          } else {
+            token.user = {};
+          }
+        } catch (err: any) {
+          token.user = {};
+        }
+      }
       return token;
     },
     async session({ session, token }) {
@@ -116,7 +136,7 @@ export default NextAuth({
         return true;
       }
 
-      if (account?.provider === "google" && user) {
+      if (account?.provider === "google") {
         return true;
       }
 
