@@ -1,12 +1,18 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { axios } from "@/libs/axios";
 
-export const useGetNewsfeed = (token: string) =>
+export const useGetNewsfeed = ({
+  token,
+  page,
+}: {
+  token: string;
+  page?: number;
+}) =>
   useQuery(
-    ["getNewsfeed", token],
+    ["getNewsfeed", token, page],
     () =>
       axios
-        .get("/post/newsfeed/personalized/", {
+        .get(`/post/newsfeed/personalized?page=${page || 1}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)
@@ -16,12 +22,18 @@ export const useGetNewsfeed = (token: string) =>
     { refetchOnMount: false, retry: 1 }
   );
 
-export const useGetAllPolls = (token: string) =>
+export const useGetAllPolls = ({
+  token,
+  page,
+}: {
+  token: string;
+  page?: number;
+}) =>
   useQuery(
-    ["getPolls", token],
+    ["getPolls", token, page],
     () =>
       axios
-        .get("/poll/", {
+        .get(`/poll?page=${page || 1}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)

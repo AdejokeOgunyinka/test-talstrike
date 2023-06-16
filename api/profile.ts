@@ -22,6 +22,22 @@ export const useUpdateMyProfile = () =>
       })
   );
 
+export const useLikeOrUnlikePoll = () =>
+  useMutation(({ token, pollId }: { token: string; pollId: string }) =>
+    axios
+      .post(
+        `/poll/${pollId}/like/`,
+        {},
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      )
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
 export const useCreatePoll = () =>
   useMutation(({ token, data }: { data: any; token: string }) =>
     axios
@@ -83,7 +99,7 @@ export const useGetAllCommentsOnPoll = ({
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnMount: false }
+    { refetchOnMount: false, enabled: !!pollId }
   );
 
 export const useVotePollChoice = () =>
