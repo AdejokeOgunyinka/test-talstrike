@@ -219,6 +219,9 @@ const Index = ({
               <NextImage
                 src={FacebookIcon}
                 alt="facebook"
+                onClick={() =>
+                  signIn("facebook", { callbackUrl: "/auth/signup/setup" })
+                }
                 className="cursor-pointer"
               />
             </div>

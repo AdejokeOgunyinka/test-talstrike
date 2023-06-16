@@ -23,7 +23,7 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
-      name: "tallstrike",
+      name: "talstrike",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
@@ -88,9 +88,11 @@ export default NextAuth({
             token.accessToken = response?.access;
             token.accessTokenExpiry = Date.now() + 7 * 24 * 60 * 60;
             token.user = { ...rest, picture: image, access: response?.access };
+          } else {
+            token.user = {};
           }
         } catch (err: any) {
-          console.log({ message: err?.message });
+          token.user = {};
         }
       }
       return token;
@@ -114,7 +116,11 @@ export default NextAuth({
         return true;
       }
 
-      if (account?.provider === "google") {
+      if (account?.provider === "google" && user) {
+        return true;
+      }
+
+      if (account?.provider === "facebook") {
         return true;
       }
 
