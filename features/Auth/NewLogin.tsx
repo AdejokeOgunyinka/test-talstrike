@@ -70,8 +70,8 @@ const Index = ({ providers }: { providers: any }) => {
 
   const [hidePassword, setHidePassword] = useState(true);
 
-  const GoogleHandlerFunction = async () => {
-    return signIn("google", { callbackUrl: "/dashboard" });
+  const signInHandlerFunction = async (social: string) => {
+    return signIn(social, { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -156,7 +156,7 @@ const Index = ({ providers }: { providers: any }) => {
               <NextImage
                 src={GmailIcon}
                 alt="gmail"
-                onClick={GoogleHandlerFunction}
+                onClick={() => signInHandlerFunction("google")}
                 className="cursor-pointer"
               />
               <NextImage
@@ -168,6 +168,7 @@ const Index = ({ providers }: { providers: any }) => {
                 src={FacebookIcon}
                 alt="facebook"
                 className="cursor-pointer"
+                onClick={() => signInHandlerFunction("facebook")}
               />
             </div>
           </div>

@@ -103,6 +103,17 @@ export const tryGoogleSSO = async (auth_token: string) => {
     });
 };
 
+export const tryFacebookSSO = async (auth_token: string) => {
+  return await axios
+    .post("/auth/users/social_login/facebook/", {
+      auth_token: auth_token,
+    })
+    .then((res) => res.data)
+    .catch((err) => {
+      throw err.response.data;
+    });
+};
+
 export const verifyToken = async (token: string) => {
   return await axios.post(`/auth/verify-email-token`, { token });
 };
