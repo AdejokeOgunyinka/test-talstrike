@@ -128,20 +128,34 @@ const PollCard = ({ post }: { post: any }) => {
               days
             </>
           )}
-          <b className="font-semibold">
-            {"  "} {post?.duration?.split(" ")[1]?.split(":")[0]}
-          </b>{" "}
-          hours
-          <b className="font-semibold">
-            {"  "} {post?.duration?.split(" ")[1]?.split(":")[1]}
-          </b>{" "}
-          mins
         </div>
         <div>
-          {
-            // : index + 1 === 2
-            "Ongoing Final result Ongoing"
-          }
+          {moment(
+            moment(new Date(post?.created_at)).add(
+              parseInt(post?.duration?.split(" ")[0]),
+              "days"
+            )
+          ).diff(new Date(), "days") > 0 &&
+          moment(
+            moment(new Date(post?.created_at)).add(
+              parseInt(post?.duration?.split(" ")[0]),
+              "days"
+            )
+          ).diff(new Date(), "days") < 2
+            ? "Ongoing"
+            : moment(
+                moment(new Date(post?.created_at)).add(
+                  parseInt(post?.duration?.split(" ")[0]),
+                  "days"
+                )
+              ).diff(new Date(), "days") > 2
+            ? moment(
+                moment(new Date(post?.created_at)).add(
+                  parseInt(post?.duration?.split(" ")[0]),
+                  "days"
+                )
+              ).diff(new Date(), "days") + " days remaining"
+            : "Final result"}
         </div>
       </div>
 
