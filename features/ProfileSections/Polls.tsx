@@ -5,7 +5,9 @@ import moment from "moment";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  ArrowLeftCircleIcon,
   ArrowLeftIcon,
+  ArrowRightCircleIcon,
   HeartIcon as HeartIcon2,
 } from "@heroicons/react/24/solid";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -35,10 +37,12 @@ const MyPolls = () => {
   const USER_IMG = session?.user?.image;
   const USER_NAME = `${session?.user?.firstname} ${session?.user?.lastname}`;
 
+  const [page, setPage] = useState(1);
   const { data: userPolls, isLoading: isLoadingUserPosts } =
     useGetPollsByUserId({
       token: TOKEN as string,
       userId: USER_ID as string,
+      page: page,
     });
 
   const [showPopover, setShowPopover] = useState(false);
@@ -525,6 +529,42 @@ const MyPolls = () => {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {!isLoadingUserPosts && userPolls?.current_page && (
+        <div className="flex justify-between items-center w-full mt-[20px]">
+          <div>
+            {userPolls?.current_page > 1 && (
+              <ArrowLeftCircleIcon
+                color="#0074D9"
+                height="30px"
+                onClick={() => {
+                  if (page === 1) {
+                    setPage(1);
+                  } else {
+                    setPage(page - 1);
+                  }
+                }}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
+          <div className="flex gap-[20px] items-center">
+            <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
+              {page}
+            </div>
+            {userPolls?.current_page < userPolls?.total_pages && (
+              <ArrowRightCircleIcon
+                color="#0074D9"
+                height="30px"
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
         </div>
       )}
 

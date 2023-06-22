@@ -8,6 +8,7 @@ export const useGetAllPlayers = ({
   location,
   sport,
   position,
+  page,
 }: {
   token: string;
   age?: string;
@@ -15,9 +16,10 @@ export const useGetAllPlayers = ({
   gender?: string;
   sport?: string;
   position?: string;
+  page?: number;
 }) =>
   useQuery(
-    ["getAllPlayers", token, age, gender, location, sport, position],
+    ["getAllPlayers", token, age, gender, location, sport, position, page],
     () =>
       axios
         .get(
@@ -25,7 +27,7 @@ export const useGetAllPlayers = ({
             gender ? `&gender=${gender}` : ""
           }${location ? `&location=${location}` : ""}${
             position ? `&position=${position}` : ""
-          }${sport ? `&sport=${sport}` : ""}`,
+          }${sport ? `&sport=${sport}` : ""}${page ? `&page=${page}` : ""}`,
           {
             headers: { Authorization: "Bearer " + token },
           }

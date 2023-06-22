@@ -8,6 +8,7 @@ export const useGetAllTrainers = ({
   location,
   specialty,
   sport,
+  page,
 }: {
   token: string;
   age?: string;
@@ -15,9 +16,10 @@ export const useGetAllTrainers = ({
   gender?: string;
   specialty?: string;
   sport?: string;
+  page?: number;
 }) =>
   useQuery(
-    ["getAllTrainers", token, age, gender, location, specialty, sport],
+    ["getAllTrainers", token, age, gender, location, specialty, sport, page],
     () =>
       axios
         .get(
@@ -25,7 +27,9 @@ export const useGetAllTrainers = ({
             gender ? `&gender=${gender}` : ""
           }${location ? `&location=${location}` : ""}${
             sport ? `&sport=${sport}` : ""
-          }${specialty ? `&specialty=${specialty}` : ""}`,
+          }${specialty ? `&specialty=${specialty}` : ""}${
+            page ? `&page=${page}` : ""
+          }`,
           {
             headers: { Authorization: "Bearer " + token },
           }

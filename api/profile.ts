@@ -53,12 +53,12 @@ export const useCreatePoll = () =>
       })
   );
 
-export const useGetPollsByUserId = ({ token, userId }: IGetPosts) =>
+export const useGetPollsByUserId = ({ token, userId, page }: IGetPosts) =>
   useQuery(
-    ["getPollsByUserId", token, userId],
+    ["getPollsByUserId", token, userId, page],
     () =>
       axios
-        .get(`/poll/?author=${userId}`, {
+        .get(`/poll/?author=${userId}${page ? `?page=${page}` : ""}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)
@@ -137,14 +137,15 @@ interface IGetPosts {
   token: string;
   userId: string;
   post_type?: string;
+  page?: number;
 }
 
-export const useGetPosts = ({ token, userId }: IGetPosts) =>
+export const useGetPosts = ({ token, userId, page }: IGetPosts) =>
   useQuery(
-    ["getMyPosts", token, userId],
+    ["getMyPosts", token, userId, page],
     () =>
       axios
-        .get(`/post/${userId}/all`, {
+        .get(`/post/${userId}/all${page ? `?page=${page}` : ""}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)

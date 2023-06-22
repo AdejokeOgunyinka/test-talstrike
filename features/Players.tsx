@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Country } from "country-state-city";
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/24/solid";
 
 import TitleBar from "@/components/TitleBar";
 import PlayersSearchBar from "@/components/DashboardSearchbar";
@@ -70,6 +74,8 @@ const Index = () => {
   const genderFilterOptions = ["no filter", "Male", "Female", "Other"];
   const [chosenGenderFilters, setChosenGenderFilters] = useState<string[]>([]);
 
+  const [page, setPage] = useState(1);
+
   const { data: playersData, isLoading: isLoadingAllPlayers } =
     useGetAllPlayers({
       token: TOKEN as string,
@@ -78,6 +84,7 @@ const Index = () => {
       gender: chosenGenderFilters?.join(","),
       sport: chosenSportFilters?.join(","),
       position: chosenPositionFilter?.join(","),
+      page: page,
     });
 
   return (
@@ -149,7 +156,7 @@ const Index = () => {
             </div>
           </PlayersSearchBar>
         </div>
-        <div className="w-full mt-[23px] flex justify-center pb-[100px] lg:pb-0">
+        <div className="w-full mt-[23px] flex justify-center">
           <div className="flex flex-wrap gap-y-[25px] gap-x-[25px] px-[5%] md:px-[2.5%] lg:px-[5%]">
             {isLoadingAllPlayers ? (
               <SkeletonLoader />
@@ -174,6 +181,45 @@ const Index = () => {
             )}
           </div>
         </div>
+
+        {!isLoadingAllPlayers && playersData?.current_page && (
+          <div className="flex justify-between items-center w-full mt-[20px] pb-[100px] lg:pb-0">
+            <div>
+              {playersData?.current_page > 1 && (
+                <ArrowLeftCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  onClick={() => {
+                    if (page === 1) {
+                      setPage(1);
+                    } else {
+                      setPage(page - 1);
+                    }
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+            <div className="flex gap-[20px] items-center">
+              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
+                {page}
+              </div>
+              {playersData?.current_page < playersData?.total_pages && (
+                <ArrowRightCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  aria-disabled={playersData?.links?.next === null}
+                  onClick={() => {
+                    if (playersData?.links?.next === null) {
+                      setPage(page);
+                    } else setPage(page + 1);
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

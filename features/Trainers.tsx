@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Country } from "country-state-city";
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/24/solid";
 
 import TitleBar from "@/components/TitleBar";
 import TrainersSearchBar from "@/components/DashboardSearchbar";
@@ -51,6 +55,8 @@ const Index = () => {
   const genderFilterOptions = ["no filter", "Male", "Female", "Other"];
   const [chosenGenderFilters, setChosenGenderFilters] = useState<string[]>([]);
 
+  const [page, setPage] = useState(1);
+
   const { data: trainersData, isLoading: isLoadingAllTrainers } =
     useGetAllTrainers({
       token: TOKEN as string,
@@ -58,6 +64,7 @@ const Index = () => {
       location: chosenCountryFilters?.join(","),
       gender: chosenGenderFilters?.join(","),
       sport: chosenSportFilters?.join(","),
+      page: page,
     });
 
   return (
@@ -119,7 +126,7 @@ const Index = () => {
             </div>
           </TrainersSearchBar>
         </div>
-        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start px-[5%] md:px-[2.5%] lg:px-[5%] gap-y-[25px] pb-[100px] lg:pb-0">
+        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start px-[5%] md:px-[2.5%] lg:px-[5%] gap-y-[25px]">
           {isLoadingAllTrainers ? (
             <SkeletonLoader />
           ) : (
@@ -141,6 +148,44 @@ const Index = () => {
             ))
           )}
         </div>
+        {!isLoadingAllTrainers && trainersData?.current_page && (
+          <div className="flex justify-between items-center w-full mt-[20px] pb-[100px] lg:pb-0">
+            <div>
+              {trainersData?.current_page > 1 && (
+                <ArrowLeftCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  onClick={() => {
+                    if (page === 1) {
+                      setPage(1);
+                    } else {
+                      setPage(page - 1);
+                    }
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+            <div className="flex gap-[20px] items-center">
+              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
+                {page}
+              </div>
+              {trainersData?.current_page < trainersData?.total_pages && (
+                <ArrowRightCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  aria-disabled={trainersData?.links?.next === null}
+                  onClick={() => {
+                    if (trainersData?.links?.next === null) {
+                      setPage(page);
+                    } else setPage(page + 1);
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
