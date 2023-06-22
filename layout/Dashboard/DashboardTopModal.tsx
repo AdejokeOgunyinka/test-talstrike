@@ -1,18 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { useState } from "react";
-import NextImage from "next/image";
 import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
 import ProfileImg from "@/assets/profileIcon.svg";
 import { useTypedSelector } from "@/hooks/hooks";
 import { handleOnError } from "@/libs/utils";
+import { useGetAchievements, useGetAppearances } from "@/api/profile";
 
 const DashboardTopBarModal = () => {
   const { data: session } = useSession();
-  const router = useRouter();
   const { userInfo } = useTypedSelector((state) => state.profile);
+
+  const TOKEN = session?.user?.access;
+  const USER_ID = session?.user?.id;
+
+  const { data: achievements } = useGetAchievements({
+    token: TOKEN as string,
+    userId: USER_ID as string,
+  });
+
+  const { data: appearances } = useGetAppearances({
+    token: TOKEN as string,
+    userId: USER_ID as string,
+  });
 
   const handleSignOut = () => {
     signOut();
@@ -50,10 +60,12 @@ const DashboardTopBarModal = () => {
         View Profile
       </a>
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
-        Achievements
+        {achievements?.results?.length} Achievement
+        {achievements?.results?.length > 1 && "s"}
       </p>
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
-        Appearances
+        {appearances?.results?.length} Appearance
+        {appearances?.results?.length > 1 && "s"}
       </p>
       <div className="w-[100%] h-[75px] border-t-[0.5px] border-brand-2100 flex items-center justify-center gap-x-[20px]">
         <p className="text-[10px] text-brand-1800 cursor-pointer font-semibold">
