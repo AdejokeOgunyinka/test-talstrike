@@ -4,6 +4,10 @@ import { DashboardLayout } from "@/layout/Dashboard";
 import { useDeleteAchievement, useGetAchievements } from "@/api/profile";
 import { useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/24/solid";
 
 import AchievementDummy from "@/assets/achievementDummyImg.svg";
 import CreateAchievement from "@/components/AchievementModals/CreateAchievement";
@@ -23,10 +27,12 @@ const Index = () => {
 
   const [chosenAchievementId, setChosenAchievementId] = useState("");
 
+  const [page, setPage] = useState(1);
   const { data: achievements, isLoading: isLoadingAchievements } =
     useGetAchievements({
       token: TOKEN as string,
       userId: USER_ID as string,
+      page: page,
     });
 
   const { mutate: deleteAchievement, isLoading: isDeletingAchievement } =
@@ -128,6 +134,45 @@ const Index = () => {
             )}
           </div>
         </div>
+
+        {!isLoadingAchievements && achievements?.results?.length > 0 && (
+          <div className="flex justify-between items-center w-full mt-[20px]">
+            <div>
+              {achievements?.current_page > 1 && (
+                <ArrowLeftCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  onClick={() => {
+                    if (page === 1) {
+                      setPage(1);
+                    } else {
+                      setPage(page - 1);
+                    }
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+            <div className="flex gap-[20px] items-center">
+              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
+                {page}
+              </div>
+              {achievements?.current_page < achievements?.total_pages && (
+                <ArrowRightCircleIcon
+                  color="#0074D9"
+                  height="30px"
+                  aria-disabled={achievements?.links?.next === null}
+                  onClick={() => {
+                    if (achievements?.links?.next === null) {
+                      setPage(page);
+                    } else setPage(page + 1);
+                  }}
+                  className="cursor-pointer"
+                />
+              )}
+            </div>
+          </div>
+        )}
       </div>
       {openAddAchievementsModal && (
         <CreateAchievement onClose={() => setOpenAddAchievementsModal(false)} />

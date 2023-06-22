@@ -515,7 +515,7 @@ const MyOpenings = () => {
         </div>
       )}
 
-      {!isLoadingUserPosts && userPosts?.current_page && (
+      {!isLoadingUserPosts && userPosts?.results?.length > 0 && (
         <div className="flex justify-between items-center w-full mt-[20px]">
           <div>
             {userPosts?.current_page > 1 && (
