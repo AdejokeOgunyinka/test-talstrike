@@ -6,7 +6,9 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
+  ArrowLeftCircleIcon,
   ArrowLeftIcon,
+  ArrowRightCircleIcon,
   HeartIcon as HeartIcon2,
 } from "@heroicons/react/24/solid";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -29,10 +31,12 @@ const MyOpenings = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const [page, setPage] = useState(1);
   const { data: userPosts, isLoading: isLoadingUserPosts } = useGetPostsByType({
     token: TOKEN as string,
     userId: id as string,
     post_type: "OPENING",
+    page: page,
   });
 
   const { data: userProfile } = useGetMyProfile({
@@ -485,7 +489,43 @@ const MyOpenings = () => {
         </div>
       )}
 
-      {!isLoadingUserPosts &&
+      {!isLoadingUserPosts && userPosts?.results?.length > 0 && (
+        <div className="flex justify-between items-center w-full mt-[20px]">
+          <div>
+            {userPosts?.current_page > 1 && (
+              <ArrowLeftCircleIcon
+                color="#0074D9"
+                height="30px"
+                onClick={() => {
+                  if (page === 1) {
+                    setPage(1);
+                  } else {
+                    setPage(page - 1);
+                  }
+                }}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
+          <div className="flex gap-[20px] items-center">
+            <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
+              {page}
+            </div>
+            {userPosts?.current_page < userPosts?.total_pages && (
+              <ArrowRightCircleIcon
+                color="#0074D9"
+                height="30px"
+                onClick={() => {
+                  setPage(page + 1);
+                }}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* {!isLoadingUserPosts &&
         userPosts?.results &&
         userPosts?.results?.length !== 0 && (
           <div className="mt-[45px] w-full flex justify-center items-center">
@@ -493,7 +533,7 @@ const MyOpenings = () => {
               Load More
             </button>
           </div>
-        )}
+        )} */}
     </div>
   );
 };

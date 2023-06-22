@@ -532,7 +532,7 @@ const MyPolls = () => {
         </div>
       )}
 
-      {!isLoadingUserPosts && userPolls?.current_page && (
+      {!isLoadingUserPosts && userPolls?.results?.length > 0 && (
         <div className="flex justify-between items-center w-full mt-[20px]">
           <div>
             {userPolls?.current_page > 1 && (

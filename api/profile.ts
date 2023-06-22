@@ -210,14 +210,17 @@ export const useGetMyProfile = ({ token, userId }: IGetPosts) =>
     }
   );
 
-export const useGetAchievements = ({ token, userId }: IGetPosts) =>
+export const useGetAchievements = ({ token, userId, page }: IGetPosts) =>
   useQuery(
-    ["getAchievements", token, userId],
+    ["getAchievements", token, userId, page],
     () =>
       axios
-        .get(`/auth/achievement/?user=${userId}`, {
-          headers: { Authorization: "Bearer " + token },
-        })
+        .get(
+          `/auth/achievement/?user=${userId}${page ? `&page=${page}` : ""}`,
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
         .then((res) => res.data)
         .catch((err) => {
           throw err.response.data;
