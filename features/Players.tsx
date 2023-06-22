@@ -182,7 +182,7 @@ const Index = () => {
           </div>
         </div>
 
-        {!isLoadingAllPlayers && (
+        {!isLoadingAllPlayers && playersData?.current_page && (
           <div className="flex justify-between items-center w-full mt-[20px] pb-[100px] lg:pb-0">
             <div>
               {playersData?.current_page > 1 && (

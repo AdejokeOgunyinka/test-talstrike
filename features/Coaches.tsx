@@ -149,7 +149,7 @@ const Index = () => {
           )}
         </div>
 
-        {!isLoadingAllCoaches && (
+        {!isLoadingAllCoaches && coachesData?.current_page && (
           <div className="flex justify-between items-center w-full mt-[20px] pb-[100px] lg:pb-0">
             <div>
               {coachesData?.current_page > 1 && (

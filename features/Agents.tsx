@@ -148,7 +148,7 @@ const Index = () => {
           )}
         </div>
 
-        {!isLoadingAllAgents && (
+        {!isLoadingAllAgents && agentsData?.current_page && (
           <div className="flex justify-between items-center w-full mt-[20px]">
             <div>
               {agentsData?.current_page > 1 && (
