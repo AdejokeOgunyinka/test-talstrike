@@ -198,7 +198,14 @@ const SinglePoll = ({
             ))}
           </div>
 
-          {chosenPost?.voted ? (
+          {chosenPost?.author?.id === session?.user?.id ||
+          chosenPost?.voted ||
+          moment(
+            moment(new Date(chosenPost?.created_at)).add(
+              parseInt(chosenPost?.duration?.split(" ")[0]),
+              "days"
+            )
+          ).diff(new Date(), "days") < 1 ? (
             <InactivePoll options={chosenPost?.poll_choices} />
           ) : (
             <ActivePoll
@@ -278,7 +285,7 @@ const SinglePoll = ({
         </div>
         {commentsOnPoll?.results?.length === 0 ? (
           <div className="w-full py-[42px] px-[36px]">
-            <p>No comments on this post yet...</p>
+            <p>No comments on this poll yet...</p>
           </div>
         ) : (
           <div className="w-full py-[42px] px-[36px] flex flex-col gap-y-[36px]">
@@ -299,7 +306,7 @@ const SinglePoll = ({
                     {comment?.author?.firstname} {comment?.author?.lastname}
                   </p>
                   <p className="text-[14px] mt-[9px] text-[#343D45] leading-[179.5%]">
-                    {comment?.body}
+                    {comment?.comment_text}
                   </p>
                 </div>
               </div>

@@ -24,7 +24,27 @@ import notify from "@/libs/toast";
 
 const Image = styled.img``;
 
-const PollCard = ({ post }: { post: any }) => {
+const PollCard = ({
+  post,
+  index,
+  setShowSinglePoll,
+  setShowPopover,
+  setClickedIndex,
+  setPollIndex,
+  setChosenPost,
+  showPopover,
+  clickedIndex,
+}: {
+  post: any;
+  index: number;
+  setShowSinglePoll: any;
+  setShowPopover: any;
+  setClickedIndex: any;
+  setPollIndex: any;
+  setChosenPost: any;
+  showPopover: boolean;
+  clickedIndex: number;
+}) => {
   const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
 
   const { data: session } = useSession();
@@ -50,6 +70,22 @@ const PollCard = ({ post }: { post: any }) => {
   const [isLikingOrUnlikingPoll, setIsLikingOrUnlikingPoll] = useState(false);
 
   const queryClient = useQueryClient();
+
+  const Popover = () => {
+    return (
+      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
+        <p
+          onClick={() => {
+            setShowSinglePoll(true);
+            setShowPopover(false);
+          }}
+          className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+        >
+          View Poll
+        </p>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full mb-[25px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
@@ -77,23 +113,23 @@ const PollCard = ({ post }: { post: any }) => {
             </p>
           </div>
         </div>
-        {/* <div
-                          className="cursor-pointer relative"
-                          onClick={(e) => e?.stopPropagation()}
-                        >
-                          <p
-                            className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
-                            onClick={() => {
-                              setClickedIndex(index);
-                              setPollIndex(post?.id);
-                              setChosenPost(post);
-                              setShowPopover(!showPopover);
-                            }}
-                          >
-                            ...
-                          </p>
-                          {showPopover && clickedIndex === index && <Popover />}
-                        </div> */}
+        <div
+          className="cursor-pointer relative"
+          onClick={(e) => e?.stopPropagation()}
+        >
+          <p
+            className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+            onClick={() => {
+              setClickedIndex(index);
+              setPollIndex(post?.id);
+              setChosenPost(post);
+              setShowPopover(!showPopover);
+            }}
+          >
+            ...
+          </p>
+          {showPopover && clickedIndex === index && <Popover />}
+        </div>
       </div>
 
       <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
