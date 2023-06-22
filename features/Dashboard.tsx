@@ -7,7 +7,9 @@ import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useRouter } from "next/router";
 import {
+  ArrowLeftCircleIcon,
   ArrowLeftIcon,
+  ArrowRightCircleIcon,
   HeartIcon as HeartIcon2,
 } from "@heroicons/react/24/solid";
 import BounceLoader from "react-spinners/BounceLoader";
@@ -82,12 +84,23 @@ const Dashboard = () => {
   });
 
   const newData =
-    NewsFeedData &&
-    PollsData &&
-    [...NewsFeedData?.results, ...PollsData?.results]?.sort(
-      (a, b) =>
-        new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime()
-    );
+    NewsFeedData !== undefined && PollsData !== undefined
+      ? [...NewsFeedData?.results, ...PollsData?.results]?.sort(
+          (a, b) =>
+            new Date(b?.created_at)?.getTime() -
+            new Date(a?.created_at)?.getTime()
+        )
+      : PollsData === undefined && NewsFeedData !== undefined
+      ? NewsFeedData?.results?.sort(
+          (a: any, b: any) =>
+            new Date(b?.created_at)?.getTime() -
+            new Date(a?.created_at)?.getTime()
+        )
+      : PollsData?.results?.sort(
+          (a: any, b: any) =>
+            new Date(b?.created_at)?.getTime() -
+            new Date(a?.created_at)?.getTime()
+        );
 
   const { data: TalentOpenings, isLoading: isLoadingTalentOpenings } =
     useGetPostsByType({
@@ -513,42 +526,50 @@ const Dashboard = () => {
                   )
                 )
             )}
-            {/* {NewsFeedData?.results?.length > 0 &&
+            {(NewsFeedData?.total_pages > 1 || PollsData?.total_pages > 1) &&
               !isLoadingNewsFeed &&
               !isLoadingPolls && (
                 <div className="flex justify-between items-center w-full">
-                  <ArrowLeftCircleIcon
-                    color="#0074D9"
-                    height="30px"
-                    onClick={() => {
-                      if (page === 1) {
-                        setPage(1);
-                      } else {
-                        setPage(page - 1);
-                      }
-                    }}
-                    className="cursor-pointer"
-                  />
+                  <div>
+                    {(NewsFeedData?.current_page > 1 ||
+                      PollsData?.current_page > 1) && (
+                      <ArrowLeftCircleIcon
+                        color="#0074D9"
+                        height="30px"
+                        onClick={() => {
+                          if (page === 1) {
+                            setPage(1);
+                          } else {
+                            setPage(page - 1);
+                          }
+                        }}
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </div>
                   <div className="flex gap-[20px] items-center">
                     <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
                       {page}
                     </div>
-                    <ArrowRightCircleIcon
-                      color="#0074D9"
-                      height="30px"
-                      onClick={() => {
-                        if (
-                          NewsFeedData?.links?.next !== null ||
-                          PollsData?.links?.next !== null
-                        ) {
-                          setPage(page + 1);
-                        }
-                      }}
-                      className="cursor-pointer"
-                    />
+                    {(NewsFeedData?.current_page < NewsFeedData?.total_pages ||
+                      PollsData?.current_page < PollsData?.total_pages) && (
+                      <ArrowRightCircleIcon
+                        color="#0074D9"
+                        height="30px"
+                        onClick={() => {
+                          if (
+                            NewsFeedData?.links?.next === null &&
+                            PollsData?.links?.next === null
+                          ) {
+                            setPage(page);
+                          } else setPage(page + 1);
+                        }}
+                        className="cursor-pointer"
+                      />
+                    )}
                   </div>
                 </div>
-              )} */}
+              )}
           </div>
           <div className="basis-[40%] pb-[20px] md:pb-[100px] lg:pb-0">
             {/* fixed right-[267px] w-[25%] overflow-y-scroll */}
