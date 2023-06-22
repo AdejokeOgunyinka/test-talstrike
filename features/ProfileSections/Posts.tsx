@@ -20,6 +20,7 @@ import EditPost from "@/components/ProfileModals/EditPost";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import { TextBox } from "@/components/ProfileModals/InputBox";
 import { useCommentOnPost, useGetAllCommentsOnPost } from "@/api/dashboard";
+import { useAddViewCount } from "@/api/explore";
 
 const Image = styled.img``;
 
@@ -102,6 +103,17 @@ const MyPosts = () => {
   const [inputComment, setInputComment] = useState("");
   const [emptyComment, setEmptyComment] = useState(false);
 
+  const { mutate: addViewCount } = useAddViewCount();
+
+  let seconds = 0;
+  function incrementSeconds() {
+    seconds += 1;
+  }
+
+  if (showSinglePost) {
+    setInterval(incrementSeconds, 1000);
+  }
+
   return (
     <div className="mt-[21px] w-full">
       {showEditModal && (
@@ -134,7 +146,16 @@ const MyPosts = () => {
           <div className="w-full mb-[10px]">
             <ArrowLeftIcon
               className="w-[20px] h-[20px] cursor-pointer"
-              onClick={() => setShowSinglePost(false)}
+              onClick={() => {
+                if (seconds > 4) {
+                  addViewCount({
+                    view_time: seconds,
+                    post: chosenPost?.id,
+                    token: TOKEN as string,
+                  });
+                }
+                setShowSinglePost(false);
+              }}
             />
           </div>
           <div className="w-full bg-brand-500 divide-y divide-brand-1150">
