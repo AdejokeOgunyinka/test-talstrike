@@ -58,7 +58,7 @@ export const useGetPollsByUserId = ({ token, userId, page }: IGetPosts) =>
     ["getPollsByUserId", token, userId, page],
     () =>
       axios
-        .get(`/poll/?author=${userId}${page ? `?page=${page}` : ""}`, {
+        .get(`/poll/?author=${userId}${page ? `&page=${page}` : ""}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)
