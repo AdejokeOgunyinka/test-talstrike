@@ -1,10 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import NextImage from "next/image";
-import {
-  ArrowLeftIcon,
-  HeartIcon as HeartIcon2,
-} from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import moment from "moment";
 import styled from "styled-components";
@@ -53,21 +50,6 @@ const SingleArticle = ({
 
   return (
     <div className="w-full p-[24px] rounded-[4px]">
-      <div className="w-full mb-[10px]">
-        <ArrowLeftIcon
-          className="w-[20px] h-[20px] cursor-pointer"
-          onClick={() => {
-            if (seconds > 4) {
-              addViewCount({
-                view_time: seconds,
-                post: chosenPost?.id,
-                token: TOKEN as string,
-              });
-            }
-            setShowSingleArticle(false);
-          }}
-        />
-      </div>
       <div className="w-full bg-brand-500 divide-y divide-brand-1150">
         <div className="py-[27px] px-[33px]">
           <div className="flex justify-between items-center mb-[32px]">
@@ -91,8 +73,23 @@ const SingleArticle = ({
                 </h4>
               </div>
             </div>
-            <div className="text-brand-2250 font-semibold text-[27.7232px] flex items-center">
-              ...
+            <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]">
+              {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
+              <div
+                onClick={() => {
+                  if (seconds > 4) {
+                    addViewCount({
+                      view_time: seconds,
+                      post: chosenPost?.id,
+                      token: TOKEN as string,
+                    });
+                  }
+                  setShowSingleArticle(false);
+                }}
+                className="cursor-pointer"
+              >
+                <img src="/closeIconBlue.svg" alt="close blue" />
+              </div>
             </div>
           </div>
           <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">

@@ -26,7 +26,7 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
   const [selectedMedia, setSelectedMedia] = useState<any>("");
   const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const createAnnouncementValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -90,8 +90,12 @@ const CreateAnnouncements = ({ onClose }: { onClose: () => void }) => {
           fileType={fileType}
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
-          onClose={() => setOpenChooseMedia(false)}
           formik={formik}
+          onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
         />
       ) : (
         <div className="relative w-[90%] lg:w-[751px] pb-[100px] h-[608px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">

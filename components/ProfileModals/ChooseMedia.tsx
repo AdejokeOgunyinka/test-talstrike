@@ -7,12 +7,14 @@ const ChooseMedia = ({
   onClose,
   fileType,
   formik,
+  onClickCloseIcon,
 }: {
   setSelectedMedia: any;
   setSelectedMediaUrl: any;
   onClose: () => void;
   fileType: string;
   formik: any;
+  onClickCloseIcon: () => void;
 }) => {
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const fileUrl =

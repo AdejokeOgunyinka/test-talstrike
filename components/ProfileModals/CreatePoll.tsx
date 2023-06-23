@@ -27,7 +27,7 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
   const [selectedMedia, setSelectedMedia] = useState<any>("");
   const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const createPollValidationSchema = yup.object().shape({
     question_text: yup.string().required("Poll Question is required"),
@@ -112,6 +112,10 @@ const CreatePoll = ({ onClose }: { onClose: () => void }) => {
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (

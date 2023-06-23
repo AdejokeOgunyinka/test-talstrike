@@ -36,16 +36,17 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
       postId: id,
     }
   );
+  const [fileType, setFileType] = useState("NIL");
 
   const [selectedMedia, setSelectedMedia] = useState<any>(null);
   const [selectedMediaUrl, setSelectedMediaUrl] = useState(postDetail?.media);
 
   useEffect(() => {
     setSelectedMediaUrl(postDetail?.media);
+    setFileType(postDetail?.file_type);
   }, [postDetail]);
 
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
 
   const { mutate: editPost, isLoading: isEditingPost } = useEditPost();
   const queryClient = useQueryClient();
@@ -106,6 +107,10 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (

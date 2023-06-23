@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
@@ -5,7 +6,6 @@ import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { useRouter } from "next/router";
 import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
@@ -46,7 +46,6 @@ export const postWidgets = [
 ];
 
 const Dashboard = () => {
-  const router = useRouter();
   const { data: session } = useSession();
   const dispatch = useTypedDispatch();
 
@@ -369,12 +368,12 @@ const Dashboard = () => {
                 <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
                   People you might like
                 </h4>
-                <h5
-                  onClick={() => router.push("/players")}
+                <a
+                  href="/players"
                   className="text-brand-400 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] font-normal cursor-pointer"
                 >
                   See all
-                </h5>
+                </a>
               </div>
               <div className="pt-[17px] w-[100%] px-[17px]">
                 <div className="w-[100%] flex items-center">

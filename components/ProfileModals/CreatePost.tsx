@@ -26,7 +26,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
   const [selectedMedia, setSelectedMedia] = useState<any>(null);
   const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const createPostValidationSchema = yup.object().shape({
     description: yup.string().optional(),
@@ -50,7 +50,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
             ? "PHOTO"
             : fileType === "VIDEO"
             ? "VIDEO"
-            : "PHOTO",
+            : "POST",
         ...(selectedMedia && { media: selectedMedia }),
         file_type: fileType,
       };
@@ -92,6 +92,10 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (

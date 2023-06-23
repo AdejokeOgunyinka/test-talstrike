@@ -25,7 +25,7 @@ const EditOpening = ({ onClose, id }: { onClose: () => void; id: string }) => {
   const { userInfo } = useTypedSelector((state) => state.profile);
 
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const editOpeningValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -47,6 +47,7 @@ const EditOpening = ({ onClose, id }: { onClose: () => void; id: string }) => {
 
   useEffect(() => {
     setSelectedMediaUrl(postDetail?.media);
+    setFileType(postDetail?.file_type);
   }, [postDetail]);
 
   const { mutate: editPost, isLoading: isEditingPost } = useEditPost();
@@ -105,6 +106,10 @@ const EditOpening = ({ onClose, id }: { onClose: () => void; id: string }) => {
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (
