@@ -47,7 +47,7 @@ const SinglePollCard = ({
   };
 
   return (
-    <div className="rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%]">
+    <div className="relative rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[250px]">
       <div className="flex items-center justify-between mb-[35px]">
         <div className="flex items-center">
           <div className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]">
@@ -96,7 +96,7 @@ const SinglePollCard = ({
         {post?.image && <Image src={post?.image} alt="poll img" />}
       </div>
 
-      <div className="relative mb-[33px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
+      <div className="relative mb-[53px] pb-[78px] rounded-[4px] overflow-hidden w-[full] mt-[20px]">
         {post?.voted ||
         post?.author?.id === session?.user?.id ||
         moment(
@@ -115,12 +115,12 @@ const SinglePollCard = ({
         )}
       </div>
 
-      <div className="flex mb-[12px] justify-between w-full text-[14px] text-brand-2250">
-        <div>
+      <div className="absolute bottom-[78px] w-[88%] flex mb-[12px] items-center justify-between text-[14px] text-brand-2250">
+        <div className="w-[33%]">
           <b className="font-semibold">{post?.total_vote_count}</b> vote
           {post?.total_vote_count > 1 && "s"}
         </div>
-        <div className="border border-t-transparent border-b-transparent border-l-brand-2750 border-r-brand-2750 px-[40px]">
+        <div className="w-[33%] flex justify-center border border-t-transparent border-b-transparent border-l-brand-2750 border-r-brand-2750">
           {parseInt(post?.duration?.split(" ")[0]) > 0 && (
             <>
               <b className="font-semibold">{post?.duration?.split(" ")[0]}</b>{" "}
@@ -128,7 +128,7 @@ const SinglePollCard = ({
             </>
           )}
         </div>
-        <div>
+        <div className="w-[33%] flex justify-center break-word px-[20px]">
           {moment(
             moment(new Date(post?.created_at)).add(
               parseInt(post?.duration?.split(" ")[0]),
@@ -158,7 +158,7 @@ const SinglePollCard = ({
         </div>
       </div>
 
-      <div className="h-[78px] px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
+      <div className="h-[78px] absolute bottom-0 w-full px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
         <div className="flex flex-col items-center">
           <div className="flex gap-x-[3px] mb-[5px]">
             <NextImage src="/heart.svg" width="15" height="15" alt="heart" />

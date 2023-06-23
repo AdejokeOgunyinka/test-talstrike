@@ -2,7 +2,7 @@ import NextImage from "next/image";
 import moment from "moment";
 import styled from "styled-components";
 
-import { handleOnError } from "@/libs/utils";
+import { handleMediaPostError, handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
@@ -90,7 +90,7 @@ const SinglePostCard = ({
   };
 
   return (
-    <div className="rounded-[8px] relative bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%]">
+    <div className="rounded-[8px] relative bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[230px]">
       <div className="flex items-center justify-between mb-[25px]">
         <div className="flex items-center">
           <div className="mr-[7px] ">
@@ -137,24 +137,28 @@ const SinglePostCard = ({
         {post?.body}
       </p>
 
-      <div className="relative mb-[100px] rounded-[4px] overflow-hidden flex justify-center">
-        {post?.media && (
+      {post?.media && (
+        <div className="relative mb-[100px] rounded-[4px] overflow-hidden flex justify-center">
           <>
             {post?.file_type === "VIDEO" ? (
               <video src={post?.media} controls />
             ) : (
-              <Image src={post?.media} alt="post img" />
+              <Image
+                src={post?.media}
+                alt="post img"
+                onError={handleMediaPostError}
+              />
             )}
           </>
-        )}
-        <div
-          className={`rounded-[4px] h-[30px] flex justify-center items-center absolute ${
-            post?.post_type === "VIDEO" ? "bottom-[60px]" : "bottom-[21.75px]"
-          } bg-brand-1500 left-[15px] py-[4px] px-[10px] text-[11px] leading-[16px] font-semibold text-brand-500`}
-        >
-          {post?.post_type}
+          <div
+            className={`rounded-[4px] h-[30px] flex justify-center items-center absolute ${
+              post?.post_type === "VIDEO" ? "bottom-[60px]" : "bottom-[21.75px]"
+            } bg-brand-1500 left-[15px] py-[4px] px-[10px] text-[11px] leading-[16px] font-semibold text-brand-500`}
+          >
+            {post?.post_type}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="h-[78px] w-full bg-brand-500 absolute bottom-0  px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
         <div className="flex flex-col items-center">

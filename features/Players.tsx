@@ -166,7 +166,7 @@ const Index = () => {
                   <ProfileCard
                     id={player?.user?.id}
                     img={player?.user?.image}
-                    skillsArray={player?.specialties || ["N/A"]}
+                    skillsArray={player?.interests || []}
                     name={`${player?.user?.firstname} ${player?.user?.lastname}`}
                     position={player?.position}
                     isPlayer={true}
