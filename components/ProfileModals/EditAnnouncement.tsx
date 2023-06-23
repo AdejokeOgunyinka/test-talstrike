@@ -31,7 +31,7 @@ const EditAnnouncement = ({
   const { userInfo } = useTypedSelector((state) => state.profile);
 
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const editAnnouncementValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -53,6 +53,7 @@ const EditAnnouncement = ({
 
   useEffect(() => {
     setSelectedMediaUrl(postDetail?.media);
+    setFileType(postDetail?.file_type);
   }, [postDetail]);
 
   const { mutate: editPost, isLoading: isEditingPost } = useEditPost();
@@ -111,6 +112,10 @@ const EditAnnouncement = ({
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (

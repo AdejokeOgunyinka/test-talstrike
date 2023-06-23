@@ -25,7 +25,7 @@ const CreateArticle = ({ onClose }: { onClose: () => void }) => {
   const [selectedMedia, setSelectedMedia] = useState<any>("");
   const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
   const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("");
+  const [fileType, setFileType] = useState("NIL");
 
   const CreateOpeningValidationSchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -90,6 +90,10 @@ const CreateArticle = ({ onClose }: { onClose: () => void }) => {
           setSelectedMedia={setSelectedMedia}
           setSelectedMediaUrl={setSelectedMediaUrl}
           onClose={() => setOpenChooseMedia(false)}
+          onClickCloseIcon={() => {
+            setOpenChooseMedia(false);
+            setFileType("NIL");
+          }}
           formik={formik}
         />
       ) : (
