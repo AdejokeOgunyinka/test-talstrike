@@ -2,7 +2,7 @@ import NextImage from "next/image";
 import moment from "moment";
 import styled from "styled-components";
 
-import { handleOnError } from "@/libs/utils";
+import { handleMediaPostError, handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
@@ -143,7 +143,11 @@ const SinglePostCard = ({
             {post?.file_type === "VIDEO" ? (
               <video src={post?.media} controls />
             ) : (
-              <Image src={post?.media} alt="post img" />
+              <Image
+                src={post?.media}
+                alt="post img"
+                onError={handleMediaPostError}
+              />
             )}
           </>
           <div
