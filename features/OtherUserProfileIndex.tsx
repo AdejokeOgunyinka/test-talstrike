@@ -77,8 +77,11 @@ const Index = () => {
                         ? userProfile?.user?.image
                         : ProfileImg
                     }
-                    width="161"
-                    height="161"
+                    style={{
+                      width: "161px",
+                      height: "161px",
+                      objectFit: "cover",
+                    }}
                     alt="profile"
                     className="profile-img"
                     onError={handleOnError}

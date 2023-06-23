@@ -56,7 +56,7 @@ const ProfileCard = ({
   const router = useRouter();
 
   return (
-    <div className="w-[100%] md:basis-[33%] md:w-[250px] h-[250px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
+    <div className="w-[100%] md:basis-[33%] md:w-[250px] min-h-[220px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
       <div className="flex gap-x-[18px]">
         <div className="flex flex-col items-center">
           <div
@@ -112,18 +112,18 @@ const ProfileCard = ({
           </p>
         </div>
       </div>
-      <div className="mt-[16px] flex gap-x-[6px]">
-        {skillsArray?.slice(2)?.map((skill, index) => (
+      <div className="mt-[16px] flex gap-x-[6px] items-center">
+        {skillsArray?.slice(0, 2)?.map((skill, index) => (
           <div
             key={index}
-            className="flex justify-center items-center text-brand-50 text-[10px] leading-[15px] bg-brand-300 rounded-[19px]"
+            className="flex justify-center items-center text-brand-50 text-[10px] leading-[15px] bg-brand-300 rounded-[19px] py-[5px] px-[10px]"
           >
             {skill}
           </div>
         ))}
         {skillsArray?.length > 2 && (
           <p className="text-brand-200 text-[10px] leading-[15px]">
-            {skillsArray?.length - 2}
+            +{skillsArray?.length - 2}
           </p>
         )}
       </div>

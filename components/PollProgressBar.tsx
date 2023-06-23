@@ -32,7 +32,7 @@ const PollProgressBar = ({
         className={`${special ? "bg-[#D7EAFB]" : bgColor}`}
       >
         <p
-          className={`absolute left-[33px] top-[7px] text-[16px] text-brand-600`}
+          className={`absolute left-[33px] top-[7px] text-[16px] text-brand-600 w-[200px] h-[30px] whitespace-nowrap overflow-hidden text-ellipsis md:w-[100%]`}
         >
           {option}
         </p>

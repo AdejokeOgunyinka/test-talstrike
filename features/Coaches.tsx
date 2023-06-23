@@ -135,7 +135,7 @@ const Index = () => {
                 <ProfileCard
                   id={coach?.user?.id}
                   img={coach?.user?.image}
-                  skillsArray={coach?.specialties || ["N/A"]}
+                  skillsArray={coach?.interests || []}
                   name={`${coach?.user?.firstname} ${coach?.user?.lastname}`}
                   isPlayer={false}
                   rating={coach?.rating || "3.5"}
