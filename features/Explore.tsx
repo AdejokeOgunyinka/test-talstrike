@@ -3,10 +3,12 @@ import { DashboardLayout } from "@/layout/Dashboard";
 import { useState } from "react";
 import ExploreSection from "./ExploreSection";
 import { useGetExploreForYou, useGetExploreTop } from "@/api/explore";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const Index = () => {
-  const { data: exploreForMe } = useGetExploreForYou();
-  const { data: exploreTop } = useGetExploreTop();
+  const { data: exploreForMe, isLoading: isLoadingForMe } =
+    useGetExploreForYou();
+  const { data: exploreTop, isLoading: isLoadingTop } = useGetExploreTop();
 
   const exploreSections = [
     { title: "For you", component: <ExploreSection data={exploreForMe} /> },
@@ -44,7 +46,18 @@ const Index = () => {
             </div>
           ))}
         </div>
-        {exploreSections[currentSection - 1]?.component}
+        {isLoadingForMe || isLoadingTop ? (
+          <SkeletonTheme
+            baseColor="rgba(0, 116, 217, 0.18)"
+            highlightColor="#fff"
+          >
+            <section>
+              <Skeleton height={550} width="100%" />
+            </section>
+          </SkeletonTheme>
+        ) : (
+          exploreSections[currentSection - 1]?.component
+        )}
       </div>
     </DashboardLayout>
   );
