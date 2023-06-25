@@ -202,7 +202,7 @@ const SinglePoll = ({
               parseInt(chosenPost?.duration?.split(" ")[0]),
               "days"
             )
-          ).diff(new Date(), "days") < 1 ? (
+          ).diff(new Date(), "hours") < 1 ? (
             <InactivePoll options={chosenPost?.poll_choices} />
           ) : (
             <ActivePoll

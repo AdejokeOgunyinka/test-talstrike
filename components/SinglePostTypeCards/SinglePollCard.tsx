@@ -104,7 +104,7 @@ const SinglePollCard = ({
             parseInt(post?.duration?.split(" ")[0]),
             "days"
           )
-        ).diff(new Date(), "days") < 1 ? (
+        ).diff(new Date(), "hours") < 1 ? (
           <InactivePoll options={post?.poll_choices} />
         ) : (
           <ActivePoll
@@ -124,7 +124,7 @@ const SinglePollCard = ({
           {parseInt(post?.duration?.split(" ")[0]) > 0 && (
             <>
               <b className="font-semibold">{post?.duration?.split(" ")[0]}</b>{" "}
-              days
+              day{post?.duration?.split(" ")[0] > 1 && "s"}
             </>
           )}
         </div>
@@ -134,26 +134,36 @@ const SinglePollCard = ({
               parseInt(post?.duration?.split(" ")[0]),
               "days"
             )
-          ).diff(new Date(), "days") > 0 &&
+          ).diff(new Date(), "hours") > 0 &&
           moment(
             moment(new Date(post?.created_at)).add(
               parseInt(post?.duration?.split(" ")[0]),
               "days"
             )
-          ).diff(new Date(), "days") < 2
+          ).diff(new Date(), "hours") < 24
             ? "Ongoing"
             : moment(
                 moment(new Date(post?.created_at)).add(
                   parseInt(post?.duration?.split(" ")[0]),
                   "days"
                 )
-              ).diff(new Date(), "days") > 2
+              ).diff(new Date(), "hours") > 24
             ? moment(
                 moment(new Date(post?.created_at)).add(
                   parseInt(post?.duration?.split(" ")[0]),
                   "days"
                 )
-              ).diff(new Date(), "days") + " days remaining"
+              ).diff(new Date(), "days") +
+              ` day${
+                moment(
+                  moment(new Date(post?.created_at)).add(
+                    parseInt(post?.duration?.split(" ")[0]),
+                    "days"
+                  )
+                ).diff(new Date(), "days") > 1
+                  ? "s"
+                  : ""
+              } remaining`
             : "Final result"}
         </div>
       </div>
