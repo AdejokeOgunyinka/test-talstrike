@@ -65,7 +65,7 @@ const EditPost = ({ onClose, id }: { onClose: () => void; id: string }) => {
             ? "PHOTO"
             : fileType === "VIDEO"
             ? "VIDEO"
-            : "PHOTO",
+            : "ARTICLE",
         ...(selectedMedia && { media: selectedMedia }),
         file_type: fileType,
       };
