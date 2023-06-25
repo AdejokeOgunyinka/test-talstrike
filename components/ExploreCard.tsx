@@ -98,7 +98,7 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
               <p className="mb-[21px]">{post?.share_count}</p>
 
               <img src="/played.svg" alt="played" className="mb-[2px]" />
-              <p className="mb-[21px]">0</p>
+              <p className="mb-[21px]">{post?.view_count}</p>
 
               <img src="/chatbox3.svg" alt="chatbox3" className="mb-[2px]" />
               <p className="mb-[21px]">{post?.comment_count}</p>
@@ -124,37 +124,39 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => {
-                followUser(
-                  {
-                    token: TOKEN as string,
-                    userId: post?.author?.id,
-                  },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries(["getSuggestedFollows"]);
-                      notify({
-                        type: "success",
-                        text: `You are now following ${post?.author?.firstname} ${post?.author?.lastname}`,
-                      });
+            {post?.is_following !== true && (
+              <button
+                onClick={() => {
+                  followUser(
+                    {
+                      token: TOKEN as string,
+                      userId: post?.author?.id,
                     },
-                  }
-                );
-              }}
-              className="border border-brand-500 text-[14px]  rounded-[4px] text-brand-500 h-[32px] w-[78px]"
-            >
-              {isFollowingPlayer ? (
-                <BeatLoader
-                  color={"orange"}
-                  size={10}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
-              ) : (
-                "Follow"
-              )}
-            </button>
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries(["getSuggestedFollows"]);
+                        notify({
+                          type: "success",
+                          text: `You are now following ${post?.author?.firstname} ${post?.author?.lastname}`,
+                        });
+                      },
+                    }
+                  );
+                }}
+                className="border border-brand-500 text-[14px]  rounded-[4px] text-brand-500 h-[32px] w-[78px]"
+              >
+                {isFollowingPlayer ? (
+                  <BeatLoader
+                    color={"orange"}
+                    size={10}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  "Follow"
+                )}
+              </button>
+            )}
           </div>
         </div>
         <div className="absolute top-[50%] left-[50%] flex justify-center items-center">

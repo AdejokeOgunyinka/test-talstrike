@@ -50,7 +50,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
             ? "PHOTO"
             : fileType === "VIDEO"
             ? "VIDEO"
-            : "POST",
+            : "ARTICLE",
         ...(selectedMedia && { media: selectedMedia }),
         file_type: fileType,
       };
