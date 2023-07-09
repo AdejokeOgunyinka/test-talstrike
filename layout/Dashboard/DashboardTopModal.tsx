@@ -60,8 +60,10 @@ const DashboardTopBarModal = () => {
         View Profile
       </a>
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
-        {achievements?.results?.length} Achievement
-        {achievements?.results?.length > 1 && "s"}
+        {achievements?.pages?.flat(1)?.length} Achievement
+        {achievements?.pages?.flat(1) &&
+          achievements?.pages?.flat(1)?.length > 1 &&
+          "s"}
       </p>
       <p className="text-brand-600 font-medium text-[11px] leading-[16px] mb-[11px]">
         {appearances?.results?.length} Appearance
