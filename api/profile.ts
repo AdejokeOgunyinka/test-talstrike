@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { axios } from "@/libs/axios";
 import { ProfileBody } from "@/libs/types/profile";
 
@@ -53,19 +53,28 @@ export const useCreatePoll = () =>
       })
   );
 
-export const useGetPollsByUserId = ({ token, userId, page }: IGetPosts) =>
-  useQuery(
-    ["getPollsByUserId", token, userId, page],
-    () =>
+export const useGetPollsByUserId = ({ token, userId }: IGetPosts) =>
+  useInfiniteQuery(
+    ["getPollsByUserId", token, userId],
+    ({ pageParam = 1 }) =>
       axios
-        .get(`/poll/?author=${userId}${page ? `&page=${page}` : ""}`, {
-          headers: { Authorization: "Bearer " + token },
-        })
-        .then((res) => res.data)
+        .get(
+          `/poll/?author=${userId}${pageParam ? `&page=${pageParam}` : ""}`,
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnWindowFocus: false }
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
 export const useCommentOnPoll = () =>
@@ -140,34 +149,51 @@ interface IGetPosts {
   page?: number;
 }
 
-export const useGetPosts = ({ token, userId, page }: IGetPosts) =>
-  useQuery(
-    ["getMyPosts", token, userId, page],
-    () =>
+export const useGetPosts = ({ token, userId }: IGetPosts) =>
+  useInfiniteQuery(
+    ["getMyPosts", token, userId],
+    ({ pageParam = 1 }) =>
       axios
-        .get(`/post/${userId}/all${page ? `?page=${page}` : ""}`, {
+        .get(`/post/${userId}/all${pageParam ? `?page=${pageParam}` : ""}`, {
           headers: { Authorization: "Bearer " + token },
         })
-        .then((res) => res.data)
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnWindowFocus: false }
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
 export const useGetPostsByType = ({ token, userId, post_type }: IGetPosts) =>
-  useQuery(
+  useInfiniteQuery(
     ["getMyPostsByType", token, userId, post_type],
-    () =>
+    ({ pageParam = 1 }) =>
       axios
-        .get(`/post/${userId}/all?post_type=${post_type}`, {
-          headers: { Authorization: "Bearer " + token },
-        })
-        .then((res) => res.data)
+        .get(
+          `/post/${userId}/all?post_type=${post_type}${
+            pageParam ? `&page=${pageParam}` : ""
+          }`,
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        )
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnWindowFocus: false }
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
 export const useGetSinglePost = ({
@@ -210,25 +236,29 @@ export const useGetMyProfile = ({ token, userId }: IGetPosts) =>
     }
   );
 
-export const useGetAchievements = ({ token, userId, page }: IGetPosts) =>
-  useQuery(
-    ["getAchievements", token, userId, page],
-    () =>
+export const useGetAchievements = ({ token, userId }: IGetPosts) =>
+  useInfiniteQuery(
+    ["getAchievements", token, userId],
+    ({ pageParam = 1 }) =>
       axios
         .get(
-          `/auth/achievement/?user=${userId}${page ? `&page=${page}` : ""}`,
+          `/auth/achievement/?user=${userId}${
+            pageParam ? `&page=${pageParam}` : ""
+          }`,
           {
             headers: { Authorization: "Bearer " + token },
           }
         )
-        .then((res) => res.data)
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
     {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
     }
   );
 

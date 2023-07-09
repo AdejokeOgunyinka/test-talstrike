@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 
@@ -246,19 +247,25 @@ const AboutMe = ({
             Achievements & Trophies
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
-            {achievements?.results?.length === 0 ? (
+            {achievements?.pages?.flat(1)?.length === 0 ? (
               <p>No achievement yet..</p>
             ) : (
-              achievements?.results?.map((achievement: any, index: number) => (
-                <b key={index} className="font-normal">
-                  {achievement?.title}, {achievement?.month} {achievement?.year}
-                  {index !== achievements?.results?.length - 1 ? ";" : "."}{" "}
-                </b>
-              ))
+              achievements?.pages
+                ?.flat(1)
+                ?.map((achievement: any, index: number) => (
+                  <b key={index} className="font-normal">
+                    {achievement?.title}, {achievement?.month}{" "}
+                    {achievement?.year}
+                    {index !== achievements?.pages?.flat(1)?.length - 1
+                      ? ";"
+                      : "."}{" "}
+                  </b>
+                ))
             )}
-            {/* {achievements?.results?.length > 5 && (
-              <b className="font-semibold cursor-pointer">VIEW ALL</b>
-            )} */}
+
+            <a className="font-semibold cursor-pointer" href="/achievements">
+              VIEW ALL
+            </a>
           </p>
         </div>
         <div className="mt-[30px]">

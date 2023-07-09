@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Country } from "country-state-city";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRightCircleIcon,
-} from "@heroicons/react/24/solid";
+import { useInView } from "react-intersection-observer";
 
 import TitleBar from "@/components/TitleBar";
 import AgentsSearchBar from "@/components/DashboardSearchbar";
@@ -19,6 +16,7 @@ const Index = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
+  const { ref, inView } = useInView();
   const { data: sports } = useGetSports();
 
   const [chosenSportFilters, setChosenSportFilters] = useState<string[]>([]);
@@ -57,14 +55,24 @@ const Index = () => {
 
   const [page, setPage] = useState(1);
 
-  const { data: agentsData, isLoading: isLoadingAllAgents } = useGetAllAgents({
+  const {
+    data: agentsData,
+    isLoading: isLoadingAllAgents,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetAllAgents({
     token: TOKEN as string,
     age: chosenAgeFilters?.join(","),
     location: chosenCountryFilters?.join(","),
     gender: chosenGenderFilters?.join(","),
     sport: chosenSportFilters?.join(","),
-    page: page,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <DashboardLayout>
@@ -129,7 +137,7 @@ const Index = () => {
           {isLoadingAllAgents ? (
             <SkeletonLoader />
           ) : (
-            agentsData?.results?.map((agent: any, index: number) => (
+            agentsData?.pages?.flat(1)?.map((agent: any, index: number) => (
               <div key={index} className="w-full md:w-[unset]">
                 <ProfileCard
                   id={agent?.user?.id}
@@ -148,42 +156,14 @@ const Index = () => {
           )}
         </div>
 
-        {!isLoadingAllAgents && agentsData?.results?.length > 0 && (
-          <div className="flex justify-between items-center w-full mt-[20px]">
-            <div>
-              {agentsData?.current_page > 1 && (
-                <ArrowLeftCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  onClick={() => {
-                    if (page === 1) {
-                      setPage(1);
-                    } else {
-                      setPage(page - 1);
-                    }
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
-            <div className="flex gap-[20px] items-center">
-              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
-                {page}
-              </div>
-              {agentsData?.current_page < agentsData?.total_pages && (
-                <ArrowRightCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  aria-disabled={agentsData?.links?.next === null}
-                  onClick={() => {
-                    if (agentsData?.links?.next === null) {
-                      setPage(page);
-                    } else setPage(page + 1);
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
+        {!isLoadingAllAgents && hasNextPage && (
+          <div
+            ref={ref}
+            className="flex w-full justify-center items-center mt-[30px]"
+          >
+            <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+              Loading More...
+            </button>
           </div>
         )}
       </div>

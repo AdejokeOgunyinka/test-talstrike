@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Country } from "country-state-city";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRightCircleIcon,
-} from "@heroicons/react/24/solid";
+import { useInView } from "react-intersection-observer";
 
 import TitleBar from "@/components/TitleBar";
 import PlayersSearchBar from "@/components/DashboardSearchbar";
@@ -19,6 +16,7 @@ const Index = () => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
+  const { ref, inView } = useInView();
   const { data: sports } = useGetSports();
 
   const [chosenSportFilters, setChosenSportFilters] = useState<string[]>([]);
@@ -74,18 +72,25 @@ const Index = () => {
   const genderFilterOptions = ["no filter", "Male", "Female", "Other"];
   const [chosenGenderFilters, setChosenGenderFilters] = useState<string[]>([]);
 
-  const [page, setPage] = useState(1);
+  const {
+    data: playersData,
+    isLoading: isLoadingAllPlayers,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetAllPlayers({
+    token: TOKEN as string,
+    age: chosenAgeFilters?.join(","),
+    location: chosenCountryFilters?.join(","),
+    gender: chosenGenderFilters?.join(","),
+    sport: chosenSportFilters?.join(","),
+    position: chosenPositionFilter?.join(","),
+  });
 
-  const { data: playersData, isLoading: isLoadingAllPlayers } =
-    useGetAllPlayers({
-      token: TOKEN as string,
-      age: chosenAgeFilters?.join(","),
-      location: chosenCountryFilters?.join(","),
-      gender: chosenGenderFilters?.join(","),
-      sport: chosenSportFilters?.join(","),
-      position: chosenPositionFilter?.join(","),
-      page: page,
-    });
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <DashboardLayout>
@@ -161,7 +166,7 @@ const Index = () => {
             {isLoadingAllPlayers ? (
               <SkeletonLoader />
             ) : (
-              playersData?.results?.map((player: any, index: number) => (
+              playersData?.pages?.flat(1)?.map((player: any, index: number) => (
                 <div key={index} className="w-full md:w-[unset]">
                   <ProfileCard
                     id={player?.user?.id}
@@ -182,42 +187,14 @@ const Index = () => {
           </div>
         </div>
 
-        {!isLoadingAllPlayers && playersData?.results?.length > 0 && (
-          <div className="flex justify-between items-center w-full mt-[20px] pb-[100px] lg:pb-0">
-            <div>
-              {playersData?.current_page > 1 && (
-                <ArrowLeftCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  onClick={() => {
-                    if (page === 1) {
-                      setPage(1);
-                    } else {
-                      setPage(page - 1);
-                    }
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
-            <div className="flex gap-[20px] items-center">
-              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
-                {page}
-              </div>
-              {playersData?.current_page < playersData?.total_pages && (
-                <ArrowRightCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  aria-disabled={playersData?.links?.next === null}
-                  onClick={() => {
-                    if (playersData?.links?.next === null) {
-                      setPage(page);
-                    } else setPage(page + 1);
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
+        {!isLoadingAllPlayers && hasNextPage && (
+          <div
+            ref={ref}
+            className="flex w-full justify-center items-center mt-[30px]"
+          >
+            <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+              Loading More...
+            </button>
           </div>
         )}
       </div>
