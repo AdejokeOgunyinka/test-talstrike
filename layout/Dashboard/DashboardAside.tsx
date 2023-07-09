@@ -111,6 +111,7 @@ const DashboardAside = () => {
                     width: "40px",
                     height: "40px",
                     objectFit: "cover",
+                    borderRadius: "50%",
                   }}
                   onError={handleOnError}
                 />
