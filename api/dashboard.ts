@@ -110,6 +110,32 @@ export const useCommentOnPost = () =>
       })
   );
 
+export const useGetAllHashtags = (token: string) =>
+  useQuery(["getAllHashtags", token], () =>
+    axios
+      .get("/post/hashtag", {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useCreateHashtag = () =>
+  useMutation(({ token, body }: IPost) =>
+    axios
+      .post("/post/hashtag/", body, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
 export const useCreatePost = () =>
   useMutation(({ token, body, additionalHeaders }: IPost) =>
     axios
