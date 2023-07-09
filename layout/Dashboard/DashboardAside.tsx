@@ -44,32 +44,35 @@ const DashboardAside = () => {
           Coaches near me
         </h4>
         <div className="flex gap-x-[14px]">
-          {Coaches?.results?.length === 0 || !Coaches ? (
+          {Coaches?.pages?.flat(1)?.length === 0 || !Coaches ? (
             <p className="text-[13px]">No coach at the moment...</p>
           ) : (
-            Coaches?.results?.slice(0, 4)?.map((coach: any, index: number) => (
-              <div
-                key={index}
-                className="flex flex-col items-center cursor-pointer"
-                onClick={() => handleClickUser({ id: coach?.user?.id })}
-              >
-                <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
-                  <img
-                    src={coach?.user?.image}
-                    alt="coach"
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      objectFit: "cover",
-                    }}
-                    onError={handleOnError}
-                  />
+            Coaches?.pages
+              ?.flat(1)
+              ?.slice(0, 4)
+              ?.map((coach: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex flex-col items-center cursor-pointer"
+                  onClick={() => handleClickUser({ id: coach?.user?.id })}
+                >
+                  <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
+                    <img
+                      src={coach?.user?.image}
+                      alt="coach"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        objectFit: "cover",
+                      }}
+                      onError={handleOnError}
+                    />
+                  </div>
+                  <p className="text-[9px] mt-[4px] lg:text-[11px] 2xl:text-[13px] leading-[14px] font-medium">
+                    {coach?.user?.firstname} {coach?.user?.lastname}
+                  </p>
                 </div>
-                <p className="text-[9px] mt-[4px] lg:text-[11px] 2xl:text-[13px] leading-[14px] font-medium">
-                  {coach?.user?.firstname} {coach?.user?.lastname}
-                </p>
-              </div>
-            ))
+              ))
           )}
         </div>
         <div className="mt-[24px] mb-[12px] flex justify-between items-center">
