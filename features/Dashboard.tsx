@@ -6,10 +6,7 @@ import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRightCircleIcon,
-} from "@heroicons/react/24/solid";
+import { useInView } from "react-intersection-observer";
 
 import InstagramIcon from "@/assets/instagramIcon.svg";
 import PhoneCallIcon from "@/assets/phoneCallIcon.svg";
@@ -49,6 +46,7 @@ const Dashboard = () => {
   const { data: session } = useSession();
   const dispatch = useTypedDispatch();
 
+  const { ref, inView } = useInView();
   const { userInfo } = useTypedSelector((state) => state.profile);
 
   const TOKEN = session?.user?.access;
@@ -63,35 +61,45 @@ const Dashboard = () => {
     dispatch(setProfile(userData));
   }, [dispatch, userData]);
 
-  const [page, setPage] = useState(1);
-
-  const { data: NewsFeedData, isLoading: isLoadingNewsFeed } = useGetNewsfeed({
+  const {
+    data: NewsFeedData,
+    isLoading: isLoadingNewsFeed,
+    hasNextPage: hasNextNewsFeedPage,
+    fetchNextPage: fetchNextNewsFeedPage,
+  } = useGetNewsfeed({
     token: TOKEN as string,
-    page: page,
   });
-  const { data: PollsData, isLoading: isLoadingPolls } = useGetAllPolls({
+  const {
+    data: PollsData,
+    isLoading: isLoadingPolls,
+    hasNextPage: hasNextPollsPage,
+    fetchNextPage: fetchNextPollsPage,
+  } = useGetAllPolls({
     token: TOKEN as string,
-    page: page,
   });
 
   const newData =
     NewsFeedData !== undefined && PollsData !== undefined
-      ? [...NewsFeedData?.results, ...PollsData?.results]?.sort(
+      ? [...NewsFeedData?.pages?.flat(1), ...PollsData?.pages?.flat(1)]?.sort(
           (a, b) =>
             new Date(b?.created_at)?.getTime() -
             new Date(a?.created_at)?.getTime()
         )
       : PollsData === undefined && NewsFeedData !== undefined
-      ? NewsFeedData?.results?.sort(
-          (a: any, b: any) =>
-            new Date(b?.created_at)?.getTime() -
-            new Date(a?.created_at)?.getTime()
-        )
-      : PollsData?.results?.sort(
-          (a: any, b: any) =>
-            new Date(b?.created_at)?.getTime() -
-            new Date(a?.created_at)?.getTime()
-        );
+      ? NewsFeedData?.pages
+          ?.flat(1)
+          ?.sort(
+            (a: any, b: any) =>
+              new Date(b?.created_at)?.getTime() -
+              new Date(a?.created_at)?.getTime()
+          )
+      : PollsData?.pages
+          ?.flat(1)
+          ?.sort(
+            (a: any, b: any) =>
+              new Date(b?.created_at)?.getTime() -
+              new Date(a?.created_at)?.getTime()
+          );
 
   const { data: TalentOpenings, isLoading: isLoadingTalentOpenings } =
     useGetPostsByType({
@@ -142,6 +150,18 @@ const Dashboard = () => {
   if (showSinglePoll || showSinglePost) {
     setInterval(incrementSeconds, 1000);
   }
+
+  useEffect(() => {
+    if (inView && hasNextNewsFeedPage) {
+      fetchNextNewsFeedPage();
+    }
+  }, [inView, fetchNextNewsFeedPage, hasNextNewsFeedPage]);
+
+  useEffect(() => {
+    if (inView && hasNextPollsPage) {
+      fetchNextPollsPage();
+    }
+  }, [inView, hasNextPollsPage, fetchNextPollsPage]);
 
   return (
     <div className="w-full min-h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
@@ -254,7 +274,7 @@ const Dashboard = () => {
                   <Skeleton height={550} width="100%" />
                 </section>
               </SkeletonTheme>
-            ) : NewsFeedData?.results?.length === 0 ? (
+            ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
               <p className="bg-brand-1300 px-2 py-2 text-[14px]">
                 Sorry! You are unable to see any posts on your newsfeed, either
                 because you have not yet added someone to your friends list, or
@@ -309,48 +329,16 @@ const Dashboard = () => {
                   )
                 )
             )}
-            {(NewsFeedData?.total_pages > 1 || PollsData?.total_pages > 1) &&
-              !isLoadingNewsFeed &&
-              !isLoadingPolls && (
-                <div className="flex justify-between items-center w-full">
-                  <div>
-                    {(NewsFeedData?.current_page > 1 ||
-                      PollsData?.current_page > 1) && (
-                      <ArrowLeftCircleIcon
-                        color="#0074D9"
-                        height="30px"
-                        onClick={() => {
-                          if (page === 1) {
-                            setPage(1);
-                          } else {
-                            setPage(page - 1);
-                          }
-                        }}
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </div>
-                  <div className="flex gap-[20px] items-center">
-                    <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
-                      {page}
-                    </div>
-                    {(NewsFeedData?.current_page < NewsFeedData?.total_pages ||
-                      PollsData?.current_page < PollsData?.total_pages) && (
-                      <ArrowRightCircleIcon
-                        color="#0074D9"
-                        height="30px"
-                        onClick={() => {
-                          if (
-                            NewsFeedData?.links?.next === null &&
-                            PollsData?.links?.next === null
-                          ) {
-                            setPage(page);
-                          } else setPage(page + 1);
-                        }}
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </div>
+            {!isLoadingNewsFeed &&
+              !isLoadingPolls &&
+              (hasNextNewsFeedPage || hasNextPollsPage) && (
+                <div
+                  ref={ref}
+                  className="flex w-full justify-center items-center mt-[30px]"
+                >
+                  <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+                    Loading More...
+                  </button>
                 </div>
               )}
           </div>

@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { axios } from "@/libs/axios";
 
 export const useGetAllPlayers = ({
@@ -8,7 +8,6 @@ export const useGetAllPlayers = ({
   location,
   sport,
   position,
-  page,
 }: {
   token: string;
   age?: string;
@@ -16,26 +15,34 @@ export const useGetAllPlayers = ({
   gender?: string;
   sport?: string;
   position?: string;
-  page?: number;
 }) =>
-  useQuery(
-    ["getAllPlayers", token, age, gender, location, sport, position, page],
-    () =>
+  useInfiniteQuery(
+    ["getAllPlayers", token, age, gender, location, sport, position],
+    ({ pageParam = 1 }) =>
       axios
         .get(
           `/auth/users/profile?roles=TALENT${age ? `&age=${age}` : ""}${
             gender ? `&gender=${gender}` : ""
           }${location ? `&location=${location}` : ""}${
             position ? `&position=${position}` : ""
-          }${sport ? `&sport=${sport}` : ""}${page ? `&page=${page}` : ""}`,
+          }${sport ? `&sport=${sport}` : ""}${
+            pageParam ? `&page=${pageParam}` : ""
+          }`,
           {
             headers: { Authorization: "Bearer " + token },
           }
         )
-        .then((res) => res.data)
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
-        })
+        }),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
 interface IUser {

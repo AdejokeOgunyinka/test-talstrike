@@ -83,12 +83,12 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
       setUpdatingProfile(true);
 
       const data = {
-        achievements: achievements?.results?.map(
-          (achievement: any) => achievement?.id
-        ),
-        appearances: appearances?.results?.map(
-          (appearance: any) => appearance?.id
-        ),
+        achievements: achievements?.pages
+          ?.flat(1)
+          ?.map((achievement: any) => achievement?.id),
+        appearances: appearances?.pages
+          ?.flat(1)
+          ?.map((appearance: any) => appearance?.id),
         teams: values.teams,
         abilities: values.abilities,
         skills: values.skills,
@@ -392,11 +392,12 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                 <div className="w-full bg-brand-1000 py-[34px] flex-wrap justify-center gap-x-[31px] gap-y-[20px]  px-[42px] mt-[14px] flex">
                   {isLoadingAchievements ? (
                     <SkeletonLoader />
-                  ) : achievements?.results?.length === 0 ? (
+                  ) : achievements?.pages?.flat(1)?.length === 0 ? (
                     <p>No achievement yet..</p>
                   ) : (
-                    achievements?.results?.map(
-                      (achievement: any, index: number) => (
+                    achievements?.pages
+                      ?.flat(1)
+                      ?.map((achievement: any, index: number) => (
                         <div
                           key={index}
                           className="w-[346px] relative h-[399px] border border-[#94AEC5] rounded-[4px] p-[24px]"
@@ -453,8 +454,7 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                             </button>
                           </div>
                         </div>
-                      )
-                    )
+                      ))
                   )}
                 </div>
               </div>

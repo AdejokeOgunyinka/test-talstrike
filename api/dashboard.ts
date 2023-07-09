@@ -1,46 +1,46 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useInfiniteQuery } from "@tanstack/react-query";
 import { axios } from "@/libs/axios";
 
-export const useGetNewsfeed = ({
-  token,
-  page,
-}: {
-  token: string;
-  page?: number;
-}) =>
-  useQuery(
-    ["getNewsfeed", token, page],
-    () =>
+export const useGetNewsfeed = ({ token }: { token: string }) =>
+  useInfiniteQuery(
+    ["getNewsfeed", token],
+    ({ pageParam = 1 }) =>
       axios
-        .get(`/post/newsfeed/personalized?page=${page || 1}`, {
+        .get(`/post/newsfeed/personalized?page=${pageParam || 1}`, {
           headers: { Authorization: "Bearer " + token },
         })
-        .then((res) => res.data)
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnMount: false, retry: 1 }
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
-export const useGetAllPolls = ({
-  token,
-  page,
-}: {
-  token: string;
-  page?: number;
-}) =>
-  useQuery(
-    ["getPolls", token, page],
-    () =>
+export const useGetAllPolls = ({ token }: { token: string }) =>
+  useInfiniteQuery(
+    ["getPolls", token],
+    ({ pageParam = 1 }) =>
       axios
-        .get(`/poll?page=${page || 1}`, {
+        .get(`/poll?page=${pageParam || 1}`, {
           headers: { Authorization: "Bearer " + token },
         })
-        .then((res) => res.data)
+        .then((res) => res.data?.results)
         .catch((err) => {
           throw err.response.data;
         }),
-    { refetchOnMount: false, retry: 1 }
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage =
+          lastPage.length === 20 ? allPages.length + 1 : undefined;
+        return nextPage;
+      },
+    }
   );
 
 export const useGetPeopleNearMe = (token: string) =>

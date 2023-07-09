@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRightCircleIcon,
-} from "@heroicons/react/24/solid";
+import { useInView } from "react-intersection-observer";
+
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetPostsByType } from "@/api/profile";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
@@ -18,13 +16,23 @@ const MyAnnouncements = () => {
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
 
-  const [page, setPage] = useState(1);
-  const { data: userPosts, isLoading: isLoadingUserPosts } = useGetPostsByType({
+  const { ref, inView } = useInView();
+  const {
+    data: userPosts,
+    isLoading: isLoadingUserPosts,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetPostsByType({
     token: TOKEN as string,
     userId: USER_ID as string,
     post_type: "ANNOUNCEMENT",
-    page: page,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(1);
@@ -110,76 +118,42 @@ const MyAnnouncements = () => {
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
             <SkeletonLoader />
-          ) : userPosts?.results?.length === 0 || !userPosts?.results ? (
+          ) : userPosts?.pages?.flat(1)?.length === 0 ||
+            !userPosts?.pages?.flat(1) ? (
             <p>No announcement available at the moment...</p>
           ) : (
-            userPosts?.results?.map((post: any, index: number) => (
-              <SingleAnnouncementCard
-                key={index}
-                setShowSingleAnnouncement={setShowSingleAnnouncement}
-                setShowPopover={setShowPopover}
-                post={post}
-                setClickedIndex={setClickedIndex}
-                setPostIndex={setPostIndex}
-                setChosenPost={setChosenPost}
-                index={index}
-                clickedIndex={clickedIndex}
-                showPopover={showPopover}
-                handleClickDelete={handleClickDelete}
-                handleClickEditModal={handleClickEditModal}
-              />
-            ))
+            userPosts?.pages
+              ?.flat(1)
+              ?.map((post: any, index: number) => (
+                <SingleAnnouncementCard
+                  key={index}
+                  setShowSingleAnnouncement={setShowSingleAnnouncement}
+                  setShowPopover={setShowPopover}
+                  post={post}
+                  setClickedIndex={setClickedIndex}
+                  setPostIndex={setPostIndex}
+                  setChosenPost={setChosenPost}
+                  index={index}
+                  clickedIndex={clickedIndex}
+                  showPopover={showPopover}
+                  handleClickDelete={handleClickDelete}
+                  handleClickEditModal={handleClickEditModal}
+                />
+              ))
           )}
         </div>
       )}
 
-      {!isLoadingUserPosts &&
-        userPosts?.results?.length > 0 &&
-        !showSingleAnnouncement && (
-          <div className="flex justify-between items-center w-full mt-[20px]">
-            <div>
-              {userPosts?.current_page > 1 && (
-                <ArrowLeftCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  onClick={() => {
-                    if (page === 1) {
-                      setPage(1);
-                    } else {
-                      setPage(page - 1);
-                    }
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
-            <div className="flex gap-[20px] items-center">
-              <div className="border border-brand-600 w-[55px] rounded-[5px] flex justify-end pr-[10px]">
-                {page}
-              </div>
-              {userPosts?.current_page < userPosts?.total_pages && (
-                <ArrowRightCircleIcon
-                  color="#0074D9"
-                  height="30px"
-                  onClick={() => {
-                    setPage(page + 1);
-                  }}
-                  className="cursor-pointer"
-                />
-              )}
-            </div>
-          </div>
-        )}
-
-      {/* {!isLoadingUserPosts &&
-        userPosts?.results &&
-        userPosts?.results?.length !== 0 && (
-          <div className="mt-[45px] w-full flex justify-center items-center">
-            <button className="w-[146px] bg-brand-600 h-[41px] rounded-[19px] text-brand-500 text-[14px] leading-[21px]">
-              Load More
-            </button>
-          </div>
-        )} */}
+      {!isLoadingUserPosts && hasNextPage && (
+        <div
+          ref={ref}
+          className="flex w-full justify-center items-center mt-[30px]"
+        >
+          <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+            Loading More...
+          </button>
+        </div>
+      )}
     </div>
   );
 };
