@@ -470,7 +470,7 @@ const Dashboard = () => {
                 </h4>
               </div>
               <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
-                {TalentOpenings?.results?.length === 0 ? (
+                {TalentOpenings?.pages?.flat(1)?.length === 0 ? (
                   <p>There are no talent openings yet..</p>
                 ) : isLoadingTalentOpenings ? (
                   <SkeletonTheme
@@ -482,7 +482,8 @@ const Dashboard = () => {
                     </section>
                   </SkeletonTheme>
                 ) : (
-                  TalentOpenings?.results
+                  TalentOpenings?.pages
+                    ?.flat(1)
                     ?.slice(0, 2)
                     .map((talentOpening: any, index: number) => (
                       <div
@@ -552,7 +553,7 @@ const Dashboard = () => {
                 </h4>
               </div>
               <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
-                {Announcements?.results?.length === 0 ? (
+                {Announcements?.pages?.flat(1)?.length === 0 ? (
                   <p>There are no announcements yet..</p>
                 ) : isLoadingAnnouncements ? (
                   <SkeletonTheme
@@ -564,7 +565,8 @@ const Dashboard = () => {
                     </section>
                   </SkeletonTheme>
                 ) : (
-                  Announcements?.results
+                  Announcements?.pages
+                    ?.flat(1)
                     ?.slice(0, 2)
                     .map((announcement: any, index: number) => (
                       <div
