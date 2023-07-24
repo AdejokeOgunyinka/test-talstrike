@@ -53,8 +53,6 @@ const Index = () => {
   const genderFilterOptions = ["no filter", "Male", "Female", "Other"];
   const [chosenGenderFilters, setChosenGenderFilters] = useState<string[]>([]);
 
-  const [page, setPage] = useState(1);
-
   const {
     data: agentsData,
     isLoading: isLoadingAllAgents,

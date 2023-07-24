@@ -27,9 +27,6 @@ const Index = ({ providers }: { providers: any }) => {
   });
 
   const resetSchema = yup.object().shape({
-    token: yup
-      .string()
-      .required("Please enter the code that was sent to your email address"),
     password: yup
       .string()
       .required("Please enter your password")
@@ -57,6 +54,7 @@ const Index = ({ providers }: { providers: any }) => {
     useResetPassword();
 
   const [page, setPage] = useState(1);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -78,10 +76,16 @@ const Index = ({ providers }: { providers: any }) => {
   });
 
   const router = useRouter();
+  const { token } = router.query;
+
+  useEffect(() => {
+    if (token) {
+      setPage(3);
+    }
+  }, [token]);
 
   const resetFormik = useFormik({
     initialValues: {
-      token: "",
       password: "",
       c_password: "",
     },
@@ -89,7 +93,7 @@ const Index = ({ providers }: { providers: any }) => {
     validationSchema: resetSchema,
     onSubmit: (values: any) => {
       resetPassword(
-        { token: values.token, new_password: values.password },
+        { token: token as string, new_password: values.password },
         {
           onError: (err: any) => notify({ type: "error", text: err?.message }),
           onSuccess: () => {
@@ -122,7 +126,7 @@ const Index = ({ providers }: { providers: any }) => {
 
   return (
     <div className="h-full w-full flex flex-col xl:px-[140px] px-[20px]">
-      {page === 1 && (
+      {page === 1 && !token && (
         <div className="w-full relative h-[unset] md:h-full  pt-[50px] lg:pt-[112px]">
           <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
             Reset your Password
@@ -205,7 +209,7 @@ const Index = ({ providers }: { providers: any }) => {
           </form>
         </div>
       )}
-      {page === 2 && (
+      {page === 2 && !token && (
         <div className="w-full relative h-[unset] md:h-full  pt-[60px] lg:pt-[191px] xl:px-[20px]">
           <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
             Password Reset Code sent to your Email
@@ -221,7 +225,7 @@ const Index = ({ providers }: { providers: any }) => {
             Click continue to enter the code and reset your password.
           </p>
 
-          <div className="flex flex-col md:flex-row gap-[15px] lg:px-[20%] w-full mt-[64px]">
+          {/* <div className="flex flex-col md:flex-row gap-[15px] lg:px-[20%] w-full mt-[64px]">
             <div
               onClick={() => setPage(1)}
               className="md:basis-1/2 flex justify-center items-center border-[1.5px] border-brand-1650 h-[37px] rounded-[4px] text-brand-1650 font-medium text-[14px]"
@@ -234,7 +238,7 @@ const Index = ({ providers }: { providers: any }) => {
             >
               Continue
             </button>
-          </div>
+          </div> */}
 
           <div className="relative md:absolute md:bottom-[62px] mt-[130px] pb-[50px] md:mt-[unset] w-full">
             <p className="text-[#0074D9] text-[14px] font-medium leading-[21px] text-center">
@@ -261,26 +265,12 @@ const Index = ({ providers }: { providers: any }) => {
           </div>
         </div>
       )}
-      {page === 3 && (
+      {token && (
         <div className="w-full relative h-[unset] md:h-full flex flex-col justify-center pt-[0px] xl:px-[20px]">
           <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
             Reset your password
           </div>
           <form onSubmit={resetFormik?.handleSubmit}>
-            <div>
-              <CustomInputBox
-                placeholder="Enter code sent to your email"
-                name="token"
-                onChange={resetFormik.handleChange}
-                onBlur={resetFormik.handleBlur}
-              />
-              {resetFormik.errors.token && resetFormik.touched.token && (
-                <p className="text-brand-warning text-[10px]">
-                  {resetFormik.errors.token as string}
-                </p>
-              )}
-            </div>
-
             <div className="mt-[15px] mb-[15px]">
               <CustomInputBox
                 type={hidePassword ? "password" : "text"}
@@ -315,7 +305,7 @@ const Index = ({ providers }: { providers: any }) => {
                     onClick={() => setHideConfirmPassword(!hideConfirmPassword)}
                   />
                 }
-                name="password"
+                name="c_password"
                 onChange={resetFormik.handleChange}
                 onBlur={resetFormik.handleBlur}
               />
