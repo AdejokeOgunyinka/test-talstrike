@@ -184,7 +184,7 @@ const Index = ({ providers }: { providers: any }) => {
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
               {"Forgotten password? "}
               <a
-                href="/auth/reset-password"
+                href="/auth/reset_password"
                 className="text-[#003D72] underline"
               >
                 Reset Password

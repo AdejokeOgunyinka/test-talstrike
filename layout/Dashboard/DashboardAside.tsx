@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import NextImage from "next/image";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import SearchBar from "@/components/SearchBar";
 import { useGetAllCoaches } from "@/api/coaches";
-import { useGetMyFollowers, useGetPeopleNearMe } from "@/api/dashboard";
+import { useGetMyFollowers } from "@/api/dashboard";
+import { handleOnError } from "@/libs/utils";
 
 const DashboardAside = () => {
   const { data: session } = useSession();
@@ -17,8 +16,6 @@ const DashboardAside = () => {
   const router = useRouter();
 
   const { data: Coaches } = useGetAllCoaches({ token: TOKEN as string });
-  // const { data: PeopleNearMe } = useGetPeopleNearMe(TOKEN as string);
-  // console.log({ PeopleNearMe });
 
   const { data: myFollowers, isLoading: isLoadingMyFollowers } =
     useGetMyFollowers({
@@ -28,10 +25,6 @@ const DashboardAside = () => {
 
   const handleClickUser = ({ id }: { id: string }) => {
     router.push(`/profile/${id}`);
-  };
-
-  const handleOnError = (e: any) => {
-    e.target.src = "/profileIcon.svg";
   };
 
   return (

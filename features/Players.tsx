@@ -29,7 +29,11 @@ const Index = () => {
   );
 
   useEffect(() => {
-    if (chosenSportFilters && chosenSportFilters[0] !== "no filter") {
+    if (
+      chosenSportFilters &&
+      chosenSportFilters[0] !== "no filter" &&
+      chosenSportFilters[0] !== ""
+    ) {
       setPositionFilterOptions(
         sports?.results?.filter(
           (sport: any) => sport?.id === chosenSportFilters[0]
