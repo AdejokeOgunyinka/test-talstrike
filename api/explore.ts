@@ -24,10 +24,20 @@ export const useAddViewCount = () =>
         })
   );
 
+export const useGetExploreLatest = () =>
+  useQuery(["getExploreLatest"], () =>
+    axios
+      .get(`/explore/latest`)
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
 export const useGetExploreForYou = () =>
   useQuery(["getExploreForYou"], () =>
     axios
-      .get(`/explore/latest`)
+      .get(`/explore/for_you`)
       .then((res) => res.data)
       .catch((err) => {
         throw err.response.data;
@@ -37,7 +47,17 @@ export const useGetExploreForYou = () =>
 export const useGetExploreTop = () =>
   useQuery(["getExploreTop"], () =>
     axios
-      .get(`/explore/top`)
+      .get(`/explore/trending`)
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useGetExploreLive = () =>
+  useQuery(["getExploreLive"], () =>
+    axios
+      .get(`/explore/live`)
       .then((res) => res.data)
       .catch((err) => {
         throw err.response.data;
