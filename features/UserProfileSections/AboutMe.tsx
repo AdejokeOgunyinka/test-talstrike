@@ -386,9 +386,9 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Training Courses
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[12px] flex-wrap">
             {userProfile?.trainings ? (
-              [userProfile?.trainings]?.map((item, index) => (
+              [...userProfile?.trainings]?.map((item, index) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
