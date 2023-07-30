@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useInView } from "react-intersection-observer";
 
-import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import SingleArticle from "@/components/SingleProfilePostComponent/SingleArticle";
 import SingleArticleCard from "@/components/SinglePostTypeCards/SingleArticleCard";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const MyArticles = () => {
   const { data: session } = useSession();
@@ -79,7 +79,11 @@ const MyArticles = () => {
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
-            <SkeletonLoader />
+            Array(2)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+              ))
           ) : userPosts?.pages?.flat(1)?.length === 0 ||
             !userPosts?.pages?.flat(1) ? (
             <p>No article available at the moment...</p>

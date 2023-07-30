@@ -10,7 +10,8 @@ import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllTrainers } from "@/api/trainers";
 import { useGetSports } from "@/api/auth";
-import SkeletonLoader from "@/components/SkeletonLoader";
+// import SkeletonLoader from "@/components/SkeletonLoader";
+import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -135,26 +136,28 @@ const Index = () => {
           </TrainersSearchBar>
         </div>
         <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start px-[5%] md:px-[2.5%] lg:px-[5%] gap-y-[25px]">
-          {isLoadingAllTrainers ? (
-            <SkeletonLoader />
-          ) : (
-            trainersData?.pages?.flat(1)?.map((trainer: any, index: number) => (
-              <div key={index} className="w-full md:w-[unset]">
-                <ProfileCard
-                  id={trainer?.user?.id}
-                  img={trainer.user?.image}
-                  skillsArray={trainer.interests || []}
-                  name={`${trainer.user?.firstname} ${trainer.user?.lastname}`}
-                  isPlayer={trainer.isPlayer}
-                  rating={trainer.rating || "2.3"}
-                  location={trainer.location?.join(", ") || "N/A"}
-                  experience={trainer.years_of_experience}
-                  appearances={trainer.appearances || 0}
-                  friend={trainer?.is_following}
-                />
-              </div>
-            ))
-          )}
+          {isLoadingAllTrainers
+            ? Array(6)
+                ?.fill("")
+                ?.map((_, index) => <LoadingProfileCards key={index} />)
+            : trainersData?.pages
+                ?.flat(1)
+                ?.map((trainer: any, index: number) => (
+                  <div key={index} className="w-full md:w-[unset]">
+                    <ProfileCard
+                      id={trainer?.user?.id}
+                      img={trainer.user?.image}
+                      skillsArray={trainer.interests || []}
+                      name={`${trainer.user?.firstname} ${trainer.user?.lastname}`}
+                      isPlayer={trainer.isPlayer}
+                      rating={trainer.rating || "2.3"}
+                      location={trainer.location?.join(", ") || "N/A"}
+                      experience={trainer.years_of_experience}
+                      appearances={trainer.appearances || 0}
+                      friend={trainer?.is_following}
+                    />
+                  </div>
+                ))}
         </div>
 
         {!isLoadingAllTrainers && hasNextPage && (

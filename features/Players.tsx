@@ -10,7 +10,8 @@ import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetSports } from "@/api/auth";
 import { useGetAllPlayers } from "@/api/players";
-import SkeletonLoader from "@/components/SkeletonLoader";
+// import SkeletonLoader from "@/components/SkeletonLoader";
+import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -169,27 +170,29 @@ const Index = () => {
         </div>
         <div className="w-full mt-[23px] flex justify-center">
           <div className="flex flex-wrap gap-y-[25px] gap-x-[25px] px-[5%] md:px-[2.5%] lg:px-[5%]">
-            {isLoadingAllPlayers ? (
-              <SkeletonLoader />
-            ) : (
-              playersData?.pages?.flat(1)?.map((player: any, index: number) => (
-                <div key={index} className="w-full md:w-[unset]">
-                  <ProfileCard
-                    id={player?.user?.id}
-                    img={player?.user?.image}
-                    skillsArray={player?.interests || []}
-                    name={`${player?.user?.firstname} ${player?.user?.lastname}`}
-                    position={player?.position}
-                    isPlayer={true}
-                    rating={player?.rating || "4.3"}
-                    location={player?.location?.join(", ") || "N/A"}
-                    experience={player?.years_of_experience}
-                    appearances={player?.appearances || 0}
-                    friend={player?.is_following}
-                  />
-                </div>
-              ))
-            )}
+            {isLoadingAllPlayers
+              ? Array(6)
+                  ?.fill("")
+                  ?.map((_, index) => <LoadingProfileCards key={index} />)
+              : playersData?.pages
+                  ?.flat(1)
+                  ?.map((player: any, index: number) => (
+                    <div key={index} className="w-full md:w-[unset]">
+                      <ProfileCard
+                        id={player?.user?.id}
+                        img={player?.user?.image}
+                        skillsArray={player?.interests || []}
+                        name={`${player?.user?.firstname} ${player?.user?.lastname}`}
+                        position={player?.position}
+                        isPlayer={true}
+                        rating={player?.rating || "4.3"}
+                        location={player?.location?.join(", ") || "N/A"}
+                        experience={player?.years_of_experience}
+                        appearances={player?.appearances || 0}
+                        friend={player?.is_following}
+                      />
+                    </div>
+                  ))}
           </div>
         </div>
 

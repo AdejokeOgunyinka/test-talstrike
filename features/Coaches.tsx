@@ -10,7 +10,8 @@ import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllCoaches } from "@/api/coaches";
 import { useGetSports } from "@/api/auth";
-import SkeletonLoader from "@/components/SkeletonLoader";
+// import SkeletonLoader from "@/components/SkeletonLoader";
+import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -135,26 +136,26 @@ const Index = () => {
           </CoachesSearchBar>
         </div>
         <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] px-[5%] md:px-[2.5%] lg:px-[5%]">
-          {isLoadingAllCoaches ? (
-            <SkeletonLoader />
-          ) : (
-            coachesData?.pages?.flat(1)?.map((coach: any, index: number) => (
-              <div key={index} className="w-full md:w-[unset]">
-                <ProfileCard
-                  id={coach?.user?.id}
-                  img={coach?.user?.image}
-                  skillsArray={coach?.interests || []}
-                  name={`${coach?.user?.firstname} ${coach?.user?.lastname}`}
-                  isPlayer={false}
-                  rating={coach?.rating || "3.5"}
-                  location={coach?.location?.join(", ") || "N/A"}
-                  experience={coach?.years_of_experience}
-                  appearances={coach?.appearances || 0}
-                  friend={coach?.is_following}
-                />
-              </div>
-            ))
-          )}
+          {isLoadingAllCoaches
+            ? Array(6)
+                ?.fill("")
+                ?.map((_, index) => <LoadingProfileCards key={index} />)
+            : coachesData?.pages?.flat(1)?.map((coach: any, index: number) => (
+                <div key={index} className="w-full md:w-[unset]">
+                  <ProfileCard
+                    id={coach?.user?.id}
+                    img={coach?.user?.image}
+                    skillsArray={coach?.interests || []}
+                    name={`${coach?.user?.firstname} ${coach?.user?.lastname}`}
+                    isPlayer={false}
+                    rating={coach?.rating || "3.5"}
+                    location={coach?.location?.join(", ") || "N/A"}
+                    experience={coach?.years_of_experience}
+                    appearances={coach?.appearances || 0}
+                    friend={coach?.is_following}
+                  />
+                </div>
+              ))}
         </div>
 
         {!isLoadingAllCoaches && hasNextPage && (

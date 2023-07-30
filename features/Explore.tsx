@@ -2,19 +2,26 @@
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useState } from "react";
 import ExploreSection from "./ExploreSection";
-import { useGetExploreForYou, useGetExploreTop } from "@/api/explore";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import {
+  useGetExploreForYou,
+  useGetExploreLatest,
+  useGetExploreLive,
+  useGetExploreTop,
+} from "@/api/explore";
+import LoadingExplore from "@/components/LoadingStates/loadingExplore";
 
 const Index = () => {
   const { data: exploreForMe, isLoading: isLoadingForMe } =
     useGetExploreForYou();
+  const { data: exploreLatest, isLoading: isLoadingLatest } =
+    useGetExploreLatest();
   const { data: exploreTop, isLoading: isLoadingTop } = useGetExploreTop();
+  // const { data: exploreLive, isLoading: isLoadingLive } = useGetExploreLive();
 
   const exploreSections = [
     { title: "For you", component: <ExploreSection data={exploreForMe} /> },
-    // { title: "Trends" },
     { title: "Top", component: <ExploreSection data={exploreTop} /> },
-    { title: "Latest", component: <ExploreSection data={exploreForMe} /> },
+    { title: "Latest", component: <ExploreSection data={exploreLatest} /> },
     { title: "Live", component: <ExploreSection data={exploreForMe} /> },
   ];
 
@@ -46,15 +53,14 @@ const Index = () => {
             </div>
           ))}
         </div>
-        {isLoadingForMe || isLoadingTop ? (
-          <SkeletonTheme
-            baseColor="rgba(0, 116, 217, 0.18)"
-            highlightColor="#fff"
-          >
-            <section>
-              <Skeleton height={550} width="100%" />
-            </section>
-          </SkeletonTheme>
+        {isLoadingForMe || isLoadingTop || isLoadingLatest ? (
+          <div className="w-full md:px-[31px] mt-[13px] md:mt-[53px] flex flex-wrap gap-[12px]">
+            {Array(4)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingExplore key={index} />
+              ))}
+          </div>
         ) : (
           exploreSections[currentSection - 1]?.component
         )}

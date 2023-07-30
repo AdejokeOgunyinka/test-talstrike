@@ -35,6 +35,7 @@ import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import PollCard from "@/components/PollCard";
 import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
 import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -114,7 +115,8 @@ const Dashboard = () => {
       userId: USER_ID as string,
       post_type: "ANNOUNCEMENT",
     });
-  const { data: SuggestedFollows } = useGetSuggestedFollows(TOKEN as string);
+  const { data: SuggestedFollows, isLoading: isLoadingSuggestedFollows } =
+    useGetSuggestedFollows(TOKEN as string);
 
   const queryClient = useQueryClient();
 
@@ -266,14 +268,9 @@ const Dashboard = () => {
               </div>
             </div>
             {isLoadingNewsFeed ? (
-              <SkeletonTheme
-                baseColor="rgba(0, 116, 217, 0.18)"
-                highlightColor="#fff"
-              >
-                <section>
-                  <Skeleton height={550} width="100%" />
-                </section>
-              </SkeletonTheme>
+              Array(6)
+                ?.fill("")
+                ?.map((_, index) => <LoadingPosts key={index} />)
             ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
               <p className="bg-brand-1300 px-2 py-2 text-[14px]">
                 Sorry! You are unable to see any posts on your newsfeed, either
@@ -351,115 +348,123 @@ const Dashboard = () => {
                 alt="talent ad"
               />
             </div>
-            <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
-              <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
-                <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
-                  People you might like
-                </h4>
-                <a
-                  href="/players"
-                  className="text-brand-400 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] font-normal cursor-pointer"
-                >
-                  See all
-                </a>
+            {isLoadingSuggestedFollows ? (
+              <div className="w-full mt-[16px]">
+                <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
+                  <Skeleton height={150} width={"95%"} />
+                </SkeletonTheme>
               </div>
-              <div className="pt-[17px] w-[100%] px-[17px]">
-                <div className="w-[100%] flex items-center">
-                  <div className="w-[40px] h-[40px] mr-[14px]">
-                    {SuggestedFollows?.data && (
-                      <img
-                        src={SuggestedFollows?.data[0]?.image}
-                        alt="jack"
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          objectFit: "cover",
-                        }}
-                        onError={handleOnError}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-50">
-                      {SuggestedFollows?.data[0]?.firstname}{" "}
-                      {SuggestedFollows?.data[0]?.lastname}
-                    </p>
-                    <p className="text-[10px] lg:text-[12px] 2xl:text-[14px] text-brand-1200 leading-[15px]">
-                      {SuggestedFollows?.data[0]?.roles[0]}
-                    </p>
-                  </div>
-                </div>
-                <div className="w-[100%] mt-[3px] mb-[18px] flex justify-end">
-                  <div className="flex gap-x-[19px]">
-                    <NextImage
-                      src={InstagramIcon}
-                      alt="instagram"
-                      style={{
-                        cursor: "pointer",
-                        width: "14px",
-                        height: "14px",
-                      }}
-                    />
-                    <NextImage
-                      src={PhoneCallIcon}
-                      alt="phone"
-                      style={{
-                        cursor: "pointer",
-                        width: "14px",
-                        height: "14px",
-                      }}
-                    />
-                    <NextImage
-                      src={MessageIcon}
-                      alt="message"
-                      style={{
-                        cursor: "pointer",
-                        width: "14px",
-                        height: "14px",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="w-full flex justify-between gap-x-[18px]">
-                  <button className="basis-[50%] border border-brand-300 text-brand-200 rounded-[7px] h-[32px]">
-                    Ignore
-                  </button>
-                  <button
-                    className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px]"
-                    onClick={() => {
-                      followUser(
-                        {
-                          token: TOKEN as string,
-                          userId: SuggestedFollows?.data[0]?.id,
-                        },
-                        {
-                          onSuccess: () => {
-                            queryClient.invalidateQueries([
-                              "getSuggestedFollows",
-                            ]);
-                            notify({
-                              type: "success",
-                              text: `You are now following ${SuggestedFollows?.data[0]?.firstname} ${SuggestedFollows?.data[0]?.lastname}`,
-                            });
-                          },
-                        }
-                      );
-                    }}
+            ) : (
+              <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
+                <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
+                  <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
+                    People you might like
+                  </h4>
+                  <a
+                    href="/players"
+                    className="text-brand-400 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] font-normal cursor-pointer"
                   >
-                    {isFollowingPlayer ? (
-                      <BeatLoader
-                        color={"orange"}
-                        size={10}
-                        aria-label="Loading Spinner"
-                        data-testid="loader"
+                    See all
+                  </a>
+                </div>
+                <div className="pt-[17px] w-[100%] px-[17px]">
+                  <div className="w-[100%] flex items-center">
+                    <div className="w-[40px] h-[40px] mr-[14px]">
+                      {SuggestedFollows?.data && (
+                        <img
+                          src={SuggestedFollows?.data[0]?.image}
+                          alt="jack"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            objectFit: "cover",
+                          }}
+                          onError={handleOnError}
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-50">
+                        {SuggestedFollows?.data[0]?.firstname}{" "}
+                        {SuggestedFollows?.data[0]?.lastname}
+                      </p>
+                      <p className="text-[10px] lg:text-[12px] 2xl:text-[14px] text-brand-1200 leading-[15px]">
+                        {SuggestedFollows?.data[0]?.roles[0]}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-[100%] mt-[3px] mb-[18px] flex justify-end">
+                    <div className="flex gap-x-[19px]">
+                      <NextImage
+                        src={InstagramIcon}
+                        alt="instagram"
+                        style={{
+                          cursor: "pointer",
+                          width: "14px",
+                          height: "14px",
+                        }}
                       />
-                    ) : (
-                      "Follow"
-                    )}
-                  </button>
+                      <NextImage
+                        src={PhoneCallIcon}
+                        alt="phone"
+                        style={{
+                          cursor: "pointer",
+                          width: "14px",
+                          height: "14px",
+                        }}
+                      />
+                      <NextImage
+                        src={MessageIcon}
+                        alt="message"
+                        style={{
+                          cursor: "pointer",
+                          width: "14px",
+                          height: "14px",
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full flex justify-between gap-x-[18px]">
+                    <button className="basis-[50%] border border-brand-300 text-brand-200 rounded-[7px] h-[32px]">
+                      Ignore
+                    </button>
+                    <button
+                      className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px]"
+                      onClick={() => {
+                        followUser(
+                          {
+                            token: TOKEN as string,
+                            userId: SuggestedFollows?.data[0]?.id,
+                          },
+                          {
+                            onSuccess: () => {
+                              queryClient.invalidateQueries([
+                                "getSuggestedFollows",
+                              ]);
+                              notify({
+                                type: "success",
+                                text: `You are now following ${SuggestedFollows?.data[0]?.firstname} ${SuggestedFollows?.data[0]?.lastname}`,
+                              });
+                            },
+                          }
+                        );
+                      }}
+                    >
+                      {isFollowingPlayer ? (
+                        <BeatLoader
+                          color={"orange"}
+                          size={10}
+                          aria-label="Loading Spinner"
+                          data-testid="loader"
+                        />
+                      ) : (
+                        "Follow"
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
               <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                 <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
@@ -473,10 +478,7 @@ const Dashboard = () => {
                 {TalentOpenings?.pages?.flat(1)?.length === 0 ? (
                   <p>There are no talent openings yet..</p>
                 ) : isLoadingTalentOpenings ? (
-                  <SkeletonTheme
-                    baseColor="rgba(0, 116, 217, 0.18)"
-                    highlightColor="#fff"
-                  >
+                  <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
                     <section>
                       <Skeleton height={100} width="100%" />
                     </section>
@@ -556,10 +558,7 @@ const Dashboard = () => {
                 {Announcements?.pages?.flat(1)?.length === 0 ? (
                   <p>There are no announcements yet..</p>
                 ) : isLoadingAnnouncements ? (
-                  <SkeletonTheme
-                    baseColor="rgba(0, 116, 217, 0.18)"
-                    highlightColor="#fff"
-                  >
+                  <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
                     <section>
                       <Skeleton height={100} width="100%" />
                     </section>

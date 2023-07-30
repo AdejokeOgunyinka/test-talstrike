@@ -9,8 +9,8 @@ import { useInView } from "react-intersection-observer";
 import AchievementDummy from "@/assets/achievementDummyImg.svg";
 import CreateAchievement from "@/components/AchievementModals/CreateAchievement";
 import EditAchievement from "@/components/AchievementModals/EditAchievement";
-import SkeletonLoader from "@/components/SkeletonLoader";
 import { useQueryClient } from "@tanstack/react-query";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -62,9 +62,17 @@ const Index = () => {
           </button>
         </div>
         <div className="w-full flex flex-wrap mt-[33px] justify-center">
-          <div className="flex flex-wrap gap-x-[31px] gap-y-[20px] justify-center lg:justify-normal">
+          <div
+            className={`flex flex-wrap gap-x-[31px] gap-y-[20px] justify-center lg:justify-normal ${
+              isLoadingAchievements && "md:w-[100%]"
+            }`}
+          >
             {isLoadingAchievements ? (
-              <SkeletonLoader />
+              Array(2)
+                ?.fill("")
+                ?.map((_, index) => (
+                  <LoadingPosts key={index} width={"w-100% md:w-[400px]"} />
+                ))
             ) : achievements?.pages?.flat(1)?.length === 0 ? (
               <p>No achievement yet..</p>
             ) : (
