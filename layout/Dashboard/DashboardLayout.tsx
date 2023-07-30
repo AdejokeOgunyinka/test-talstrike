@@ -73,7 +73,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          <div className="w-[100%] min-h-[calc(100vh-70px)] flex scrollbar-hidden">
+          <div className="w-[100%] min-h-[calc(100vh-70px)] lg:min-h-unset lg:h-[calc(80vh-70px)] flex scrollbar-hidden">
             <div
               className={`w-[100%] ${
                 router.pathname === "/profile" ||

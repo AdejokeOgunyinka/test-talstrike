@@ -29,7 +29,9 @@ const Index = () => {
   );
 
   useEffect(() => {
-    if (
+    if (chosenSportFilters?.length === 0) {
+      setPositionFilterOptions(sports?.results[0]?.positions);
+    } else if (
       chosenSportFilters &&
       chosenSportFilters[0] !== "no filter" &&
       chosenSportFilters[0] !== ""
@@ -39,8 +41,6 @@ const Index = () => {
           (sport: any) => sport?.id === chosenSportFilters[0]
         )[0]?.positions
       );
-    } else {
-      setPositionFilterOptions(sports?.results[0]?.positions);
     }
   }, [sports, chosenSportFilters]);
 
