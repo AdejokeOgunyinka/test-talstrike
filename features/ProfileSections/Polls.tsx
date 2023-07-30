@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 
-import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetPollsByUserId, useVotePollChoice } from "@/api/profile";
 import { useEffect, useState } from "react";
 import PollRadioBtn from "@/components/PollRadioBtn";
@@ -12,6 +11,7 @@ import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import notify from "@/libs/toast";
 import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
 import SinglePollCard from "@/components/SinglePostTypeCards/SinglePollCard";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const MyPolls = () => {
   const { data: session } = useSession();
@@ -84,7 +84,11 @@ const MyPolls = () => {
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
-            <SkeletonLoader />
+            Array(2)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+              ))
           ) : userPolls?.pages?.flat(1)?.length === 0 ||
             !userPolls?.pages?.flat(1) ? (
             <p>No poll available at the moment...</p>

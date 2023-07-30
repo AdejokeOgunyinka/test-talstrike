@@ -8,8 +8,8 @@ import CreatePost from "@/components/ProfileModals/CreatePost";
 import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditPost from "@/components/ProfileModals/EditPost";
 import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
-import SkeletonLoader from "@/components/SkeletonLoader";
 import SinglePostCard from "@/components/SinglePostTypeCards/SinglePostCard";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const MyPosts = () => {
   const { data: session } = useSession();
@@ -98,7 +98,11 @@ const MyPosts = () => {
         <div className="w-full">
           <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
             {isLoadingUserPosts ? (
-              <SkeletonLoader />
+              Array(2)
+                ?.fill("")
+                ?.map((_, index) => (
+                  <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+                ))
             ) : userPosts?.pages?.flat(1)?.length === 0 ||
               !userPosts?.pages?.flat(1) ? (
               <p>No post available at the moment...</p>

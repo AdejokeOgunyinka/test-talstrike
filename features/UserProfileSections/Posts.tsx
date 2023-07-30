@@ -5,10 +5,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useInView } from "react-intersection-observer";
 
-import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetMyProfile, useGetPosts } from "@/api/profile";
 import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
 import SinglePostCard from "@/components/SinglePostTypeCards/SinglePostCard";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const MyPosts = () => {
   const { data: session } = useSession();
@@ -79,7 +79,11 @@ const MyPosts = () => {
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
-            <SkeletonLoader />
+            Array(2)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+              ))
           ) : userPosts?.pages?.flat(1)?.length === 0 ||
             !userPosts?.pages?.flat(1) ? (
             <p>No post available at the moment...</p>

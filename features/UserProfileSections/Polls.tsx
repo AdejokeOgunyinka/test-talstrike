@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-import SkeletonLoader from "@/components/SkeletonLoader";
 import { useGetMyProfile, useGetPollsByUserId } from "@/api/profile";
 import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
 import SinglePollCard from "@/components/SinglePostTypeCards/SinglePollCard";
+import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
 const MyPolls = () => {
   const { data: session } = useSession();
@@ -76,7 +76,11 @@ const MyPolls = () => {
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
-            <SkeletonLoader />
+            Array(2)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+              ))
           ) : userPolls?.pages?.flat(1)?.length === 0 ||
             !userPolls?.pages?.flat(1) ? (
             <p>No poll available at the moment...</p>

@@ -268,7 +268,9 @@ const Dashboard = () => {
               </div>
             </div>
             {isLoadingNewsFeed ? (
-              <LoadingPosts repeatLoader={2} />
+              Array(6)
+                ?.fill("")
+                ?.map((_, index) => <LoadingPosts key={index} />)
             ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
               <p className="bg-brand-1300 px-2 py-2 text-[14px]">
                 Sorry! You are unable to see any posts on your newsfeed, either
