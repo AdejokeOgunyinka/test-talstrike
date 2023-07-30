@@ -53,6 +53,8 @@ const Index = () => {
   const genderFilterOptions = ["no filter", "Male", "Female", "Other"];
   const [chosenGenderFilters, setChosenGenderFilters] = useState<string[]>([]);
 
+  const [searchValue, setSearchValue] = useState("");
+
   const {
     data: agentsData,
     isLoading: isLoadingAllAgents,
@@ -64,6 +66,7 @@ const Index = () => {
     location: chosenCountryFilters?.join(","),
     gender: chosenGenderFilters?.join(","),
     sport: chosenSportFilters?.join(","),
+    search: searchValue,
   });
 
   useEffect(() => {
@@ -80,7 +83,7 @@ const Index = () => {
           text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
         />
         <div className="-mt-[27px]">
-          <AgentsSearchBar>
+          <AgentsSearchBar onChangeSearchInput={setSearchValue}>
             <div className="w-full h-full flex flex-col md:flex-row gap-y-[13px] md:gap-x-[13px]">
               <AgentsDropdown
                 label="Sport"

@@ -7,23 +7,27 @@ export const useGetAllAgents = ({
   gender,
   location,
   sport,
+  search,
 }: {
   token: string;
   age?: string;
   location?: string;
   gender?: string;
   sport?: string;
+  search?: string;
 }) =>
   useInfiniteQuery(
-    ["getAllAgents", token, age, gender, location, sport],
+    ["getAllAgents", token, age, gender, location, sport, search],
     ({ pageParam = 1 }) =>
       axios
         .get(
           `/auth/users/profile?roles=AGENT${age ? `&age=${age}` : ""}${
             gender ? `&gender=${gender}` : ""
           }${location ? `&location=${location}` : ""}${
-            sport ? `&sport=${sport}` : ""
-          }${pageParam ? `&page=${pageParam}` : ""}`,
+            search ? `&search=${search}` : ""
+          }${sport ? `&sport=${sport}` : ""}${
+            pageParam ? `&page=${pageParam}` : ""
+          }`,
           {
             headers: { Authorization: "Bearer " + token },
           }

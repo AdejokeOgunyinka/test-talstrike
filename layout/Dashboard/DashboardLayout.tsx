@@ -39,14 +39,14 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
           <DashboardSidebar />
         </div>
         <div className="ml-[unset] md:ml-[178px] w-[100%] md:w-[calc(100%-178px)] relative md:static scrollbar-hidden">
-          <div className="bg-brand-500 z-[10] h-[70px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
+          <div className="bg-[#343D45] z-[10] h-[70px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
             <div className="w-[50%] lg:w-[475px] h-[100%]">
-              <SearchBar placeholder="Search" />
+              <SearchBar placeholder="Search" isLight />
             </div>
             <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">
               <p
                 onClick={() => setShowSignOutButton(!showSignOutButton)}
-                className="mr-[9px] cursor-pointer font-normal text-[11px] text-brand-90 lg:text-[14px] 2xl:text-[16px] leading-[16px]"
+                className="mr-[9px] cursor-pointer font-normal text-[11px] text-brand-500 lg:text-[14px] 2xl:text-[16px] leading-[16px]"
               >
                 {session?.user?.firstname} {session?.user?.lastname}
               </p>
@@ -57,7 +57,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                   setShowSignOutButton(!showSignOutButton);
                 }}
               >
-                <div className="rounded-[7px] overflow-hidden flex justify-center items-center cursor-pointer">
+                <div className="overflow-hidden flex justify-center items-center cursor-pointer">
                   <img
                     src={
                       userInfo?.profile?.user?.image !== null
@@ -66,6 +66,10 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                     }
                     alt="me"
                     className="object-cover w-[35px] h-[35px]"
+                    style={{
+                      borderRadius: "100%",
+                      border: "1px solid #D7EAFB",
+                    }}
                     onError={handleOnError}
                   />
                 </div>

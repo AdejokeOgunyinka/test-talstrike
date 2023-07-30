@@ -8,6 +8,7 @@ export const useGetAllTrainers = ({
   location,
   specialty,
   sport,
+  search,
 }: {
   token: string;
   age?: string;
@@ -15,19 +16,20 @@ export const useGetAllTrainers = ({
   gender?: string;
   specialty?: string;
   sport?: string;
+  search?: string;
 }) =>
   useInfiniteQuery(
-    ["getAllTrainers", token, age, gender, location, specialty, sport],
+    ["getAllTrainers", token, age, gender, location, specialty, sport, search],
     ({ pageParam = 1 }) =>
       axios
         .get(
           `/auth/users/profile?roles=TRAINER${age ? `&age=${age}` : ""}${
             gender ? `&gender=${gender}` : ""
-          }${location ? `&location=${location}` : ""}${
-            sport ? `&sport=${sport}` : ""
-          }${specialty ? `&specialty=${specialty}` : ""}${
-            pageParam ? `&page=${pageParam}` : ""
-          }`,
+          }${search ? `&search=${search}` : ""}${
+            location ? `&location=${location}` : ""
+          }${sport ? `&sport=${sport}` : ""}${
+            specialty ? `&specialty=${specialty}` : ""
+          }${pageParam ? `&page=${pageParam}` : ""}`,
           {
             headers: { Authorization: "Bearer " + token },
           }

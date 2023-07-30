@@ -164,7 +164,7 @@ const Dashboard = () => {
   }, [inView, hasNextPollsPage, fetchNextPollsPage]);
 
   return (
-    <div className="w-full min-h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
+    <div className="w-full h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
       {showCreatePostModal && (
         <CreatePost onClose={() => setShowCreatePostModal(false)} />
       )}
@@ -198,7 +198,7 @@ const Dashboard = () => {
         />
       ) : (
         <div className="w-full flex flex-col-reverse md:flex-row gap-x-[20px]">
-          <div className="basis-[60%] pb-[100px] md:pb-[unset]">
+          <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[unset]">
             <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
               <div className="flex items-center">
                 <div className="w-[40px] h-[40px] overflow-hidden">
@@ -342,7 +342,7 @@ const Dashboard = () => {
                 </div>
               )}
           </div>
-          <div className="basis-[40%] pb-[20px] md:pb-[100px] lg:pb-0">
+          <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] overflow-y-scroll pb-[50px]">
             {/* fixed right-[267px] w-[25%] overflow-y-scroll */}
             <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
               <img
