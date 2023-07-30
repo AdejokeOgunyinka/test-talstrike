@@ -8,6 +8,7 @@ export const useGetAllPlayers = ({
   location,
   sport,
   position,
+  search,
 }: {
   token: string;
   age?: string;
@@ -15,9 +16,10 @@ export const useGetAllPlayers = ({
   gender?: string;
   sport?: string;
   position?: string;
+  search?: string;
 }) =>
   useInfiniteQuery(
-    ["getAllPlayers", token, age, gender, location, sport, position],
+    ["getAllPlayers", token, age, gender, location, sport, position, search],
     ({ pageParam = 1 }) =>
       axios
         .get(
@@ -26,8 +28,8 @@ export const useGetAllPlayers = ({
           }${location ? `&location=${location}` : ""}${
             position ? `&position=${position}` : ""
           }${sport ? `&sport=${sport}` : ""}${
-            pageParam ? `&page=${pageParam}` : ""
-          }`,
+            search ? `&search=${search}` : ""
+          }${pageParam ? `&page=${pageParam}` : ""}`,
           {
             headers: { Authorization: "Bearer " + token },
           }

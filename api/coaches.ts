@@ -7,23 +7,27 @@ export const useGetAllCoaches = ({
   gender,
   location,
   sport,
+  search,
 }: {
   token: string;
   age?: string;
   location?: string;
   gender?: string;
   sport?: string;
+  search?: string;
 }) =>
   useInfiniteQuery(
-    ["getAllCoaches", token, age, gender, location, sport],
+    ["getAllCoaches", token, age, gender, location, sport, search],
     ({ pageParam = 1 }) =>
       axios
         .get(
           `/auth/users/profile?roles=COACH${age ? `&age=${age}` : ""}${
             gender ? `&gender=${gender}` : ""
           }${location ? `&location=${location}` : ""}${
-            sport ? `&sport=${sport}` : ""
-          }${pageParam ? `&page=${pageParam}` : ""}`,
+            search ? `&search=${search}` : ""
+          }${sport ? `&sport=${sport}` : ""}${
+            pageParam ? `&page=${pageParam}` : ""
+          }`,
           {
             headers: { Authorization: "Bearer " + token },
           }
