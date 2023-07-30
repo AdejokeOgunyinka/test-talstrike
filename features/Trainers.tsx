@@ -10,7 +10,7 @@ import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllTrainers } from "@/api/trainers";
 import { useGetSports } from "@/api/auth";
-import SkeletonLoader from "@/components/SkeletonLoader";
+// import SkeletonLoader from "@/components/SkeletonLoader";
 import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
 
 const Index = () => {
