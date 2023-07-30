@@ -4,6 +4,7 @@ import { useState } from "react";
 import ExploreSection from "./ExploreSection";
 import { useGetExploreForYou, useGetExploreTop } from "@/api/explore";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import LoadingExplore from "@/components/LoadingStates/loadingExplore";
 
 const Index = () => {
   const { data: exploreForMe, isLoading: isLoadingForMe } =
@@ -47,14 +48,13 @@ const Index = () => {
           ))}
         </div>
         {isLoadingForMe || isLoadingTop ? (
-          <SkeletonTheme
-            baseColor="rgba(0, 116, 217, 0.18)"
-            highlightColor="#fff"
-          >
-            <section>
-              <Skeleton height={550} width="100%" />
-            </section>
-          </SkeletonTheme>
+          <div className="w-full md:px-[31px] mt-[13px] md:mt-[53px] flex flex-wrap gap-[12px]">
+            {Array(4)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingExplore key={index} />
+              ))}
+          </div>
         ) : (
           exploreSections[currentSection - 1]?.component
         )}
