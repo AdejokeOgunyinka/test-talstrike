@@ -8,7 +8,7 @@ const LoadingMyFriends = ({ repeatLoader }: { repeatLoader: number }) => {
         ?.map((_, index) => (
           <div
             key={index}
-            className="flex w-full items-center gap-x-[22px] mb-[10px]"
+            className="flex w-full items-center gap-x-[22px] mb-[10px] rounded-[8px]"
           >
             <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
               <Skeleton

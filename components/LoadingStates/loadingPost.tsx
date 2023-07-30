@@ -8,7 +8,7 @@ const LoadingPosts = ({ repeatLoader }: { repeatLoader: number }) => {
         ?.map((_, index) => (
           <div
             key={index}
-            className="bg-brand-500 w-[100%] h-[383px] px-[37px] pt-[32px] pb-[43px] mb-[20px]"
+            className="bg-brand-500 w-[100%] h-[383px] px-[37px] pt-[32px] pb-[43px] mb-[20px] rounded-[8px]"
           >
             <div className="flex items-center gap-x-[10px] mb-[26px]">
               <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
