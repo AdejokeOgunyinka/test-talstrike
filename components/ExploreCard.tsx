@@ -61,7 +61,7 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
           ref={videoRef}
           id={`explore-video-${index}`}
           src={post?.media}
-          className="w-full h-full object-cover rounded-[4px] bg-brand-100"
+          className="w-full h-full object-cover md:rounded-[4px] bg-brand-100"
           onError={handleMediaPostError}
         />
 
