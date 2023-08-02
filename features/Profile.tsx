@@ -17,6 +17,7 @@ import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
 import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
 import { setProfile } from "@/store/slices/profileSlice";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
+import { useRouter } from "next/router";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("../features/ProfileSections/Posts"));
@@ -44,7 +45,7 @@ const Index = () => {
 
   const dispatch = useTypedDispatch();
 
-  const { data: userData } = useGetMyProfile({
+  const { data: userData, isLoading: isLoadingUserData } = useGetMyProfile({
     token: TOKEN as string,
     userId: USERID as string,
   });
@@ -59,12 +60,12 @@ const Index = () => {
   ];
 
   const profileSections = [
-    { title: "About Me" },
-    { title: "Posts" },
-    { title: "Openings" },
-    { title: "Polls" },
-    { title: "Announcements" },
-    { title: "Articles" },
+    { title: "About Me", href: "/profile" },
+    { title: "Posts", href: "/profile?name=posts" },
+    { title: "Openings", href: "/profile?name=openings" },
+    { title: "Polls", href: "/profile?name=polls" },
+    { title: "Announcements", href: "/profile?name=announcements" },
+    { title: "Articles", href: "/profile?name=articles" },
   ];
 
   const [currentSection, setCurrentSection] = useState(1);
@@ -74,9 +75,28 @@ const Index = () => {
   const [viewProfilePicture, setViewProfilePicture] = useState(false);
   const [viewEditProfilePicture, setViewEditProfilePicture] = useState(false);
 
+  const router = useRouter();
+  const value = router.query;
+
+  useEffect(() => {
+    if (value && value?.name) {
+      if (value?.name === "posts") {
+        setCurrentSection(2);
+      } else if (value?.name === "openings") {
+        setCurrentSection(3);
+      } else if (value?.name === "polls") {
+        setCurrentSection(4);
+      } else if (value?.name === "announcements") {
+        setCurrentSection(5);
+      } else {
+        setCurrentSection(6);
+      }
+    }
+  }, [value, value?.name]);
+
   return (
     <DashboardLayout>
-      {userInfo?.loading ? (
+      {isLoadingUserData ? (
         <div className="w-full flex justify-center items-center md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
           <PageLoader />
         </div>
@@ -192,9 +212,10 @@ const Index = () => {
             <div className="w-full lg:w-[calc(100%-274px)] pb-[100px]">
               <div className="flex z-[99] flex-wrap lg:flex-nowrap gap-y-[10px] w-full lg:w-[calc(100%-550px)] lg:-mt-[30px] backdrop-blur-[15px] pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:ml-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300">
                 {profileSections?.map((section, index) => (
-                  <div
+                  <a
+                    href={section?.href}
                     key={index}
-                    onClick={() => setCurrentSection(index + 1)}
+                    // onClick={() => setCurrentSection(index + 1)}
                     className={`border-t-0 border-[3px] border-x-0 z-[22] -mb-[3px] lg:-mb-[3px] ${
                       currentSection === index + 1
                         ? "border-b-brand-2250"
@@ -210,7 +231,7 @@ const Index = () => {
                     >
                       {section.title}
                     </h3>
-                  </div>
+                  </a>
                 ))}
               </div>
               <div className="lg:ml-[26px] pt-[28px]  lg:mt-[28px] xl:mt-0">

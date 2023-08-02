@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -33,12 +34,22 @@ const DashboardAside = () => {
   return (
     <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline h-[100%] lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
       <div className="sticky z-[99] bg-brand-500">
-        <div className="h-[40px] mb-[13px] mt-[100px]">
+        <div className="h-[40px] mb-[26px] mt-[100px]">
           <SearchBar placeholder="Search for players" />
         </div>
-        <h4 className="text-brand-90 text-[11px] lg:text-[14px] 2xl:text-[16px] leading-[16px] font-semibold mb-[12px]">
-          Coaches near me
-        </h4>
+        <div className="flex justify-between items-center mb-[12px]">
+          <h4 className="text-brand-90 text-[11px] lg:text-[14px] 2xl:text-[16px] leading-[16px] font-semibold">
+            Coaches near me
+          </h4>
+          <a
+            href="/coaches"
+            className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+          >
+            <p>VIEW ALL</p>
+            <img src="/arrow-forward.svg" alt="forward arrow" />
+          </a>
+        </div>
+
         <div className="flex gap-x-[14px]">
           {isLoadingCoaches ? (
             <div className="flex justify-between gap-x-[5px]">
@@ -89,13 +100,17 @@ const DashboardAside = () => {
               ))
           )}
         </div>
-        <div className="mt-[24px] mb-[12px] flex justify-between items-center">
+        <div className="mt-[27px] mb-[12px] flex justify-between items-center">
           <h4 className="text-brand-90 text-[11px] lg:text-[14px] 2xl:text-[16px] leading-[16px] font-semibold">
             My Friends
           </h4>
-          <h3 className="text-brand-50 text-[20px] font-semibold leading-[30px]">
-            ...
-          </h3>
+          <a
+            href="/players"
+            className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+          >
+            <p>VIEW ALL</p>
+            <img src="/arrow-forward.svg" alt="forward arrow" />
+          </a>
         </div>
       </div>
       <div className="flex bg-brand-500 flex-col gap-y-[14px] overflow-y-scroll h-[100%] pb-[230px]">

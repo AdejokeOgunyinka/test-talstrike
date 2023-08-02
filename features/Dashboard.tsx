@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -362,9 +363,10 @@ const Dashboard = () => {
                   </h4>
                   <a
                     href="/players"
-                    className="text-brand-400 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] font-normal cursor-pointer"
+                    className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
                   >
-                    See all
+                    <p>VIEW ALL</p>
+                    <img src="/arrow-forward.svg" alt="forward arrow" />
                   </a>
                 </div>
                 <div className="pt-[17px] w-[100%] px-[17px]">
@@ -425,11 +427,11 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="w-full flex justify-between gap-x-[18px]">
-                    <button className="basis-[50%] border border-brand-300 text-brand-200 rounded-[7px] h-[32px]">
+                    <button className="basis-[50%] border border-[#F8FAFB] text-[#343D45] text-[12px] rounded-[7px] h-[32px]">
                       Ignore
                     </button>
                     <button
-                      className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px]"
+                      className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px] text-[12px]"
                       onClick={() => {
                         followUser(
                           {
@@ -470,9 +472,13 @@ const Dashboard = () => {
                 <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
                   Talent openings
                 </h4>
-                <h4 className="font-semibold text-[20px] leading-[30px] text-brand-50">
-                  ...
-                </h4>
+                <Link
+                  href={{ pathname: "/profile", query: { name: "openings" } }}
+                  className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+                >
+                  <p>VIEW ALL</p>
+                  <img src="/arrow-forward.svg" alt="forward arrow" />
+                </Link>
               </div>
               <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
                 {TalentOpenings?.pages?.flat(1)?.length === 0 ? (
@@ -550,9 +556,16 @@ const Dashboard = () => {
                 <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
                   Announcements
                 </h4>
-                <h4 className="font-semibold text-[20px] leading-[30px] text-brand-50">
-                  ...
-                </h4>
+                <Link
+                  href={{
+                    pathname: "/profile",
+                    query: { name: "announcements" },
+                  }}
+                  className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+                >
+                  <p>VIEW ALL</p>
+                  <img src="/arrow-forward.svg" alt="forward arrow" />
+                </Link>
               </div>
               <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
                 {Announcements?.pages?.flat(1)?.length === 0 ? (
@@ -617,6 +630,90 @@ const Dashboard = () => {
                             <p className="text-[11px] lg:text-[12px] 2xl:text-[13px] ml-[3px] pt-[2px] text-brand-1050">
                               {announcement?.views?.total > 0
                                 ? `+${announcement?.views?.total - 3}`
+                                : ""}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </div>
+            </div>
+
+            <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
+                <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
+                  Polls
+                </h4>
+                <Link
+                  href={{ pathname: "/profile", query: { name: "polls" } }}
+                  className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+                >
+                  <p>VIEW ALL</p>
+                  <img src="/arrow-forward.svg" alt="forward arrow" />
+                </Link>
+              </div>
+              <div className="py-[17px] px-[16px] flex flex-col gap-y-[15px]">
+                {PollsData?.pages?.flat(1)?.length === 0 ? (
+                  <p>There are no polls yet..</p>
+                ) : isLoadingAnnouncements ? (
+                  <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
+                    <section>
+                      <Skeleton height={100} width="100%" />
+                    </section>
+                  </SkeletonTheme>
+                ) : (
+                  PollsData?.pages
+                    ?.flat(1)
+                    ?.slice(0, 2)
+                    .map((poll: any, index: number) => (
+                      <div
+                        className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                        key={index}
+                      >
+                        <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
+                          <img
+                            src={poll?.author?.image}
+                            alt="poll media"
+                            style={{
+                              overflow: "hidden",
+                              borderRadius: "100%",
+                              objectFit: "cover",
+                              width: "40px",
+                              height: "40px",
+                            }}
+                            onError={handleMediaPostError}
+                          />
+                          <div className="ml-[13px]">
+                            <p className="text-[11px] mb-[3px] leading-[16px] lg:text-[12px] 2xl:text-[13px] text-brand-50 font-semibold">
+                              {poll?.question_text}
+                            </p>
+                            <p className="text-[10px] leading-[15px] text-brand-50 font-normal">
+                              {poll?.body}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center pl-[15px] pt-[9px] relative">
+                          <p className="font-semibold text-brand-1350 text-[11px] lg:text-[12px] 2xl:text-[13px] leading-[16px]">
+                            {poll?.like_count} likes
+                          </p>
+
+                          <div className="absolute -top-[10px] flex right-[14px]">
+                            {poll.views?.icons
+                              ?.slice(0, 3)
+                              ?.map((icon: string, index: number) => (
+                                <div className="-ml-[7px]" key={index}>
+                                  <NextImage
+                                    src={icon}
+                                    alt="icons"
+                                    width="40"
+                                    height="40"
+                                  />
+                                </div>
+                              ))}
+                            <p className="text-[11px] lg:text-[12px] 2xl:text-[13px] ml-[3px] pt-[2px] text-brand-1050">
+                              {poll?.views?.total > 0
+                                ? `+${poll?.views?.total - 3}`
                                 : ""}
                             </p>
                           </div>
