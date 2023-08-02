@@ -281,7 +281,7 @@ const AboutMe = () => {
           </h3>
           <p className="mb-[14px] text-brand-50 text-[12px] font-normal leading-[18px]">
             {achievements?.pages?.flat(1)?.length === 0 ? (
-              <p>No achievement yet..</p>
+              <p>No achievement has been added yet..</p>
             ) : (
               achievements?.pages
                 ?.flat(1)
@@ -330,7 +330,7 @@ const AboutMe = () => {
           <div className="flex gap-x-[12px] w-full flex-wrap">
             {userProfile?.teams?.length === 0 || userProfile?.teams === null ? (
               <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
-                No team yet..
+                No team has been added yet...
               </p>
             ) : (
               userProfile?.teams?.map((item: any, index: number) => (
@@ -349,7 +349,7 @@ const AboutMe = () => {
             Special Abilities
           </h3>
           <div className="flex gap-x-[12px]">
-            {userProfile?.abilities ? (
+            {userProfile?.abilities && userProfile?.abilities?.length > 0 ? (
               userProfile?.abilities?.map((item: any, index: number) => (
                 <div
                   key={index}
@@ -359,7 +359,9 @@ const AboutMe = () => {
                 </div>
               ))
             ) : (
-              <p className="text-[11px] text-brand-600">Unavailable</p>
+              <p className="text-[11px] text-brand-600">
+                No special ability has been added yet
+              </p>
             )}
           </div>
         </div>
@@ -368,7 +370,7 @@ const AboutMe = () => {
             Skills
           </h3>
           <div className="flex gap-x-[12px]">
-            {userProfile?.skills ? (
+            {userProfile?.skills && userProfile?.skills?.length > 0 ? (
               userProfile?.skills?.map((item: any, index: number) => (
                 <div
                   key={index}
@@ -378,7 +380,9 @@ const AboutMe = () => {
                 </div>
               ))
             ) : (
-              <p className="text-[11px] text-brand-600">Unavailable</p>
+              <p className="text-[11px] text-brand-600">
+                No skill has been added yet
+              </p>
             )}
           </div>
         </div>
@@ -387,7 +391,7 @@ const AboutMe = () => {
             Training Courses
           </h3>
           <div className="flex gap-x-[12px] gap-y-[12px] flex-wrap">
-            {userProfile?.trainings ? (
+            {userProfile?.trainings && userProfile?.trainings?.length > 0 ? (
               [...userProfile?.trainings]?.map((item, index) => (
                 <div
                   key={index}
@@ -397,7 +401,9 @@ const AboutMe = () => {
                 </div>
               ))
             ) : (
-              <p className="text-[11px] text-brand-600">Unavailable</p>
+              <p className="text-[11px] text-brand-600">
+                No training course has been added yet
+              </p>
             )}
           </div>
         </div>

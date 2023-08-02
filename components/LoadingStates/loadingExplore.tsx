@@ -3,7 +3,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 const LoadingExplore = () => {
   return (
     <div className="bg-brand-500 flex relative h-[391px] px-[37px] pt-[32px] pb-[43px] mb-[20px] rounded-[8px] w-full md:w-[45%]">
-      <div className="absolute bottom-0 w-full">
+      <div className="absolute bottom-0">
         <div className="w-full mb-[21px]">
           <SkeletonTheme baseColor="#D7DEE1" highlightColor="#fff">
             <Skeleton
