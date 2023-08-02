@@ -75,21 +75,21 @@ const SignupBanner = ({ providers }: { providers: any }) => {
   return (
     <>
       {currScreen === "" && (
-        <div className="pt-[65px] relative w-full h-full flex flex-col items-center xl:px-[140px] px-[20px]">
+        <div className="pt-[25px] md:pt-[65px] relative w-full h-full flex flex-col items-center xl:px-[140px] px-[20px]">
           <h3 className="mb-[30px] text-brand-1650 font-semibold text-[24px] leading-[36px]">
             Get Started
           </h3>
-          <p className="mb-[93px] text-[18px] text-[#94AEC5] font-medium leading-[132.5%]">
+          <p className="mb-[33px] xl:mb-[93px] text-[14px] md:text-[18px] text-[#94AEC5] text-center md:text-start font-medium leading-[132.5%]">
             Anyone can strike, you too can!
           </p>
-          <h5 className="mb-[40px] text-brand-600 text-[20px] font-bold">
+          <h5 className="mb-[40px] text-brand-600 text-[15px] md:text-[20px] text-center md:text-start font-bold">
             Create and set up your account in 3 easy steps
           </h5>
-          <div className="h-[42px] mb-[60px] flex items-center">
+          <div className="h-[42px] mb-[30px] md:mb-[60px] flex items-center">
             {setupInstructions?.map((setup, index) => (
               <React.Fragment key={index}>
                 <div
-                  className="flex py-[10px] h-[58px] md:h-[unset] px-[15px] md:px-[30.5px] rounded-[100px] text-[14px] leading-[21px]"
+                  className="flex py-[10px] max-h-[58px] md:max-h-[unset] px-[15px] md:px-[30.5px] rounded-[100px] text-center text-[12px] md:text-[14px] leading-[21px]"
                   style={{
                     background: index === activeIndex ? "#003D72" : "unset",
                     border: "1.3px solid #003D72",
@@ -106,26 +106,28 @@ const SignupBanner = ({ providers }: { providers: any }) => {
           </div>
           <p
             style={{ transform: "rotate(0.01deg)" }}
-            className="text-brand-600 text-center text-[16px] leading-[27px] font-medium mb-[50px]"
+            className="text-brand-600 text-center text-[13px] md:text-[16px] leading-[20px] md:leading-[27px] font-medium"
           >
             {setupInstructions[activeIndex]?.description}
           </p>
-          <div className="flex gap-[13px]">
-            <a
-              href="/"
-              className="w-[135px] flex items-center justify-center h-[40px] border-[1.5px] rounded-[4px] border-brand-1650 text-brand-1650 text-[14px] font-medium"
-            >
-              Back
-            </a>
-            <button
-              onClick={() => setCurrScreen("signup")}
-              className="w-[135px] h-[40px] bg-brand-600 text-brand-500 rounded-[4px] text-[14px] font-medium"
-            >
-              Continue
-            </button>
-          </div>
-          <div className="absolute bottom-[62px]">
-            <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px]">
+
+          <div className="absolute bottom-[20px] md:bottom-[32px] lg:bottom-[62px]">
+            <div className="flex gap-[13px] mb-[15px] md:mb-[30px] xl:mb-[40%]">
+              <a
+                href="/"
+                className="w-[135px] flex items-center justify-center h-[40px] border-[1.5px] rounded-[4px] border-brand-1650 text-brand-1650 text-[14px] font-medium"
+              >
+                Back
+              </a>
+              <button
+                onClick={() => setCurrScreen("signup")}
+                className="w-[135px] h-[40px] bg-brand-600 text-brand-500 rounded-[4px] text-[14px] font-medium"
+              >
+                Continue
+              </button>
+            </div>
+
+            <p className="text-[#94AEC5] text-[14px]  font-medium leading-[21px] text-center">
               Already have an account?{" "}
               <a href="/auth/login" className="text-[#003D72] underline">
                 Login
