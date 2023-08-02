@@ -8,7 +8,7 @@ import SearchBar from "@/components/SearchBar";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
 import { useTypedSelector } from "@/hooks/hooks";
-import ProfileImg from "@/assets/profileIcon.svg";
+// import ProfileImg from "@/assets/profileIcon.svg";
 import { handleOnError, isActivePath } from "@/libs/utils";
 import { MobileSideBarLink } from "./DashboardSidebar";
 
@@ -81,7 +81,8 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             <div
               className={`w-[100%] ${
                 router.pathname === "/profile" ||
-                router.pathname === "/profile/[id]"
+                router.pathname === "/profile/[id]" ||
+                router.pathname === "/profile/section/[section]"
                   ? "md:w-[calc(100%-23px)]"
                   : "lg:w-[calc(100%-267px)]"
               } h-[100%] scrollbar-hidden`}
@@ -89,7 +90,8 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               {children}
             </div>
             {router.pathname !== "/profile" &&
-              router.pathname !== "/profile/[id]" && (
+              router.pathname !== "/profile/[id]" &&
+              router.pathname !== "/profile/section/[section]" && (
                 <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden">
                   <DashboardAside />
                 </aside>
