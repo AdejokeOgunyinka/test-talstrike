@@ -36,26 +36,22 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
     teams: yup
       .array()
       .of(yup.string().required("Teams cannot be empty"))
-      .required("*Teams is required")
-      .min(1, "Minimum of 1 team is required")
+      .optional()
       .max(5, "Maximum of 5 teams are expected"),
     abilities: yup
       .array()
       .of(yup.string().required("Ability cannot be empty"))
-      .required("*Abilities is required")
-      .min(1, "Minimum of 1 ability is required")
+      .optional()
       .max(5, "Maximum of 5 abilities are expected"),
     skills: yup
       .array()
       .of(yup.string().required("Skill cannot be empty"))
-      .required("*Skills are required")
-      .min(1, "Minimum of 1 skill is required")
+      .optional()
       .max(5, "maximum of 5 skills are expected"),
     trainings: yup
       .array()
       .of(yup.string().required("Training cannot be empty"))
       .optional()
-      .min(1, "Minimum of 1 training is required")
       .max(5, "maximum of 5 trainings are expected"),
   });
 
