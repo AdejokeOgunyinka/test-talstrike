@@ -75,7 +75,7 @@ const Index = ({ providers }: { providers: any }) => {
   };
 
   return (
-    <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[112px] xl:px-[140px] px-[20px]">
+    <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[112px] lg:px-[70px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
         <div className="text-[24px] leading-[145%] text-brand-1650 font-semibold text-center mb-[31px]">
           Welcome Back, please Login
@@ -148,7 +148,7 @@ const Index = ({ providers }: { providers: any }) => {
               )}
             </button>
           </div>
-          <div className="mt-[44px] w-full">
+          <div className="mt-[45px] w-full">
             <p className="text-center text-[#94AEC5] text-[14px] mb-[24px]">
               Or login with
             </p>
@@ -172,16 +172,15 @@ const Index = ({ providers }: { providers: any }) => {
               />
             </div>
           </div>
-          <div className="relative md:absolute md:bottom-[62px] w-full">
+          <div className="pb-[62px] mt-[88px] w-full">
             <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
               {"If you don’t have an account, "}
               <a href="/auth/signup" className="text-[#003D72] underline">
                 Sign up
               </a>
             </p>
-          </div>
-          <div className="relative md:absolute md:bottom-[34px] w-full">
-            <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
+
+            <p className="text-[#94AEC5] text-[14px] mt-[18px] font-medium leading-[21px] text-center">
               {"Forgotten password? "}
               <a
                 href="/auth/reset_password"

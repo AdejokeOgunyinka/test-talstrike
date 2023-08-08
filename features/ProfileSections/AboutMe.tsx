@@ -4,6 +4,7 @@ import NextImage from "next/image";
 
 import { useTypedSelector } from "@/hooks/hooks";
 import { useGetAchievements, useGetAppearances } from "@/api/profile";
+import { useGetAllHashtags } from "@/api/dashboard";
 
 const AboutMe = ({
   onClickEditProfile,
@@ -18,7 +19,6 @@ const AboutMe = ({
 
   const { userInfo } = useTypedSelector((state) => state.profile);
 
-  // const trainingCourses = ['Daily fitness', 'Webinar', 'How to score hat tricks'];
   const socialProfiles = [
     { name: "facebook", link: "#", icon: "/fbIcon.svg" },
     { name: "twitter", link: "#", icon: "/twIcon.svg" },
@@ -34,6 +34,21 @@ const AboutMe = ({
   const { data: appearances } = useGetAppearances({
     token: TOKEN as string,
     userId: USER_ID as string,
+  });
+
+  const { data: hashtags } = useGetAllHashtags(TOKEN as string);
+  const dropdownOfHashtags = hashtags?.results?.map((hashtag: any) => {
+    return {
+      value: hashtag?.id,
+      label: hashtag?.hashtag,
+    };
+  });
+
+  const interestValues = userInfo?.profile?.interests?.map((val: any) => {
+    const interestValue = dropdownOfHashtags?.filter(
+      (innerVal: any) => innerVal?.value === val
+    )[0]?.label;
+    return interestValue;
   });
 
   return (
@@ -137,12 +152,12 @@ const AboutMe = ({
                 No likes added yet...
               </p>
             ) : (
-              userInfo?.profile?.interests?.map((item, index) => (
+              interestValues?.map((item, index) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"
                 >
-                  #{item}
+                  {item}
                 </div>
               ))
             )}
@@ -263,9 +278,9 @@ const AboutMe = ({
                 ))
             )}
 
-            <a className="font-semibold cursor-pointer" href="/achievements">
+            {/* <a className="font-semibold cursor-pointer" href="/achievements">
               VIEW ALL
-            </a>
+            </a> */}
           </p>
         </div>
         <div className="mt-[30px]">

@@ -75,7 +75,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
   return (
     <>
       {currScreen === "" && (
-        <div className="pt-[25px] md:pt-[65px] relative w-full h-full flex flex-col items-center xl:px-[140px] px-[20px]">
+        <div className="pt-[25px] md:pt-[65px]  relative w-full h-full flex flex-col items-center lg:px-[70px] xl:px-[140px] px-[20px]">
           <h3 className="mb-[30px] text-brand-1650 font-semibold text-[24px] leading-[36px]">
             Get Started
           </h3>
@@ -111,8 +111,8 @@ const SignupBanner = ({ providers }: { providers: any }) => {
             {setupInstructions[activeIndex]?.description}
           </p>
 
-          <div className="absolute bottom-[20px] md:bottom-[32px] lg:bottom-[62px]">
-            <div className="flex gap-[13px] mb-[15px] md:mb-[30px] xl:mb-[40%]">
+          <div className="w-full mt-[80px] xl:mt-[166px] pb-[20px] md:pb-[65px]">
+            <div className="w-full justify-center flex gap-[13px] mb-[15px]">
               <a
                 href="/"
                 className="w-[135px] flex items-center justify-center h-[40px] border-[1.5px] rounded-[4px] border-brand-1650 text-brand-1650 text-[14px] font-medium"
