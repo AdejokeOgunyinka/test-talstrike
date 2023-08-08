@@ -1,16 +1,18 @@
 import NextImage from "next/image";
-import { FieldArray, FormikProvider, useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { FieldArray, FormikProvider, useFormik } from "formik";
 import { useQueryClient } from "@tanstack/react-query";
 import { Country, State, City } from "country-state-city";
+import BeatLoader from "react-spinners/BeatLoader";
+import CreatableSelect from "react-select/creatable";
 
 import ModalContainer from "@/components/Modal";
 import InputBox, { TextBox } from "./InputBox";
 import { useTypedSelector } from "@/hooks/hooks";
 import { updateUserProfile } from "@/api/auth";
 import notify from "@/libs/toast";
-import BeatLoader from "react-spinners/BeatLoader";
-import { useSession } from "next-auth/react";
+import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -42,6 +44,8 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
   });
 
   const [phoneCode, setPhoneCode] = useState("+234");
+
+  const [value, setValue] = useState<any>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -77,7 +81,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
       const data = {
         phone_number: values.phone_number,
-        interests: values.likes,
+        interests: value?.map((val: any) => val?.value),
         // date_of_birth: `${values.year}-${monthOfBirth[values.month]}-${values.day}`,
         biography: values.biography,
         years_of_experience: values.years_of_experience,
@@ -176,9 +180,55 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
   }, [chosenCountryCode, chosenStateCode]);
 
   const [updatingProfile, setUpdatingProfile] = useState(false);
+
+  const { data: hashtags } = useGetAllHashtags(TOKEN as string);
+  const dropdownOfHashtags = hashtags?.results?.map((hashtag: any) => {
+    return {
+      value: hashtag?.id,
+      label: hashtag?.hashtag,
+    };
+  });
+
+  const { mutate: createHashtag, isLoading: isCreatingHashtag } =
+    useCreateHashtag();
+
+  useEffect(() => {
+    const initialInterests = userInfo
+      ? userInfo?.profile?.interests?.map((val) => {
+          const hashtagValue = dropdownOfHashtags?.filter(
+            (innerVal: { value: string; label: string }) =>
+              innerVal?.value === val
+          )[0]?.label;
+          return {
+            label: hashtagValue,
+            value: val,
+          };
+        })
+      : [];
+
+    setValue(initialInterests);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (value) {
+      formik?.setFieldValue("interests", value);
+    }
+    // eslint-disable-next-line
+  }, [value]);
   const queryClient = useQueryClient();
 
-  const [likeInput, setLikeInput] = useState("");
+  const handleCreate = (inputValue: string) => {
+    createHashtag(
+      {
+        body: {
+          hashtag: inputValue[0] !== "#" ? `#${inputValue}` : inputValue,
+        },
+        token: TOKEN as string,
+      },
+      { onSuccess: () => queryClient.invalidateQueries(["getAllHashtags"]) }
+    );
+  };
 
   return (
     <ModalContainer>
@@ -289,7 +339,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 name="likes"
                 render={(arrayHelpers) => (
                   <div>
-                    <div className="flex gap-[15px]">
+                    {/* <div className="flex gap-[15px]">
                       <input
                         placeholder={`Enter a maximum of 5 topics that are interesting to you`}
                         className="w-[100%] h-[46px] border-2 border-brand-2850 pl-[10px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
@@ -307,9 +357,23 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                       >
                         Add Interest
                       </button>
-                    </div>
+                    </div> */}
 
-                    {formik.values.likes && formik.values.likes?.length > 0 && (
+                    <CreatableSelect
+                      isClearable
+                      isMulti
+                      isDisabled={isCreatingHashtag}
+                      isLoading={isCreatingHashtag}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      onCreateOption={handleCreate}
+                      options={dropdownOfHashtags}
+                      value={value}
+                      className="special-creatable"
+                    />
+
+                    {/* {formik.values.likes && formik.values.likes?.length > 0 && (
                       <div className="bg-brand-2900 mt-[8px] flex flex-wrap py-[25px] px-[28px] gap-[10px] rounded-[4px]">
                         {formik.values.likes?.map((like, index) => (
                           <div
@@ -331,7 +395,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                           </div>
                         ))}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 )}
               />

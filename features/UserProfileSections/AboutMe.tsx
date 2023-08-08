@@ -2,7 +2,6 @@ import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
 
-// import { useTypedSelector } from "@/hooks/hooks";
 import {
   useGetAchievements,
   useGetAppearances,
@@ -12,14 +11,11 @@ import { useFollowUser } from "@/api/players";
 import { useQueryClient } from "@tanstack/react-query";
 import notify from "@/libs/toast";
 import { BeatLoader } from "react-spinners";
+import { useGetAllHashtags } from "@/api/dashboard";
 
 const AboutMe = () => {
   const { data: session } = useSession();
-  // const trainingCourses = [
-  //   "Daily fitness",
-  //   "Webinar",
-  //   "How to score hat tricks",
-  // ];
+
   const socialProfiles = [
     { name: "facebook", link: "#", icon: "/fbIcon.svg" },
     { name: "twitter", link: "#", icon: "/twIcon.svg" },
@@ -49,6 +45,21 @@ const AboutMe = () => {
 
   const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
   const queryClient = useQueryClient();
+
+  const { data: hashtags } = useGetAllHashtags(TOKEN as string);
+  const dropdownOfHashtags = hashtags?.results?.map((hashtag: any) => {
+    return {
+      value: hashtag?.id,
+      label: hashtag?.hashtag,
+    };
+  });
+
+  const interestValues = userProfile?.interests?.map((val: any) => {
+    const interestValue = dropdownOfHashtags?.filter(
+      (innerVal: any) => innerVal?.value === val
+    )[0]?.label;
+    return interestValue;
+  });
 
   return (
     <div className="mt-[28px]">
@@ -177,7 +188,7 @@ const AboutMe = () => {
                 No likes added yet...
               </p>
             ) : (
-              userProfile?.interests?.map((item: any, index: number) => (
+              interestValues?.map((item: any, index: number) => (
                 <div
                   key={index}
                   className="px-[11px] py-[10px] bg-brand-2300 text-[12px] rounded-[4px] text-brand-600 border-[1.2px] border-solid border-brand-2350 flex justify-center items-center"

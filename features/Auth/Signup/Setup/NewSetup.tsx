@@ -1,6 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
+import { BeatLoader } from "react-spinners";
+import CreatableSelect from "react-select/creatable";
 import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
 import { City, Country, State } from "country-state-city";
@@ -18,30 +22,30 @@ import AgentIcon from "@/assets/agentIcon.svg";
 import AgentHoverIcon from "@/assets/agentHoverIcon.svg";
 import AgentActiveIcon from "@/assets/agentActiveIcon.svg";
 import Dropdown, { Inputbox } from "@/components/NewSelectDropdown";
+import { Option } from "@/components/ProfileModals/CreatePost";
 import { SetupIndicator } from "@/features/Auth/Signup/SignupIndicators";
-import { updateUserInfo, updateUserProfile, useGetSports } from "@/api/auth";
 import { getYears } from "@/libs/utils";
 import notify from "@/libs/toast";
-import { useRouter } from "next/router";
-import { BeatLoader } from "react-spinners";
-import { signOut, useSession } from "next-auth/react";
+import { updateUserInfo, updateUserProfile, useGetSports } from "@/api/auth";
+import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Index = ({ providers }: any) => {
   const session = useSession();
   const router = useRouter();
 
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState<any>("");
   const [userId, setUserId] = useState("");
   const localToken = localStorage?.getItem("verificationToken");
 
   useEffect(() => {
-    if (session) {
+    if (session?.data === null) {
+      setToken(localToken);
+    } else if (session) {
       setToken(session?.data?.user?.access as string);
       setUserId(session?.data?.user?.id as string);
-    } else {
-      setToken(localToken as string);
     }
-  }, [session]);
+  }, [session, localToken]);
 
   const specialties = [
     {
@@ -306,12 +310,37 @@ const Index = ({ providers }: any) => {
 
   const [skillInput, setSkillInput] = useState("");
 
+  const { data: hashtags } = useGetAllHashtags(token as string);
+  const dropdownOfHashtags = hashtags?.results?.map((hashtag: any) => {
+    return {
+      value: hashtag?.id,
+      label: hashtag?.hashtag,
+    };
+  });
+
+  const { mutate: createHashtag, isLoading: isCreatingHashtag } =
+    useCreateHashtag();
+
+  const [value, setValue] = useState<readonly Option[]>([]);
+  const queryClient = useQueryClient();
+
+  const handleCreate = (inputValue: string) => {
+    createHashtag(
+      {
+        body: {
+          hashtag: inputValue[0] !== "#" ? `#${inputValue}` : inputValue,
+        },
+        token: token as string,
+      },
+      { onSuccess: () => queryClient.invalidateQueries(["getAllHashtags"]) }
+    );
+  };
+
   const step9Validation = yup.object().shape({
     interests: yup
       .array()
       .of(yup.string().required("Interest cannot be empty"))
-      .required("*Interests are required")
-      .min(1, "Minimum of 1 interest is required")
+      .optional()
       .max(5, "maximum of 5 interests are expected"),
   });
 
@@ -324,7 +353,16 @@ const Index = ({ providers }: any) => {
       setSubstep(substep + 1);
     },
   });
-  const [interestInput, setInterestInput] = useState("");
+
+  useEffect(() => {
+    if (value) {
+      step9Formik?.setFieldValue(
+        "interests",
+        value?.map((val) => val?.value)
+      );
+    }
+    // eslint-disable-next-line
+  }, [value]);
 
   const step10Validation = yup.object().shape({
     career_goals: yup
@@ -950,7 +988,7 @@ const Index = ({ providers }: any) => {
                         name="interests"
                         render={(arrayHelpers: any) => (
                           <div className="flex flex-col items-center">
-                            <div className="flex align-center w-[90%] md:w-[60%]">
+                            {/* <div className="flex align-center w-[90%] md:w-[60%]">
                               <Inputbox
                                 placeholder="Add up to 5 major interests"
                                 type="text"
@@ -972,9 +1010,23 @@ const Index = ({ providers }: any) => {
                               >
                                 Add
                               </button>
-                            </div>
+                            </div> */}
 
-                            {step9Formik.values.interests &&
+                            <CreatableSelect
+                              isClearable
+                              isMulti
+                              isDisabled={isCreatingHashtag}
+                              isLoading={isCreatingHashtag}
+                              onChange={(newValue) => {
+                                setValue(newValue);
+                              }}
+                              onCreateOption={handleCreate}
+                              options={dropdownOfHashtags}
+                              value={value}
+                              className="special-creatable"
+                            />
+
+                            {/* {step9Formik.values.interests &&
                               step9Formik.values.interests.length > 0 && (
                                 <div className="mt-[13px] flex flex-wrap gap-[10px] rounded-[4px] w-[90%] md:w-[60%]">
                                   {step9Formik.values.interests?.map(
@@ -987,7 +1039,7 @@ const Index = ({ providers }: any) => {
                                           className="text-[14px] text-brand-1800"
                                           id={`interests.${index}`}
                                         >
-                                          {interest}
+                                          {interest?.label}
                                         </p>
                                         <div
                                           className="text-[16px] ml-[9px] cursor-pointer"
@@ -1006,7 +1058,7 @@ const Index = ({ providers }: any) => {
                                     )
                                   )}
                                 </div>
-                              )}
+                              )} */}
                           </div>
                         )}
                       />
@@ -1051,7 +1103,7 @@ const Index = ({ providers }: any) => {
                                 className="w-[49px] h-[44px] bg-brand-600 text-brand-500 rounded-tr-[4px] rounded-br-[4px] disabled:bg-[#E3E2E2]"
                                 onClick={() => {
                                   arrayHelpers.push(goalInput);
-                                  setInterestInput("");
+                                  setGoalInput("");
                                 }}
                                 disabled={goalInput === ""}
                               >
