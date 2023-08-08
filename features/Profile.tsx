@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { DashboardLayout } from "@/layout/Dashboard";
 import Star from "@/assets/star.svg";
+import People from "@/assets/people.svg";
 import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import EditProfile from "@/components/ProfileModals/EditProfile";
@@ -129,11 +130,20 @@ const Index = () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-[69px] mb-[37px] h-[30px] bg-brand-1100 rounded-[19px] flex justify-center items-center">
-                  <NextImage src={Star} alt="star" />
-                  <p className="ml-[5px] font-semibold text-[15px] leading-[22px] text-brand-500">
-                    4.3
-                  </p>
+                <div className="px-[19px] mb-[37px] h-[43px] bg-brand-1100 gap-x-[10px] rounded-[19px] flex justify-center items-center">
+                  <div className="flex">
+                    <NextImage src={Star} alt="star" />
+                    <p className="ml-[5px] font-semibold text-[15px] leading-[22px] text-brand-500">
+                      4.3
+                    </p>
+                  </div>{" "}
+                  <p className="text-brand-500">|</p>
+                  <div className="flex">
+                    <NextImage src={People} alt="people" />
+                    <p className="ml-[5px] font-semibold text-[15px] leading-[22px] text-brand-500">
+                      4.3M
+                    </p>
+                  </div>
                 </div>
                 <div className="flex gap-x-[14px] mb-[26px]">
                   {profileIcons.map((icon, index) => (
@@ -150,11 +160,15 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
-                <p className="text-brand-50 text-[14px] font-semibold leading-[21px] mb-[7px]">
-                  {userInfo?.profile?.years_of_experience || 1} year(s)
+                <p className="text-[#0074D9] text-[14px] font-semibold leading-[21px] mb-[7px]">
+                  {userInfo?.profile?.years_of_experience || 1} year
+                  {userInfo?.profile?.years_of_experience &&
+                  userInfo?.profile?.years_of_experience > 1
+                    ? "s "
+                    : " "}
                   Experience
                 </p>
-                <p className="text-brand-2400 mb-[29px] opacity-50 text-[11px] lg:text-[13px] font-semibold">
+                <p className="text-[#00B127] mb-[29px] opacity-50 text-[11px] lg:text-[13px] font-semibold">
                   online
                 </p>
                 <div

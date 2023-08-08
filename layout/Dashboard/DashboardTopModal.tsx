@@ -47,12 +47,14 @@ const DashboardTopBarModal = () => {
           onError={handleOnError}
         />
       </div>
-      <h3 className="font-medium text-brand-1800 text-[16px] leading-[24px]">
-        {session?.user?.firstname} {session?.user?.lastname}
-      </h3>
-      <p className="text-brand-2000 text-[11px] font-normal mb-[17px]">
-        {session?.user?.email}
-      </p>
+      <div className="w-full text-center inline-block px-[20px]">
+        <h3 className="font-medium break-all whitespace-pre-wrap text-brand-1800 text-[16px] leading-[24px]">
+          {session?.user?.firstname} {session?.user?.lastname}
+        </h3>
+        <p className="text-brand-2000 break-all whitespace-pre-wrap text-[11px] font-normal mb-[17px]">
+          {session?.user?.email}
+        </p>
+      </div>
       <a
         href="/profile"
         className="w-[102px] flex justify-center items-center bg-brand-2050 rounded-[19px] h-[29px] text-brand-600 mb-[21px] text-[10px] font-semibold"
