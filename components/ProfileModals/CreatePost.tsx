@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NextImage from "next/image";
+import CreatableSelect from "react-select/creatable";
 import { useSession } from "next-auth/react";
 import { ErrorMessage, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
@@ -14,14 +15,25 @@ import { useTypedSelector } from "@/hooks/hooks";
 import { TextBox } from "./InputBox";
 import ChooseMedia from "./ChooseMedia";
 import notify from "@/libs/toast";
-import { useCreatePost } from "@/api/dashboard";
+import {
+  useCreateHashtag,
+  useCreatePost,
+  useGetAllHashtags,
+} from "@/api/dashboard";
 import { handleOnError } from "@/libs/utils";
 
 const Image = styled.img``;
 
+export interface Option {
+  readonly label: string;
+  readonly value: string;
+}
+
 const CreatePost = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
   const { userInfo } = useTypedSelector((state) => state.profile);
+
+  const TOKEN = session?.user?.access;
 
   const [selectedMedia, setSelectedMedia] = useState<any>(null);
   const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
@@ -29,17 +41,45 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
   const [fileType, setFileType] = useState("NIL");
 
   const createPostValidationSchema = yup.object().shape({
-    description: yup.string().optional(),
+    description: yup.string().required("Description is required"),
+    // hashtags: yup
+    //   .array(yup.string())
+    //   .min(1, "Please select atleast one hashtag")
+    //   .required("Hashtags are required"),
   });
-
-  const TOKEN = session?.user?.access;
 
   const { mutate: createPost, isLoading: isCreatingPost } = useCreatePost();
   const queryClient = useQueryClient();
 
+  const { data: hashtags } = useGetAllHashtags(TOKEN as string);
+  const dropdownOfHashtags = hashtags?.results?.map((hashtag: any) => {
+    return {
+      value: hashtag?.id,
+      label: hashtag?.hashtag,
+    };
+  });
+
+  // const { mutate: createHashtag, isLoading: isCreatingHashtag } =
+  //   useCreateHashtag();
+
+  // const [value, setValue] = useState<readonly Option[]>([]);
+
+  // const handleCreate = (inputValue: string) => {
+  //   createHashtag(
+  //     {
+  //       body: {
+  //         hashtag: inputValue[0] !== "#" ? `#${inputValue}` : inputValue,
+  //       },
+  //       token: TOKEN as string,
+  //     },
+  //     { onSuccess: () => queryClient.invalidateQueries(["getAllHashtags"]) }
+  //   );
+  // };
+
   const formik = useFormik({
     initialValues: {
       description: "",
+      // hashtags: [],
     },
     validationSchema: createPostValidationSchema,
     onSubmit: (values) => {
@@ -60,6 +100,8 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
       for (let key in initialBody) {
         body.append(key, initialBody[key]);
       }
+
+      // body.append("hashtags", JSON.stringify(values.hashtags));
 
       createPost(
         { token: TOKEN as string, body },
@@ -83,6 +125,16 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
       );
     },
   });
+
+  // useEffect(() => {
+  //   if (value) {
+  //     formik?.setFieldValue(
+  //       "hashtags",
+  //       value?.map((val: any) => val?.value)
+  //     );
+  //   }
+  //   // eslint-disable-next-line
+  // }, [value]);
 
   return (
     <ModalContainer>
@@ -151,7 +203,35 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                       withoutBorder
                     />
                   </div>
+                  <ErrorMessage
+                    name="description"
+                    component="p"
+                    className="text-brand-warning text-[12px] pb-[12px]"
+                  />
                 </div>
+
+                {/* <div className="w-full">
+                  <h2 className="text-[16px] text-brand-600 font-semibold mb-[7px]">
+                    Add Hashtags
+                  </h2>
+
+                  <CreatableSelect
+                    isClearable
+                    isMulti
+                    isDisabled={isCreatingHashtag}
+                    isLoading={isCreatingHashtag}
+                    onChange={(newValue) => setValue(newValue)}
+                    onCreateOption={handleCreate}
+                    options={dropdownOfHashtags}
+                    value={value}
+                  />
+
+                  <ErrorMessage
+                    name="hashtags"
+                    component="p"
+                    className="text-brand-warning text-[12px]"
+                  />
+                </div> */}
 
                 <ErrorMessage
                   name="media"
@@ -159,7 +239,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                   className="text-brand-warning text-[12px]"
                 />
                 {selectedMediaUrl && (
-                  <div className="mt-[15px] w-[50%] h-[300px]">
+                  <div className="mt-[15px] w-[50%] h-[240px] pb-[80px]">
                     {fileType?.toLowerCase() === "image" ? (
                       <Image src={selectedMediaUrl} alt="media" />
                     ) : (
