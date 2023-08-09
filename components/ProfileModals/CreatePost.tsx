@@ -42,10 +42,10 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
 
   const createPostValidationSchema = yup.object().shape({
     description: yup.string().required("Description is required"),
-    // hashtags: yup
-    //   .array(yup.string())
-    //   .min(1, "Please select atleast one hashtag")
-    //   .required("Hashtags are required"),
+    hashtags: yup
+      .array(yup.string())
+      .min(1, "Please select atleast one hashtag")
+      .required("Hashtags are required"),
   });
 
   const { mutate: createPost, isLoading: isCreatingPost } = useCreatePost();
@@ -59,27 +59,27 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
     };
   });
 
-  // const { mutate: createHashtag, isLoading: isCreatingHashtag } =
-  //   useCreateHashtag();
+  const { mutate: createHashtag, isLoading: isCreatingHashtag } =
+    useCreateHashtag();
 
-  // const [value, setValue] = useState<readonly Option[]>([]);
+  const [value, setValue] = useState<readonly Option[]>([]);
 
-  // const handleCreate = (inputValue: string) => {
-  //   createHashtag(
-  //     {
-  //       body: {
-  //         hashtag: inputValue[0] !== "#" ? `#${inputValue}` : inputValue,
-  //       },
-  //       token: TOKEN as string,
-  //     },
-  //     { onSuccess: () => queryClient.invalidateQueries(["getAllHashtags"]) }
-  //   );
-  // };
+  const handleCreate = (inputValue: string) => {
+    createHashtag(
+      {
+        body: {
+          hashtag: inputValue[0] !== "#" ? `#${inputValue}` : inputValue,
+        },
+        token: TOKEN as string,
+      },
+      { onSuccess: () => queryClient.invalidateQueries(["getAllHashtags"]) }
+    );
+  };
 
   const formik = useFormik({
     initialValues: {
       description: "",
-      // hashtags: [],
+      hashtags: [],
     },
     validationSchema: createPostValidationSchema,
     onSubmit: (values) => {
@@ -101,7 +101,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
         body.append(key, initialBody[key]);
       }
 
-      // body.append("hashtags", JSON.stringify(values.hashtags));
+      body.append("hashtags", JSON.stringify(values.hashtags));
 
       createPost(
         { token: TOKEN as string, body },
@@ -126,15 +126,15 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
     },
   });
 
-  // useEffect(() => {
-  //   if (value) {
-  //     formik?.setFieldValue(
-  //       "hashtags",
-  //       value?.map((val: any) => val?.value)
-  //     );
-  //   }
-  //   // eslint-disable-next-line
-  // }, [value]);
+  useEffect(() => {
+    if (value) {
+      formik?.setFieldValue(
+        "hashtags",
+        value?.map((val: any) => val?.value)
+      );
+    }
+    // eslint-disable-next-line
+  }, [value]);
 
   return (
     <ModalContainer>
@@ -210,7 +210,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                   />
                 </div>
 
-                {/* <div className="w-full">
+                <div className="w-full">
                   <h2 className="text-[16px] text-brand-600 font-semibold mb-[7px]">
                     Add Hashtags
                   </h2>
@@ -231,7 +231,7 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                     component="p"
                     className="text-brand-warning text-[12px]"
                   />
-                </div> */}
+                </div>
 
                 <ErrorMessage
                   name="media"
