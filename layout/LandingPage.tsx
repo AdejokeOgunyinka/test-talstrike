@@ -65,7 +65,7 @@ const LandingPageLayout = () => {
   return (
     <div className="w-full h-screen flex justify-center">
       <div className="w-full 2xl:w-[85vw] relative h-screen 2xl:h-[85vh] flex 2xl:mx-auto 2xl:my-auto 2xl:rounded-[29px] overflow-hidden">
-        <div className="absolute top-[50px] md:top-[144px] w-full flex justify-center z-[999]">
+        <div className="absolute top-[50px] md:top-[80px] xl:top-[144px] w-full flex justify-center z-[999]">
           <NextImage
             src="/white-logo.svg"
             alt="white logo"
