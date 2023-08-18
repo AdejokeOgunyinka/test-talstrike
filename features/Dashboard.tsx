@@ -380,12 +380,16 @@ const Dashboard = () => {
                             width: "40px",
                             height: "40px",
                             objectFit: "cover",
+                            borderRadius: "100%",
                           }}
                           onError={handleOnError}
                         />
                       )}
                     </div>
-                    <div>
+                    <a
+                      href={`/profile/${SuggestedFollows?.data[0]?.id}`}
+                      className="cursor-pointer"
+                    >
                       <p className="text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-50">
                         {SuggestedFollows?.data[0]?.firstname}{" "}
                         {SuggestedFollows?.data[0]?.lastname}
@@ -393,7 +397,7 @@ const Dashboard = () => {
                       <p className="text-[10px] lg:text-[12px] 2xl:text-[14px] text-brand-1200 leading-[15px]">
                         {SuggestedFollows?.data[0]?.roles[0]}
                       </p>
-                    </div>
+                    </a>
                   </div>
                   <div className="w-[100%] mt-[3px] mb-[18px] flex justify-end">
                     <div className="flex gap-x-[19px]">
