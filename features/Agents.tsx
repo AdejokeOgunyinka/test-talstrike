@@ -10,7 +10,6 @@ import ProfileCard from "@/components/ProfileCard";
 import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllAgents } from "@/api/agents";
 import { useGetSports } from "@/api/auth";
-// import SkeletonLoader from "@/components/SkeletonLoader";
 import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
 
 const Index = () => {
@@ -135,27 +134,35 @@ const Index = () => {
             </div>
           </AgentsSearchBar>
         </div>
-        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] px-[5%] md:px-[2.5%] lg:px-[5%]">
-          {isLoadingAllAgents
-            ? Array(6)
-                ?.fill("")
-                ?.map((_, index) => <LoadingProfileCards key={index} />)
-            : agentsData?.pages?.flat(1)?.map((agent: any, index: number) => (
-                <div key={index} className="w-full md:w-[unset]">
-                  <ProfileCard
-                    id={agent?.user?.id}
-                    img={agent.user?.image}
-                    skillsArray={agent.interests || []}
-                    name={`${agent.user?.firstname} ${agent.user?.lastname}`}
-                    isPlayer={agent.isPlayer}
-                    rating={agent.rating || "1.6"}
-                    location={agent.location?.join(", ") || "N/A"}
-                    experience={agent.years_of_experience}
-                    appearances={agent.appearances || 0}
-                    friend={agent?.is_following}
-                  />
-                </div>
-              ))}
+        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start gap-y-[25px] px-[5%] md:px-[2.5%] 2xl:px-[5%]">
+          {isLoadingAllAgents ? (
+            Array(6)
+              ?.fill("")
+              ?.map((_, index) => <LoadingProfileCards key={index} />)
+          ) : agentsData?.pages?.flat(1)?.length === 0 ? (
+            <div className="w-full h-[60vh] flex justify-center items-center">
+              <p className="text-[#343D45] font-medium text-[18px]">
+                No agent found! Try and search for something else
+              </p>
+            </div>
+          ) : (
+            agentsData?.pages?.flat(1)?.map((agent: any, index: number) => (
+              <div key={index} className="w-full md:w-[unset]">
+                <ProfileCard
+                  id={agent?.user?.id}
+                  img={agent.user?.image}
+                  skillsArray={agent.interests || []}
+                  name={`${agent.user?.firstname} ${agent.user?.lastname}`}
+                  isPlayer={agent.isPlayer}
+                  rating={agent.rating || "1.6"}
+                  location={agent.location?.join(", ") || "N/A"}
+                  experience={agent.years_of_experience}
+                  appearances={agent.appearances || 0}
+                  friend={agent?.is_following}
+                />
+              </div>
+            ))
+          )}
         </div>
 
         {!isLoadingAllAgents && hasNextPage && (

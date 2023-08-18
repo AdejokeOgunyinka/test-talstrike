@@ -28,7 +28,7 @@ const ActiveIcons: Record<string, string> = {
   Messages: "/messagesActiveIcon.svg",
   Explore: "/exploreActiveIcon.svg",
   Agents: "/agentsActiveIcon.svg",
-  Trophies: "/trophyActive.svg",
+  Awards: "/trophyActive.svg",
 };
 
 const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
@@ -49,7 +49,7 @@ const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
         className="h-5 w-5"
       />
       <span
-        className={`font-normal ml-[19px] text-[13px] lg:text-[14px] 2xl:text-[16px] leading-[16px] ${
+        className={`font-medium ml-[11px] text-[13px] lg:text-[14px] 2xl:text-[16px] leading-[16px] ${
           active ? "text-brand-1750" : "text-brand-2150"
         }`}
       >
@@ -146,6 +146,14 @@ export const DashboardSidebar = () => {
             Icon={"/newsFeedInactive.svg"}
             title="Feed"
           />
+
+          <SideBarLink
+            path="/explore"
+            active={isActivePath("/explore", router.pathname)}
+            Icon={"/exploreInactiveIcon.svg"}
+            title="Explore"
+          />
+
           <SideBarLink
             path="/players"
             active={isActivePath("/players", router.pathname)}
@@ -184,25 +192,13 @@ export const DashboardSidebar = () => {
             Icon={"/profileInactiveIcon.svg"}
             title="Profile"
           />
-          <SideBarLink
-            path="/explore"
-            active={isActivePath("/explore", router.pathname)}
-            Icon={"/exploreInactiveIcon.svg"}
-            title="Explore"
-          />
+
           <SideBarLink
             path="/achievements"
             active={isActivePath("/achievements", router.pathname)}
             Icon="/trophyInactive.svg"
-            title="Trophies"
+            title="Awards"
           />
-          {/* <NewSideBarLink
-            path="/players"
-            active={isActivePath('/players', router.pathname)}
-            Icon={'/playersInactiveIcon.svg'}
-            title="Players"
-            onClick={() => router.push('/players')}
-          /> */}
         </nav>
       </div>
     </Fragment>
