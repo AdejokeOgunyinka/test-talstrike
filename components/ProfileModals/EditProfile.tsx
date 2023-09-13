@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { useQueryClient } from "@tanstack/react-query";
 import { Country, State, City } from "country-state-city";
+import PhoneInput from "react-phone-number-input";
 import BeatLoader from "react-spinners/BeatLoader";
 import CreatableSelect from "react-select/creatable";
 
@@ -13,6 +14,8 @@ import { useTypedSelector } from "@/hooks/hooks";
 import { updateUserProfile } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
+
+import "react-phone-number-input/style.css";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -42,6 +45,8 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       phoneCode: country?.phonecode,
     };
   });
+
+  console.log({ countries });
 
   const [phoneCode, setPhoneCode] = useState("+234");
 
@@ -82,7 +87,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       const data = {
         phone_number: values.phone_number,
         interests: value?.map((val: any) => val?.value),
-        // date_of_birth: `${values.year}-${monthOfBirth[values.month]}-${values.day}`,
         biography: values.biography,
         years_of_experience: values.years_of_experience,
         location: [values.country, values.state, values.city],
@@ -303,16 +307,13 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
               <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
                 Phone number *
               </label>
-              <div className="flex">
-                <input
-                  placeholder="phone number"
-                  className="w-full h-[46px] border-2 border-brand-1850  pl-[10px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
-                  id="phone_number"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.phone_number}
-                />
-              </div>
+
+              <PhoneInput
+                value={formik.values.phone_number}
+                onChange={(e) => formik.setFieldValue("phone_number", e)}
+                onBlur={formik.handleBlur}
+                className="w-full h-[46px] border-2 border-brand-1850 focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
+              />
 
               <TextBox
                 id="biography"
