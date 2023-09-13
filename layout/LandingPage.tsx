@@ -61,10 +61,15 @@ const LandingPageLayout = () => {
     };
   }, [activeIndex, slideShowImages.length]);
   return (
-    <Flex w="full" h="100vh" justify="center">
+    <Flex
+      w="full"
+      minH="100vh"
+      justify="center"
+      bg="linear-gradient(180deg, rgba(0, 0, 0, 0.00) 13.86%, rgba(0, 0, 0, 0.90) 79.09%), url(<path-to-image>), lightgray 50% / cover no-repeat"
+    >
       <Box
         w={{ base: "full", "2xl": "85vw" }}
-        h={{ base: "full", "2xl": "85vh" }}
+        minH={{ base: "full", "2xl": "85vh" }}
         mx={{ "2xl": "auto" }}
         my={{ "2xl": "auto" }}
         borderRadius={{ "2xl": "29px" }}
@@ -91,7 +96,7 @@ const LandingPageLayout = () => {
           transitionDelay="100ms"
           transitionDuration="1000ms"
           w="full"
-          h="full"
+          h="100vh"
           style={{ transform: `translate3d(${-activeIndex * 100}%, 0, 0)` }}
         >
           {slideShowImages.map((val, index) => (
@@ -114,10 +119,9 @@ const LandingPageLayout = () => {
 
         <Flex
           position="absolute"
-          top={{ base: "157px", xl: "182px" }}
+          top={{ base: "157px", xl: "299px" }}
           w="full"
           px={{ base: "29px", lg: "unset" }}
-          h="full"
           direction="column"
         >
           <Text
@@ -182,25 +186,20 @@ const LandingPageLayout = () => {
               Reserved.
             </Text> */}
           </Flex>
-        </Flex>
-        <Flex
-          mx="auto"
-          position="absolute"
-          bottom={{ base: "50px", md: "85px" }}
-          w="full"
-          justify="center"
-        >
-          {slideShowImages.map((_, index) => (
-            <div
-              key={index}
-              className={`inline-block h-[12.23px] w-[12.23px] border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
-                activeIndex === index
-                  ? "bg-brand-1100  border-brand-1100"
-                  : "border-brand-500 bg-unset"
-              }`}
-              onClick={() => setActiveIndex(index)}
-            ></div>
-          ))}
+
+          <Flex mt={{ base: "50px", md: "85px" }} w="full" justify="center">
+            {slideShowImages.map((_, index) => (
+              <div
+                key={index}
+                className={`inline-block h-[12.23px] w-[12.23px] border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
+                  activeIndex === index
+                    ? "bg-brand-1100  border-brand-1100"
+                    : "border-brand-500 bg-unset"
+                }`}
+                onClick={() => setActiveIndex(index)}
+              ></div>
+            ))}
+          </Flex>
         </Flex>
       </Box>
     </Flex>
