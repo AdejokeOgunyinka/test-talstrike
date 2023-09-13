@@ -181,3 +181,22 @@ span:has(.ad-img), span:has(.post-img), .span:has(.profile-img) {
   border-width: 2px !important;
   border-color: #D5D5D5 !important;
 }
+
+.PhoneInputCountry {
+  background-color: #0074D9;
+  margin-right: 0px !important;
+}
+
+.PhoneInputCountrySelectArrow {
+  border-color: #fff;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.PhoneInputInput {
+  border-color: transparent !important;
+}
+
+.PhoneInputCountryIcon {
+  margin-left: 10px
+}

@@ -157,7 +157,7 @@ export const DashboardSidebar = () => {
                     }
                   />
                   <Text
-                    fontSize="13px"
+                    fontSize="14px"
                     fontWeight="500"
                     color={
                       isActivePath("/players", router.pathname) ||

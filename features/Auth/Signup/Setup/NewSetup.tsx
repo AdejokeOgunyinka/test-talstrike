@@ -8,6 +8,7 @@ import CreatableSelect from "react-select/creatable";
 import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
 import { City, Country, State } from "country-state-city";
+import PhoneInput from "react-phone-number-input";
 
 import CoachIcon from "@/assets/coachIcon.svg";
 import CoachHoverIcon from "@/assets/coachHoverIcon.svg";
@@ -770,12 +771,13 @@ const Index = ({ providers }: any) => {
                     <form onSubmit={step5Formik.handleSubmit}>
                       <div className="w-full flex justify-center">
                         <div className="w-[60%]">
-                          <Inputbox
-                            placeholder="Enter your Phone number..."
-                            type="text"
-                            name="phone_number"
+                          <PhoneInput
                             value={step5Formik.values.phone_number}
-                            onChange={step5Formik.handleChange}
+                            onChange={(e) =>
+                              step5Formik.setFieldValue("phone_number", e)
+                            }
+                            onBlur={step5Formik.handleBlur}
+                            className="w-full h-[44px] border-[1.5px] border-brand-600"
                           />
                         </div>
                       </div>
@@ -1023,7 +1025,7 @@ const Index = ({ providers }: any) => {
                               onCreateOption={handleCreate}
                               options={dropdownOfHashtags}
                               value={value}
-                              className="special-creatable"
+                              className="special-creatable w-[70%]"
                             />
 
                             {/* {step9Formik.values.interests &&
