@@ -7,7 +7,6 @@ import * as yup from "yup";
 import Cropper from "react-easy-crop";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-hot-toast";
 
 import ModalContainer from "@/components/Modal";
 import InputBox from "@/components/ProfileModals/InputBox";
@@ -210,7 +209,7 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
             onClose();
           },
           onError: (err: any) => {
-            toast(err?.message);
+            notify(err?.message);
           },
         }
       );

@@ -1,8 +1,9 @@
 import type { AppProps } from "next/app";
 
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { Provider } from "react-redux";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 import { useRouter } from "next/router";
 import { SessionProvider } from "next-auth/react";
 import { persistStore } from "redux-persist";
@@ -13,13 +14,15 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import store from "../store";
 import PageLoader from "@/components/Loader";
 
+import { theme } from "../styles/baseTheme";
+
 import "react-multi-carousel/lib/styles.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
+import "react-toastify/dist/ReactToastify.css";
+
 import "@/styles/globals.css";
 import "@/styles/styles.css";
-import "@/styles/custom-datepicker.css";
-import "@/styles/conference.css";
 import "@/styles/authlayout.css";
 
 export default function App({
@@ -29,13 +32,20 @@ export default function App({
   const route = useRouter();
   let persistor = persistStore(store);
 
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+      },
+    },
+  });
 
   return (
     <SessionProvider session={session} refetchInterval={0}>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          <Toaster position="top-right" containerClassName="toaster" />
+          <ToastContainer />
+
           <PersistGate
             persistor={persistor}
             loading={
@@ -51,7 +61,9 @@ export default function App({
                 </div>
               }
             >
-              <Component key={route.asPath} {...pageProps} />
+              <ChakraProvider theme={theme}>
+                <Component key={route.asPath} {...pageProps} />
+              </ChakraProvider>
             </Suspense>
           </PersistGate>
         </Provider>

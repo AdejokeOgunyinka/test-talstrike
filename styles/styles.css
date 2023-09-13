@@ -120,10 +120,6 @@ body, #__next  {
   z-index: 22;
 }
 
-.toaster {
-  z-index: 99999;
-}
-
 .progress-bar {
   height: 4px;
   background-color: #94AEC5;

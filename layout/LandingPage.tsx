@@ -1,7 +1,5 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from "react";
-import NextImage from "next/image";
+import { Box, Flex, Image, Text, Button, Link } from "@chakra-ui/react";
 
 const LandingPageLayout = () => {
   const slideShowImages = [
@@ -63,22 +61,46 @@ const LandingPageLayout = () => {
     };
   }, [activeIndex, slideShowImages.length]);
   return (
-    <div className="w-full h-screen flex justify-center">
-      <div className="w-full 2xl:w-[85vw] relative h-screen 2xl:h-[85vh] flex 2xl:mx-auto 2xl:my-auto 2xl:rounded-[29px] overflow-hidden">
-        <div className="absolute top-[50px] md:top-[80px] xl:top-[144px] w-full flex justify-center z-[999]">
-          <NextImage
+    <Flex
+      w="full"
+      minH="100vh"
+      justify="center"
+      bg="linear-gradient(180deg, rgba(0, 0, 0, 0.00) 13.86%, rgba(0, 0, 0, 0.90) 79.09%), url(<path-to-image>), lightgray 50% / cover no-repeat"
+    >
+      <Box
+        w={{ base: "full", "2xl": "85vw" }}
+        minH={{ base: "full", "2xl": "85vh" }}
+        mx={{ "2xl": "auto" }}
+        my={{ "2xl": "auto" }}
+        borderRadius={{ "2xl": "29px" }}
+        overflow="hidden"
+      >
+        <Flex
+          justify="center"
+          zIndex="999"
+          position="absolute"
+          top={{ base: "58px", xl: "144px" }}
+          w="full"
+        >
+          <Image
             src="/white-logo.svg"
             alt="white logo"
-            width="231"
-            height="90"
+            width={{ base: "171px", md: "281px" }}
+            height={{ base: "67px", md: "90px" }}
           />
-        </div>
-        <div
-          className="whitespace-nowrap transition ease-in-out delay-100 duration-1000 w-full h-full"
+        </Flex>
+
+        <Box
+          whiteSpace="nowrap"
+          transition="ease-in-out"
+          transitionDelay="100ms"
+          transitionDuration="1000ms"
+          w="full"
+          h="100vh"
           style={{ transform: `translate3d(${-activeIndex * 100}%, 0, 0)` }}
         >
           {slideShowImages.map((val, index) => (
-            <div key={index} className="slideshow-img w-full h-full">
+            <Box key={index} w="full" h="full" className="slideshow-img">
               <div
                 style={{
                   objectFit: "cover",
@@ -91,50 +113,96 @@ const LandingPageLayout = () => {
                 }}
                 className="w-full h-full"
               />
-            </div>
+            </Box>
           ))}
-        </div>
-        <div className="absolute top-[0px] w-full px-[20px] lg:px-unset h-full flex flex-col justify-center items-center">
-          <h4 className="text-brand-500 text-[20px] text-center md:text-start lg:text-[36px] font-semibold mb-[24px] leading-[25px] md:leading-[54px]">
+        </Box>
+
+        <Flex
+          position="absolute"
+          top={{ base: "157px", xl: "299px" }}
+          w="full"
+          px={{ base: "29px", lg: "unset" }}
+          direction="column"
+        >
+          <Text
+            color="primary-white-3"
+            textAlign="center"
+            fontSize="36px"
+            fontWeight="600"
+            lineHeight="normal"
+            mb={{ base: "30px", md: "24px" }}
+          >
             {slideShowImages[activeIndex].sloganHeader}
-          </h4>
-          <p className="text-brand-500 text-[14px] text-center md:text-start break-words lg:text-[20px] font-medium leading-[166%]">
+          </Text>
+
+          <Text
+            color="primary-white-3"
+            textAlign="center"
+            wordBreak="break-word"
+            fontWeight="500"
+            lineHeight="166%"
+          >
             {slideShowImages[activeIndex].sloganText}
-          </p>
-          <div className="mt-[60px] w-full flex flex-col items-center z-[999]">
-            <div className="w-full flex justify-center gap-[13px]">
-              <a href="/auth/login">
-                <button className="w-[141px] h-[40px] text-brand-500 text-[14px] border-[1.5px] border-brand-500 rounded-[4px] ">
+          </Text>
+
+          <Flex mt="60px" direction="column" align="center" w="full">
+            <Flex justify="center" gap="13px" w="full">
+              <Link href="/auth/login">
+                <Button
+                  w="141px"
+                  h="40px"
+                  color="primary-white-3"
+                  fontSize="14px"
+                  fontWeight="500"
+                  border="1.5px solid #fff"
+                  bg="transparent"
+                  borderRadius="4px"
+                >
                   Login
-                </button>
-              </a>
-              <a href="/auth/signup">
-                <button className="w-[141px] h-[40px] text-brand-500 text-[14px] rounded-[4px] bg-brand-600">
+                </Button>
+              </Link>
+
+              <Link href="/auth/signup">
+                <Button
+                  w="141px"
+                  h="40px"
+                  color="primary-white-3"
+                  fontSize="14px"
+                  fontWeight="500"
+                  bg="light-blue"
+                  borderRadius="4px"
+                >
                   Get Started
-                </button>
-              </a>
-            </div>
-            {/* <p className="mt-[30px] text-brand-500 text-[12px] md:text-[14px]">
-            © {new Date().getFullYear()} Talstrike Technologies. All Rights
-            Reserved.
-          </p> */}
-          </div>
-        </div>
-        <div className="mx-auto absolute bottom-[85px] w-full flex justify-center">
-          {slideShowImages.map((_, index) => (
-            <div
-              key={index}
-              className={`inline-block h-[12.23px] w-[12.23px] border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
-                activeIndex === index
-                  ? "bg-brand-1100  border-brand-1100"
-                  : "border-brand-500 bg-unset"
-              }`}
-              onClick={() => setActiveIndex(index)}
-            ></div>
-          ))}
-        </div>
-      </div>
-    </div>
+                </Button>
+              </Link>
+            </Flex>
+
+            {/* <Text
+              mt="30px"
+              color="primary-white-3"
+              fontSize={{ base: "12px", md: "14px" }}
+            >
+              © {new Date().getFullYear()} Talstrike Technologies. All Rights
+              Reserved.
+            </Text> */}
+          </Flex>
+
+          <Flex mt={{ base: "50px", md: "85px" }} w="full" justify="center">
+            {slideShowImages.map((_, index) => (
+              <div
+                key={index}
+                className={`inline-block h-[12.23px] w-[12.23px] border-[1.3px] rounded-[50%] cursor-pointer mt-[15px] mr-[7px] ml-[7px] mb-[0px] ${
+                  activeIndex === index
+                    ? "bg-brand-1100  border-brand-1100"
+                    : "border-brand-500 bg-unset"
+                }`}
+                onClick={() => setActiveIndex(index)}
+              ></div>
+            ))}
+          </Flex>
+        </Flex>
+      </Box>
+    </Flex>
   );
 };
 

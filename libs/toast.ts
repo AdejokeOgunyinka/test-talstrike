@@ -1,4 +1,4 @@
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const notify = ({ type, text }: { type: string; text: any }) => {
   switch (type) {
