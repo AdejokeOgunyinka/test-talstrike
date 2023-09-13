@@ -13,6 +13,9 @@ export const theme = extendTheme({
   colors: {
     "primary-white-3": "#fff",
     "light-blue": "#0074D9",
+    "dark-blue": "#003D72",
+    "grey-1": "#93A3B1",
+    "bg-grey": "#F8FAFB",
   },
   fonts: {
     heading: `Degular Display, ${baseTheme.fonts?.heading}`,

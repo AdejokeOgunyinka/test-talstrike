@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { Box, Image } from "@chakra-ui/react";
 
 import { DashboardSidebar, MobileMenu } from "./DashboardSidebar";
 import SearchBar from "@/components/SearchBar";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
 import { useTypedSelector } from "@/hooks/hooks";
-// import ProfileImg from "@/assets/profileIcon.svg";
 import { handleOnError, isActivePath } from "@/libs/utils";
 import { MobileSideBarLink } from "./DashboardSidebar";
 
@@ -35,13 +35,37 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
   return (
     <div className="w-full min-h-screen lg:flex lg:justify-center">
       <div className="w-full 2xl:w-[70vw] 2xl:h-[85vh] h-[100%] relative flex 2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-brand-500">
-        <div className="w-[178px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] bg-brand-500 2xl:h-[85vh] fixed">
+        <Box
+          className="w-[178px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed"
+          borderRight="1px solid #93A3B1"
+          bg="bg-grey"
+        >
           <DashboardSidebar />
-        </div>
+        </Box>
         <div className="ml-[unset] md:ml-[178px] w-[100%] md:w-[calc(100%-178px)] relative md:static scrollbar-hidden">
           <div className="bg-[#343D45] z-[10] h-[70px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
-            <div className="w-[50%] lg:w-[475px] h-[100%]">
-              <SearchBar placeholder="Search" isLight />
+            <div
+              className={`w-[50%] lg:w-[350px] h-[100%] flex items-center ${
+                router.pathname === "/dashboard" && "ml-[15px]"
+              }`}
+            >
+              {router.pathname !== "/dashboard" && (
+                <Image
+                  width={{ base: "15px", md: "25px" }}
+                  height={{ base: "15px", md: "25px" }}
+                  src="/arrowBack.svg"
+                  alt="back"
+                  mr={{ base: "10px", md: "55px" }}
+                  onClick={() => router.back()}
+                  cursor="pointer"
+                />
+              )}
+              <SearchBar
+                placeholder="Search"
+                isLight
+                isLeftIcon
+                hasRoundedCorners
+              />
             </div>
             <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">
               <p
