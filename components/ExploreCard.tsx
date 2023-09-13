@@ -163,7 +163,7 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
           <img
             src={"/playIcon2.svg"}
             alt="playIcon 2"
-            className="cursor-pointer z-[999]"
+            className="cursor-pointer z-[44]"
             onClick={() => setShowMoreAboutVideo(true)}
           />
         </div>

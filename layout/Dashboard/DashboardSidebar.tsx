@@ -2,14 +2,22 @@
 /* eslint-disable no-unused-vars */
 import { Fragment, useState } from "react";
 import NextImage from "next/image";
-// import Link from "next/link";
+import {
+  Link,
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+  Flex,
+  Image,
+  AccordionButton,
+  AccordionIcon,
+  Text,
+  Box,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import clsx from "clsx";
-import styled from "styled-components";
 
 import DashboardLogo from "@/assets/TalstrikeLogo.svg";
-
-const Image = styled.img``;
 
 type SideBarLinkProps = {
   path: string;
@@ -33,11 +41,13 @@ const ActiveIcons: Record<string, string> = {
 
 const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
   return (
-    // <Link href={path}>
-    <a
+    <Link
+      textDecoration="none !important"
+      textDecorationLine={"none"}
       href={path}
+      color={active ? "dark-blue" : "light-blue"}
       className={clsx(
-        "flex items-center transition mb-[17px] py-[9px] w-[133px]  duration-200 text-brand-100",
+        "flex items-center transition mb-[17px] py-[9px] w-[133px]  duration-200",
         active
           ? "pl-[23px] border-3 border-l-brand-1750 border-r-transparent border-y-transparent"
           : "pl-[25px] hover:pl-[22px] hover:py-[6px] hover:border-3 hover:border-l-brand-1750 border-r-transparent border-y-transparent"
@@ -48,43 +58,15 @@ const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
         alt="dashboard icons"
         className="h-5 w-5"
       />
-      <span
+      <Text
+        textDecoration={"none !important"}
         className={`font-medium ml-[11px] text-[13px] lg:text-[14px] 2xl:text-[16px] leading-[16px] ${
           active ? "text-brand-1750" : "text-brand-2150"
         }`}
       >
         {title}
-      </span>
-    </a>
-    // </Link>
-  );
-};
-
-const NewSideBarLink = ({ active, Icon, title, onClick }: SideBarLinkProps) => {
-  return (
-    <p onClick={onClick} className="cursor-pointer">
-      <p
-        className={clsx(
-          "flex items-center transition mb-[17px] py-[9px] w-[133px]  duration-200 text-brand-100",
-          active
-            ? "pl-[23px] border-3 border-l-brand-1750 border-r-transparent border-y-transparent"
-            : "pl-[25px] hover:border-3 hover:border-l-brand-1750 border-r-transparent border-y-transparent"
-        )}
-      >
-        <Image
-          src={active ? ActiveIcons[title as string] : Icon}
-          alt="dashboard icons"
-          className="h-5 w-5"
-        />
-        <span
-          className={`font-normal ml-[19px] text-[13px] lg:text-[14px] 2xl:text-[16px] leading-[16px] ${
-            active ? "text-brand-1750" : "text-brand-2150"
-          }`}
-        >
-          {title}
-        </span>
-      </p>
-    </p>
+      </Text>
+    </Link>
   );
 };
 
@@ -96,10 +78,12 @@ export const MobileSideBarLink = ({
   onClick,
 }: SideBarLinkProps) => {
   return (
-    // <Link >
-    <a
+    <Link
       href={path}
+      textDecoration="none !important"
+      textDecorationLine={"none"}
       onClick={onClick}
+      display="flex"
       className={clsx(
         "flex flex-col justify-center items-center transition px-[14px] w-[100px] h-[100%]  duration-200 text-brand-100",
         active
@@ -112,15 +96,15 @@ export const MobileSideBarLink = ({
         alt="dashboard icons"
         className="h-5 w-5"
       />
-      <span
+      <Text
+        textDecoration={"none !important"}
         className={`font-normal text-[10px] mt-[7px] lg:text-[14px] 2xl:text-[16px] leading-[16px]  ${
           active ? "text-brand-1750" : "text-brand-2150"
         }`}
       >
         {title}
-      </span>
-    </a>
-    // </Link>
+      </Text>
+    </Link>
   );
 };
 
@@ -133,8 +117,11 @@ export const DashboardSidebar = () => {
 
   return (
     <Fragment>
-      <div className="bg-brand-500  absolute md:relative md:translate-x-0 transform -translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-y-0 left-0">
-        <div className="mt-[37px] mb-[28px] pl-[20px] pr-[20px]">
+      <Box
+        bg="bg-grey"
+        className="absolute md:relative md:translate-x-0 transform -translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-y-0 left-0"
+      >
+        <div className="mt-[21px] mb-[37px] pl-[20px] pr-[20px]">
           <a href="/dashboard">
             <NextImage src={DashboardLogo} alt="logo" />
           </a>
@@ -154,32 +141,80 @@ export const DashboardSidebar = () => {
             title="Explore"
           />
 
-          <SideBarLink
-            path="/players"
-            active={isActivePath("/players", router.pathname)}
-            Icon={"/playersInactiveIcon.svg"}
-            title="Players"
-          />
+          <Accordion allowToggle border="none" borderColor="transparent">
+            <AccordionItem>
+              <AccordionButton px="25px" mb="17px">
+                <Flex>
+                  <Image
+                    alt="initial athlete"
+                    src={
+                      isActivePath("/players", router.pathname) ||
+                      isActivePath("/coaches", router.pathname) ||
+                      isActivePath("/trainers", router.pathname) ||
+                      isActivePath("/agents", router.pathname)
+                        ? "/athletesActiveIcon.svg"
+                        : "/athletesInactiveIcon.svg"
+                    }
+                  />
+                  <Text
+                    fontSize="13px"
+                    fontWeight="500"
+                    color={
+                      isActivePath("/players", router.pathname) ||
+                      isActivePath("/coaches", router.pathname) ||
+                      isActivePath("/trainers", router.pathname) ||
+                      isActivePath("/agents", router.pathname)
+                        ? "dark-blue"
+                        : "light-blue"
+                    }
+                    ml="8px"
+                  >
+                    Athletes
+                  </Text>
+                  <AccordionIcon
+                    color={
+                      isActivePath("/players", router.pathname) ||
+                      isActivePath("/coaches", router.pathname) ||
+                      isActivePath("/trainers", router.pathname) ||
+                      isActivePath("/agents", router.pathname)
+                        ? "dark-blue"
+                        : "light-blue"
+                    }
+                  />
+                </Flex>
+              </AccordionButton>
 
-          <SideBarLink
-            path="/coaches"
-            active={router.asPath.includes("/coaches")}
-            Icon={"/coachesInactiveIcon.svg"}
-            title="Coaches"
-          />
-          <SideBarLink
-            path="/trainers"
-            active={isActivePath("/trainers", router.pathname)}
-            Icon={"/trainersInactiveIcon.svg"}
-            title="Trainers"
-          />
+              <AccordionPanel px="-10px" paddingBottom="0px">
+                <SideBarLink
+                  path="/players"
+                  active={isActivePath("/players", router.pathname)}
+                  Icon={"/playersInactiveIcon.svg"}
+                  title="Players"
+                />
 
-          <SideBarLink
-            path="/agents"
-            active={isActivePath("/agents", router.pathname)}
-            Icon={"/agentsInactiveIcon.svg"}
-            title="Agents"
-          />
+                <SideBarLink
+                  path="/coaches"
+                  active={router.asPath.includes("/coaches")}
+                  Icon={"/coachesInactiveIcon.svg"}
+                  title="Coaches"
+                />
+                <SideBarLink
+                  path="/trainers"
+                  active={isActivePath("/trainers", router.pathname)}
+                  Icon={"/trainersInactiveIcon.svg"}
+                  title="Trainers"
+                />
+
+                <SideBarLink
+                  path="/agents"
+                  active={isActivePath("/agents", router.pathname)}
+                  Icon={"/agentsInactiveIcon.svg"}
+                  title="Agents"
+                />
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+
           <SideBarLink
             path="/messages"
             active={isActivePath("/messages", router.pathname)}
@@ -200,7 +235,7 @@ export const DashboardSidebar = () => {
             title="Awards"
           />
         </nav>
-      </div>
+      </Box>
     </Fragment>
   );
 };

@@ -16,7 +16,6 @@ const Index = () => {
   const { data: exploreLatest, isLoading: isLoadingLatest } =
     useGetExploreLatest();
   const { data: exploreTop, isLoading: isLoadingTop } = useGetExploreTop();
-  // const { data: exploreLive, isLoading: isLoadingLive } = useGetExploreLive();
 
   const exploreSections = [
     { title: "For you", component: <ExploreSection data={exploreForMe} /> },
@@ -35,7 +34,7 @@ const Index = () => {
             <div
               key={index}
               onClick={() => setCurrentSection(index + 1)}
-              className={`border-t-0 border-[3px] border-x-0 z-[22] -mb-[3px] lg:-mb-[3px] ${
+              className={`border-t-0 border-[3px] border-x-0 z-[66] -mb-[3px] lg:-mb-[3px] ${
                 currentSection === index + 1
                   ? "border-b-brand-2250"
                   : "border-b-brand-300"

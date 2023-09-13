@@ -5,12 +5,24 @@ interface ISearchBar {
   placeholder: string;
   onChange?: any;
   isLight?: boolean;
+  isLeftIcon?: boolean;
+  hasRoundedCorners?: boolean;
 }
 
-const SearchBar = ({ placeholder, onChange, isLight }: ISearchBar) => {
+const SearchBar = ({
+  placeholder,
+  onChange,
+  isLight,
+  isLeftIcon,
+  hasRoundedCorners,
+}: ISearchBar) => {
   return (
-    <div className="w-[100%] h-[100%] border-[1px] rounded-[7px] border-brand-300 flex items-center pl-[11px]">
-      <SearchIcon fill={isLight ? "#fff" : "#131316"} />
+    <div
+      className={`w-[100%] h-[100%] border-[1px] ${
+        hasRoundedCorners ? "rounded-[80px]" : "rounded-[4px]"
+      } border-brand-300 flex items-center px-[16px]`}
+    >
+      {!isLeftIcon && <SearchIcon fill={isLight ? "#fff" : "#131316"} />}
       <input
         placeholder={placeholder}
         onChange={(e) => {
@@ -20,6 +32,7 @@ const SearchBar = ({ placeholder, onChange, isLight }: ISearchBar) => {
         className="border-none w-full bg-[unset] ml-[5px] focus:outline-0 placeholder:text-[11px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px] text-[11px] lg:text-[14px] 2xl:text[16px]"
         style={{ color: isLight ? "#fff" : "#131316" }}
       />
+      {isLeftIcon && <SearchIcon fill={isLight ? "#fff" : "#131316"} />}
     </div>
   );
 };
