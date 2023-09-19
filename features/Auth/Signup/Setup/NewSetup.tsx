@@ -910,9 +910,9 @@ const Index = ({ providers }: any) => {
                                 placeholder="Add up to 5 major skills"
                                 type="text"
                                 name="skill"
-                                onChange={(e: any) =>
-                                  setSkillInput(e?.target?.value)
-                                }
+                                onChange={(e: any) => {
+                                  setSkillInput(e?.target?.value);
+                                }}
                                 value={skillInput}
                               />
 
@@ -920,7 +920,14 @@ const Index = ({ providers }: any) => {
                                 type="button"
                                 className="w-[49px] h-[44px] bg-brand-600 text-brand-500 rounded-tr-[4px] rounded-br-[4px] disabled:bg-[#E3E2E2]"
                                 onClick={() => {
-                                  arrayHelpers.push(skillInput);
+                                  if (skillInput?.includes(",")) {
+                                    const val = skillInput?.split(",");
+                                    val?.map((innerVal) =>
+                                      arrayHelpers.push(innerVal?.trim())
+                                    );
+                                  } else {
+                                    arrayHelpers.push(skillInput);
+                                  }
                                   setSkillInput("");
                                 }}
                                 disabled={skillInput === ""}
@@ -990,30 +997,6 @@ const Index = ({ providers }: any) => {
                         name="interests"
                         render={(arrayHelpers: any) => (
                           <div className="flex flex-col items-center">
-                            {/* <div className="flex align-center w-[90%] md:w-[60%]">
-                              <Inputbox
-                                placeholder="Add up to 5 major interests"
-                                type="text"
-                                name="interest"
-                                onChange={(e: any) =>
-                                  setInterestInput(e?.target?.value)
-                                }
-                                value={interestInput}
-                              />
-
-                              <button
-                                type="button"
-                                className="w-[49px] h-[44px] bg-brand-600 text-brand-500 rounded-tr-[4px] rounded-br-[4px] disabled:bg-[#E3E2E2]"
-                                onClick={() => {
-                                  arrayHelpers.push(interestInput);
-                                  setInterestInput("");
-                                }}
-                                disabled={interestInput === ""}
-                              >
-                                Add
-                              </button>
-                            </div> */}
-
                             <CreatableSelect
                               isClearable
                               isMulti
@@ -1027,40 +1010,6 @@ const Index = ({ providers }: any) => {
                               value={value}
                               className="special-creatable w-[70%]"
                             />
-
-                            {/* {step9Formik.values.interests &&
-                              step9Formik.values.interests.length > 0 && (
-                                <div className="mt-[13px] flex flex-wrap gap-[10px] rounded-[4px] w-[90%] md:w-[60%]">
-                                  {step9Formik.values.interests?.map(
-                                    (interest: any, index: number) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-center py-[5px] px-[11px] rounded-[100px] border border-brand-600 bg-[#F8FAFB]"
-                                      >
-                                        <p
-                                          className="text-[14px] text-brand-1800"
-                                          id={`interests.${index}`}
-                                        >
-                                          {interest?.label}
-                                        </p>
-                                        <div
-                                          className="text-[16px] ml-[9px] cursor-pointer"
-                                          onClick={() =>
-                                            arrayHelpers.remove(index)
-                                          }
-                                        >
-                                          <NextImage
-                                            src={"/x.svg"}
-                                            alt="close"
-                                            width="12"
-                                            height="12"
-                                          />
-                                        </div>
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                              )} */}
                           </div>
                         )}
                       />
@@ -1104,7 +1053,14 @@ const Index = ({ providers }: any) => {
                                 type="button"
                                 className="w-[49px] h-[44px] bg-brand-600 text-brand-500 rounded-tr-[4px] rounded-br-[4px] disabled:bg-[#E3E2E2]"
                                 onClick={() => {
-                                  arrayHelpers.push(goalInput);
+                                  if (goalInput?.includes(",")) {
+                                    const val = goalInput?.split(",");
+                                    val?.map((innerVal) =>
+                                      arrayHelpers.push(innerVal?.trim())
+                                    );
+                                  } else {
+                                    arrayHelpers.push(goalInput);
+                                  }
                                   setGoalInput("");
                                 }}
                                 disabled={goalInput === ""}
