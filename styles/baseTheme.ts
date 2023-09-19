@@ -16,6 +16,7 @@ export const theme = extendTheme({
     "dark-blue": "#003D72",
     "grey-1": "#93A3B1",
     "bg-grey": "#F8FAFB",
+    text: "#343D45",
   },
   fonts: {
     heading: `Degular Display, ${baseTheme.fonts?.heading}`,

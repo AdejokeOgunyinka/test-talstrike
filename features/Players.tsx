@@ -104,6 +104,7 @@ const Index = () => {
         <TitleBar
           titleBarColor="bg-[#D1E6F8]"
           text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+          header="Players"
         />
         <div className="-mt-[27px]">
           <PlayersSearchBar onChangeSearchInput={setSearchValue}>

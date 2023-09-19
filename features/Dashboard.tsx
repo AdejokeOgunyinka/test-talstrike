@@ -355,7 +355,7 @@ const Dashboard = () => {
                   <Skeleton height={150} width={"95%"} />
                 </SkeletonTheme>
               </div>
-            ) : (
+            ) : SuggestedFollows?.data?.length > 0 ? (
               <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
                 <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
                   <h4 className="font-bold text-brand-90 text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]">
@@ -369,6 +369,7 @@ const Dashboard = () => {
                     <img src="/arrow-forward.svg" alt="forward arrow" />
                   </a>
                 </div>
+
                 <div className="pt-[17px] w-[100%] px-[17px]">
                   <div className="w-[100%] flex items-center">
                     <div className="w-[40px] h-[40px] mr-[14px]">
@@ -470,6 +471,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
+            ) : (
+              <></>
             )}
             <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
               <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">

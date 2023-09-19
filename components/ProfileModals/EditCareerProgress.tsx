@@ -35,22 +35,22 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
   const careerProgressValidationSchema = yup.object().shape({
     teams: yup
       .array()
-      .of(yup.string().required("Teams cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "Maximum of 5 teams are expected"),
     abilities: yup
       .array()
-      .of(yup.string().required("Ability cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "Maximum of 5 abilities are expected"),
     skills: yup
       .array()
-      .of(yup.string().required("Skill cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "maximum of 5 skills are expected"),
     trainings: yup
       .array()
-      .of(yup.string().required("Training cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "maximum of 5 trainings are expected"),
   });
@@ -664,7 +664,14 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                           type="button"
                           className="w-[150px] bg-brand-600 text-brand-500 rounded-[4px]"
                           onClick={() => {
-                            arrayHelpers.push(teamInput);
+                            if (teamInput?.includes(",")) {
+                              const val = teamInput?.split(",");
+                              val?.map((innerVal) =>
+                                arrayHelpers.push(innerVal?.trim())
+                              );
+                            } else {
+                              arrayHelpers.push(teamInput);
+                            }
                             setTeamInput("");
                           }}
                         >
@@ -726,7 +733,14 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                           type="button"
                           className="w-[150px] bg-brand-600 text-brand-500 rounded-[4px]"
                           onClick={() => {
-                            arrayHelpers.push(abilityInput);
+                            if (abilityInput?.includes(",")) {
+                              const val = abilityInput?.split(",");
+                              val?.map((innerVal) =>
+                                arrayHelpers.push(innerVal?.trim())
+                              );
+                            } else {
+                              arrayHelpers.push(abilityInput);
+                            }
                             setAbilityInput("");
                           }}
                         >
@@ -788,7 +802,14 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                           type="button"
                           className="w-[150px] bg-brand-600 text-brand-500 rounded-[4px]"
                           onClick={() => {
-                            arrayHelpers.push(skillInput);
+                            if (skillInput?.includes(",")) {
+                              const val = skillInput?.split(",");
+                              val?.map((innerVal) =>
+                                arrayHelpers.push(innerVal?.trim())
+                              );
+                            } else {
+                              arrayHelpers.push(skillInput);
+                            }
                             setSkillInput("");
                           }}
                         >
@@ -852,7 +873,14 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
                           type="button"
                           className="w-[150px] bg-brand-600 text-brand-500 rounded-[4px]"
                           onClick={() => {
-                            arrayHelpers.push(trainingInput);
+                            if (trainingInput?.includes(",")) {
+                              const val = trainingInput?.split(",");
+                              val?.map((innerVal) =>
+                                arrayHelpers.push(innerVal?.trim())
+                              );
+                            } else {
+                              arrayHelpers.push(trainingInput);
+                            }
                             setTrainingInput("");
                           }}
                         >
