@@ -94,6 +94,7 @@ const PollCard = ({
     document.body.addEventListener("click", () => {
       setShowPopover(false);
     });
+    //eslint-disable-next-line
   }, []);
 
   return (
