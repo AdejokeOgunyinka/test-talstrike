@@ -47,8 +47,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
     };
   });
 
-  console.log({ countries });
-
   const [phoneCode, setPhoneCode] = useState("+234");
 
   const [value, setValue] = useState<any>([]);
