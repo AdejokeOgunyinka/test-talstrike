@@ -31,6 +31,8 @@ import { updateUserInfo, updateUserProfile, useGetSports } from "@/api/auth";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 import { useQueryClient } from "@tanstack/react-query";
 
+import "react-phone-number-input/style.css";
+
 const Index = ({ providers }: any) => {
   const session = useSession();
   const router = useRouter();
@@ -772,7 +774,7 @@ const Index = ({ providers }: any) => {
                       <div className="w-full flex justify-center">
                         <div className="w-[60%]">
                           <PhoneInput
-                            value={step5Formik.values.phone_number}
+                            value={step5Formik.values.phone_number as string}
                             onChange={(e) =>
                               step5Formik.setFieldValue("phone_number", e)
                             }

@@ -309,7 +309,7 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
               </label>
 
               <PhoneInput
-                value={formik.values.phone_number}
+                value={formik.values.phone_number as string}
                 onChange={(e) => formik.setFieldValue("phone_number", e)}
                 onBlur={formik.handleBlur}
                 className="w-full h-[46px] border-2 border-brand-1850 focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"

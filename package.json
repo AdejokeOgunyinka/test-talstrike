@@ -57,6 +57,7 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
+    "@types/react-phone-number-input": "^3.0.14",
     "@types/styled-components": "^5.1.26"
   }
 }
