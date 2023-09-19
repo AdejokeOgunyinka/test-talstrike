@@ -14,21 +14,6 @@ import {
 } from "@/libs/authSelections";
 import { useGetSports } from "@/api/auth";
 
-// import FootballIcon1 from "@/assets/footballIcon1.svg";
-// import FootballIcon2 from "@/assets/footballIcon2.svg";
-// import BasketballIcon1 from "@/assets/basketballIcon1.svg";
-// import BasketballIcon2 from "@/assets/basketballIcon2.svg";
-// import AthleticsIcon1 from "@/assets/athleticsIcon1.svg";
-// import AthleticsIcon2 from "@/assets/athleticsIcon2.svg";
-// import RugbyIcon1 from "@/assets/rugbyIcon1.svg";
-// import RugbyIcon2 from "@/assets/rugbyIcon2.svg";
-// import CyclingIcon1 from "@/assets/cyclingIcon1.svg";
-// import CyclingIcon2 from "@/assets/cyclingIcon2.svg";
-// import HockeyIcon1 from "@/assets/hockeyIcon1.svg";
-// import HockeyIcon2 from "@/assets/hockeyIcon2.svg";
-// import BaseballIcon1 from "@/assets/baseballIcon1.svg";
-// import BaseballIcon2 from "@/assets/baseballIcon2.svg";
-
 const PersonalInfo = dynamic(() => import("./personalInfo"));
 
 const Setup = ({ providers }: { providers: any }) => {
@@ -45,51 +30,6 @@ const Setup = ({ providers }: { providers: any }) => {
   const [progressValue, setProgressValue] = useState(50);
 
   const [chosenSportIndex, setChosenSportIndex] = useState(1);
-
-  // const sports = [
-  //   {
-  //     name: "Football",
-  //     initialIcon: FootballIcon1,
-  //     chosenIcon: FootballIcon2,
-  //     bgImg: "lg:bg-player",
-  //   },
-  //   {
-  //     name: " Basketball",
-  //     initialIcon: BasketballIcon1,
-  //     chosenIcon: BasketballIcon2,
-  //     bgImg: "lg:bg-basketball",
-  //   },
-  //   {
-  //     name: "Athletics",
-  //     initialIcon: AthleticsIcon1,
-  //     chosenIcon: AthleticsIcon2,
-  //     bgImg: "lg:bg-athletics",
-  //   },
-  //   {
-  //     name: "Rugby",
-  //     initialIcon: RugbyIcon1,
-  //     chosenIcon: RugbyIcon2,
-  //     bgImg: "lg:bg-rugby",
-  //   },
-  //   {
-  //     name: "Cycling",
-  //     initialIcon: CyclingIcon1,
-  //     chosenIcon: CyclingIcon2,
-  //     bgImg: "lg:bg-cycling",
-  //   },
-  //   {
-  //     name: "Hockey",
-  //     initialIcon: HockeyIcon1,
-  //     chosenIcon: HockeyIcon2,
-  //     bgImg: "lg:bg-hockey",
-  //   },
-  //   {
-  //     name: "Baseball",
-  //     initialIcon: BaseballIcon1,
-  //     chosenIcon: BaseballIcon2,
-  //     bgImg: "lg:bg-baseball",
-  //   },
-  // ];
 
   const sportOptions = [
     footballPositions,
@@ -201,49 +141,6 @@ const Setup = ({ providers }: { providers: any }) => {
                   }}
                 />
               </div>
-              {/* {sports.map((sport, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setChosenSportIndex(index);
-                    specialties[clicked - 1] !== "Player" &&
-                      setProgressValue(100);
-                    // specialties[clicked - 1] !== 'Player' &&
-                    //   userInfo &&
-                    //   onUpdateProfile(userInfo.access);
-                    specialties[clicked - 1] !== "Player" &&
-                      setTimeout(() => {
-                        setStep(3);
-                      }, 1000);
-                  }}
-                  className={`flex cursor-pointer flex-col justify-center items-center ${
-                    chosenSportIndex === index &&
-                    "bg-[#F8FAFB] w-[120px] lg:w-[216px] h-[120px] lg:h-[216px] shadow-xl shadow-[rgba(0, 0, 0, 0.11)] rounded-[12px] lg:rounded-[20px]"
-                  } ${
-                    chosenSportIndex === index
-                      ? "lg:-ml-[68px]  lg:mr-[31px] pr-[0px] lg:pr-[0px]"
-                      : "pr-[20px] lg:pr-[99px]"
-                  }`}
-                >
-                  <NextImage
-                    src={
-                      chosenSportIndex === index
-                        ? sport.chosenIcon
-                        : sport.initialIcon
-                    }
-                    alt="sport"
-                  />
-                  <p
-                    className={`mt-[15px] font-bold text-[12px] leading-[18px] ${
-                      chosenSportIndex === index
-                        ? "text-brand-600"
-                        : "text-brand-1650"
-                    }`}
-                  >
-                    {sport.name}
-                  </p>
-                </div>
-              ))} */}
             </div>
             {specialties[clicked - 1] === "Player" && (
               <div className="w-full pl-[20px] pr-[20px] lg:pl-0 lg:pr-0 lg:w-[256px] mt-[59px] mb-[52px]">
@@ -253,7 +150,6 @@ const Setup = ({ providers }: { providers: any }) => {
                   onChange={(e) => {
                     setProgressValue(100);
                     setChosenPosition(e?.target?.value);
-                    // userInfo && chosenPosition && onUpdateProfile(userInfo.access);
                     setTimeout(() => {
                       setStep(3);
                     }, 1000);
