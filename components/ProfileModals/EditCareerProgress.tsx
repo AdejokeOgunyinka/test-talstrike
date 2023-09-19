@@ -35,22 +35,22 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
   const careerProgressValidationSchema = yup.object().shape({
     teams: yup
       .array()
-      .of(yup.string().required("Teams cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "Maximum of 5 teams are expected"),
     abilities: yup
       .array()
-      .of(yup.string().required("Ability cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "Maximum of 5 abilities are expected"),
     skills: yup
       .array()
-      .of(yup.string().required("Skill cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "maximum of 5 skills are expected"),
     trainings: yup
       .array()
-      .of(yup.string().required("Training cannot be empty"))
+      .of(yup.string().optional())
       .optional()
       .max(5, "maximum of 5 trainings are expected"),
   });
