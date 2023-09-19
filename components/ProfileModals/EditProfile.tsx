@@ -1,6 +1,7 @@
 import NextImage from "next/image";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { Text } from "@chakra-ui/react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { useQueryClient } from "@tanstack/react-query";
 import { Country, State, City } from "country-state-city";
@@ -304,9 +305,12 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
                 />
               </div>
 
-              <label className="text-brand-200 font-medium text-[18px] leading-[162%] -mb-[20px]">
+              <Text
+                color="text"
+                className="font-medium text-[18px] leading-[162%] -mb-[20px]"
+              >
                 Phone number *
-              </label>
+              </Text>
 
               <PhoneInput
                 value={formik.values.phone_number}
