@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
-// import Select from 'react-select';
 import * as yup from "yup";
 import { ErrorMessage, FormikProvider, useFormik, FieldArray } from "formik";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -13,7 +12,6 @@ import notify from "@/libs/toast";
 import { updateUserInfo, updateUserProfile } from "@/api/auth";
 import SetupDropdown from "./dropdown";
 import { getYears } from "@/libs/utils";
-// import InputBox from '@/features/Profile/Modals/InputBox';
 
 const Image = styled.img``;
 

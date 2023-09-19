@@ -13,8 +13,7 @@ import {
   baseballPositions,
 } from "@/libs/authSelections";
 import { useGetSports } from "@/api/auth";
-
-const PersonalInfo = dynamic(() => import("./personalInfo"));
+import PersonalInfo from "./personalInfo";
 
 const Setup = ({ providers }: { providers: any }) => {
   const [step, setStep] = useState(1);
