@@ -8,7 +8,7 @@ import CreatableSelect from "react-select/creatable";
 import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
 import { City, Country, State } from "country-state-city";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput from "react-phone-input-2";
 
 import CoachIcon from "@/assets/coachIcon.svg";
 import CoachHoverIcon from "@/assets/coachHoverIcon.svg";
@@ -31,7 +31,7 @@ import { updateUserInfo, updateUserProfile, useGetSports } from "@/api/auth";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 import { useQueryClient } from "@tanstack/react-query";
 
-import "react-phone-number-input/style.css";
+import "react-phone-input-2/lib/style.css";
 
 const Index = ({ providers }: any) => {
   const session = useSession();
@@ -776,10 +776,11 @@ const Index = ({ providers }: any) => {
                           <PhoneInput
                             value={step5Formik.values.phone_number as string}
                             onChange={(e) =>
-                              step5Formik.setFieldValue("phone_number", e)
+                              step5Formik.setFieldValue("phone_number", `+${e}`)
                             }
                             onBlur={step5Formik.handleBlur}
-                            className="w-full h-[44px] border-[1.5px] border-brand-600"
+                            containerClass="w-full"
+                            inputClass="phone-input-2 border-2 border-brand-1850 focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
                           />
                         </div>
                       </div>

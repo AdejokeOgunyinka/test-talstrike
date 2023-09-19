@@ -19,7 +19,6 @@ import { theme } from "../styles/baseTheme";
 import "react-multi-carousel/lib/styles.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
-import "react-phone-number-input/style.css";
 
 import "@/styles/globals.css";
 import "@/styles/styles.css";

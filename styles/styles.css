@@ -171,3 +171,9 @@ body, #__next  {
 .inputbox-new {
   padding-left: 13px !important;
 }
+
+.phone-input-2 {
+  width: 100% !important;
+  height: 46px !important;
+  border: 2px solid #c1c7d0 !important;
+}

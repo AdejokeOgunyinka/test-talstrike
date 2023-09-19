@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import { useQueryClient } from "@tanstack/react-query";
 import { Country, State, City } from "country-state-city";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput from "react-phone-input-2";
 import BeatLoader from "react-spinners/BeatLoader";
 import CreatableSelect from "react-select/creatable";
 
@@ -15,7 +15,7 @@ import { updateUserProfile } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 
-import "react-phone-number-input/style.css";
+import "react-phone-input-2/lib/style.css";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
   const { data: session } = useSession();
@@ -310,9 +310,10 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
 
               <PhoneInput
                 value={formik.values.phone_number as string}
-                onChange={(e) => formik.setFieldValue("phone_number", e)}
+                onChange={(e) => formik.setFieldValue("phone_number", `+${e}`)}
                 onBlur={formik.handleBlur}
-                className="w-full h-[46px] border-2 border-brand-1850 focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
+                containerClass="w-full"
+                inputClass="phone-input-2 border-2 border-brand-1850 focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0"
               />
 
               <TextBox
