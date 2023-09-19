@@ -31,7 +31,7 @@
     "emoji-picker-react": "^4.4.8",
     "eslint": "8.37.0",
     "eslint-config-next": "13.3.0",
-    "formik": "^2.2.9",
+    "formik": "^2.4.5",
     "framer-motion": "^10.16.4",
     "gif-picker-react": "^1.1.0",
     "moment": "^2.29.4",
