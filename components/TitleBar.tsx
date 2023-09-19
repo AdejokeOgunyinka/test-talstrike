@@ -1,16 +1,30 @@
+import { Text, Box } from "@chakra-ui/react";
+
 const TitleBar = ({
   titleBarColor,
   text,
+  header,
 }: {
   titleBarColor: string;
   text: string;
+  header?: string;
 }) => {
   return (
-    <div
-      className={`w-full h-[81px] rounded-[6px] pt-[23px] pl-[37px] ${titleBarColor}`}
+    <Box
+      width="full"
+      height="119px"
+      borderRadius="6px"
+      paddingTop="18px"
+      paddingLeft="37px"
+      className={`${titleBarColor}`}
     >
-      <p className="text-brand-50 text-[11px]">{text}</p>
-    </div>
+      <Text fontSize="20px" fontWeight="500" mb="2px" color="text">
+        {header}
+      </Text>
+      <Text fontSize="11px" color="text">
+        {text}
+      </Text>
+    </Box>
   );
 };
 
