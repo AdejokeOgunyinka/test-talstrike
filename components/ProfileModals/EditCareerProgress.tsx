@@ -69,10 +69,17 @@ const EditCareerProgress = ({ onClose }: { onClose: () => void }) => {
 
   const formik = useFormik({
     initialValues: {
-      teams: userInfo?.profile?.teams,
-      abilities: userInfo?.profile?.abilities,
-      skills: userInfo?.profile?.skills,
-      trainings: userInfo?.profile?.trainings,
+      teams: userInfo?.profile?.teams === null ? [] : userInfo?.profile?.teams,
+      abilities:
+        userInfo?.profile?.abilities === null
+          ? []
+          : userInfo?.profile?.abilities,
+      skills:
+        userInfo?.profile?.skills === null ? [] : userInfo?.profile?.skills,
+      trainings:
+        userInfo?.profile?.trainings === null
+          ? []
+          : userInfo?.profile?.trainings,
     },
     validationSchema: careerProgressValidationSchema,
     onSubmit: async (values) => {
