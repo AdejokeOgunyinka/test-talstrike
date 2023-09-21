@@ -68,7 +68,7 @@ const AboutMe = () => {
           <h2 className="text-brand-2000 font-medium text-[18px]">
             Personal Details
           </h2>
-          {!userProfile?.is_following && (
+          {(!userProfile?.is_following)?(
             <button
               onClick={() => {
                 followUser(
@@ -100,6 +100,30 @@ const AboutMe = () => {
               ) : (
                 `Follow ${userProfile?.user?.firstname}`
               )}
+            </button>
+          ):(
+            <button
+              onClick={() => {
+                followUser(
+                  { token: TOKEN as string, userId: id as string },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries(["getAllPlayers"]);
+                      queryClient.invalidateQueries(["getAllCoaches"]);
+                      queryClient.invalidateQueries(["getAllTrainers"]);
+                      queryClient.invalidateQueries(["getAllAgents"]);
+                      queryClient.invalidateQueries(["getMyProfile"]);
+                      notify({
+                        type: "success",
+                        text: `You have unfollowed ${userProfile?.user?.firstname} ${userProfile?.user?.lastname}`,
+                      });
+                    },
+                  }
+                );
+              }}
+              className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500"
+            >
+              UnFollow {userProfile?.user?.firstname}
             </button>
           )}
         </div>
