@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
+import { Link, Box, useMediaQuery } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
@@ -93,6 +94,9 @@ const Index = () => {
     }
   }, [value, value?.name]);
 
+  const [isMobileView1] = useMediaQuery("(max-width: 769px)");
+  const [isMobileView] = useMediaQuery("(max-width: 1028px)");
+
   return (
     <DashboardLayout>
       {isLoadingUserData ? (
@@ -100,10 +104,13 @@ const Index = () => {
           <PageLoader />
         </div>
       ) : (
-        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
+        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 px-[0px] lg:px-[31px]">
           <div className="flex h-[100%] flex-col lg:flex-row ">
-            <div className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px]">
-              <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
+            <Box
+              bg="transparent-white"
+              className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px] md:mr-[5px]"
+            >
+              <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
                 <div className="relative w-[161px] profile-pic h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <img
                     src={
@@ -183,10 +190,10 @@ const Index = () => {
                   />
                 </div>
               </div>
-              <div className="h-[182px] mt-[24px] bg-brand-500 lg:w-[274px] rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] px-[18px] pt-[11px] pb-[18px]">
+              <div className="h-[182px] mt-[5px] md:mt-[24px] bg-brand-500 lg:w-[274px] md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] px-[18px] pt-[11px] pb-[18px]">
                 <div className="flex justify-between mb-[6px]">
                   <p className="font-semibold text-[14px] leading-[21px] text-brand-50">
-                    Photos
+                    Media
                   </p>
                   <p className="text-brand-300 text-[12px]">
                     {media?.count} picture{media?.count > 1 && "s"}
@@ -220,53 +227,93 @@ const Index = () => {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="w-full lg:w-[calc(100%-274px)] pb-[100px]">
-              <div className="flex z-[99] flex-wrap lg:flex-nowrap gap-y-[10px] w-full lg:w-[calc(100%-550px)] lg:-mt-[30px] backdrop-blur-[15px] pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:ml-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300">
+            </Box>
+            <Box
+              borderLeft={{ md: "1px solid" }}
+              borderLeftColor={{ md: "stroke" }}
+              paddingTop="18px"
+              className="w-full lg:w-[calc(100%-274px)] pb-[100px]"
+            >
+              <Box
+                borderBottom="1px solid"
+                borderColor="stroke"
+                overflowX={isMobileView1 ? "scroll" : "unset"}
+                paddingX={isMobileView ? "20px" : "30px"}
+                className="flex z-[99] gap-y-[10px] w-full lg:w-[calc(100%-543px)] lg:-mt-[30px] backdrop-blur-[15px] md:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:pl-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
+              >
                 {profileSections?.map((section, index) => (
-                  <a
-                    href={section?.href}
+                  <Box
                     key={index}
-                    // onClick={() => setCurrentSection(index + 1)}
-                    className={`border-t-0 border-[3px] border-x-0 z-[22] -mb-[3px] lg:-mb-[3px] ${
+                    minW="fit-content"
+                    borderBottom={
+                      currentSection === index + 1
+                        ? "3px solid"
+                        : "3px transparent"
+                    }
+                    borderBottomColor={
+                      currentSection === index + 1 ? "secondary-blue" : "stroke"
+                    }
+                    className={`z-[22] -mb-[3px] lg:-mb-[3px] ${
                       currentSection === index + 1
                         ? "border-b-brand-2250"
                         : "border-b-brand-300"
                     } cursor-pointer`}
                   >
-                    <h3
-                      className={`${
+                    <Link
+                      href={section?.href}
+                      className={`z-[22] -mb-[3px] lg:-mb-[3px] cursor-pointer`}
+                      _hover={{
+                        textUnderline: "none",
+                        color: "secondary-blue",
+                      }}
+                      color={
                         currentSection === index + 1
-                          ? "text-brand-2250"
-                          : "text-brand-2200"
-                      } mb-[11px] text-[11px] lg:text-[14px] font-semibold`}
+                          ? "secondary-blue"
+                          : "grey-1"
+                      }
                     >
-                      {section.title}
-                    </h3>
-                  </a>
+                      <h3
+                        className={`${
+                          currentSection === index + 1
+                            ? "text-brand-2250"
+                            : "text-brand-2200"
+                        } mb-[11px] text-[11px] lg:text-[14px] font-semibold`}
+                      >
+                        {section.title}
+                      </h3>
+                    </Link>
+                  </Box>
                 ))}
-              </div>
-              <div className="lg:ml-[26px] pt-[28px]  lg:mt-[28px] xl:mt-0">
-                {currentSection === 1 ? (
-                  <AboutMe
-                    onClickEditProfile={() => setOpenEditProfileModal(true)}
-                    onClickEditCareer={() =>
-                      setOpenEditCareerProgressModal(true)
-                    }
-                  />
-                ) : currentSection === 2 ? (
-                  <MyPosts />
-                ) : currentSection === 3 ? (
-                  <MyOpenings />
-                ) : currentSection === 4 ? (
-                  <MyPolls />
-                ) : currentSection === 5 ? (
-                  <MyAnnouncements />
-                ) : (
-                  <MyArticles />
-                )}
-              </div>
-            </div>
+              </Box>
+
+              <Box className="md:pt-[28px] -mt-[15px] lg:mt-[28px] xl:mt-0">
+                <Box
+                  pt="16px"
+                  borderBottom="1px solid"
+                  borderBottomColor="stroke"
+                ></Box>
+                <Box className="lg:pl-[26px]">
+                  {currentSection === 1 ? (
+                    <AboutMe
+                      onClickEditProfile={() => setOpenEditProfileModal(true)}
+                      onClickEditCareer={() =>
+                        setOpenEditCareerProgressModal(true)
+                      }
+                    />
+                  ) : currentSection === 2 ? (
+                    <MyPosts />
+                  ) : currentSection === 3 ? (
+                    <MyOpenings />
+                  ) : currentSection === 4 ? (
+                    <MyPolls />
+                  ) : currentSection === 5 ? (
+                    <MyAnnouncements />
+                  ) : (
+                    <MyArticles />
+                  )}
+                </Box>
+              </Box>
+            </Box>
           </div>
 
           {openEditProfileModal && (

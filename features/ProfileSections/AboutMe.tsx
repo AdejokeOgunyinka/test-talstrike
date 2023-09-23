@@ -53,7 +53,7 @@ const AboutMe = ({
 
   return (
     <div className="mt-[28px]">
-      <div className="w-full bg-brand-500 rounded-[12px] px-[50px] py-[37px]">
+      <div className="w-full bg-brand-500 rounded-[12px] px-[24px] md:px-[50px] py-[37px]">
         <div className="flex w-full justify-between items-center mb-[31px]">
           <h2 className="text-brand-2000 font-medium text-[18px]">
             Personal Details
@@ -243,7 +243,7 @@ const AboutMe = ({
           </div>
         </div>
       </div>
-      <div className="w-full mt-[18px] bg-brand-500 rounded-[12px] px-[50px] py-[37px]">
+      <div className="w-full mt-[18px] bg-brand-500 rounded-[12px] px-[24px] md:px-[50px] py-[37px]">
         <div className="flex w-full justify-between items-center mb-[31px]">
           <h2 className="text-brand-2000 font-medium text-[18px]">
             Career Progress

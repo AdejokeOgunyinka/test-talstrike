@@ -18,6 +18,8 @@ export const theme = extendTheme({
     "bg-grey": "#F8FAFB",
     text: "#343D45",
     stroke: "#CDCDCD",
+    "secondary-blue": "#00729D",
+    "transparent-white": "rgba(255, 255, 255, 0.80)",
   },
   fonts: {
     heading: `Degular Display, ${baseTheme.fonts?.heading}`,

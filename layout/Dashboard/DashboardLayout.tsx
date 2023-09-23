@@ -36,7 +36,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
     <div className="w-full min-h-screen lg:flex lg:justify-center">
       <div className="w-full 2xl:w-[70vw] 2xl:h-[85vh] h-[100%] relative flex 2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-brand-500">
         <Box
-          className="w-[178px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed"
+          className="w-[178px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed hidden md:inline-block"
           borderRight="1px solid #93A3B1"
           bg="bg-grey"
         >
@@ -116,7 +116,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             {router.pathname !== "/profile" &&
               router.pathname !== "/profile/[id]" &&
               router.pathname !== "/profile/section/[section]" && (
-                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden">
+                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden hidden md:inline-block">
                   <DashboardAside />
                 </aside>
               )}
