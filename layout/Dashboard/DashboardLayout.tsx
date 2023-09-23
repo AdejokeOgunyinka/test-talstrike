@@ -122,9 +122,16 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               )}
           </div>
         </div>
-        <div className="inline-block md:hidden fixed bottom-0 left-0 right-0 h-[81px] w-full bg-brand-500 z-[9999] overflow-y-scroll">
+        <Box
+          borderTop="1px solid"
+          borderColor="stroke"
+          h="64px"
+          w="full"
+          bg="primary-white-3"
+          className="inline-block md:hidden fixed bottom-0 left-0 right-0 w-full z-[9999] overflow-y-scroll"
+        >
           <MobileMenu show={showMore} setShow={setShowMore} />
-        </div>
+        </Box>
 
         {showMore && (
           <div className="w-full flex justify-center fixed bottom-0 left-0 right-0">
