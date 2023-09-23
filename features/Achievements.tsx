@@ -81,7 +81,7 @@ const Index = () => {
                 ?.map((achievement: any, index: number) => (
                   <div
                     key={index}
-                    className="w-[346px] relative h-[399px] border border-[#94AEC5] rounded-[4px] p-[24px]"
+                    className="w-full md:w-[346px] relative h-[399px] border border-[#94AEC5] rounded-[4px] p-[24px]"
                   >
                     <div className="relative">
                       <img

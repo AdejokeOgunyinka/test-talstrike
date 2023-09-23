@@ -68,7 +68,7 @@ const AboutMe = () => {
           <h2 className="text-brand-2000 font-medium text-[18px]">
             Personal Details
           </h2>
-          {(!userProfile?.is_following)?(
+          {!userProfile?.is_following ? (
             <button
               onClick={() => {
                 followUser(
@@ -101,7 +101,7 @@ const AboutMe = () => {
                 `Follow ${userProfile?.user?.firstname}`
               )}
             </button>
-          ):(
+          ) : (
             <button
               onClick={() => {
                 followUser(
@@ -205,7 +205,7 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Likes to talk about
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userProfile?.interests?.length === 0 ||
             userProfile?.interests === null ? (
               <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
@@ -362,7 +362,7 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Teams Played With
           </h3>
-          <div className="flex gap-x-[12px] w-full flex-wrap">
+          <div className="flex gap-x-[12px] w-full gap-y-[10px] flex-wrap">
             {userProfile?.teams?.length === 0 || userProfile?.teams === null ? (
               <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
                 No team has been added yet...
@@ -383,7 +383,7 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Special Abilities
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userProfile?.abilities && userProfile?.abilities?.length > 0 ? (
               userProfile?.abilities?.map((item: any, index: number) => (
                 <div
@@ -404,7 +404,7 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Skills
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userProfile?.skills && userProfile?.skills?.length > 0 ? (
               userProfile?.skills?.map((item: any, index: number) => (
                 <div
@@ -425,7 +425,7 @@ const AboutMe = () => {
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Training Courses
           </h3>
-          <div className="flex gap-x-[12px] gap-y-[12px] flex-wrap">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userProfile?.trainings && userProfile?.trainings?.length > 0 ? (
               [...userProfile?.trainings]?.map((item, index) => (
                 <div

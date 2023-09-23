@@ -122,7 +122,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               )}
           </div>
         </div>
-        <div className="inline-block md:hidden fixed bottom-0 left-0 right-0 h-[81px] w-full bg-brand-500 z-[999] overflow-y-scroll">
+        <div className="inline-block md:hidden fixed bottom-0 left-0 right-0 h-[81px] w-full bg-brand-500 z-[9999] overflow-y-scroll">
           <MobileMenu show={showMore} setShow={setShowMore} />
         </div>
 
