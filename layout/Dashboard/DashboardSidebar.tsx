@@ -13,6 +13,10 @@ import {
   AccordionIcon,
   Text,
   Box,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import clsx from "clsx";
@@ -60,7 +64,7 @@ const SideBarLink = ({ path, active, Icon, title }: SideBarLinkProps) => {
       />
       <Text
         textDecoration={"none !important"}
-        className={`font-medium ml-[11px] text-[13px] lg:text-[14px] 2xl:text-[16px] leading-[16px] ${
+        className={`font-medium ml-[11px] text-[16px] leading-[16px] ${
           active ? "text-brand-1750" : "text-brand-2150"
         }`}
       >
@@ -83,9 +87,10 @@ export const MobileSideBarLink = ({
       textDecoration="none !important"
       textDecorationLine={"none"}
       onClick={onClick}
+      color={active ? "dark-blue" : "light-blue"}
       display="flex"
       className={clsx(
-        "flex flex-col justify-center items-center transition px-[14px] w-[100px] h-[100%]  duration-200 text-brand-100",
+        "flex flex-col justify-center items-center transition px-[14px] h-[100%]  duration-200 text-brand-100",
         active
           ? "border-3 border-b-brand-1750 border-x-transparent border-t-transparent"
           : "hover:border-3 hover:border-b-brand-1750 border-x-transparent border-t-transparent"
@@ -94,16 +99,9 @@ export const MobileSideBarLink = ({
       <Image
         src={active ? ActiveIcons[title as string] : Icon}
         alt="dashboard icons"
-        className="h-5 w-5"
+        width="34px"
+        height="34.462px"
       />
-      <Text
-        textDecoration={"none !important"}
-        className={`font-normal text-[10px] mt-[7px] lg:text-[14px] 2xl:text-[16px] leading-[16px]  ${
-          active ? "text-brand-1750" : "text-brand-2150"
-        }`}
-      >
-        {title}
-      </Text>
     </Link>
   );
 };
@@ -249,8 +247,20 @@ export const MobileMenu = ({
 }) => {
   const router = useRouter();
 
+  const {
+    isOpen: isOpenMoreDrawer,
+    onOpen: onOpenMoreDrawer,
+    onClose: onCloseMoreDrawer,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenAthleteDrawer,
+    onClose: onCloseAthleteDrawer,
+    onOpen: onOpenAthleteDrawer,
+  } = useDisclosure();
+
   return (
-    <nav className="px-[10px] w-full flex gap-x-[10px] h-full justify-center relative">
+    <nav className="px-[10px] w-full flex gap-x-[10px] h-full justify-center relative z-[9999]">
       <MobileSideBarLink
         path="/dashboard"
         active={show === false && isActivePath("/dashboard", router.pathname)}
@@ -258,47 +268,88 @@ export const MobileMenu = ({
         title="Feed"
         onClick={() => setShow(false)}
       />
+
       <MobileSideBarLink
-        path="/players"
-        active={show === false && isActivePath("/players", router.pathname)}
-        Icon={"/playersInactiveIcon.svg"}
-        title="Players"
+        path="/explore"
+        active={show === false && isActivePath("/explore", router.pathname)}
+        Icon={"/exploreInactiveIcon.svg"}
+        title="Explore"
         onClick={() => setShow(false)}
       />
-      {/* <MobileSideBarLink
-        path={router.pathname}
-        active={showMore && isActivePath(router.pathname, router.pathname)}
-        Icon={'/middleMobileMenuInactive.png'}
-        title="More"
-        more
-      /> */}
 
-      {/* $
-      {showMore
-        ? 'border-3 border-b-brand-1750 border-x-transparent border-t-transparent'
-        : 'hover:border-3 hover:border-b-brand-1750 border-x-transparent border-t-transparent'} */}
-      <div
-        className={`w-[63px] h-[100%] flex items-center justify-center`}
-        onClick={() => setShow(!show)}
+      <Flex
+        className={clsx(
+          "flex flex-col justify-center items-center transition px-[14px] h-[100%]  duration-200 text-brand-100 hover:border-3 hover:border-b-brand-1750 border-x-transparent border-t-transparent"
+        )}
+        onClick={
+          isOpenAthleteDrawer ? onCloseAthleteDrawer : onOpenAthleteDrawer
+        }
       >
         <Image
+          alt="initial athlete"
           src={
-            show
-              ? "/middleMobileMenuActive.svg"
-              : "/middleMobileMenuInactive.svg"
+            isActivePath("/players", router.pathname) ||
+            isActivePath("/coaches", router.pathname) ||
+            isActivePath("/trainers", router.pathname) ||
+            isActivePath("/agents", router.pathname)
+              ? "/athletesActiveIcon.svg"
+              : "/athletesInactiveIcon.svg"
           }
-          alt="middle"
-          style={{ width: "100%", height: "100%" }}
+          width="32px"
+          height="34.462px"
         />
-      </div>
+      </Flex>
 
-      <MobileSideBarLink
-        path="/coaches"
-        active={show === false && isActivePath("/coaches", router.pathname)}
-        Icon={"/coachesInactiveIcon.svg"}
-        title="Coaches"
-        onClick={() => setShow(false)}
-      />
+      <Drawer
+        placement="bottom"
+        isOpen={isOpenAthleteDrawer}
+        onClose={onCloseAthleteDrawer}
+      >
+        <DrawerOverlay />
+        <DrawerContent
+          borderTopLeftRadius="16px"
+          borderTopRightRadius="16px"
+          pb="60px"
+        >
+          <Flex justify="center" w="full" pt="28px">
+            <Image src="/menuDrawerIcon.svg" alt="menu icon" />
+          </Flex>
+          <Box pl="26px">
+            <Text fontSize="20px" fontWeight="500" color="text" mb="28px">
+              Athletes
+            </Text>
+            <Box ml="-26px !important">
+              <SideBarLink
+                path="/players"
+                active={isActivePath("/players", router.pathname)}
+                Icon={"/playersInactiveIcon.svg"}
+                title="Players"
+              />
+
+              <SideBarLink
+                path="/coaches"
+                active={router.asPath.includes("/coaches")}
+                Icon={"/coachesInactiveIcon.svg"}
+                title="Coaches"
+              />
+              <SideBarLink
+                path="/trainers"
+                active={isActivePath("/trainers", router.pathname)}
+                Icon={"/trainersInactiveIcon.svg"}
+                title="Trainers"
+              />
+
+              <SideBarLink
+                path="/agents"
+                active={isActivePath("/agents", router.pathname)}
+                Icon={"/agentsInactiveIcon.svg"}
+                title="Agents"
+              />
+            </Box>
+          </Box>
+        </DrawerContent>
+      </Drawer>
+
       <MobileSideBarLink
         path="/messages"
         active={show === false && isActivePath("/messages", router.pathname)}
@@ -306,6 +357,58 @@ export const MobileMenu = ({
         title="Messages"
         onClick={() => setShow(false)}
       />
+
+      <Flex
+        className={clsx(
+          "flex flex-col justify-center items-center transition px-[14px] h-[100%]  duration-200 text-brand-100 hover:border-3 hover:border-b-brand-1750 border-x-transparent border-t-transparent"
+        )}
+        onClick={isOpenMoreDrawer ? onCloseMoreDrawer : onOpenMoreDrawer}
+      >
+        <Image
+          src="/moreIcon.svg"
+          alt="manage more"
+          width="32px"
+          height="34.462px"
+        />
+      </Flex>
+
+      <Drawer
+        placement="bottom"
+        onClose={onCloseMoreDrawer}
+        isOpen={isOpenMoreDrawer}
+      >
+        <DrawerOverlay />
+        <DrawerContent
+          pb="60px"
+          borderTopLeftRadius="16px"
+          borderTopRightRadius="16px"
+        >
+          <Flex justify="center" w="full" pt="28px">
+            <Image src="/menuDrawerIcon.svg" alt="menu icon" />
+          </Flex>
+          <Box pl="28px">
+            <Text fontSize="20px" fontWeight="500" color="text" mb="19px">
+              More
+            </Text>
+
+            <Box ml="-28px !important">
+              <SideBarLink
+                path="/profile"
+                active={isActivePath("/profile", router.pathname)}
+                Icon={"/profileInactiveIcon.svg"}
+                title="Profile"
+              />
+
+              <SideBarLink
+                path="/achievements"
+                active={isActivePath("/achievements", router.pathname)}
+                Icon="/trophyInactive.svg"
+                title="Awards"
+              />
+            </Box>
+          </Box>
+        </DrawerContent>
+      </Drawer>
     </nav>
   );
 };

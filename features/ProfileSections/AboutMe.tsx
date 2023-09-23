@@ -145,7 +145,7 @@ const AboutMe = ({
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Likes to talk about
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userInfo?.profile?.interests?.length === 0 ||
             userInfo?.profile?.interests === null ? (
               <p className="text-brand-50 text-[12px] font-normal leading-[18px]">
@@ -309,7 +309,7 @@ const AboutMe = ({
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Teams Played With
           </h3>
-          <div className="flex gap-x-[12px] w-full flex-wrap">
+          <div className="flex gap-x-[12px] w-full gap-y-[10px] flex-wrap">
             {userInfo?.profile?.teams?.length === 0 ||
             userInfo?.profile?.teams === null ? (
               <p className="text-brand-600 text-[12px] font-normal leading-[18px]">
@@ -331,7 +331,7 @@ const AboutMe = ({
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Special Abilities
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userInfo?.profile?.abilities &&
             userInfo?.profile?.abilities?.length > 0 ? (
               userInfo?.profile?.abilities?.map((item, index) => (
@@ -353,7 +353,7 @@ const AboutMe = ({
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Skills
           </h3>
-          <div className="flex gap-x-[12px]">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userInfo?.profile?.skills &&
             userInfo?.profile?.skills?.length > 0 ? (
               userInfo?.profile?.skills?.map((item, index) => (
@@ -375,7 +375,7 @@ const AboutMe = ({
           <h3 className="text-brand-600 mb-[19px] font-semibold text-[18px] leading-[183.5%]">
             Training Courses
           </h3>
-          <div className="flex gap-x-[12px] gap-y-[12px] flex-wrap">
+          <div className="flex gap-x-[12px] gap-y-[10px] flex-wrap">
             {userInfo?.profile?.trainings &&
             userInfo?.profile?.trainings?.length > 0 ? (
               [...userInfo?.profile?.trainings]?.map((item, index) => (
