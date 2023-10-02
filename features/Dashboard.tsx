@@ -37,6 +37,7 @@ import PollCard from "@/components/PollCard";
 import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
 import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
+import GeneralAppSearch from "./GeneralAppSearch";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -48,8 +49,7 @@ const Dashboard = () => {
   const { data: session } = useSession();
   const dispatch = useTypedDispatch();
 
-  const { ref, inView } = useInView();
-  const { userInfo } = useTypedSelector((state) => state.profile);
+  const { inView } = useInView();
 
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
@@ -202,7 +202,8 @@ const Dashboard = () => {
       ) : (
         <div className="w-full flex flex-col-reverse md:flex-row gap-x-[20px]">
           <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[unset]">
-            <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
+            <GeneralAppSearch />
+            {/* <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
               <div className="flex items-center">
                 <div className="w-[40px] h-[40px] overflow-hidden">
                   <img
@@ -267,8 +268,8 @@ const Dashboard = () => {
                   Create Post
                 </button>
               </div>
-            </div>
-            {isLoadingNewsFeed ? (
+            </div> */}
+            {/* {isLoadingNewsFeed ? (
               Array(6)
                 ?.fill("")
                 ?.map((_, index) => <LoadingPosts key={index} />)
@@ -338,7 +339,7 @@ const Dashboard = () => {
                     Loading More...
                   </button>
                 </div>
-              )}
+              )} */}
           </div>
           <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] overflow-y-scroll pb-[50px]">
             {/* fixed right-[267px] w-[25%] overflow-y-scroll */}

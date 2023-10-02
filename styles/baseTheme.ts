@@ -20,6 +20,7 @@ export const theme = extendTheme({
     stroke: "#CDCDCD",
     "secondary-blue": "#00729D",
     "transparent-white": "rgba(255, 255, 255, 0.80)",
+    "blue-green": "#00CDA6",
   },
   fonts: {
     heading: `Degular Display, ${baseTheme.fonts?.heading}`,
