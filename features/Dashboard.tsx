@@ -51,8 +51,7 @@ const Dashboard = () => {
   const { data: session } = useSession();
   const dispatch = useTypedDispatch();
 
-  const { ref, inView } = useInView();
-  const { userInfo } = useTypedSelector((state) => state.profile);
+  const { inView } = useInView();
 
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
