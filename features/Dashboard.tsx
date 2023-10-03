@@ -23,7 +23,7 @@ import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import { useGeneralSearch } from "@/api/dashboard";
-import { useFollowUser } from "@/api/players";
+import { useFollowUser, useIgnoreUser } from "@/api/players";
 import {
   useGetAllPolls,
   useGetNewsfeed,
@@ -126,6 +126,7 @@ const Dashboard = () => {
   const queryClient = useQueryClient();
 
   const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
+  const { mutate: ignoreUser, isLoading: isIgnoringPlayer } = useIgnoreUser();
 
   const [showCreatePostModal, setShowCreatePostModal] = useState(false);
   const [showCreateAnnouncementModal, setShowCreateAnnouncementModal] =
@@ -458,7 +459,28 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="w-full flex justify-between gap-x-[18px]">
-                    <button className="basis-[50%] border border-[#F8FAFB] text-[#343D45] text-[12px] rounded-[7px] h-[32px]">
+                    <button
+                      className="basis-[50%] border border-[#F8FAFB] text-[#343D45] text-[12px] rounded-[7px] h-[32px]"
+                      onClick={() => {
+                        ignoreUser(
+                          {
+                            token: TOKEN as string,
+                            ignored: SuggestedFollows?.data[0]?.id,
+                          },
+                          {
+                            onSuccess: () => {
+                              queryClient.invalidateQueries([
+                                "getSuggestedFollows",
+                              ]);
+                              notify({
+                                type: "success",
+                                text: `You have successfully ignored ${SuggestedFollows?.data[0]?.firstname} ${SuggestedFollows?.data[0]?.lastname}`,
+                              });
+                            },
+                          }
+                        );
+                      }}
+                    >
                       Ignore
                     </button>
                     <button
