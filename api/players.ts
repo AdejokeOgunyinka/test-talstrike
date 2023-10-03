@@ -52,12 +52,30 @@ interface IUser {
   token: string;
 }
 
+interface IIgnore {
+  ignored: string;
+  token: string;
+}
 export const useFollowUser = () =>
   useMutation(({ userId, token }: IUser) =>
     axios
       .post(
         "/auth/users/follow/",
         { user: userId },
+        { headers: { Authorization: "Bearer " + token } }
+      )
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+
+export const useIgnoreUser = () =>
+  useMutation(({ ignored, token }: IIgnore) =>
+    axios
+      .post(
+        "/auth/users/ignore/",
+        { ignored },
         { headers: { Authorization: "Bearer " + token } }
       )
       .then((res) => res.data)

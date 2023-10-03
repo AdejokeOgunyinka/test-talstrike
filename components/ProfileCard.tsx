@@ -8,7 +8,7 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 import Star from "@/assets/star2.svg";
 import Map from "@/assets/map.svg";
-import { useFollowUser } from "@/api/players";
+import { useFollowUser, useIgnoreUser } from "@/api/players";
 import { useGetAllHashtags } from "@/api/dashboard";
 import notify from "@/libs/toast";
 import { handleOnError } from "@/libs/utils";
@@ -53,6 +53,9 @@ const ProfileCard = ({
   const TOKEN = session?.user?.access;
 
   const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
+  const { mutate: ignoreUser, isLoading: isIgnoringPlayer } = useIgnoreUser();
+
+  
   const { data: hashtags } = useGetAllHashtags(TOKEN as string);
 
   const getInterestValue = (id: string) => {
@@ -141,7 +144,26 @@ const ProfileCard = ({
         </button>
       ) : (
         <div className="w-full mt-[22px] flex gap-x-[5px]">
-          <button className="w-[50%] bg-brand-500 border border-brand-300 h-[32px] rounded-[7px]">
+          <button className="w-[50%] bg-brand-500 border border-brand-300 h-[32px] rounded-[7px]"
+          
+          onClick={() => {
+            ignoreUser(
+              { token: TOKEN as string, ignored: id },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries(["getAllPlayers"]);
+                  queryClient.invalidateQueries(["getAllCoaches"]);
+                  queryClient.invalidateQueries(["getAllTrainers"]);
+                  queryClient.invalidateQueries(["getAllAgents"]);
+                  notify({
+                    type: "success",
+                    text: `You have successfully ignored ${name}`,
+                  });
+                },
+              }
+            );
+          }}
+          >
             Ignore
           </button>
           <button
