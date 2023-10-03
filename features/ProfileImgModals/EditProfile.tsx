@@ -508,10 +508,10 @@ const EditProfileAndExperience = ({ onClose }: { onClose: () => void }) => {
                 </div>
               </div>
               <div className="flex items-center justify-center gap-[24px] w-full h-[93px] mb-[19px] border border-t border-b-transparent border-[#E3E2E2]">
-                {/* <button className="border border-[2px] font-medium w-[135px] h-[41px] rounded-[4px] border-brand-600 text-brand-600">
+                <button className="border border-[2px] font-medium w-[135px] h-[41px] rounded-[4px] border-brand-600 text-brand-600">
                   {" "}
                   Edit Image
-                </button> */}
+                </button>
                 <button
                   type="submit"
                   className="w-[135px] h-[41px] font-medium rounded-[4px] bg-brand-600 text-brand-500"

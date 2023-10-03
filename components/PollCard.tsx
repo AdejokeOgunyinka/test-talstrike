@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import GifPicker from "gif-picker-react";
 import EmojiPicker from "emoji-picker-react";
-import { Link } from "@chakra-ui/react";
 
 import GifIcon from "@/assets/gifIcon.svg";
 import SmallImageIcon from "@/assets/smallImgIcon.svg";
@@ -116,14 +115,9 @@ const PollCard = ({
             </div>
 
             <div>
-              <Link
-                href={`/profile/${post?.author?.id}`}
-                cursor="pointer"
-                _hover={{ textDecoration: "none" }}
-                className="mb-[3px] font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-2250"
-              >
+              <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
                 {post?.author?.firstname} {post?.author?.lastname}
-              </Link>
+              </p>
               <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
                 {moment(post?.created_at).format("dddd Do MMMM")}
               </p>
