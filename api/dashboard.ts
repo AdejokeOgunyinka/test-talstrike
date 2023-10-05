@@ -187,3 +187,24 @@ export const useGetMyFollowers = ({
         }),
     { refetchOnMount: false, retry: 1 }
   );
+
+export const useGeneralSearch = ({
+  token,
+  search_query,
+}: {
+  token: string;
+  search_query: string;
+}) =>
+  useQuery(
+    ["getSearchValues", token, search_query],
+    () =>
+      axios
+        .get(`/explore?search_query=${search_query}`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw err.response.data;
+        }),
+    { refetchOnMount: false }
+  );

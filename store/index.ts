@@ -1,5 +1,6 @@
 import authReducer from "./slices/authSlice";
 import profileReducer from "./slices/profileSlice";
+import dashboardReducer from "./slices/dashboardSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import {
@@ -22,6 +23,7 @@ const persistConfig = {
 const reducers = combineReducers({
   auth: authReducer,
   profile: profileReducer,
+  dashboard: dashboardReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

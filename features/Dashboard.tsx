@@ -22,6 +22,7 @@ import CreateArticle from "@/components/ProfileModals/CreateArticle";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
+import { useGeneralSearch } from "@/api/dashboard";
 import { useFollowUser } from "@/api/players";
 import {
   useGetAllPolls,
@@ -165,6 +166,15 @@ const Dashboard = () => {
       fetchNextPollsPage();
     }
   }, [inView, hasNextPollsPage, fetchNextPollsPage]);
+
+  const { search_query } = useTypedSelector((state) => state.dashboard);
+
+  const { data: searchData } = useGeneralSearch({
+    token: TOKEN as string,
+    search_query: search_query,
+  });
+
+  console.log({ searchData });
 
   return (
     <div className="w-full h-[100vh] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
@@ -342,7 +352,6 @@ const Dashboard = () => {
               )} */}
           </div>
           <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] overflow-y-scroll pb-[50px]">
-            {/* fixed right-[267px] w-[25%] overflow-y-scroll */}
             <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
               <img
                 src={"/talentAd1.png"}

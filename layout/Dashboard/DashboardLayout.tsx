@@ -6,10 +6,11 @@ import { Box, Image } from "@chakra-ui/react";
 
 import { DashboardSidebar, MobileMenu } from "./DashboardSidebar";
 import SearchBar from "@/components/SearchBar";
+import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
+import { handleOnError, isActivePath } from "@/libs/utils";
+import { setSearchQuery } from "@/store/slices/dashboardSlice";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
-import { useTypedSelector } from "@/hooks/hooks";
-import { handleOnError, isActivePath } from "@/libs/utils";
 import { MobileSideBarLink } from "./DashboardSidebar";
 
 type LayoutProps = {
@@ -31,6 +32,8 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
       setShowSignOutButton(false);
     });
   }, []);
+
+  const dispatch = useTypedDispatch();
 
   return (
     <div className="w-full min-h-screen lg:flex lg:justify-center">
@@ -65,6 +68,9 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 isLight
                 isLeftIcon
                 hasRoundedCorners
+                differentOnChange={(e: any) =>
+                  dispatch(setSearchQuery(e?.target?.value))
+                }
               />
             </div>
             <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">
