@@ -25,6 +25,7 @@ import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import { useGeneralSearch } from "@/api/dashboard";
 import { useFollowUser, useIgnoreUser } from "@/api/players";
 import {
+  useGeneralSearch,
   useGetAllPolls,
   useGetNewsfeed,
   useGetSuggestedFollows,
