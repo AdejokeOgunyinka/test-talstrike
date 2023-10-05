@@ -34,6 +34,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
   }, []);
 
   const dispatch = useTypedDispatch();
+  const { search_query } = useTypedSelector((state) => state.dashboard);
 
   return (
     <div className="w-full min-h-screen lg:flex lg:justify-center">
@@ -71,6 +72,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 differentOnChange={(e: any) =>
                   dispatch(setSearchQuery(e?.target?.value))
                 }
+                value={search_query}
               />
             </div>
             <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">

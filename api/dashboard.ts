@@ -199,7 +199,7 @@ export const useGeneralSearch = ({
     ["getSearchValues", token, search_query],
     () =>
       axios
-        .get(`/explore?search_query=${search_query}`, {
+        .get(`/explore?search_key=${search_query}`, {
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => res.data)
