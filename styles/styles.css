@@ -171,3 +171,13 @@ body, #__next  {
 .inputbox-new {
   padding-left: 13px !important;
 }
+
+.chakra-tabs__tablist button[aria-selected=true] {
+  --tabs-color: #0074D9;
+}
+
+.chakra-tabs {
+  border-bottom: 3px solid;
+  border-color: #CDCDCD;
+  margin-bottom: -5px;
+}
