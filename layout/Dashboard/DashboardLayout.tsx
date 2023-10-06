@@ -69,9 +69,12 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 isLight
                 isLeftIcon
                 hasRoundedCorners
-                differentOnChange={(e: any) =>
-                  dispatch(setSearchQuery(e?.target?.value))
-                }
+                differentOnChange={(e: any) => {
+                  dispatch(setSearchQuery(e?.target?.value));
+                  if (router.pathname !== "/dashboard") {
+                    router.push("/dashboard");
+                  }
+                }}
                 value={search_query}
                 hasClearBtn={search_query?.length > 0}
                 onClickClear={() => dispatch(setSearchQuery(""))}
