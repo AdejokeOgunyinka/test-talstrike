@@ -78,12 +78,13 @@ const Index = ({ providers }: { providers: any }) => {
     <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[112px] lg:px-[70px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
         <div className="text-[24px] leading-[145%] text-brand-1650 font-semibold text-center mb-[31px]">
-          Welcome Back, please Login
+          Welcome Back: Your Dreams Are Valid and Achievable.
         </div>
 
         <p className=" mt-[65px] mb-[100px] text-[16px] text-brand-600 font-medium text-center">
-          Get to your feeds, explore curated inspirational videos, livestream
-          mentors and engage in self improvement challenges.
+          Immerse Yourself in Customized Feeds, Uncover Inspiring Videos,
+          Participate in Live Mentorship Sessions, and Embrace Self-Improvement
+          Challenges to Elevate Your Athletic Journey.
         </p>
 
         <form onSubmit={formik.handleSubmit}>

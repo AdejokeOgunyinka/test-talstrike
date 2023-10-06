@@ -5,33 +5,34 @@ const LandingPageLayout = () => {
   const slideShowImages = [
     {
       image: "/young-man-landing-page.png",
-      sloganHeader: "Track your Workouts and Progress",
+      sloganHeader: "Every athlete deserves their moment in the Spotlight.",
       sloganText:
-        "Use our advanced tracking features to monitor your performance and see how far you've come.",
+        "Begin showcasing your skills today. The world eagerly awaits your performance.",
     },
     {
       image: "/team-celebrating-landing-page.png",
-      sloganHeader: "Connect with other Athletes",
+      sloganHeader:
+        "Put Your Talents on Display: Record and Share Your Sports Videos.",
       sloganText:
-        "Meet like-minded individuals, share tips and advice, and get motivated by others' success stories.",
+        "Share Your Training Videos to Demonstrate Your Skills and Dedication to the Game. You Never Know Who's Watching.",
     },
     {
       image: "/electronic-sports-landing-page.png",
-      sloganHeader: "Join Virtual Competitions",
+      sloganHeader: "Grow Your Sports Network and Connections.",
       sloganText:
-        " Challenge yourself and others to virtual competitions and see how you stack up against the competition.",
+        "Enhance Your Sports Journey and Career: Network with Coaches, Trainers, Agents, and Proven Athletes in Your Sport",
     },
     {
       image: "/trainer-chatting-landing-page.png",
-      sloganHeader: " Get Personalized Coaching",
+      sloganHeader: "Participate in and Host Sports Competitions",
       sloganText:
-        "Work with a personal coach to help you achieve your goals and take your game to the next level.",
+        "Embrace the Excitement of Thrilling Contests: Organize and Participate in Competitions Within Your Field. There's Never a Dull Moment Here!",
     },
     {
       image: "/charming-man-landing-page.png",
-      sloganHeader: "Discover New Sports",
+      sloganHeader: "The Ultimate Social App for Athletes",
       sloganText:
-        "Explore new sports and find your next passion with our app's extensive library of sports and activities.",
+        "Share Your Experiences, Join Trends, Connect with Fellow Athletes Worldwide, and Expand Your Network.",
     },
   ];
 
