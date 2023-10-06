@@ -305,10 +305,8 @@ const Dashboard = () => {
                     ?.map((_, index) => <LoadingPosts key={index} />)
                 ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
                   <p className="bg-brand-1300 px-2 py-2 text-[14px]">
-                    Sorry! You are unable to see any posts on your newsfeed,
-                    either because you have not yet added someone to your
-                    friends list, or none of your friends have created a post
-                    yet, or you have not yet created a post...
+                    New to the community? Start connecting with fellow athletes
+                    and share your sports journey to populate your news feed!
                   </p>
                 ) : (
                   newData

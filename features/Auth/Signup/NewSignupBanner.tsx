@@ -13,19 +13,18 @@ const SignupBanner = ({ providers }: { providers: any }) => {
 
   const setupInstructions = [
     {
-      header: "Sign Up",
-      description:
-        "First, create an account with your basic information if you don’t have one already on Talstrike.",
+      header: "Join Us",
+      description: "Step into the Game. Begin Your Journey with Talstrike!",
     },
     {
-      header: "Confirm Email",
+      header: "Email Confirmation",
       description:
-        "Then you get your email verified by clicking the confirmation link sent to your inbox.",
+        "Ready to Score? We've Passed You the Ball. Check Your Inbox and Click the Confirmation Link.",
     },
     {
-      header: "Set up",
+      header: "Set Up",
       description:
-        "Finally, go through the onboarding process which may take about 5 minutes to complete. And, boom you are ready to explore!",
+        "Game plan locked in! Touchdown on setting up. Just a quick 5-minute warm-up, and you'll be ready to dive into your sports adventure.",
     },
   ];
 
@@ -80,7 +79,7 @@ const SignupBanner = ({ providers }: { providers: any }) => {
             Get Started
           </h3>
           <p className="mb-[33px] xl:mb-[93px] text-[14px] md:text-[18px] text-[#94AEC5] text-center md:text-start font-medium leading-[132.5%]">
-            Anyone can strike, you too can!
+            Anyone Can Make an Impact, and You Can Too.
           </p>
           <h5 className="mb-[40px] text-brand-600 text-[15px] md:text-[20px] text-center md:text-start font-bold">
             Create and set up your account in 3 easy steps

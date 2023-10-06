@@ -80,7 +80,7 @@ const Index = () => {
       <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
         <TitleBar
           titleBarColor="bg-brand-pink-rgba"
-          text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+          text="Seeking to Get Fit? Absolutely! Discover Experienced Trainers Ready to Guide and Mentor You."
           header="Trainers"
         />
         <div className="-mt-[27px]">
