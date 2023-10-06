@@ -10,24 +10,23 @@ import { useFollowUser } from "@/api/players";
 import notify from "@/libs/toast";
 import ModalContainer from "./Modal";
 import SinglePost from "./SingleProfilePostComponent/SinglePost";
+import { Box } from "@chakra-ui/react";
 
-const ExploreCard = ({ index, post }: { index: number; post: any }) => {
+const ExploreCard = ({
+  index,
+  post,
+  exploreCardWidth,
+}: {
+  index: number;
+  post: any;
+  exploreCardWidth?: string;
+}) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
   const queryClient = useQueryClient();
 
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
-  // const [stop, setStop] = useState(false);
-
-  // const handleVideo = () => {
-  //   setStop(!stop);
-  //   if (stop === true) {
-  //     videoRef?.current?.pause();
-  //   } else {
-  //     videoRef?.current?.play();
-  //   }
-  // };
 
   const [showFullPostText, setShowFullPostText] = useState(false);
   const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
@@ -56,7 +55,10 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
           </div>
         </ModalContainer>
       )}
-      <div className="relative w-[100%] xl:w-[47%] h-[464px]">
+      <Box
+        width={{ xl: exploreCardWidth || "47%", base: "100%" }}
+        className="relative h-[464px]"
+      >
         <video
           ref={videoRef}
           id={`explore-video-${index}`}
@@ -167,7 +169,7 @@ const ExploreCard = ({ index, post }: { index: number; post: any }) => {
             onClick={() => setShowMoreAboutVideo(true)}
           />
         </div>
-      </div>
+      </Box>
     </>
   );
 };
