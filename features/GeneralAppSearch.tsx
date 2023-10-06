@@ -29,35 +29,37 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            {searchData?.posts?.map((post: any, index: number) => (
-              <PostCard
-                key={index}
-                postType={post?.post_type}
-                postImage={post?.author?.image}
-                postAuthor={
-                  post
-                    ? `${post?.author?.firstname} ${post?.author?.lastname}`
-                    : ""
-                }
-                timeCreated={post?.created_at}
-                postBody={post?.body}
-                postMedia={post?.media}
-                postLikedAvatars={post?.liked_avatars}
-                postLikeCount={post?.like_count}
-                postCommentCount={post?.comment_count}
-                postShareCount={post?.share_count}
-                postId={post?.id}
-                liked={post?.liked}
-                isLoadingPost={false}
-                postTitle={post?.title}
-                fileType={post?.file_type}
-                post={post}
-                onClickViewPost={() => {}}
-              />
-            ))}
+            <Flex direction="column" gap="10px">
+              {searchData?.posts?.map((post: any, index: number) => (
+                <PostCard
+                  key={index}
+                  postType={post?.post_type}
+                  postImage={post?.author?.image}
+                  postAuthor={
+                    post
+                      ? `${post?.author?.firstname} ${post?.author?.lastname}`
+                      : ""
+                  }
+                  timeCreated={post?.created_at}
+                  postBody={post?.body}
+                  postMedia={post?.media}
+                  postLikedAvatars={post?.liked_avatars}
+                  postLikeCount={post?.like_count}
+                  postCommentCount={post?.comment_count}
+                  postShareCount={post?.share_count}
+                  postId={post?.id}
+                  liked={post?.liked}
+                  isLoadingPost={false}
+                  postTitle={post?.title}
+                  fileType={post?.file_type}
+                  post={post}
+                  onClickViewPost={() => {}}
+                />
+              ))}
+            </Flex>
           </TabPanel>
           <TabPanel>
-            <Flex direction="column" gap="12px">
+            <Flex direction="column" gap="12px" width="100%">
               {searchData?.videos?.map((video: any, index: number) => (
                 <ExploreCard key={index} index={index} post={video} />
               ))}
@@ -196,7 +198,36 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
               ))}
             </Flex>
           </TabPanel>
-          <TabPanel></TabPanel>
+          <TabPanel>
+            <Flex direction="column" gap="10px">
+              {searchData?.latest?.map((latest: any, index: number) => (
+                <PostCard
+                  key={index}
+                  postType={latest?.post_type}
+                  postImage={latest?.author?.image}
+                  postAuthor={
+                    latest
+                      ? `${latest?.author?.firstname} ${latest?.author?.lastname}`
+                      : ""
+                  }
+                  timeCreated={latest?.created_at}
+                  postBody={latest?.body}
+                  postMedia={latest?.media}
+                  postLikedAvatars={latest?.liked_avatars}
+                  postLikeCount={latest?.like_count}
+                  postCommentCount={latest?.comment_count}
+                  postShareCount={latest?.share_count}
+                  postId={latest?.id}
+                  liked={latest?.liked}
+                  isLoadingPost={false}
+                  postTitle={latest?.title}
+                  fileType={latest?.file_type}
+                  post={latest}
+                  onClickViewPost={() => {}}
+                />
+              ))}
+            </Flex>
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </Box>
