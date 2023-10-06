@@ -5,7 +5,7 @@ import { theme as baseTheme, extendTheme } from "@chakra-ui/react";
 const config = {
   initialColorMode: "light",
   useSystemColorMode: false,
-  cssVarPrefix: "mainstack",
+  cssVarPrefix: "talstrike",
 };
 
 export const theme = extendTheme({
@@ -16,6 +16,8 @@ export const theme = extendTheme({
     "dark-blue": "#003D72",
     "grey-1": "#93A3B1",
     "bg-grey": "#F8FAFB",
+    "text-grey": "#758797",
+    green: "#00B127",
     text: "#343D45",
     stroke: "#CDCDCD",
     "secondary-blue": "#00729D",
@@ -23,8 +25,8 @@ export const theme = extendTheme({
     "blue-green": "#00CDA6",
   },
   fonts: {
-    heading: `Degular Display, ${baseTheme.fonts?.heading}`,
-    body: `Degular, ${baseTheme.fonts?.body}`,
+    heading: `Poppins, ${baseTheme.fonts?.heading}`,
+    body: `Poppins, ${baseTheme.fonts?.body}`,
   },
   fontSizes: {
     p: "16px",

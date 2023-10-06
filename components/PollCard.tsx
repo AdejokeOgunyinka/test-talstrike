@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
+import { Link } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { BeatLoader, BounceLoader } from "react-spinners";
 import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
@@ -115,9 +116,14 @@ const PollCard = ({
             </div>
 
             <div>
-              <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
+              <Link
+                href={`/profile/${post?.author?.id}`}
+                cursor="pointer"
+                _hover={{ textDecoration: "none" }}
+                className="mb-[3px] font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-2250"
+              >
                 {post?.author?.firstname} {post?.author?.lastname}
-              </p>
+              </Link>
               <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
                 {moment(post?.created_at).format("dddd Do MMMM")}
               </p>
