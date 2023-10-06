@@ -223,8 +223,11 @@ const PostCard = ({
               likeUnlikePost(
                 { token: TOKEN as string, postId: postId },
                 {
-                  onSuccess: () =>
-                    queryClient.invalidateQueries(["getNewsfeed"]),
+                  onSuccess: () => {
+                    queryClient.invalidateQueries(["getNewsfeed"]);
+                    queryClient.invalidateQueries(["getPolls"]);
+                    queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                  },
                 }
               );
             }}
@@ -431,6 +434,7 @@ const PostCard = ({
                       onSuccess: () => {
                         setInputComment("");
                         queryClient.invalidateQueries(["getNewsfeed"]);
+                        queryClient.invalidateQueries(["getPolls"]);
                         queryClient.invalidateQueries(["getAllCommentsOnPost"]);
                       },
                     }

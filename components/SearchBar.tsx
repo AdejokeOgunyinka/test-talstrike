@@ -1,5 +1,6 @@
 import NextImage from "next/image";
 import SearchIcon from "@/assets/SearchIcon.svg.next";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 
 interface ISearchBar {
   placeholder: string;
@@ -9,6 +10,8 @@ interface ISearchBar {
   isLeftIcon?: boolean;
   hasRoundedCorners?: boolean;
   value?: string;
+  onClickClear?: any;
+  hasClearBtn?: boolean;
 }
 
 const SearchBar = ({
@@ -19,6 +22,8 @@ const SearchBar = ({
   hasRoundedCorners,
   differentOnChange,
   value,
+  onClickClear,
+  hasClearBtn,
 }: ISearchBar) => {
   return (
     <div
@@ -26,7 +31,18 @@ const SearchBar = ({
         hasRoundedCorners ? "rounded-[80px]" : "rounded-[4px]"
       } border-brand-300 flex items-center px-[16px]`}
     >
-      {!isLeftIcon && <SearchIcon fill={isLight ? "#fff" : "#131316"} />}
+      {!isLeftIcon && !hasClearBtn && (
+        <SearchIcon fill={isLight ? "#fff" : "#131316"} />
+      )}
+      {!isLeftIcon && hasClearBtn && (
+        <XCircleIcon
+          onClick={onClickClear}
+          width="25px"
+          height="25px"
+          color={isLight ? "#fff" : "#131316"}
+          cursor="pointer"
+        />
+      )}
       <input
         placeholder={placeholder}
         onChange={
@@ -41,7 +57,18 @@ const SearchBar = ({
         style={{ color: isLight ? "#fff" : "#131316" }}
         value={value}
       />
-      {isLeftIcon && <SearchIcon fill={isLight ? "#fff" : "#131316"} />}
+      {isLeftIcon && !hasClearBtn && (
+        <SearchIcon fill={isLight ? "#fff" : "#131316"} />
+      )}
+      {isLeftIcon && hasClearBtn && (
+        <XCircleIcon
+          onClick={onClickClear}
+          width="25px"
+          height="25px"
+          color={isLight ? "#fff" : "#131316"}
+          cursor="pointer"
+        />
+      )}
     </div>
   );
 };

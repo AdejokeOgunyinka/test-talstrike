@@ -73,6 +73,8 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                   dispatch(setSearchQuery(e?.target?.value))
                 }
                 value={search_query}
+                hasClearBtn={search_query?.length > 0}
+                onClickClear={() => dispatch(setSearchQuery(""))}
               />
             </div>
             <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">
