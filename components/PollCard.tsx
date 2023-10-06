@@ -239,8 +239,9 @@ const PollCard = ({
                   headers: { Authorization: "Bearer " + (TOKEN as string) },
                 })
                 .then(() => {
-                  queryClient.invalidateQueries(["getPolls"]);
                   queryClient.invalidateQueries(["getNewsfeed"]);
+                  queryClient.invalidateQueries(["getPolls"]);
+                  queryClient.invalidateQueries(["getAllCommentsOnPost"]);
                 })
                 .catch((err) => {
                   notify({ type: "error", text: err?.response?.data?.message });
@@ -455,8 +456,8 @@ const PollCard = ({
                       onSuccess: () => {
                         setInputComment("");
                         queryClient.invalidateQueries(["getNewsfeed"]);
-                        queryClient.invalidateQueries(["getAllCommentsOnPoll"]);
                         queryClient.invalidateQueries(["getPolls"]);
+                        queryClient.invalidateQueries(["getAllCommentsOnPost"]);
                       },
                     }
                   );

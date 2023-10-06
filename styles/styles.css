@@ -174,10 +174,14 @@ body, #__next  {
 
 .chakra-tabs__tablist button[aria-selected=true] {
   --tabs-color: #0074D9;
+  border-bottom: 3px solid #0074D9 !important ;
+  color: #0074D9;
 }
 
 .chakra-tabs {
-  border-bottom: 3px solid;
   border-color: #CDCDCD;
-  margin-bottom: -5px;
+  margin-bottom: -2px;
+}
+.chakra-tabs__tablist {
+  border-color: #CDCDCD !important;
 }

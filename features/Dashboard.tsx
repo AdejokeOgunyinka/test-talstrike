@@ -83,28 +83,33 @@ const Dashboard = () => {
     token: TOKEN as string,
   });
 
-  const newData =
-    NewsFeedData !== undefined && PollsData !== undefined
-      ? [...NewsFeedData?.pages?.flat(1), ...PollsData?.pages?.flat(1)]?.sort(
-          (a, b) =>
-            new Date(b?.created_at)?.getTime() -
-            new Date(a?.created_at)?.getTime()
-        )
-      : PollsData === undefined && NewsFeedData !== undefined
-      ? NewsFeedData?.pages
-          ?.flat(1)
-          ?.sort(
-            (a: any, b: any) =>
+  const [newData, setNewData] = useState<any>([]);
+
+  useEffect(() => {
+    const initData =
+      NewsFeedData !== undefined && PollsData !== undefined
+        ? [...NewsFeedData?.pages?.flat(1), ...PollsData?.pages?.flat(1)]?.sort(
+            (a, b) =>
               new Date(b?.created_at)?.getTime() -
               new Date(a?.created_at)?.getTime()
           )
-      : PollsData?.pages
-          ?.flat(1)
-          ?.sort(
-            (a: any, b: any) =>
-              new Date(b?.created_at)?.getTime() -
-              new Date(a?.created_at)?.getTime()
-          );
+        : PollsData === undefined && NewsFeedData !== undefined
+        ? NewsFeedData?.pages
+            ?.flat(1)
+            ?.sort(
+              (a: any, b: any) =>
+                new Date(b?.created_at)?.getTime() -
+                new Date(a?.created_at)?.getTime()
+            )
+        : PollsData?.pages
+            ?.flat(1)
+            ?.sort(
+              (a: any, b: any) =>
+                new Date(b?.created_at)?.getTime() -
+                new Date(a?.created_at)?.getTime()
+            );
+    setNewData(initData);
+  }, [NewsFeedData, PollsData]);
 
   const { data: TalentOpenings, isLoading: isLoadingTalentOpenings } =
     useGetPostsByType({
@@ -214,7 +219,7 @@ const Dashboard = () => {
       ) : (
         <div className="w-full flex flex-col-reverse md:flex-row gap-x-[20px]">
           <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[unset]">
-            {isSearching && search_query !== "" ? (
+            {isSearching ? (
               Array(6)
                 ?.fill("")
                 ?.map((_, index) => <LoadingPosts key={index} />)
@@ -481,7 +486,16 @@ const Dashboard = () => {
                         );
                       }}
                     >
-                      Ignore
+                      {isIgnoringPlayer ? (
+                        <BeatLoader
+                          color={"orange"}
+                          size={10}
+                          aria-label="Loading Spinner"
+                          data-testid="loader"
+                        />
+                      ) : (
+                        "Ignore"
+                      )}
                     </button>
                     <button
                       className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px] text-[12px]"
