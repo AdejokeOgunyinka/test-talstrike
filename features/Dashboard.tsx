@@ -22,7 +22,6 @@ import CreateArticle from "@/components/ProfileModals/CreateArticle";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
-import { useGeneralSearch } from "@/api/dashboard";
 import { useFollowUser, useIgnoreUser } from "@/api/players";
 import {
   useGeneralSearch,
@@ -52,7 +51,8 @@ const Dashboard = () => {
   const { data: session } = useSession();
   const dispatch = useTypedDispatch();
 
-  const { inView } = useInView();
+  const { ref, inView } = useInView();
+  const { userInfo } = useTypedSelector((state) => state.profile);
 
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
