@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
-import { Link, Box, useMediaQuery } from "@chakra-ui/react";
+import { Link, Box, useMediaQuery, Text, Flex, Image } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 import { DashboardLayout } from "@/layout/Dashboard";
-import Star from "@/assets/star.svg";
-import People from "@/assets/people.svg";
+import Star2 from "@/assets/star3.svg";
 import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import EditProfile from "@/components/ProfileModals/EditProfile";
@@ -39,6 +38,20 @@ const Index = () => {
   const USERID = session?.user?.id;
   const { userInfo } = useTypedSelector((state) => state.profile);
 
+  const followStatistic = [
+    { name: "Following", val: userInfo?.profile?.following },
+    { name: "Followers", val: userInfo?.profile?.followers },
+    {
+      name: `Year${
+        userInfo?.profile?.years_of_experience &&
+        userInfo?.profile?.years_of_experience > 1
+          ? "s "
+          : " "
+      } Experience`,
+      val: userInfo?.profile?.years_of_experience || 1,
+    },
+  ];
+
   const { data: media } = useGetUserPhotos({
     token: TOKEN as string,
     userId: USERID as string,
@@ -55,8 +68,8 @@ const Index = () => {
   }, [dispatch, userData]);
 
   const profileIcons = [
-    { icon: "/chatbox.svg", onClick: "" },
-    { icon: "/shareSocial.svg", onClick: "" },
+    { icon: "/chatbox4.svg", onClick: "" },
+    { icon: "/shareSocial2.svg", onClick: "" },
   ];
 
   const profileSections = [
@@ -110,8 +123,8 @@ const Index = () => {
               bg="transparent-white"
               className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px] md:mr-[5px]"
             >
-              <div className="h-[515px] w-[100%] lg:w-[274px] bg-brand-500 md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
-                <div className="relative w-[161px] profile-pic h-[161px] mb-[28px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
+              <div className="h-[475px] w-[100%] lg:w-[274px] bg-brand-500 md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
+                <div className="relative w-[163px] profile-pic h-[163px] mb-[13px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
                   <img
                     src={
                       userInfo?.profile?.user?.image !== null
@@ -119,8 +132,8 @@ const Index = () => {
                         : "/profileIcon.svg"
                     }
                     style={{
-                      width: "161px",
-                      height: "161px",
+                      width: "163px",
+                      height: "163px",
                       objectFit: "cover",
                     }}
                     alt="profile"
@@ -128,35 +141,63 @@ const Index = () => {
                     onError={handleOnError}
                   />
 
-                  <div
-                    onClick={() => setViewProfilePicture(true)}
-                    className="profile-pic__overlay bg-brand-100 opacity-20 absolute top-0 w-full h-full flex justify-center items-center"
+                  <Flex
+                    justify="center"
+                    align="center"
+                    onClick={() => setViewEditProfilePicture(true)}
+                    className="profile-pic__overlay absolute top-0 w-full h-full"
                   >
-                    <p className="text-[16px] font-medium text-brand-500">
-                      View
-                    </p>
-                  </div>
+                    <Image src="/editProfileIcon.svg" alt="edit" />
+                  </Flex>
                 </div>
-                <div className="px-[19px] mb-[37px] h-[43px] bg-brand-1100 gap-x-[10px] rounded-[19px] flex justify-center items-center">
-                  <div className="flex">
-                    <NextImage src={Star} alt="star" />
-                    <p className="ml-[5px] font-semibold text-[15px] leading-[22px] text-brand-500">
+                <Text color="text" fontSize="20px" fontWeight="500" mb="6px">
+                  {session?.user.firstname} {session?.user.lastname}
+                </Text>
+                <Text color="green" mb="16px" fontSize="16px" fontWeight="500">
+                  online
+                </Text>
+
+                <Flex direction="column" align="center" mb="29.5px">
+                  {followStatistic?.map((inner, index) => (
+                    <Flex key={index} columnGap="5px" rowGap="5px">
+                      <Text color="light-blue" fontWeight="500" fontSize="18px">
+                        {inner?.val}
+                      </Text>
+                      <Text color="text-grey" fontSize="16px" fontWeight="400">
+                        {inner?.name}
+                      </Text>
+                    </Flex>
+                  ))}
+                </Flex>
+
+                <div className="flex gap-x-[14px]">
+                  <Flex
+                    bg="#EAF0F2"
+                    borderRadius="5px"
+                    w="74px"
+                    h="50px"
+                    align="center"
+                    justify="center"
+                  >
+                    <NextImage src={Star2} alt="star" />
+                    <Text
+                      color="text"
+                      fontSize="16px"
+                      fontWeight="600"
+                      className="ml-[5px] leading-[22px]"
+                    >
                       4.3
-                    </p>
-                  </div>{" "}
-                  <p className="text-brand-500">|</p>
-                  <div className="flex">
-                    <NextImage src={People} alt="people" />
-                    <p className="ml-[5px] font-semibold text-[15px] leading-[22px] text-brand-500">
-                      4.3M
-                    </p>
-                  </div>
-                </div>
-                <div className="flex gap-x-[14px] mb-[26px]">
+                    </Text>
+                  </Flex>
                   {profileIcons.map((icon, index) => (
-                    <div
+                    <Flex
+                      justify="center"
+                      align="center"
                       key={index}
-                      className="w-[44px] h-[44px] rounded-[10px] bg-brand-2300 flex justify-center items-center"
+                      w="54px"
+                      h="50px"
+                      bg="#EAF0F2"
+                      borderRadius="5px"
                     >
                       <NextImage
                         src={icon.icon}
@@ -164,30 +205,8 @@ const Index = () => {
                         width="21"
                         height="21"
                       />
-                    </div>
+                    </Flex>
                   ))}
-                </div>
-                <p className="text-[#0074D9] text-[14px] font-semibold leading-[21px] mb-[7px]">
-                  {userInfo?.profile?.years_of_experience || 1} year
-                  {userInfo?.profile?.years_of_experience &&
-                  userInfo?.profile?.years_of_experience > 1
-                    ? "s "
-                    : " "}
-                  Experience
-                </p>
-                <p className="text-[#00B127] mb-[29px] opacity-50 text-[11px] lg:text-[13px] font-semibold">
-                  online
-                </p>
-                <div
-                  onClick={() => setViewEditProfilePicture(true)}
-                  className="cursor-pointer"
-                >
-                  <NextImage
-                    src={"/editBtn.svg"}
-                    alt="edit"
-                    width="102"
-                    height="38"
-                  />
                 </div>
               </div>
               <div className="h-[182px] mt-[5px] md:mt-[24px] bg-brand-500 lg:w-[274px] md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] px-[18px] pt-[11px] pb-[18px]">
