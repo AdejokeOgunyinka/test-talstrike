@@ -13,7 +13,7 @@ import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
 import { MobileSideBarLink } from "./DashboardSidebar";
 
-type LayoutProps = {
+export type LayoutProps = {
   children?: React.ReactNode;
 };
 
@@ -47,7 +47,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
           <DashboardSidebar />
         </Box>
         <div className="ml-[unset] md:ml-[178px] w-[100%] md:w-[calc(100%-178px)] relative md:static scrollbar-hidden">
-          <div className="bg-[#343D45] z-[10] h-[70px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
+          <div className="bg-[#343D45] z-[10] h-[60px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
             <div
               className={`w-[50%] lg:w-[350px] h-[100%] flex items-center ${
                 router.pathname === "/dashboard" && "ml-[15px]"
@@ -114,21 +114,20 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          <div className="w-[100%] min-h-[calc(100vh-70px)] flex scrollbar-hidden">
+          <div className="w-[100%] min-h-[calc(100vh-60px)] flex scrollbar-hidden">
             <div
               className={`w-[100%] ${
-                router.pathname === "/profile" ||
-                router.pathname === "/profile/[id]" ||
-                router.pathname === "/profile/section/[section]"
+                router.pathname?.startsWith("/profile")
                   ? "md:w-[calc(100%-23px)]"
+                  : router.pathname?.startsWith("/messaging")
+                  ? "w-[100%]"
                   : "lg:w-[calc(100%-267px)]"
               } h-[100%] scrollbar-hidden`}
             >
               {children}
             </div>
-            {router.pathname !== "/profile" &&
-              router.pathname !== "/profile/[id]" &&
-              router.pathname !== "/profile/section/[section]" && (
+            {!router.pathname?.startsWith("/profile") &&
+              !router.pathname?.startsWith("/messaging") && (
                 <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden hidden md:inline-block">
                   <DashboardAside />
                 </aside>
