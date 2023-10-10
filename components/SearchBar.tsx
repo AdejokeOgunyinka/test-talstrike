@@ -12,6 +12,7 @@ interface ISearchBar {
   value?: string;
   onClickClear?: any;
   hasClearBtn?: boolean;
+  iconColor?: string;
 }
 
 const SearchBar = ({
@@ -24,22 +25,27 @@ const SearchBar = ({
   value,
   onClickClear,
   hasClearBtn,
+  iconColor,
 }: ISearchBar) => {
   return (
     <div
-      className={`w-[100%] h-[100%] border-[1px] ${
+      className={`w-[100%] h-[100%] ${!iconColor && `border-[1px]`} ${
         hasRoundedCorners ? "rounded-[80px]" : "rounded-[4px]"
-      } border-brand-300 flex items-center px-[16px]`}
+      } border-brand-300 flex items-center px-[16px] ${
+        iconColor && `bg-[#F1F1F1]`
+      }`}
     >
       {!isLeftIcon && !hasClearBtn && (
-        <SearchIcon fill={isLight ? "#fff" : "#131316"} />
+        <SearchIcon
+          fill={iconColor ? iconColor : isLight ? "#fff" : "#131316"}
+        />
       )}
       {!isLeftIcon && hasClearBtn && (
         <XCircleIcon
           onClick={onClickClear}
           width="25px"
           height="25px"
-          color={isLight ? "#fff" : "#131316"}
+          color={iconColor ? iconColor : isLight ? "#fff" : "#131316"}
           cursor="pointer"
         />
       )}
@@ -53,19 +59,23 @@ const SearchBar = ({
                 onChange && onChange(val);
               }
         }
-        className="border-none w-full bg-[unset] ml-[5px] focus:outline-0 placeholder:text-[11px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px] text-[11px] lg:text-[14px] 2xl:text[16px]"
-        style={{ color: isLight ? "#fff" : "#131316" }}
+        className={`border-none w-full bg-[unset] ml-[5px] focus:outline-0 placeholder:text-[11px] placeholder:font-light ${
+          iconColor && `placeholder:text-[${iconColor}]`
+        } placeholder:text-brand-200 placeholder: leading-[16px] text-[11px] lg:text-[14px] 2xl:text[16px]`}
+        style={{ color: iconColor ? iconColor : isLight ? "#fff" : "#131316" }}
         value={value}
       />
       {isLeftIcon && !hasClearBtn && (
-        <SearchIcon fill={isLight ? "#fff" : "#131316"} />
+        <SearchIcon
+          fill={iconColor ? iconColor : isLight ? "#fff" : "#131316"}
+        />
       )}
       {isLeftIcon && hasClearBtn && (
         <XCircleIcon
           onClick={onClickClear}
           width="25px"
           height="25px"
-          color={isLight ? "#fff" : "#131316"}
+          color={iconColor ? iconColor : isLight ? "#fff" : "#131316"}
           cursor="pointer"
         />
       )}

@@ -214,8 +214,8 @@ export const DashboardSidebar = () => {
           </Accordion>
 
           <SideBarLink
-            path="/messages"
-            active={isActivePath("/messages", router.pathname)}
+            path="/messaging"
+            active={isActivePath("/messaging", router.pathname)}
             Icon={"/messagesInactiveIcon.svg"}
             title="Messages"
           />
