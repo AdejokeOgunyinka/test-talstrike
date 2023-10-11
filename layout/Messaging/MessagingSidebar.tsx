@@ -1,14 +1,18 @@
 import ArrowForwardIcon from "@/assets/svgFiles/ArrowForward.svg.next";
 import { Box, Flex, Text, Image } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
+import { useTypedDispatch } from "@/hooks/hooks";
 import { useGetAllCoaches } from "@/api/coaches";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import PeopleComponent from "@/components/Messaging/PeopleComponent";
 import MessagingFriendComponent, {
   IMessagingFriendComponent,
 } from "@/components/Messaging/MessagingFriendComponent";
+import {
+  setShowFriends,
+  setShowPeopleNearMe,
+} from "@/store/slices/messagingSlice";
 
 const MessagingSidebar = () => {
   const { data: session } = useSession();
@@ -66,6 +70,8 @@ const MessagingSidebar = () => {
     },
   ];
 
+  const dispatch = useTypedDispatch();
+
   return (
     <Box w="100%" pt="15px">
       <Flex
@@ -92,7 +98,14 @@ const MessagingSidebar = () => {
       >
         <Flex justify="space-between" color="grey-1" fontWeight="500" mb="14px">
           <Text fontSize="11px">People near me</Text>
-          <Flex align="center" cursor="pointer">
+          <Flex
+            align="center"
+            cursor="pointer"
+            onClick={() => {
+              dispatch(setShowFriends(false));
+              dispatch(setShowPeopleNearMe(true));
+            }}
+          >
             <Text fontSize="10px" mr="5px">
               {" "}
               VIEW ALL
@@ -150,7 +163,14 @@ const MessagingSidebar = () => {
             mb="14px"
           >
             <Text fontSize="11px">Friends</Text>
-            <Flex align="center" cursor="pointer">
+            <Flex
+              align="center"
+              cursor="pointer"
+              onClick={() => {
+                dispatch(setShowFriends(true));
+                dispatch(setShowPeopleNearMe(false));
+              }}
+            >
               <Text fontSize="10px" mr="5px">
                 {" "}
                 VIEW ALL

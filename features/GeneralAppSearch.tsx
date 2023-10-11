@@ -26,7 +26,25 @@ import { useFollowUser } from "@/api/players";
 import { useTypedSelector } from "@/hooks/hooks";
 import notify from "@/libs/toast";
 
-const PersonSearchResultComponent = ({ person }: { person: any }) => {
+export const PersonSearchResultComponent = ({
+  firstname,
+  lastname,
+  userId,
+  img,
+  roles,
+  location,
+  isFollowing,
+  sport,
+}: {
+  firstname: string;
+  lastname: string;
+  userId: string;
+  img: string;
+  sport?: string;
+  roles: string[];
+  location?: string[];
+  isFollowing?: boolean;
+}) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
@@ -43,78 +61,81 @@ const PersonSearchResultComponent = ({ person }: { person: any }) => {
       borderRadius="8px"
       pos="relative"
     >
-      <Box mr="10.3px">
-        <Box
-          w="43.797px"
-          h="42.543px"
-          borderRadius="43.797px"
-          border="2px solid"
-          borderColor="stroke"
-          mb="9px"
-        >
-          <Image
-            src={`${person?.user?.image}`}
-            alt="avatar"
-            w="full"
-            h="full"
-            borderRadius={"43.797px"}
-            onError={handleOnError}
-          />
-        </Box>
-        <Flex
-          w="39.056px"
-          h="19px"
-          bg="blue-green"
-          color="primary-white-3"
-          justify="center"
-          align="center"
-          fontSize="10px"
-          fontWeight="600"
-          borderRadius="10.314px"
-        >
-          4.3M
-        </Flex>
-      </Box>
-      <Flex direction="column" gap="11px">
-        <Flex align="center">
-          <Link
-            href={`/profile/${person?.user?.id}`}
-            cursor="pointer"
-            _hover={{ textDecoration: "none" }}
-            fontSize="13px"
-          >
-            {person?.user?.firstname} {person?.user?.lastname}
-          </Link>
+      <Flex align="center" className="w-[calc(100%-88px)]">
+        <Box mr="10.3px">
           <Box
-            w="6px"
-            h="6px"
+            w="43.797px"
+            h="42.543px"
+            borderRadius="43.797px"
+            border="2px solid"
+            borderColor="stroke"
+            mb="9px"
+          >
+            <Image
+              src={img}
+              alt="avatar"
+              w="full"
+              h="full"
+              borderRadius={"43.797px"}
+              onError={handleOnError}
+            />
+          </Box>
+          <Flex
+            w="39.056px"
+            h="19px"
             bg="blue-green"
-            borderRadius="100%"
-            ml="15px"
-          ></Box>
-        </Flex>
-        <Text color="secondary-blue" fontSize="11px" fontWeight="500">
-          {person?.user?.roles[0]}
-          {`${person?.sport !== null ? ", " : ""}`}
-          {
-            sports?.results?.filter(
-              (sport: any) => sport?.id === person?.sport
-            )[0]?.name
-          }
-        </Text>
-        <Flex
-          gap={person?.location !== null ? "10px" : "unset"}
-          align="center"
-          color="grey-1"
-          fontSize="11px"
-          fontWeight="500"
-        >
-          <Text>
-            {person?.location !== null
-              ? `${person?.location[1]}, ${person?.location[0]}`
-              : ""}
+            color="primary-white-3"
+            justify="center"
+            align="center"
+            fontSize="10px"
+            fontWeight="600"
+            borderRadius="10.314px"
+          >
+            4.3M
+          </Flex>
+        </Box>
+        <Flex direction="column" gap="11px">
+          <Flex align="center">
+            <Link
+              href={`/profile/${userId}`}
+              cursor="pointer"
+              _hover={{ textDecoration: "none" }}
+              fontSize="13px"
+              noOfLines={1}
+              textOverflow="ellipsis"
+            >
+              {firstname} {lastname}
+            </Link>
+            <Box
+              w="6px"
+              h="6px"
+              bg="blue-green"
+              borderRadius="100%"
+              ml="15px"
+            ></Box>
+          </Flex>
+          <Text color="secondary-blue" fontSize="11px" fontWeight="500">
+            {roles[0]}
+            {`${sport && sport !== null ? ", " : ""}`}
+            {
+              sports?.results?.filter(
+                (sportResult: any) => sportResult?.id === sport
+              )[0]?.name
+            }
           </Text>
-          {/* {person?.location !== null && (
+          <Flex
+            gap={location && location !== null ? "10px" : "unset"}
+            align="center"
+            color="grey-1"
+            fontSize="11px"
+            fontWeight="500"
+          >
+            <Text>
+              {location && location !== null
+                ? `${location[1]}, ${location[0]}`
+                : ""}
+            </Text>
+            {/* {person?.location !== null && (
                         <Box
                           w="3px"
                           h="3px"
@@ -122,7 +143,8 @@ const PersonSearchResultComponent = ({ person }: { person: any }) => {
                           borderRadius="100%"
                         ></Box>
                       )} */}
-          {/* <Text>15 miles away</Text> */}
+            {/* <Text>15 miles away</Text> */}
+          </Flex>
         </Flex>
       </Flex>
 
@@ -149,17 +171,19 @@ const PersonSearchResultComponent = ({ person }: { person: any }) => {
             followUser(
               {
                 token: TOKEN as string,
-                userId: person?.user?.id,
+                userId: userId,
               },
               {
                 onSuccess: () => {
                   queryClient.invalidateQueries(["getSuggestedFollows"]);
                   queryClient.invalidateQueries(["getSearchValues"]);
+                  queryClient.invalidateQueries(["getMyFollowers"]);
+                  queryClient.invalidateQueries(["getPeopleNearMe"]);
                   notify({
                     type: "success",
-                    text: `You are ${!person?.is_following && "now"} ${
-                      person?.is_following ? "unfollowing" : "following"
-                    } ${person?.user?.firstname} ${person?.user?.lastname}`,
+                    text: `You are ${!isFollowing && "now"} ${
+                      isFollowing ? "unfollowing" : "following"
+                    } ${firstname} ${lastname}`,
                   });
                 },
               }
@@ -167,7 +191,7 @@ const PersonSearchResultComponent = ({ person }: { person: any }) => {
           }}
           isLoading={isFollowingPlayer}
         >
-          {person?.is_following ? "Unfollow" : "Follow"}
+          {isFollowing ? "Unfollow" : "Follow"}
         </Button>
         <Button
           borderRadius="4px"
@@ -177,6 +201,7 @@ const PersonSearchResultComponent = ({ person }: { person: any }) => {
           h="29px"
           fontSize="11px"
           color="text"
+          bg="primary-white-3"
         >
           Chat
         </Button>
@@ -310,7 +335,17 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
               ) : (
                 <Flex direction="column" gap="10px">
                   {searchData?.people?.map((person: any, index: number) => (
-                    <PersonSearchResultComponent person={person} key={index} />
+                    <PersonSearchResultComponent
+                      firstname={person?.user?.firstname}
+                      lastname={person?.user?.lastname}
+                      userId={person?.user?.id}
+                      sport={person?.sport}
+                      location={person?.location}
+                      img={person?.user?.image}
+                      roles={person?.user?.roles[0]}
+                      isFollowing={person?.is_following}
+                      key={index}
+                    />
                   ))}
                 </Flex>
               )}
