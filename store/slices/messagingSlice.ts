@@ -4,11 +4,15 @@ import { createSlice } from "@reduxjs/toolkit";
 interface MessagingState {
   messageUserId: string;
   messageUserInfo: any;
+  showFriends: boolean;
+  showPeopleNearMe: boolean;
 }
 
 const initialState: MessagingState = {
   messageUserId: "",
   messageUserInfo: null,
+  showFriends: false,
+  showPeopleNearMe: false,
 };
 
 const messagingSlice = createSlice({
@@ -21,10 +25,21 @@ const messagingSlice = createSlice({
     setMessagingUserInfo: (state, action) => {
       state.messageUserInfo = action.payload;
     },
+    setShowFriends: (state, action) => {
+      state.showFriends = action.payload;
+    },
+    setShowPeopleNearMe: (state, action) => {
+      state.showPeopleNearMe = action.payload;
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const { setMessagingUserId, setMessagingUserInfo } =
-  messagingSlice.actions;
+export const {
+  setMessagingUserId,
+  setMessagingUserInfo,
+  setShowFriends,
+  setShowPeopleNearMe,
+} = messagingSlice.actions;
+
 export default messagingSlice.reducer;

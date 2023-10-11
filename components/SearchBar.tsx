@@ -13,6 +13,7 @@ interface ISearchBar {
   onClickClear?: any;
   hasClearBtn?: boolean;
   iconColor?: string;
+  bgColor?: string;
 }
 
 const SearchBar = ({
@@ -26,13 +27,14 @@ const SearchBar = ({
   onClickClear,
   hasClearBtn,
   iconColor,
+  bgColor,
 }: ISearchBar) => {
   return (
     <div
       className={`w-[100%] h-[100%] ${!iconColor && `border-[1px]`} ${
         hasRoundedCorners ? "rounded-[80px]" : "rounded-[4px]"
       } border-brand-300 flex items-center px-[16px] ${
-        iconColor && `bg-[#F1F1F1]`
+        bgColor ? bgColor : iconColor && `bg-[#F1F1F1]`
       }`}
     >
       {!isLeftIcon && !hasClearBtn && (
