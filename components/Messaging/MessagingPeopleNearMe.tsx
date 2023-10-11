@@ -88,7 +88,7 @@ const MessagingPeopleNearMe = () => {
       </Flex>
 
       <Flex
-        p="22px 20px"
+        p={{ base: "22px  20px 100px 20px ", md: "22px 20px" }}
         w="100%"
         h="76vh"
         flexWrap="wrap"
