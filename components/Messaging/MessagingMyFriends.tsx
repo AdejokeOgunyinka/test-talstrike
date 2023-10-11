@@ -90,7 +90,7 @@ const MessagingMyFriends = () => {
       </Flex>
 
       <Flex
-        p="22px 20px"
+        p={{ base: "22px  20px 100px 20px ", md: "22px 20px" }}
         w="100%"
         flexWrap="wrap"
         gap="14px"
