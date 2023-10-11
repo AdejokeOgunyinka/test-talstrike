@@ -5,6 +5,8 @@ import PeopleComponent from "./PeopleComponent";
 import {
   setMessagingUserId,
   setMessagingUserInfo,
+  setShowFriends,
+  setShowPeopleNearMe,
 } from "@/store/slices/messagingSlice";
 import { useTypedDispatch } from "@/hooks/hooks";
 
@@ -39,6 +41,8 @@ const MessagingFriendComponent = ({
       justify="space-between"
       cursor="pointer"
       onClick={() => {
+        dispatch(setShowFriends(false));
+        dispatch(setShowPeopleNearMe(false));
         dispatch(setMessagingUserId(id));
         dispatch(
           setMessagingUserInfo({

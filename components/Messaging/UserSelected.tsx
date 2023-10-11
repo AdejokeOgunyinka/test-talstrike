@@ -1,9 +1,10 @@
 import { Flex, Box, Text, Image, Input } from "@chakra-ui/react";
 import MoreIconThreeDots from "@/assets/svgFiles/MoreIconThreeDots.svg.next";
-import SearchBar from "../SearchBar";
 import { useTypedSelector } from "@/hooks/hooks";
 import CircleIcon from "@/assets/svgFiles/Circle.svg.next";
 import SendMessageIcon from "@/assets/svgFiles/SendMessage.svg.next";
+import MessageComponent from "./MessageComponent";
+import SearchBar from "../SearchBar";
 
 const UserSelected = () => {
   const { messageUserInfo } = useTypedSelector((state) => state.messaging);
@@ -71,14 +72,78 @@ const UserSelected = () => {
         </Flex>
       </Flex>
 
-      <Box className="h-[88vh-55px]" overflowY="scroll"></Box>
+      <Flex
+        direction="column"
+        gap="48px"
+        className="h-[calc(88vh-55px)]"
+        overflowY="scroll"
+        padding={{ base: "18px 12px 120px 12px", md: "28px 18px 50px 18px" }}
+      >
+        <MessageComponent
+          isSender
+          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+          time="10:25 AM"
+        >
+          <Text color="primary-white-3" fontSize="16px">
+            Professional!
+          </Text>
+        </MessageComponent>
+
+        <MessageComponent
+          userImg={messageUserInfo?.img}
+          isReceiver
+          time="10:30 AM"
+          status="sent"
+        >
+          <Text>Yes it is </Text>
+        </MessageComponent>
+
+        <MessageComponent
+          isSender
+          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+          time="10:25 AM"
+        >
+          <Text color="primary-white-3" fontSize="16px">
+            I am going to recommend her for an award!
+          </Text>
+        </MessageComponent>
+
+        <MessageComponent
+          userImg={messageUserInfo?.img}
+          isReceiver
+          time="10:30 AM"
+          status="pending"
+        >
+          <Text>{`That's what I'm talking about`}</Text>
+        </MessageComponent>
+
+        <MessageComponent
+          isSender
+          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+          time="10:25 AM"
+        >
+          <Text color="primary-white-3" fontSize="16px">
+            I am going to recommend her for an award!
+          </Text>
+        </MessageComponent>
+
+        <MessageComponent
+          userImg={messageUserInfo?.img}
+          isReceiver
+          time="10:30 AM"
+          status="pending"
+        >
+          <Text>{`That's what I'm talking about`}</Text>
+        </MessageComponent>
+      </Flex>
+
       <Flex
         pos="absolute"
         bottom={{ base: "64px", md: "0" }}
         w="100%"
         justify="space-between"
         bg="text"
-        padding="16px 24px"
+        padding={{ base: "16px", md: "16px 24px" }}
       >
         <Flex align="center">
           <Image alt="smile" src="/smile.svg" cursor="pointer" />
@@ -86,11 +151,11 @@ const UserSelected = () => {
             alt="attachment"
             src="/attachment.svg"
             cursor="pointer"
-            ml="24px"
+            ml={{ base: "12px", md: "24px" }}
           />
         </Flex>
         <Flex
-          w="70%"
+          w={{ base: "60%", md: "70%" }}
           bg="primary-white-3"
           borderRadius="24px"
           h="41px"
