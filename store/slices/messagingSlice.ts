@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface MessagingState {
   messageUserId: string;
   messageUserInfo: any;
+  chatChannel: string;
   showFriends: boolean;
   showPeopleNearMe: boolean;
 }
@@ -11,6 +12,7 @@ interface MessagingState {
 const initialState: MessagingState = {
   messageUserId: "",
   messageUserInfo: null,
+  chatChannel:"",
   showFriends: false,
   showPeopleNearMe: false,
 };
@@ -25,6 +27,9 @@ const messagingSlice = createSlice({
     setMessagingUserInfo: (state, action) => {
       state.messageUserInfo = action.payload;
     },
+    setChatChannel: (state, action) => {
+      state.chatChannel = action.payload;
+    },
     setShowFriends: (state, action) => {
       state.showFriends = action.payload;
     },
@@ -38,6 +43,7 @@ const messagingSlice = createSlice({
 export const {
   setMessagingUserId,
   setMessagingUserInfo,
+  setChatChannel,
   setShowFriends,
   setShowPeopleNearMe,
 } = messagingSlice.actions;

@@ -1,13 +1,137 @@
 import { Flex, Box, Text, Image, Input } from "@chakra-ui/react";
 import MoreIconThreeDots from "@/assets/svgFiles/MoreIconThreeDots.svg.next";
 import { useTypedSelector } from "@/hooks/hooks";
+import { useSession } from "next-auth/react";
 import CircleIcon from "@/assets/svgFiles/Circle.svg.next";
 import SendMessageIcon from "@/assets/svgFiles/SendMessage.svg.next";
 import MessageComponent from "./MessageComponent";
 import SearchBar from "../SearchBar";
+import { useEffect, useState } from "react";
+import {getChannel} from "@/api/messages";
+import {
+  setChatChannel
+} from "@/store/slices/messagingSlice";
+
+
+
+
+interface IMessage {
+  id: string
+  message: string;
+  img: string;
+  time: string;
+}
 
 const UserSelected = () => {
   const { messageUserInfo } = useTypedSelector((state) => state.messaging);
+  const { userInfo } = useTypedSelector((state) => state.profile);
+  const [connected, setConnected] = useState(false);
+  const [websock, setWebSock] = useState<any>()
+  const [messages, setMessages] = useState<IMessage[]>([])
+  const [message, setMessage] = useState<IMessage>()
+  const [messageComponent, setMessageComponent] = useState(<></>)
+  const [msgDisplayed, setMsgDisplayed] = useState(false)
+
+  let key = 0;
+
+  
+  const { data: session } = useSession();
+ // const {  data: ChatChannel } = useGetChatChannel(userId);
+  
+  const startChat = async()=>{
+    const token = session?.user?.access
+     const userId = messageUserInfo.id
+     const channel = await getChannel(token || "", userId)
+    //console.log(channel, "Channel Data")
+    setChatChannel(channel)
+    const ws = new WebSocket("ws://143.244.179.156:8000/ws/chat/emmy_lobby/");
+      ws.onopen = (event) => {
+       console.log("Connected!!!")
+       setConnected(true)
+       setWebSock(ws)
+      };
+      ws.onmessage = function (event) {
+       const json = JSON.parse(event.data);
+       const msgs = messages
+       messages.push(event.data)
+      setMessages(messages)
+
+  
+
+// const uniquemsgs = messages.map(item => item.id)
+// .filter((value, index, self) => self.indexOf(value) === index);
+
+// console.log(uniquemsgs, "Unique messages")
+
+
+      // const fmsgs = uniquemsgs.map((newmsg)=>{
+        
+        // if(msgDisplayed===false){
+        //   setMsgDisplayed(true)
+        //   return <MessageComponent
+        //   userImg={`https://res.cloudinary.com/dblqvlycm/image/upload/v1/media/users/user/templates/images/${newmsg?.img}`}
+        //   isReceiver
+        //   time={newmsg.time}
+        //   status="sent"
+        //   key={id}
+        // >
+        //   <Text>{newmsg.message} </Text>
+        // </MessageComponent>
+        // }
+        
+      // })
+      if(messages){
+
+        const result = Object.values(
+          messages.reduce((msg, obj) => ({ ...msg, [obj.id]: obj }), {})
+      );
+    
+        console.log(result, "Unique messages")
+        }
+      
+      console.log(messages, "console data...")
+      
+    //  setMessages(msgs)
+
+    
+
+       
+      };
+
+  
+    
+  }
+
+  const handleSendMessage = () => {
+    let date = new Date();
+    let hr = date.getHours();
+    let mnt = date.getMinutes();
+    const ampm = hr >= 12 ? 'pm' : 'am';
+    hr = hr > 12 ? hr-12 : hr
+    const hour = hr < 10?`0${hr}`:hr;
+    const minutes = mnt < 10?`0${mnt}`:mnt
+
+    websock.send(JSON.stringify({
+      'message': {
+        'id':Date.now(),
+        'message': message,
+        'img':'user_xtlmxp',
+        'time': `${hour}:${minutes} ${ampm}`
+
+      }
+      
+  }));
+  };
+
+  const handleTextChange = (e:any)=>{
+    setMessage(e.target.value)
+  }
+
+  useEffect(()=>{
+    if(connected===false)
+    startChat(); 
+    
+  })
 
   return (
     <Box w="full" h="full" pos="relative">
@@ -75,66 +199,25 @@ const UserSelected = () => {
       <Flex
         direction="column"
         gap="48px"
-        className="h-[calc(88vh-55px)]"
+        className="h-[calc(88vh-55px)] msgparent"
         overflowY="scroll"
         padding={{ base: "18px 12px 120px 12px", md: "28px 18px 50px 18px" }}
       >
-        <MessageComponent
-          isSender
-          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-          time="10:25 AM"
-        >
-          <Text color="primary-white-3" fontSize="16px">
-            Professional!
-          </Text>
-        </MessageComponent>
-
-        <MessageComponent
-          userImg={messageUserInfo?.img}
-          isReceiver
-          time="10:30 AM"
-          status="sent"
-        >
-          <Text>Yes it is </Text>
-        </MessageComponent>
-
-        <MessageComponent
-          isSender
-          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-          time="10:25 AM"
-        >
-          <Text color="primary-white-3" fontSize="16px">
-            I am going to recommend her for an award!
-          </Text>
-        </MessageComponent>
-
-        <MessageComponent
-          userImg={messageUserInfo?.img}
-          isReceiver
-          time="10:30 AM"
-          status="pending"
-        >
-          <Text>{`That's what I'm talking about`}</Text>
-        </MessageComponent>
-
-        <MessageComponent
-          isSender
-          userImg="https://images.unsplash.com/photo-1696513301944-90abb561b935?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-          time="10:25 AM"
-        >
-          <Text color="primary-white-3" fontSize="16px">
-            I am going to recommend her for an award!
-          </Text>
-        </MessageComponent>
-
-        <MessageComponent
-          userImg={messageUserInfo?.img}
-          isReceiver
-          time="10:30 AM"
-          status="pending"
-        >
-          <Text>{`That's what I'm talking about`}</Text>
-        </MessageComponent>
+        {/* {
+          messages.map((msg)=>{
+             ++key
+             const newmsg = JSON.parse(msg)
+            return <MessageComponent
+            userImg={`https://res.cloudinary.com/dblqvlycm/image/upload/v1/media/users/user/templates/images/${newmsg?.img}`}
+            isReceiver
+            time={newmsg.time}
+            status="sent"
+            key={key}
+          >
+            <Text>{newmsg.message} </Text>
+          </MessageComponent>
+          })
+        } */}
       </Flex>
 
       <Flex
@@ -168,6 +251,7 @@ const UserSelected = () => {
             outlineColor="transparent"
             _focusVisible={{ borderColor: "transparent" }}
             borderRadius="24px"
+            onChange={handleTextChange}
           />
           <Flex
             h="full"
@@ -176,7 +260,7 @@ const UserSelected = () => {
             align="center"
             justify="center"
           >
-            <SendMessageIcon cursor="pointer" />
+            <SendMessageIcon cursor="pointer" onClick={handleSendMessage} />
           </Flex>
         </Flex>
         <Image alt="record audio" src="/recordAudio.svg" cursor="pointer" />
