@@ -116,7 +116,12 @@ const Index = () => {
                   ))}
                 </div>
                 <p className="text-brand-50 text-[14px] font-semibold leading-[21px] mb-[7px]">
-                  {userProfile?.years_of_experience || 1} year(s) Experience
+                  {userProfile?.years_of_experience || 1} year
+                  {userProfile?.years_of_experience &&
+                  userProfile?.years_of_experience > 1
+                    ? "s "
+                    : " "}{" "}
+                  Experience
                 </p>
                 <p className="text-brand-2400 mb-[29px] opacity-50 text-[11px] lg:text-[13px] font-semibold">
                   online
