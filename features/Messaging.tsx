@@ -16,15 +16,14 @@ const Index = () => {
   const dispatch = useTypedDispatch();
 
   useEffect(() => {
-    dispatch(setMessagingUserId(""));
+    if(!messageUserId) 
+        dispatch(setMessagingUserId(""));
   }, []);
 
   return (
     <MessagingLayout>
       <Box w="full" h="full">
-        {showPeopleNearMe ? (
-          <MessagingPeopleNearMe />
-        ) : showFriends ? (
+        {showPeopleNearMe ? (<MessagingPeopleNearMe />) : showFriends ? (
           <MessagingMyFriends />
         ) : messageUserId ? (
           <UserSelected />

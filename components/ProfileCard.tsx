@@ -10,8 +10,16 @@ import Star from "@/assets/star2.svg";
 import Map from "@/assets/map.svg";
 import { useFollowUser, useIgnoreUser } from "@/api/players";
 import { useGetAllHashtags } from "@/api/dashboard";
-import notify from "@/libs/toast";
+import notify from "@/libs/toast"; 
 import { handleOnError } from "@/libs/utils";
+import {
+  setMessagingUserId,
+  setMessagingUserInfo,
+  setChatChannel
+} from "@/store/slices/messagingSlice";
+
+import { useTypedDispatch } from "@/hooks/hooks";
+
 
 type IProfileCardProps = {
   id: string;
@@ -41,6 +49,7 @@ const ProfileCard = ({
   friend,
 }: IProfileCardProps) => {
   const queryClient = useQueryClient();
+  const dispatch = useTypedDispatch();
 
   let ratingColorArray: Record<string, string> = {
     1: "bg-[#DD1111]",
@@ -63,8 +72,24 @@ const ProfileCard = ({
       ?.filter((hashtag: any) => hashtag.id === id)[0]
       ?.hashtag?.slice(1);
   };
+  
 
   const router = useRouter();
+
+  const startMessaging = ()=>{
+        dispatch(setMessagingUserId(id));
+        dispatch(
+          setMessagingUserInfo({
+            id,
+            name,
+            img,
+          })
+        );
+        
+       router.push("/messaging")
+      }
+
+ 
 
   return (
     <div className="w-[100%] md:basis-[25%] md:w-[230px] xl:basis-[33%] xl:w-[250px] min-h-[220px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
@@ -139,7 +164,7 @@ const ProfileCard = ({
         )}
       </div>
       {friend ? (
-        <button className="w-full h-[32px] mt-[24px] border border-brand-90 bg-brand-500 rounded-[7px]">
+        <button className="w-full h-[32px] mt-[24px] border border-brand-90 bg-brand-500 rounded-[7px]" onClick={startMessaging}>
           Message
         </button>
       ) : (
