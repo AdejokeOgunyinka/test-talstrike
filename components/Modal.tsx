@@ -10,7 +10,7 @@ const ModalContainer = ({
   return (
     <div className="h-auto w-screen fixed bg-brand-modal z-[9999] flex justify-center inset-0">
       <div
-        className={`w-full mt-[20px] md:mt-[113px] ${
+        className={`w-full mt-[20px] md:mt-[50px] 2xl:mt-[113px] ${
           marginTop || "md:mt-113px"
         } flex justify-center`}
       >
