@@ -10,16 +10,14 @@ import Star from "@/assets/star2.svg";
 import Map from "@/assets/map.svg";
 import { useFollowUser, useIgnoreUser } from "@/api/players";
 import { useGetAllHashtags } from "@/api/dashboard";
-import notify from "@/libs/toast"; 
+import notify from "@/libs/toast";
 import { handleOnError } from "@/libs/utils";
 import {
   setMessagingUserId,
   setMessagingUserInfo,
-  setChatChannel
 } from "@/store/slices/messagingSlice";
 
 import { useTypedDispatch } from "@/hooks/hooks";
-
 
 type IProfileCardProps = {
   id: string;
@@ -64,7 +62,6 @@ const ProfileCard = ({
   const { mutate: followUser, isLoading: isFollowingPlayer } = useFollowUser();
   const { mutate: ignoreUser, isLoading: isIgnoringPlayer } = useIgnoreUser();
 
-  
   const { data: hashtags } = useGetAllHashtags(TOKEN as string);
 
   const getInterestValue = (id: string) => {
@@ -72,24 +69,21 @@ const ProfileCard = ({
       ?.filter((hashtag: any) => hashtag.id === id)[0]
       ?.hashtag?.slice(1);
   };
-  
 
   const router = useRouter();
 
-  const startMessaging = ()=>{
-        dispatch(setMessagingUserId(id));
-        dispatch(
-          setMessagingUserInfo({
-            id,
-            name,
-            img,
-          })
-        );
-        
-       router.push("/messaging")
-      }
+  const startMessaging = () => {
+    dispatch(setMessagingUserId(id));
+    dispatch(
+      setMessagingUserInfo({
+        id,
+        name,
+        img,
+      })
+    );
 
- 
+    router.push("/messaging");
+  };
 
   return (
     <div className="w-[100%] md:basis-[25%] md:w-[230px] xl:basis-[33%] xl:w-[250px] min-h-[220px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
@@ -141,7 +135,7 @@ const ProfileCard = ({
             </p>
           </div>
           <p className="mt-[12px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
-            {experience} year(s) experience
+            {experience} year{parseInt(experience) === 1 ? "" : "s"} experience
           </p>
           <p className="mt-[1px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
             {appearances?.length} game appearance(s)
@@ -164,30 +158,33 @@ const ProfileCard = ({
         )}
       </div>
       {friend ? (
-        <button className="w-full h-[32px] mt-[24px] border border-brand-90 bg-brand-500 rounded-[7px]" onClick={startMessaging}>
+        <button
+          className="w-full h-[32px] mt-[24px] border border-brand-90 bg-brand-500 rounded-[7px]"
+          onClick={startMessaging}
+        >
           Message
         </button>
       ) : (
         <div className="w-full mt-[22px] flex gap-x-[5px]">
-          <button className="w-[50%] bg-brand-500 border border-brand-300 h-[32px] rounded-[7px]"
-          
-          onClick={() => {
-            ignoreUser(
-              { token: TOKEN as string, ignored: id },
-              {
-                onSuccess: () => {
-                  queryClient.invalidateQueries(["getAllPlayers"]);
-                  queryClient.invalidateQueries(["getAllCoaches"]);
-                  queryClient.invalidateQueries(["getAllTrainers"]);
-                  queryClient.invalidateQueries(["getAllAgents"]);
-                  notify({
-                    type: "success",
-                    text: `You have successfully ignored ${name}`,
-                  });
-                },
-              }
-            );
-          }}
+          <button
+            className="w-[50%] bg-brand-500 border border-brand-300 h-[32px] rounded-[7px]"
+            onClick={() => {
+              ignoreUser(
+                { token: TOKEN as string, ignored: id },
+                {
+                  onSuccess: () => {
+                    queryClient.invalidateQueries(["getAllPlayers"]);
+                    queryClient.invalidateQueries(["getAllCoaches"]);
+                    queryClient.invalidateQueries(["getAllTrainers"]);
+                    queryClient.invalidateQueries(["getAllAgents"]);
+                    notify({
+                      type: "success",
+                      text: `You have successfully ignored ${name}`,
+                    });
+                  },
+                }
+              );
+            }}
           >
             Ignore
           </button>
