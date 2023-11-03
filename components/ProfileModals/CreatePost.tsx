@@ -42,10 +42,10 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
 
   const createPostValidationSchema = yup.object().shape({
     description: yup.string().required("Description is required"),
-    hashtags: yup
-      .array(yup.string())
-      .min(1, "Please select atleast one hashtag")
-      .required("Hashtags are required"),
+    // hashtags: yup
+    //   .array(yup.string())
+    //   .min(1, "Please select atleast one hashtag")
+    //   .required("Hashtags are required"),
   });
 
   const { mutate: createPost, isLoading: isCreatingPost } = useCreatePost();
