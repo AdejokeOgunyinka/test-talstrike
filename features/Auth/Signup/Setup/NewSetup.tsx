@@ -9,6 +9,8 @@ import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
 import * as yup from "yup";
 import { City, Country, State } from "country-state-city";
 import PhoneInput from "react-phone-number-input";
+import { useQueryClient } from "@tanstack/react-query";
+import { Alert, AlertIcon } from "@chakra-ui/react";
 
 import CoachIcon from "@/assets/coachIcon.svg";
 import CoachHoverIcon from "@/assets/coachHoverIcon.svg";
@@ -29,7 +31,6 @@ import { getYears } from "@/libs/utils";
 import notify from "@/libs/toast";
 import { updateUserInfo, updateUserProfile, useGetSports } from "@/api/auth";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
-import { useQueryClient } from "@tanstack/react-query";
 
 const Index = ({ providers }: any) => {
   const session = useSession();
@@ -244,33 +245,42 @@ const Index = ({ providers }: any) => {
 
   const SubstepController = () => {
     return (
-      <div className="w-full flex gap-[20px] mt-[30px] md:mt-[70px] justify-center">
-        {substep > 1 && (
-          <button
-            onClick={() => setSubstep(substep - 1)}
-            className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
-          >
-            <NextImage
-              src="/arrowLeft.svg"
-              alt="left-arrow"
-              width="10"
-              height="10"
-            />
-          </button>
-        )}
-        {substep < 8 && (
-          <button
-            type="submit"
-            className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
-          >
-            <NextImage
-              src="/arrowRight.svg"
-              alt="left-arrow"
-              width="10"
-              height="10"
-            />
-          </button>
-        )}
+      <div className="w-full">
+        <div className="w-full flex gap-[20px] mt-[30px] md:mt-[70px] mb-[10px] justify-center">
+          {substep > 1 && (
+            <button
+              onClick={() => setSubstep(substep - 1)}
+              className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
+            >
+              <NextImage
+                src="/arrowLeft.svg"
+                alt="left-arrow"
+                width="10"
+                height="10"
+              />
+            </button>
+          )}
+          {substep < 8 && (
+            <button
+              type="submit"
+              className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
+            >
+              <NextImage
+                src="/arrowRight.svg"
+                alt="left-arrow"
+                width="10"
+                height="10"
+              />
+            </button>
+          )}
+        </div>
+        <div className="w-full">
+          <Alert status="info" className="text-[12px]">
+            <AlertIcon />
+            Click one of the arrows above to either proceed or go back to the
+            previous step!
+          </Alert>
+        </div>
       </div>
     );
   };
@@ -770,7 +780,7 @@ const Index = ({ providers }: any) => {
                   <FormikProvider value={step5Formik}>
                     <form onSubmit={step5Formik.handleSubmit}>
                       <div className="w-full flex justify-center">
-                        <div className="w-[60%]">
+                        <div className="w-[100%] md:w-[60%]">
                           <PhoneInput
                             value={step5Formik.values.phone_number}
                             onChange={(e) =>
