@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import CreatableSelect from "react-select/creatable";
 import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
@@ -464,9 +464,12 @@ const Index = ({ providers }: any) => {
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        userId
-          ? signOut({ callbackUrl: "/starter-video" })
-          : router.push("/starter-video");
+        signIn("credentials", {
+          email: "",
+          password: "",
+          user: JSON.stringify(updateUser.data),
+          callbackUrl: "/dashboard",
+        });
       } else {
         notify({
           type: "error",
