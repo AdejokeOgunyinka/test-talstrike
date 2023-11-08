@@ -268,7 +268,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
               ) : (
                 <Flex gap="9px" flexWrap={"wrap"}>
                   {searchData?.people?.map((person: any, index: number) => (
-                    <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                    <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                       <PersonSearchResultComponent
                         firstname={person?.user?.firstname}
                         lastname={person?.user?.lastname}
@@ -294,7 +294,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                 <Flex gap="9px" flexWrap="wrap">
                   {searchData?.posts?.map((post: any, index: number) =>
                     post?.question_text ? (
-                      <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                      <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                         <PollCard
                           key={index}
                           post={post}
@@ -309,7 +309,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                         />
                       </Box>
                     ) : (
-                      <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                      <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                         <PostCard
                           postType={post?.post_type}
                           postImage={post?.author?.image}
@@ -347,7 +347,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
               ) : (
                 <Flex gap="9px" width="100%" flexWrap="wrap">
                   {searchData?.videos?.map((video: any, index: number) => (
-                    <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                    <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                       <ExploreCard
                         key={index}
                         index={index}
@@ -368,7 +368,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                 <Flex gap="9px" flexWrap="wrap">
                   {searchData?.latest?.map((latest: any, index: number) =>
                     latest?.question_text ? (
-                      <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                      <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                         <PollCard
                           key={index}
                           post={latest}
@@ -383,7 +383,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                         />
                       </Box>
                     ) : (
-                      <Box width={{ base: "100%", lg: "calc(50% - 9px)" }}>
+                      <Box width={{ base: "100%", xl: "calc(50% - 9px)" }}>
                         <PostCard
                           key={index}
                           postType={latest?.post_type}
