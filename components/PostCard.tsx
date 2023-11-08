@@ -227,6 +227,7 @@ const PostCard = ({
                     queryClient.invalidateQueries(["getNewsfeed"]);
                     queryClient.invalidateQueries(["getPolls"]);
                     queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                    queryClient.invalidateQueries(["getMyPosts"]);
                   },
                 }
               );
@@ -436,6 +437,7 @@ const PostCard = ({
                         queryClient.invalidateQueries(["getNewsfeed"]);
                         queryClient.invalidateQueries(["getPolls"]);
                         queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                        queryClient.invalidateQueries(["getMyPosts"]);
                       },
                     }
                   );

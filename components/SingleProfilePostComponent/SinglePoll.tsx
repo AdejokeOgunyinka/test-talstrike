@@ -260,6 +260,7 @@ const SinglePoll = ({
                           queryClient.invalidateQueries([
                             "getAllCommentsOnPoll",
                           ]);
+                          queryClient.invalidateQueries(["getMyPosts"]);
                         },
                       }
                     );

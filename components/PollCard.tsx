@@ -242,6 +242,7 @@ const PollCard = ({
                   queryClient.invalidateQueries(["getNewsfeed"]);
                   queryClient.invalidateQueries(["getPolls"]);
                   queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                  queryClient.invalidateQueries(["getMyPosts"]);
                 })
                 .catch((err) => {
                   notify({ type: "error", text: err?.response?.data?.message });
@@ -458,6 +459,7 @@ const PollCard = ({
                         queryClient.invalidateQueries(["getNewsfeed"]);
                         queryClient.invalidateQueries(["getPolls"]);
                         queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                        queryClient.invalidateQueries(["getMyPosts"]);
                       },
                     }
                   );
