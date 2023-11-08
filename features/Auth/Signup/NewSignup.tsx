@@ -7,13 +7,14 @@ import NextImage from "next/image";
 import * as yup from "yup";
 import BeatLoader from "react-spinners/BeatLoader";
 import { signIn } from "next-auth/react";
+// import {getProviders} from "next-auth/react"
 
 import GmailIcon from "@/assets/gmailIcon.svg";
 import FacebookIcon from "@/assets/facebookIcon.svg";
 import LinkedinIcon from "@/assets/linkedinIcon.svg";
 import EmailIcon from "@/assets/emailIcon.svg";
 import HiddenPasswordIcon from "@/assets/hiddenPasswordIcon.svg";
-import { useCreateUser } from "@/api/auth";
+import { createUser } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useRouter } from "next/router";
 import { User } from "@/libs/types/user";
@@ -61,7 +62,7 @@ const Index = ({
       .matches(/^(?=.{6,20}$)\D*\d/, "password must contain one number (0-9)"),
   });
 
-  const { mutate: createUser, isLoading } = useCreateUser();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -72,16 +73,22 @@ const Index = ({
     },
     validationSchema: signupSchema,
     validateOnBlur: true,
-    onSubmit: (values: User) => {
-      createUser(values, {
-        onSuccess: (response: any) => {
+    onSubmit: async (values: User, { setErrors }) => {
+      try {
+        setLoading(true);
+        const response = await createUser(values);
+        if (response.data.user) {
           dispatch(setAuthUser(response.data));
           continueSignup && continueSignup();
-        },
-        onError: (err) => {
-          notify({ type: "error", text: (err as any)?.data?.message });
-        },
-      });
+        } else {
+          notify({ type: "error", text: response.data.message });
+        }
+      } catch (error) {
+        const { data } = (error as any).response;
+        notify({ type: "error", text: data.message || data?.body });
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -179,7 +186,7 @@ const Index = ({
               type="submit"
               className="h-[37px] bg-brand-600 rounded-[4px] md:basis-1/2 font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
             >
-              {isLoading ? (
+              {loading ? (
                 <BeatLoader
                   color={"white"}
                   size={10}
