@@ -14,7 +14,6 @@ import { useTypedSelector } from "@/hooks/hooks";
 import { updateUserProfile } from "@/api/auth";
 import notify from "@/libs/toast";
 import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
-
 import "react-phone-number-input/style.css";
 
 const EditProfile = ({ onClose }: { onClose: () => void }) => {
@@ -45,8 +44,6 @@ const EditProfile = ({ onClose }: { onClose: () => void }) => {
       phoneCode: country?.phonecode,
     };
   });
-
-  console.log({ countries });
 
   const [phoneCode, setPhoneCode] = useState("+234");
 

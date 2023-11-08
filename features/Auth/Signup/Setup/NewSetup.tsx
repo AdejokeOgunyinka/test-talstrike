@@ -161,14 +161,14 @@ const Index = ({ providers }: any) => {
     },
   });
 
-  const step5Validation = yup.object().shape({
-    phone_number: yup.string().required("Phone Number is required."),
-  });
+  // const step5Validation = yup.object().shape({
+  //   phone_number: yup.string().required("Phone Number is required."),
+  // });
   const step5Formik = useFormik({
     initialValues: {
       phone_number: "",
     },
-    validationSchema: step5Validation,
+    // validationSchema: step5Validation,
     onSubmit: (values: any) => {
       setSubstep(substep + 1);
     },
