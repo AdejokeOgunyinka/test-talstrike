@@ -13,6 +13,16 @@ export const createUser = async (user: User) => {
   });
 };
 
+export const useCreateUser = () =>
+  useMutation((user: User) =>
+    axios
+      .post("/auth/users/createuser/", { ...user })
+      .then((res) => res.data)
+      .catch((err) => {
+        throw err.response.data;
+      })
+  );
+  
 export const login = async (data: LoginBody) => {
   return await axios.post(`/auth/login/`, data);
 };
