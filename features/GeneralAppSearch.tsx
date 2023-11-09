@@ -115,7 +115,7 @@ export const PersonSearchResultComponent = ({
             ></Box>
           </Flex>
           <Text color="secondary-blue" fontSize="11px" fontWeight="500">
-            {roles[0]}
+            {roles}
             {`${sport && sport !== null ? ", " : ""}`}
             {
               sports?.results?.filter(
@@ -229,7 +229,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
   }
 
   return (
-    <Box>
+    <Box pb="60px">
       {showSinglePost === true ? (
         <SinglePost
           setShowSinglePost={setShowSinglePost}
@@ -246,20 +246,43 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
         <Tabs>
           <TabList>
             <Tab fontSize="14px" fontWeight="500">
+              People
+            </Tab>
+            <Tab fontSize="14px" fontWeight="500">
               Posts
             </Tab>
             <Tab fontSize="14px" fontWeight="500">
               Videos
             </Tab>
             <Tab fontSize="14px" fontWeight="500">
-              People
-            </Tab>
-            <Tab fontSize="14px" fontWeight="500">
               Latest
             </Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>
+            <TabPanel padding={"unset"} paddingTop="14px">
+              {searchData?.people?.length === 0 ? (
+                <Flex w="full" h="70vh" align="center" justify="center">
+                  <Text>No person found with query: {search_query}!</Text>
+                </Flex>
+              ) : (
+                <Flex direction="column" gap="10px">
+                  {searchData?.people?.map((person: any, index: number) => (
+                    <PersonSearchResultComponent
+                      firstname={person?.user?.firstname}
+                      lastname={person?.user?.lastname}
+                      userId={person?.user?.id}
+                      sport={person?.sport}
+                      location={person?.location}
+                      img={person?.user?.image}
+                      roles={person?.user?.roles[0]}
+                      isFollowing={person?.is_following}
+                      key={index}
+                    />
+                  ))}
+                </Flex>
+              )}
+            </TabPanel>
+            <TabPanel padding={"unset"} paddingTop="14px">
               {searchData?.posts?.length === 0 ? (
                 <Flex w="full" h="70vh" align="center" justify="center">
                   <Text>No post found with query: {search_query}!</Text>
@@ -309,7 +332,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                 </Flex>
               )}
             </TabPanel>
-            <TabPanel>
+            <TabPanel padding={"unset"} paddingTop="14px">
               {searchData?.videos?.length === 0 ? (
                 <Flex w="full" h="70vh" align="center" justify="center">
                   <Text>No video found with query: {search_query}!</Text>
@@ -327,30 +350,7 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                 </Flex>
               )}
             </TabPanel>
-            <TabPanel>
-              {searchData?.people?.length === 0 ? (
-                <Flex w="full" h="70vh" align="center" justify="center">
-                  <Text>No person found with query: {search_query}!</Text>
-                </Flex>
-              ) : (
-                <Flex direction="column" gap="10px">
-                  {searchData?.people?.map((person: any, index: number) => (
-                    <PersonSearchResultComponent
-                      firstname={person?.user?.firstname}
-                      lastname={person?.user?.lastname}
-                      userId={person?.user?.id}
-                      sport={person?.sport}
-                      location={person?.location}
-                      img={person?.user?.image}
-                      roles={person?.user?.roles[0]}
-                      isFollowing={person?.is_following}
-                      key={index}
-                    />
-                  ))}
-                </Flex>
-              )}
-            </TabPanel>
-            <TabPanel>
+            <TabPanel padding={"unset"} paddingTop="14px">
               {searchData?.latest?.length === 0 ? (
                 <Flex w="full" h="70vh" align="center" justify="center">
                   <Text>No latest found with query: {search_query}!</Text>

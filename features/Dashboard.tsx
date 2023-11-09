@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { Box, Flex } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -39,7 +40,6 @@ import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
 import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 import GeneralAppSearch from "./GeneralAppSearch";
-import { Box } from "@chakra-ui/react";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "Live" },
@@ -540,7 +540,10 @@ const Dashboard = () => {
                   Talent openings
                 </h4>
                 <Link
-                  href={{ pathname: "/profile", query: { name: "openings" } }}
+                  href={{
+                    pathname: "/profile",
+                    query: { name: "openings" },
+                  }}
                   className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
                 >
                   <p>VIEW ALL</p>
