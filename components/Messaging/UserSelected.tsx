@@ -7,14 +7,16 @@ import SendMessageIcon from "@/assets/svgFiles/SendMessage.svg.next";
 import MessageComponent from "./MessageComponent";
 import SearchBar from "../SearchBar";
 import { useEffect, useRef, useState } from "react";
-import { useGetChatChannel } from "@/api/messages";
+import { useGetChatChannel, loadMessages, createMessage } from "@/api/messages";
 import { setChatChannel } from "@/store/slices/messagingSlice";
 
 interface IMessage {
   id: string;
+  user_id: string;
   message: string;
   img: string;
   time: string;
+  type: string
 }
 
 const UserSelected = () => {
@@ -26,27 +28,37 @@ const UserSelected = () => {
 
   const { data: session } = useSession();
   const token = session?.user?.access;
+  
   const { data: channel } = useGetChatChannel({
     token: token as string,
     receiver: messageUserInfo?.id,
   });
+ 
+
+ const formatTime = (prevDate: string)=>{
+  let date = new Date(prevDate);
+  let hr = date.getHours();
+  let mnt = date.getMinutes();
+  const ampm = hr >= 12 ? "pm" : "am";
+  hr = hr > 12 ? hr - 12 : hr;
+  const hour = hr < 10 ? `0${hr}` : hr;
+  const minutes = mnt < 10 ? `0${mnt}` : mnt;
+  return `${hour}:${minutes} ${ampm}`;
+
+ }
+ 
 
   const handleSendMessage = () => {
     let date = new Date();
-    let hr = date.getHours();
-    let mnt = date.getMinutes();
-    const ampm = hr >= 12 ? "pm" : "am";
-    hr = hr > 12 ? hr - 12 : hr;
-    const hour = hr < 10 ? `0${hr}` : hr;
-    const minutes = mnt < 10 ? `0${mnt}` : mnt;
-
     websock.send(
       JSON.stringify({
         message: {
           id: Date.now(),
+          user_id: session?.user?.id,
           message: message,
           img: session?.user?.image,
-          time: `${hour}:${minutes} ${ampm}`,
+          time: formatTime(date.toString()),
+          type: "TEXT",
         },
       })
     );
@@ -54,35 +66,81 @@ const UserSelected = () => {
     setMessage("");
   };
 
+
+  const saveMessage = (token: string, sender_id: string, recepient: string, msg: string, msg_type: string, msg_channel: string)=>{
+    console.log("Token: "+token+", Sender: "+sender_id+", recepient: "+ recepient+", message: "+ msg+", type: "+ msg_type+", channel: "+ msg_channel, "...new msg...")
+    createMessage({ token, sender: sender_id, receiver:recepient, message:msg, type: msg_type, channel: msg_channel });
+
+  }
+
+  const loadPreviousMessages = async()=>{
+    const token = session?.user?.access;
+    const previous_messages =  await loadMessages(token as string, channel)
+    console.log(previous_messages, "...load messages...")
+    //const prev_msg = previous_messages.results as unknown as IMessage
+     previous_messages.results.map((msg: any)=>{
+
+     const newmsg: any = { message:{
+      id: msg.id,
+      user_id: msg.sender.id,
+      message: msg.message,
+      img: msg.sender.image,
+      time: formatTime(msg.created_at),
+      type: msg.type,
+     }
+        
+      }
+     
+      setMessages((prev) => [...prev, newmsg]);
+    })
+  //  console.log(prev_msgs, "... previous messages ...")
+    
+  }
+
   const handleTextChange = (e: any) => {
     setMessage(e.target.value);
   };
 
-  const url = "ws://143.244.179.156:8000/ws/chat/emmy_lobby/";
+ 
 
   useEffect(() => {
-    const ws = new WebSocket(url);
-
-    ws.onopen = (event) => {
-      setChatChannel(channel);
-      setWebSock(ws);
-    };
-
-    ws.onmessage = function (event) {
-      const json = JSON.parse(event.data);
-      setMessages((prev) => [...prev, json]);
-    };
-
-    return () => {
-      if (ws.readyState === 1) {
-        ws.close();
-      } else {
-        ws.addEventListener("open", () => {
+    if(channel){
+      const url = `ws://143.244.179.156:8000/ws/chat/${channel}/`;
+      //const url = `ws://chat.talstrike.com/ws/chat/${channel}/`;
+      const ws = new WebSocket(url);
+      ws.onopen = (event) => {
+        console.log("Channel:"+channel+",   URL:"+url)
+        setChatChannel(channel);
+        setWebSock(ws);
+        loadPreviousMessages()
+        
+        
+      };
+  
+      ws.onmessage = function (event) {
+        const json = JSON.parse(event.data);
+        const new_msg = json as IMessage
+        setMessages((prev) => [...prev, json]);
+        console.log(json, "...new message...")
+        const msg_body = new_msg.message as unknown as IMessage
+        if(msg_body.type==="TEXT")
+        saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id,msg_body.message,msg_body.type, channel) 
+      };
+  
+      return () => {
+        if (ws.readyState === 1) {
           ws.close();
-        });
-      }
-    };
-  }, []);
+        } else {
+          ws.addEventListener("open", () => {
+            ws.close();
+          });
+        }
+      };
+    }
+    
+
+   
+  }, [channel]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -165,7 +223,7 @@ const UserSelected = () => {
         {messages.map((msg, index) => (
           <MessageComponent
             key={index}
-            isReceiver
+            isReceiver={(session?.user?.id===msg?.message?.user_id)}
             userImg={msg?.message?.img}
             time={msg?.message?.time}
             status="sent"
