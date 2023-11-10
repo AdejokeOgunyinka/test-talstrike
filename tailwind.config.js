@@ -10,24 +10,6 @@ module.exports = {
   mode: "jit",
   theme: {
     extend: {
-      fontFamily: {
-        polysans: ["var(--font-polysans)"],
-        PolySansItalic: ["var(--font-polysans-italic)"],
-        PolySansWide: ["var(--font-polysans-wide)"],
-        PolySansWideItalic: ["var(--font-polysans-wide-italic)"],
-        PolySansBulky: ["var(--font-polysans-bulky)"],
-        PolySansBulkyItalic: ["var(--font-polysans-bulky-italic)"],
-        PolySansBulkyWide: ["--font-polysans-bulky-wide"],
-        PolySansBulkyWideItalic: ["var(--font-polysans-bulky-wide-italic)"],
-        PolySansMedian: ["var(--font-polysans-median)"],
-        PolySansMedianItalic: ["var(--font-polysans-median-italic)"],
-        PolySansMedianWide: ["var(--font-polysans-median-wide)"],
-        PolySansMedianWideItalic: ["var(--font-polysans-median-wide-italic)"],
-        PolySansSlim: ["var(--font-polysans-slim)"],
-        PolySansSlimItalic: ["var(--font-polysans-slim-italic)"],
-        PolySansSlimWide: ["var(--font-polysans-slim-wide)"],
-        PolySansSlimWideItalic: ["var(--font-polysans-slim-wide-italic)"]
-      },
       screens: {
         xs: "480px",
       },
@@ -86,6 +68,7 @@ module.exports = {
           2900: "#F4F5F7",
           2950: "#E7E9ED",
           3000: "#343D45",
+          green: "#00B127",
           "blue-rgba": "rgba(177, 253, 240, 0.36)",
           "pink-rgba": "rgba(255, 233, 254, 0.41)",
           "blue2-rgba": "rgba(0, 131, 213, 0.21)",

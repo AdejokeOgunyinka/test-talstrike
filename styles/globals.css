@@ -33,6 +33,22 @@
 
 @font-face {
   font-family: "PolySans";
+  src: url('/font/PolySans/PolySansSlim.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
+  src: url('/font/PolySans/PolySansSlimItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
   src: url('/font/PolySans/PolySansNeutral.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
@@ -49,9 +65,33 @@
 
 @font-face {
   font-family: "PolySans";
-  src: url('/font/PolySans/PolySansNeutralWide.ttf') format('truetype');
-  font-weight: 400;
+  src: url('/font/PolySans/PolySansBulky.ttf') format('truetype');
+  font-weight: 600;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
+  src: url('/font/PolySans/PolySansBulkyItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
+  src: url('/font/PolySans/PolySansMedian.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
+  src: url('/font/PolySans/PolySansMedianItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
   font-display: swap;
 }
 

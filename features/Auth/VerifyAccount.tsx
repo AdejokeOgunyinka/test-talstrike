@@ -58,19 +58,19 @@ const Index = () => {
       {isVerifyingEmail ? (
         <PageLoader />
       ) : (
-        <div className="pt-[30px] w-full h-full lg:pt-[110px] flex flex-col items-center">
-          <h3 className="mb-[50px] text-brand-600 text-[20px] leading-[168.5%] font-bold">
+        <div className="w-full h-full flex flex-col items-center">
+          <h3 className="mb-[50px] text-[22px] leading-[168.5%] font-semibold">
             Welcome onboard, {verifiedUser?.firstname}
           </h3>
-          <p className="text-brand-600 font-medium leading-[32px] mb-[60px]">
+          <p className="text-center text-[18px] leading-[32.5px] mb-[36px] w-full md:w-[60%]">
             You are just one step away. Please complete your profile set up by
             letting us know more about you as a sports professional. This
             process should take you about{" "}
-            <b className="font-medium text-brand-1650">5 mins</b> to complete.
+            <b className="font-semibold ">5 mins</b> to complete.
           </p>
           <a href={"/auth/signup/setup"}>
-            <button className="bg-brand-600 w-[171px] h-[37px] rounded-[4px] text-brand-500 text-[14px] leading-[21px] font-medium">
-              Proceed
+            <button className="bg-brand-green w-[171px] h-[45px] rounded-[4px] text-brand-500 text-[18px] leading-[21px]">
+              Begin Setup
             </button>
           </a>
           <div className="mt-[120px] w-full flex justify-center items-center">

@@ -1,5 +1,5 @@
 body, #__next  {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'PolySans', sans-serif;
 }
 
 .pagination {
@@ -148,24 +148,24 @@ body, #__next  {
 }
 
 .auth-dropdown .css-13cymwt-control{
-  border: 1px solid #0074D9;
+  border: 1px solid #293137;
   border-radius: 4px;
-  height: 44px !important;
+  height: 50px !important;
 }
 
 .css-13cymwt-control:hover {
-  border-color: #0074D9 !important;
+  border-color: #293137 !important;
 }
 
 .css-t3ipsp-control {
-  height: 44px !important;
+  height: 50px !important;
 }
 
 .auth-dropdown .css-1jqq78o-placeholder, .auth-dropdown .css-1dimb5e-singleValue {
-  color: #0074D9;
-  font-size: 14px;
+  color: #293137;
+  font-size: 18px;
   line-height: 21px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .inputbox-new {
