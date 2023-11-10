@@ -90,14 +90,42 @@ const Index = ({
   return (
     <div className="pt-[50px] h-full w-full flex flex-col lg:pt-[61px] xl:px-[140px] px-[20px]">
       <div className="w-full relative h-[unset] md:h-full">
-        <div className="text-[24px] leading-[168.5%] text-brand-1650 font-semibold text-center mb-[31px]">
-          Create an account
-        </div>
         <SignupIndicators active={0} />
-        <p className=" mt-[71px] mb-[40px] text-[16px] text-brand-600 font-medium text-center">
-          Great! You’ve taken the first step to creating your account. Please
-          fill in your basic information to begin.
+        <div className="text-[30px] leading-[145%] text-brand-600 font-semibold text-center mt-[28px]">
+          Sign Up
+        </div>
+        <p className="mt-[26px] text-[16px] text-center">
+          Great! You’ve taken the first step to creating your account.
         </p>
+
+        <div className="mt-[36px] w-full">
+          <div className="flex w-full justify-center items-center gap-[20px]">
+            <NextImage
+              src={GmailIcon}
+              alt="gmail"
+              onClick={() =>
+                signIn("google", { callbackUrl: "/auth/signup/setup" })
+              }
+              className="cursor-pointer"
+            />
+            <NextImage
+              src={LinkedinIcon}
+              alt="linkedin"
+              className="cursor-pointer"
+            />
+            <NextImage
+              src={FacebookIcon}
+              alt="facebook"
+              onClick={() =>
+                signIn("facebook", { callbackUrl: "/auth/signup/setup" })
+              }
+              className="cursor-pointer"
+            />
+          </div>
+          <p className="text-center text-[18px] mt-[32px] mb-[24px]">
+            Or sign up with
+          </p>
+        </div>
 
         <form onSubmit={formik.handleSubmit} autoComplete="on">
           <div className="flex gap-x-[13px]">
@@ -154,7 +182,7 @@ const Index = ({
                 <NextImage
                   src={HiddenPasswordIcon}
                   alt="password"
-                  className="cursor-pointer"
+                  className="cursor-pointer mt-[18px]"
                   onClick={() => setHidePassword(!hidePassword)}
                 />
               }
@@ -172,13 +200,13 @@ const Index = ({
           <div className="flex flex-col md:flex-row gap-[15px]">
             <button
               onClick={goBack}
-              className="md:basis-1/2 border-[1.5px] border-brand-1650 h-[37px] rounded-[4px] text-brand-1650 font-medium text-[14px]"
+              className="md:basis-1/2 border-[1.5px] border-[#293137] h-[44px] rounded-[4px] text-[#293137] text-[18px]"
             >
               Back
             </button>
             <button
               type="submit"
-              className="h-[37px] bg-brand-600 rounded-[4px] md:basis-1/2 font-light font-medium text-[14px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
+              className="h-[44px] bg-brand-600 rounded-[4px] md:basis-1/2 text-[18px] text-white border border-[rgba(217, 217, 217, 0.97)] mb-[12px]"
             >
               {isLoading ? (
                 <BeatLoader
@@ -192,38 +220,14 @@ const Index = ({
               )}
             </button>
           </div>
-          <div className="mt-[44px] w-full">
-            <p className="text-center text-[#94AEC5] text-[14px] mb-[24px]">
-              Or sign up with
-            </p>
-            <div className="flex w-full justify-center items-center gap-[20px] mb-[25px] md:mb-[unset]">
-              <NextImage
-                src={GmailIcon}
-                alt="gmail"
-                onClick={() =>
-                  signIn("google", { callbackUrl: "/auth/signup/setup" })
-                }
-                className="cursor-pointer"
-              />
-              <NextImage
-                src={LinkedinIcon}
-                alt="linkedin"
-                className="cursor-pointer"
-              />
-              <NextImage
-                src={FacebookIcon}
-                alt="facebook"
-                onClick={() =>
-                  signIn("facebook", { callbackUrl: "/auth/signup/setup" })
-                }
-                className="cursor-pointer"
-              />
-            </div>
-          </div>
-          <div className="relative mt-[30px] pb-[15px] w-full">
-            <p className="text-[#94AEC5] text-[14px] font-medium leading-[21px] text-center">
+
+          <div className="relative mt-[46px] pb-[15px] w-full">
+            <p className="text-[18px] leading-[21px] text-center">
               Already have an account?{" "}
-              <a href="/auth/login" className="text-[#003D72] underline">
+              <a
+                href="/auth/login"
+                className="text-brand-600 underline underline-offset-4"
+              >
                 Login
               </a>
             </p>
