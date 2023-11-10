@@ -119,10 +119,10 @@ export const DashboardSidebar = () => {
         bg="bg-grey"
         className="absolute md:relative md:translate-x-0 transform -translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-y-0 left-0"
       >
-        <div className="mt-[21px] mb-[37px] pl-[20px] pr-[20px]">
-          <a href="/dashboard">
+        <div className="mt-[21px] mb-[21px] pl-[20px] pr-[20px]">
+          {/* <a href="/dashboard">
             <NextImage src={DashboardLogo} alt="logo" />
-          </a>
+          </a> */}
         </div>
         <nav>
           <SideBarLink

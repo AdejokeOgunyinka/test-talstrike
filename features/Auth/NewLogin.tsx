@@ -193,7 +193,7 @@ const Index = ({ providers }: { providers: any }) => {
                 href="/auth/reset_password"
                 className="text-brand-600 underline underline-offset-4 font-normal"
               >
-                Reset Password
+                Reset here
               </a>
             </p>
           </div>

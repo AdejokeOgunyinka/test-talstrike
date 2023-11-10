@@ -73,7 +73,7 @@ export const PersonSearchResultComponent = ({
             mb="9px"
           >
             <Image
-              src={img}
+              src={img || "/user_placeholder.svg"}
               alt="avatar"
               w="full"
               h="full"
