@@ -101,7 +101,6 @@ const MyPolls = () => {
                   showPopover={showPopover}
                   index={index}
                   clickedIndex={clickedIndex}
-                  setShowSinglePoll={setShowSinglePoll}
                 />
               ))
           )}

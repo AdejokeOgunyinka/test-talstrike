@@ -31,6 +31,8 @@ import {
   uppercaseFirsLetter,
 } from "@/libs/utils";
 import ShareModal from "./ShareModal";
+import EditPost from "./ProfileModals/EditPost";
+import DeletePost from "./ProfileModals/DeletePost";
 
 const PostCard = ({
   postType,
@@ -97,6 +99,19 @@ const PostCard = ({
   const [showPopover, setShowPopover] = useState(false);
   const router = useRouter();
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleClickDelete = () => {
+    setShowDeleteModal(true);
+    setShowPopover(false);
+  };
+
+  const handleClickEditModal = () => {
+    setShowEditModal(true);
+    setShowPopover(false);
+  };
+
   const Popover = () => {
     return (
       <div className="absolute w-max top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
@@ -109,8 +124,24 @@ const PostCard = ({
           }
           className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
-          View {uppercaseFirsLetter(postType)}
+          View
         </p>
+        {post?.author?.id === session?.user?.id && (
+          <>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickEditModal}
+            >
+              Edit
+            </p>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickDelete}
+            >
+              Delete
+            </p>
+          </>
+        )}
       </div>
     );
   };
@@ -473,6 +504,18 @@ const PostCard = ({
 
       {showShareModal && (
         <ShareModal post={post} onClose={() => setShowShareModal(false)} />
+      )}
+
+      {showEditModal && (
+        <EditPost id={post?.id} onClose={() => setShowEditModal(false)} />
+      )}
+
+      {showDeleteModal && (
+        <DeletePost
+          id={post?.id}
+          postType={uppercaseFirsLetter(post?.post_type)}
+          onClose={() => setShowDeleteModal(false)}
+        />
       )}
     </>
   );

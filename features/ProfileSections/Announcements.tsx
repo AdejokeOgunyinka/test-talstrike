@@ -127,7 +127,6 @@ const MyAnnouncements = () => {
               ?.map((post: any, index: number) => (
                 <SingleAnnouncementCard
                   key={index}
-                  setShowSingleAnnouncement={setShowSingleAnnouncement}
                   setShowPopover={setShowPopover}
                   post={post}
                   setClickedIndex={setClickedIndex}

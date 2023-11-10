@@ -112,7 +112,6 @@ const MyPosts = () => {
                     clickedIndex={clickedIndex}
                     post={post}
                     setShowPopover={setShowPopover}
-                    setShowSinglePost={setShowSinglePost}
                     showPopover={showPopover}
                     setShowDeleteModal={setShowDeleteModal}
                     setShowEditModal={setShowEditModal}

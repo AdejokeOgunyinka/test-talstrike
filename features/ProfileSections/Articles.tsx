@@ -127,7 +127,6 @@ const MyArticles = () => {
                   index={index}
                   showPopover={showPopover}
                   clickedIndex={clickedIndex}
-                  setShowSingleArticle={setShowSingleArticle}
                   handleClickDelete={handleClickDelete}
                   handleClickEditModal={handleClickEditModal}
                 />

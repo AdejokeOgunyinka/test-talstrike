@@ -129,7 +129,6 @@ const MyOpenings = () => {
                   setChosenPost={setChosenPost}
                   handleClickDeleteModal={handleClickDelete}
                   handleClickEditModal={handleClickEditModal}
-                  setShowSingleOpening={setShowSingleOpening}
                 />
               ))
           )}

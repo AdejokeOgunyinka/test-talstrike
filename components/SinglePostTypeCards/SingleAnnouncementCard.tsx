@@ -1,4 +1,5 @@
 import NextImage from "next/image";
+import { useRouter } from "next/router";
 import moment from "moment";
 import styled from "styled-components";
 
@@ -9,7 +10,6 @@ import ShareModal from "../ShareModal";
 const Image = styled.img``;
 
 const SingleAnnouncementCard = ({
-  setShowSingleAnnouncement,
   setShowPopover,
   handleClickEditModal,
   handleClickDelete,
@@ -22,7 +22,6 @@ const SingleAnnouncementCard = ({
   clickedIndex,
   isOther,
 }: {
-  setShowSingleAnnouncement: any;
   setShowPopover: any;
   handleClickEditModal?: any;
   handleClickDelete?: any;
@@ -35,14 +34,18 @@ const SingleAnnouncementCard = ({
   isOther?: boolean;
   showPopover: boolean;
 }) => {
+  const router = useRouter();
+
   const Popover = () => {
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[150px] h-[100px] py-[20px] px-[17px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSingleAnnouncement(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Announcement
@@ -68,10 +71,12 @@ const SingleAnnouncementCard = ({
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[150px] py-[10px] px-[15px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSingleAnnouncement(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Announcement
