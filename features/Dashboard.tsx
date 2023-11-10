@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Box, Flex, Image } from "@chakra-ui/react";
+import { Box, Flex, Tooltip } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -266,7 +266,9 @@ const Dashboard = () => {
                               }
                             }}
                           >
-                            <NextImage src={widget.icon} alt="widget" />
+                            <Tooltip label={widget.text} placement="top">
+                              <NextImage src={widget.icon} alt="widget" />
+                            </Tooltip>
                           </div>
                         ))}
                         <div className="relative">
@@ -309,19 +311,21 @@ const Dashboard = () => {
                         {openMoreDropdown && (
                           <div className="flex w-full gap-x-[10px] md:gap-x-[14px] items-center">
                             {remainingPostWidgets?.map((widget, index) => (
-                              <div
-                                key={index}
-                                className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
-                                onClick={() => {
-                                  if (widget.name === "opening") {
-                                    setShowCreateOpeningModal(true);
-                                  } else if (widget.name === "announcement") {
-                                    setShowCreateAnnouncementModal(true);
-                                  }
-                                }}
-                              >
-                                <NextImage src={widget.icon} alt="widget" />
-                              </div>
+                              <Tooltip label={widget.text} placement="top">
+                                <div
+                                  key={index}
+                                  className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
+                                  onClick={() => {
+                                    if (widget.name === "opening") {
+                                      setShowCreateOpeningModal(true);
+                                    } else if (widget.name === "announcement") {
+                                      setShowCreateAnnouncementModal(true);
+                                    }
+                                  }}
+                                >
+                                  <NextImage src={widget.icon} alt="widget" />
+                                </div>
+                              </Tooltip>
                             ))}
                           </div>
                         )}
