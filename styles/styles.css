@@ -185,3 +185,7 @@ body, #__next  {
 .chakra-tabs__tablist {
   border-color: #CDCDCD !important;
 }
+
+.masonry > div{
+  display: unset !important;
+}

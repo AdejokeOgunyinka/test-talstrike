@@ -291,8 +291,14 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                   <Text>No post found with query: {search_query}!</Text>
                 </Flex>
               ) : (
-                <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2 }}>
-                  <Masonry columnsCount={2} style={{ gap: "9px" }}>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 1, 1150: 2 }}
+                >
+                  <Masonry
+                    columnsCount={2}
+                    style={{ gap: "9px" }}
+                    className="masonry"
+                  >
                     {searchData?.posts?.map((post: any, index: number) =>
                       post?.question_text ? (
                         <PollCard
@@ -364,7 +370,11 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                 </Flex>
               ) : (
                 <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2 }}>
-                  <Masonry columnsCount={2} style={{ gap: "9px" }}>
+                  <Masonry
+                    columnsCount={2}
+                    style={{ gap: "9px" }}
+                    className="masonry"
+                  >
                     {searchData?.latest?.map((latest: any, index: number) =>
                       latest?.question_text ? (
                         <PollCard
