@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
-import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import CreatableSelect from "react-select/creatable";
@@ -34,7 +33,6 @@ import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 
 const Index = ({ providers }: any) => {
   const session = useSession();
-  const router = useRouter();
 
   const [token, setToken] = useState<any>("");
   const [userId, setUserId] = useState("");
@@ -467,7 +465,7 @@ const Index = ({ providers }: any) => {
         signIn("credentials", {
           email: "",
           password: "",
-          user: JSON.stringify(updateUser.data),
+          user: JSON.stringify({ ...updateUserRole?.data, access: localToken }),
           callbackUrl: "/dashboard",
         });
       } else {

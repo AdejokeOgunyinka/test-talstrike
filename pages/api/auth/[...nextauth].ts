@@ -38,11 +38,9 @@ export default NextAuth({
 
         if(credentials?.user) {
           const newUser = JSON.parse(credentials?.user);
-          const userInfo = await ProfileApi(newUser?.access).getUser({ id: newUser?.id });
-          const { data: userData } = userInfo;
 
-          const userObj = { ...userData, ...userData, access: newUser?.access };
-          return userObj;    
+          const userObj = { ...newUser };
+          return userObj;
         } else {
           try {
             const response = await login(body);
