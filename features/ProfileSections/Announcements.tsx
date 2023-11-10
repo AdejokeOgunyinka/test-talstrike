@@ -7,7 +7,6 @@ import { useGetPostsByType } from "@/api/profile";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
 import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditAnnouncement from "@/components/ProfileModals/EditAnnouncement";
-import SingleAnnouncement from "@/components/SingleProfilePostComponent/SingleAnnouncement";
 import SingleAnnouncementCard from "@/components/SinglePostTypeCards/SingleAnnouncementCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
@@ -108,40 +107,36 @@ const MyAnnouncements = () => {
         </button>
       </div>
 
-      {showSingleAnnouncement === true ? (
-        <SingleAnnouncement chosenPost={chosenPost} />
-      ) : (
-        <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
-          {isLoadingUserPosts ? (
-            Array(2)
-              ?.fill("")
-              ?.map((_, index) => (
-                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
-              ))
-          ) : userPosts?.pages?.flat(1)?.length === 0 ||
-            !userPosts?.pages?.flat(1) ? (
-            <p>No announcement available at the moment...</p>
-          ) : (
-            userPosts?.pages
-              ?.flat(1)
-              ?.map((post: any, index: number) => (
-                <SingleAnnouncementCard
-                  key={index}
-                  setShowPopover={setShowPopover}
-                  post={post}
-                  setClickedIndex={setClickedIndex}
-                  setPostIndex={setPostIndex}
-                  setChosenPost={setChosenPost}
-                  index={index}
-                  clickedIndex={clickedIndex}
-                  showPopover={showPopover}
-                  handleClickDelete={handleClickDelete}
-                  handleClickEditModal={handleClickEditModal}
-                />
-              ))
-          )}
-        </div>
-      )}
+      <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
+        {isLoadingUserPosts ? (
+          Array(2)
+            ?.fill("")
+            ?.map((_, index) => (
+              <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+            ))
+        ) : userPosts?.pages?.flat(1)?.length === 0 ||
+          !userPosts?.pages?.flat(1) ? (
+          <p>No announcement available at the moment...</p>
+        ) : (
+          userPosts?.pages
+            ?.flat(1)
+            ?.map((post: any, index: number) => (
+              <SingleAnnouncementCard
+                key={index}
+                setShowPopover={setShowPopover}
+                post={post}
+                setClickedIndex={setClickedIndex}
+                setPostIndex={setPostIndex}
+                setChosenPost={setChosenPost}
+                index={index}
+                clickedIndex={clickedIndex}
+                showPopover={showPopover}
+                handleClickDelete={handleClickDelete}
+                handleClickEditModal={handleClickEditModal}
+              />
+            ))
+        )}
+      </div>
 
       {!isLoadingUserPosts && hasNextPage && (
         <div
