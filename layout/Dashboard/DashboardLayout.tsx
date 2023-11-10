@@ -138,7 +138,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             </div>
             {!router.pathname?.startsWith("/profile") &&
               !router.pathname?.startsWith("/messaging") && (
-                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] px-[20px] scrollbar-hidden hidden md:inline-block">
+                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] scrollbar-hidden hidden md:inline-block lg:border lg:border-l-[#CDCDCD] lg:bg-brand-500 px-[20px]">
                   <DashboardAside />
                 </aside>
               )}

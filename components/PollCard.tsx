@@ -118,7 +118,7 @@ const PollCard = ({
 
   return (
     <>
-      <div className="w-full mb-[9px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
+      <div className="w-full mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
         <div className="flex items-center justify-between mb-[35px]">
           <div className="flex items-center">
             <div className="mr-[7px]">
@@ -129,7 +129,7 @@ const PollCard = ({
                     : "/profileIcon.svg"
                 }
                 alt="post image"
-                className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                className="object-cover w-[42px] h-[42px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                 onError={handleOnError}
               />
             </div>
@@ -139,12 +139,12 @@ const PollCard = ({
                 href={`/profile/${post?.author?.id}`}
                 cursor="pointer"
                 _hover={{ textDecoration: "none" }}
-                className="mb-[3px] font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-2250"
+                className="mb-[3px] font-semibold text-[11px] lg:text-[18px] text-[#293137]"
               >
                 {post?.author?.firstname} {post?.author?.lastname}
               </Link>
-              <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
-                {moment(post?.created_at).format("dddd Do MMMM")}
+              <p className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
+                {moment(post?.created_at).format("dddd Do MMM")}
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@ const PollCard = ({
             onClick={(e) => e?.stopPropagation()}
           >
             <p
-              className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+              className="text-[#293137] font-semibold text-[31px] relative pb-[10px]"
               onClick={() => {
                 setClickedIndex(index);
                 setPollIndex(post?.id);
@@ -166,7 +166,7 @@ const PollCard = ({
           </div>
         </div>
 
-        <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
+        <p className="mb-[9px] font-medium text-[#293137] text-[11px] lg:text-[18px] leading-[21px]">
           {post?.question_text}
         </p>
 

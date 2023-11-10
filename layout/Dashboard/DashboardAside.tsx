@@ -32,7 +32,7 @@ const DashboardAside = () => {
   };
 
   return (
-    <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
+    <div className="scrollbar-hidden h-[100vh] hidden lg:inline lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
       <div className="sticky z-[99] bg-brand-500">
         <div className="h-[40px] mb-[26px] mt-[81px]">
           <SearchBar
@@ -49,7 +49,7 @@ const DashboardAside = () => {
             href="/coaches"
             className="text-[#93A3B1] flex gap-x-[1px] text-[15px] font-normal cursor-pointer"
           >
-            <p>VIEW ALL</p>
+            <p>View All</p>
             <img src="/arrow-forward.svg" alt="forward arrow" />
           </a>
         </div>
@@ -85,7 +85,7 @@ const DashboardAside = () => {
                   className="flex flex-col items-center cursor-pointer"
                   onClick={() => handleClickUser({ id: coach?.user?.id })}
                 >
-                  <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
+                  <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.092px] border-brand-500 overflow-hidden">
                     <img
                       src={coach?.user?.image || "/user_placeholder.svg"}
                       alt="coach"
@@ -97,8 +97,8 @@ const DashboardAside = () => {
                       onError={handleOnError}
                     />
                   </div>
-                  <p className="text-[9px] mt-[4px] lg:text-[11px] 2xl:text-[13px] leading-[14px] font-medium">
-                    {coach?.user?.firstname} {coach?.user?.lastname}
+                  <p className="text-[9px] text-[#293137] lg:text-[14px] leading-[14px] font-medium">
+                    {coach?.user?.firstname}
                   </p>
                 </div>
               ))
@@ -112,7 +112,7 @@ const DashboardAside = () => {
             href="/players"
             className="text-[#93A3B1] flex gap-x-[5px] text-[15px] leading-[16px] font-normal cursor-pointer"
           >
-            <p>VIEW ALL</p>
+            <p>View All</p>
             <img src="/arrow-forward.svg" alt="forward arrow" />
           </a>
         </div>
@@ -129,7 +129,7 @@ const DashboardAside = () => {
               className="flex justify-between items-center cursor-pointer"
               onClick={() => handleClickUser({ id: follower?.users?.id })}
             >
-              <div className="flex gap-[20px] items-center">
+              <div className="flex gap-[14px] items-center">
                 <img
                   src={follower?.users?.image || "/user_placeholder.svg"}
                   alt="player"
@@ -141,7 +141,7 @@ const DashboardAside = () => {
                   }}
                   onError={handleOnError}
                 />
-                <p className="text-[#293137] text-[11px] lg:text-[16px] leading-[16px] font-semibold">
+                <p className="text-[#293137] text-[11px] lg:text-[16px] leading-[16px]">
                   {follower?.users?.firstname} {follower?.users?.lastname}
                 </p>
               </div>

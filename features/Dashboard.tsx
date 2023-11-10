@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -14,8 +14,16 @@ import InstagramIcon from "@/assets/instagramIcon.svg";
 import PhoneCallIcon from "@/assets/phoneCallIcon.svg";
 import MessageIcon from "@/assets/messageIcon.svg";
 import VideoCameraIcon from "@/assets/videoCameraIcon.svg";
+import PictureIcon from "@/assets/pictureIcon.svg";
+import AnnouncementIcon from "@/assets/announcementIcon.svg";
 import ImageIcon from "@/assets/imageIcon.svg";
 import VideoIcon from "@/assets/videoIcon.svg";
+import ArticleIcon from "@/assets/articleIcon.svg";
+import OpeningIcon from "@/assets/openingIcon.svg";
+import PollIcon from "@/assets/pollIcon.svg";
+import PlusIcon from "@/assets/plusIcon.svg";
+import XIcon from "@/assets/xIcon.svg";
+
 import MoreDropdown from "@/components/DashboardMoreDropdown";
 import PostCard from "@/components/PostCard";
 import CreatePost from "@/components/ProfileModals/CreatePost";
@@ -36,15 +44,21 @@ import { setProfile } from "@/store/slices/profileSlice";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import PollCard from "@/components/PollCard";
-import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
-import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 import GeneralAppSearch from "./GeneralAppSearch";
 
 export const postWidgets = [
-  { icon: VideoCameraIcon, name: "Live" },
-  { icon: ImageIcon, name: "Photo" },
-  { icon: VideoIcon, name: "Video" },
+  { icon: VideoCameraIcon, name: "live", text: "Go live" },
+  { icon: PictureIcon, name: "picture", text: "Take a picture" },
+  { icon: ImageIcon, name: "image", text: "Post an image" },
+  { icon: VideoIcon, name: "video", text: "Post a video" },
+  { icon: ArticleIcon, name: "article", text: "Write an Article" },
+  { icon: PollIcon, name: "poll", text: "Create a poll" },
+];
+
+export const remainingPostWidgets = [
+  { icon: OpeningIcon, name: "opening", text: "Create an Opening" },
+  { icon: AnnouncementIcon, name: "announcement", text: "Announcement" },
 ];
 
 const Dashboard = () => {
@@ -151,7 +165,6 @@ const Dashboard = () => {
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
   const [, setPollIndex] = useState("");
-  const [chosenPost, setChosenPost] = useState<any>(null);
 
   useEffect(() => {
     if (inView && hasNextNewsFeedPage) {
@@ -173,7 +186,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="w-full h-[100%] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
+    <div className="w-full h-[100%] gap-x-[7px] px-[15px] md:px-[7px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
       {showCreatePostModal && (
         <CreatePost onClose={() => setShowCreatePostModal(false)} />
       )}
@@ -206,12 +219,12 @@ const Dashboard = () => {
         ) : search_query !== "" && !isSearching ? (
           <GeneralAppSearch searchData={searchData} />
         ) : (
-          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[20px]">
-            <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px]">
+          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[7px]">
+            <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px] border border-l-[#CDCDCD] border-r-[#CDCDCD]">
               <Box w="full">
-                <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
+                <div className="w-[100%] py-[12px] px-[14px] border border-b-[#CDCDCD]  shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] bg-brand-500">
                   <div className="flex items-center">
-                    <div className="w-[40px] h-[40px] overflow-hidden">
+                    <div className="w-[47px] h-[47px] overflow-hidden">
                       <img
                         src={
                           userInfo?.profile?.user?.image !== null
@@ -219,13 +232,13 @@ const Dashboard = () => {
                             : "/profileIcon.svg"
                         }
                         alt="profile"
-                        className="object-cover w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
+                        className="object-cover w-[47px] h-[47px] rounded-[50%] border-2 border-brand-500"
                         onError={handleOnError}
                       />
                     </div>
-                    <div className="ml-[10px] h-[30px] bg-brand-1250 rounded-[6px] w-[calc(100%-50px)]">
-                      <div className="w-[100%] h-[100%] pl-[11px] flex items-center focus:outline-0 rounded-[6px]  bg-brand-1250 text-[11px] font-light text-brand-200 leading-[16px]">
-                        <p>Post something interesting...</p>
+                    <div className="ml-[4px] h-[30px] rounded-[6px] w-[calc(100%-50px)]">
+                      <div className="w-[100%] h-[100%] pl-[11px] flex items-center focus:outline-0 rounded-[6px] text-[18px] font-medium text-[#293137] leading-[16px]">
+                        <p>Create a new adventure</p>
                       </div>
                     </div>
                   </div>
@@ -233,121 +246,159 @@ const Dashboard = () => {
                     className="mt-[22px] flex justify-between items-center"
                     onClick={(e) => e?.stopPropagation()}
                   >
-                    <div className="flex w-full justify-center gap-x-[10px] md:gap-x-[14px] items-center">
-                      {postWidgets.map((widget, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-col md:flex-row items-center cursor-pointer"
-                          onClick={() => setShowCreatePostModal(true)}
-                        >
-                          <NextImage src={widget.icon} alt="widget" />
-                          <p className="ml-[4px] font-semibold text-[11px] leading-[16px] text-brand-50">
-                            {widget.name}
-                          </p>
-                        </div>
-                      ))}
-                      <div className="relative">
-                        <p
+                    <div className="flex flex-col w-full gap-x-[10px] md:gap-x-[14px]">
+                      <div className="flex gap-x-[10px] md:gap-x-[14px] gap-y-[10px] md:gap-y-[14px] flex-wrap">
+                        {postWidgets.map((widget, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
+                            onClick={() => {
+                              if (
+                                widget.name === "image" ||
+                                widget.name === "video" ||
+                                widget.name === "picture"
+                              ) {
+                                setShowCreatePostModal(true);
+                              } else if (widget.name === "poll") {
+                                setShowCreatePollModal(true);
+                              } else if (widget.name === "article") {
+                                setShowCreateArticleModal(true);
+                              }
+                            }}
+                          >
+                            <NextImage src={widget.icon} alt="widget" />
+                          </div>
+                        ))}
+                        <div className="relative">
+                          {/* <p
                           onClick={() => setOpenMoreDropdown(!openMoreDropdown)}
                           className="font-semibold cursor-pointer text-[11px] leading-[16px] text-brand-50 mr-[5px] md:mr-[0px]"
                         >
                           Others
-                        </p>
-                        {openMoreDropdown && (
-                          <div className="absolute left-[0px] top-[20px] z-[99]">
-                            <MoreDropdown
-                              onClickAnnouncement={() =>
-                                setShowCreateAnnouncementModal(true)
-                              }
-                              onClickArticle={() =>
-                                setShowCreateArticleModal(true)
-                              }
-                              onClickOpening={() =>
-                                setShowCreateOpeningModal(true)
-                              }
-                              onClickPoll={() => setShowCreatePollModal(true)}
+                        </p> */}
+                          {/* {openMoreDropdown && ( */}
+                          {/* <div className="absolute left-[0px] top-[20px] z-[99]">
+                          <MoreDropdown
+                            onClickAnnouncement={() =>
+                              setShowCreateAnnouncementModal(true)
+                            }
+                            onClickArticle={() =>
+                              setShowCreateArticleModal(true)
+                            }
+                            onClickOpening={() =>
+                              setShowCreateOpeningModal(true)
+                            }
+                            onClickPoll={() => setShowCreatePollModal(true)}
+                          />
+                        </div> */}
+                          {/* )} */}
+                          <div
+                            className="w-[48px] h-[48px] cursor-pointer rounded-[100%] flex justify-center items-center bg-[#293137]"
+                            onClick={() =>
+                              setOpenMoreDropdown(!openMoreDropdown)
+                            }
+                          >
+                            <NextImage
+                              src={openMoreDropdown ? XIcon : PlusIcon}
+                              alt="plus"
                             />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-x-[10px] md:gap-x-[14px] mt-[10px]">
+                        {openMoreDropdown && (
+                          <div className="flex w-full gap-x-[10px] md:gap-x-[14px] items-center">
+                            {remainingPostWidgets?.map((widget, index) => (
+                              <div
+                                key={index}
+                                className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
+                                onClick={() => {
+                                  if (widget.name === "opening") {
+                                    setShowCreateOpeningModal(true);
+                                  } else if (widget.name === "announcement") {
+                                    setShowCreateAnnouncementModal(true);
+                                  }
+                                }}
+                              >
+                                <NextImage src={widget.icon} alt="widget" />
+                              </div>
+                            ))}
                           </div>
                         )}
                       </div>
                     </div>
-                    <button
-                      onClick={() =>
-                        setShowCreatePostModal(!showCreatePostModal)
-                      }
-                      className="w-[101px] h-[30px] text-brand-500 bg-brand-600 cursor-pointer rounded-[4px] text-[11px] font-semibold leading-[16px]"
-                    >
-                      Create Post
-                    </button>
                   </div>
                 </div>
-                {isLoadingNewsFeed ? (
-                  Array(6)
-                    ?.fill("")
-                    ?.map((_, index) => <LoadingPosts key={index} />)
-                ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
-                  <p className="bg-brand-1300 px-2 py-2 text-[14px]">
-                    New to the community? Start connecting with fellow athletes
-                    and share your sports journey to populate your news feed!
-                  </p>
-                ) : (
-                  newData
-                    ?.sort(
-                      (a: any, b: any) =>
-                        new Date(a?.updated_at)?.valueOf() -
-                        new Date(b?.updated_at)?.valueOf()
-                    )
-                    ?.map((post: any, index: number) =>
-                      post?.question_text ? (
-                        <PollCard
-                          key={index}
-                          post={post}
-                          index={index}
-                          setShowPopover={setShowPopover}
-                          setClickedIndex={setClickedIndex}
-                          setPollIndex={setPollIndex}
-                          showPopover={showPopover}
-                          clickedIndex={clickedIndex}
-                        />
-                      ) : (
-                        <PostCard
-                          postType={post?.post_type}
-                          postImage={post?.author?.image}
-                          postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
-                          timeCreated={post?.created_at}
-                          postBody={post?.body}
-                          postMedia={post?.media}
-                          postLikedAvatars={post.liked_avatars}
-                          postLikeCount={post?.like_count}
-                          postCommentCount={post?.comment_count}
-                          postShareCount={post?.share_count}
-                          postId={post?.id}
-                          liked={post?.liked}
-                          key={index}
-                          isLoadingPost={isLoadingNewsFeed}
-                          postTitle={post?.title}
-                          fileType={post?.file_type}
-                          post={post}
-                        />
+                <div className="pt-[20px] bg-brand-500 px-[10px]">
+                  {isLoadingNewsFeed ? (
+                    Array(6)
+                      ?.fill("")
+                      ?.map((_, index) => <LoadingPosts key={index} />)
+                  ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
+                    <p className="bg-brand-1300 px-2 py-2 text-[14px]">
+                      New to the community? Start connecting with fellow
+                      athletes and share your sports journey to populate your
+                      news feed!
+                    </p>
+                  ) : (
+                    newData
+                      ?.sort(
+                        (a: any, b: any) =>
+                          new Date(a?.updated_at)?.valueOf() -
+                          new Date(b?.updated_at)?.valueOf()
                       )
-                    )
-                )}
-                {!isLoadingNewsFeed &&
-                  !isLoadingPolls &&
-                  (hasNextNewsFeedPage || hasNextPollsPage) && (
-                    <div
-                      ref={ref}
-                      className="flex w-full justify-center items-center mt-[30px]"
-                    >
-                      <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
-                        Loading More...
-                      </button>
-                    </div>
+                      ?.map((post: any, index: number) =>
+                        post?.question_text ? (
+                          <PollCard
+                            key={index}
+                            post={post}
+                            index={index}
+                            setShowPopover={setShowPopover}
+                            setClickedIndex={setClickedIndex}
+                            setPollIndex={setPollIndex}
+                            showPopover={showPopover}
+                            clickedIndex={clickedIndex}
+                          />
+                        ) : (
+                          <PostCard
+                            postType={post?.post_type}
+                            postImage={post?.author?.image}
+                            postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
+                            timeCreated={post?.created_at}
+                            postBody={post?.body}
+                            postMedia={post?.media}
+                            postLikedAvatars={post.liked_avatars}
+                            postLikeCount={post?.like_count}
+                            postCommentCount={post?.comment_count}
+                            postShareCount={post?.share_count}
+                            postId={post?.id}
+                            liked={post?.liked}
+                            key={index}
+                            isLoadingPost={isLoadingNewsFeed}
+                            postTitle={post?.title}
+                            fileType={post?.file_type}
+                            post={post}
+                          />
+                        )
+                      )
                   )}
+                  {!isLoadingNewsFeed &&
+                    !isLoadingPolls &&
+                    (hasNextNewsFeedPage || hasNextPollsPage) && (
+                      <div
+                        ref={ref}
+                        className="flex w-full justify-center items-center mt-[30px]"
+                      >
+                        <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+                          Loading More...
+                        </button>
+                      </div>
+                    )}
+                </div>
               </Box>
             </div>
-            <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] pb-[50px]">
-              <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
+            <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] pb-[50px] pt-[18px] px-[17px] bg-brand-500 border border-l-[#CDCDCD] border-r-[#CDCDCD]">
+              <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px] border border-[#CDCDCD]">
                 <img
                   src={"/talentAd1.png"}
                   className="w-full h-[176px] object-cover"
@@ -361,7 +412,7 @@ const Dashboard = () => {
                   </SkeletonTheme>
                 </div>
               ) : SuggestedFollows?.data?.length > 0 ? (
-                <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
+                <div className="w-[100%] h-[183px] border border-[#CDCDCD] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
                   <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
                     <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                       People you might like
@@ -370,7 +421,7 @@ const Dashboard = () => {
                       href="/players"
                       className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                     >
-                      <p>VIEW ALL</p>
+                      <p>View All</p>
                       <img src="/arrow-forward.svg" alt="forward arrow" />
                     </a>
                   </div>
@@ -396,11 +447,11 @@ const Dashboard = () => {
                         href={`/profile/${SuggestedFollows?.data[0]?.id}`}
                         className="cursor-pointer"
                       >
-                        <p className="text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-50">
+                        <p className="text-[11px] lg:text-[18px] leading-[16px] text-[#293137] mb-[5px]">
                           {SuggestedFollows?.data[0]?.firstname}{" "}
                           {SuggestedFollows?.data[0]?.lastname}
                         </p>
-                        <p className="text-[10px] lg:text-[12px] 2xl:text-[14px] text-brand-1200 leading-[15px]">
+                        <p className="text-[10px] lg:text-[16px] text-brand-1200 leading-[15px]">
                           {SuggestedFollows?.data[0]?.roles[0]}
                         </p>
                       </a>
@@ -438,7 +489,7 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full flex justify-between gap-x-[18px]">
                       <button
-                        className="basis-[50%] border border-[#F8FAFB] text-[#343D45] text-[12px] rounded-[7px] h-[32px]"
+                        className="basis-[50%] border border-[[#293137]] text-[[#293137]] text-[18px] rounded-[7px] h-[45px]"
                         onClick={() => {
                           ignoreUser(
                             {
@@ -471,7 +522,7 @@ const Dashboard = () => {
                         )}
                       </button>
                       <button
-                        className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px] text-[12px]"
+                        className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[45px] text-[18px]"
                         onClick={() => {
                           followUser(
                             {
@@ -509,7 +560,7 @@ const Dashboard = () => {
               ) : (
                 <></>
               )}
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] rounded-[12px] mt-[19px]">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Talent openings
@@ -521,7 +572,7 @@ const Dashboard = () => {
                     }}
                     className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                   >
-                    <p>VIEW ALL</p>
+                    <p>View All</p>
                     <img src="/arrow-forward.svg" alt="forward arrow" />
                   </Link>
                 </div>
@@ -540,7 +591,7 @@ const Dashboard = () => {
                       ?.slice(0, 2)
                       .map((talentOpening: any, index: number) => (
                         <div
-                          className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                          className="w-[100%] h-[130px] md:h-[116px] bg-[#F4F4F4] rounded-[10px] border border-[#CDCDCD]"
                           key={index}
                         >
                           <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
@@ -596,7 +647,7 @@ const Dashboard = () => {
                   )}
                 </div>
               </div>
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] rounded-[12px] mt-[19px]">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Announcements
@@ -608,7 +659,7 @@ const Dashboard = () => {
                     }}
                     className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                   >
-                    <p>VIEW ALL</p>
+                    <p>View All</p>
                     <img src="/arrow-forward.svg" alt="forward arrow" />
                   </Link>
                 </div>
@@ -627,7 +678,7 @@ const Dashboard = () => {
                       ?.slice(0, 2)
                       .map((announcement: any, index: number) => (
                         <div
-                          className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                          className="w-[100%] h-[130px] md:h-[116px] bg-[#F4F4F4] rounded-[10px] border border-[#CDCDCD]"
                           key={index}
                         >
                           <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
