@@ -99,7 +99,7 @@ const PollCard = ({
 
   return (
     <>
-      <div className="w-full mb-[25px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
+      <div className="w-full mb-[9px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
         <div className="flex items-center justify-between mb-[35px]">
           <div className="flex items-center">
             <div className="mr-[7px]">

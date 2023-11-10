@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "@tanstack/react-query";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 import PostCard from "@/components/PostCard";
 import PollCard from "@/components/PollCard";
@@ -265,19 +266,21 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                   <Text>No person found with query: {search_query}!</Text>
                 </Flex>
               ) : (
-                <Flex direction="column" gap="10px">
+                <Flex gap="9px" flexWrap={"wrap"}>
                   {searchData?.people?.map((person: any, index: number) => (
-                    <PersonSearchResultComponent
-                      firstname={person?.user?.firstname}
-                      lastname={person?.user?.lastname}
-                      userId={person?.user?.id}
-                      sport={person?.sport}
-                      location={person?.location}
-                      img={person?.user?.image}
-                      roles={person?.user?.roles[0]}
-                      isFollowing={person?.is_following}
-                      key={index}
-                    />
+                    <Box width={{ base: "100%", md: "calc(50% - 9px)" }}>
+                      <PersonSearchResultComponent
+                        firstname={person?.user?.firstname}
+                        lastname={person?.user?.lastname}
+                        userId={person?.user?.id}
+                        sport={person?.sport}
+                        location={person?.location}
+                        img={person?.user?.image}
+                        roles={person?.user?.roles[0]}
+                        isFollowing={person?.is_following}
+                        key={index}
+                      />
+                    </Box>
                   ))}
                 </Flex>
               )}
@@ -288,48 +291,50 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                   <Text>No post found with query: {search_query}!</Text>
                 </Flex>
               ) : (
-                <Flex direction="column" gap="10px">
-                  {searchData?.posts?.map((post: any, index: number) =>
-                    post?.question_text ? (
-                      <PollCard
-                        key={index}
-                        post={post}
-                        index={index}
-                        setShowSinglePoll={setShowSinglePoll}
-                        setShowPopover={setShowPopover}
-                        setClickedIndex={setClickedIndex}
-                        setPollIndex={setPollIndex}
-                        setChosenPost={setChosenPost}
-                        showPopover={showPopover}
-                        clickedIndex={clickedIndex}
-                      />
-                    ) : (
-                      <PostCard
-                        postType={post?.post_type}
-                        postImage={post?.author?.image}
-                        postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
-                        timeCreated={post?.created_at}
-                        postBody={post?.body}
-                        postMedia={post?.media}
-                        postLikedAvatars={post.liked_avatars}
-                        postLikeCount={post?.like_count}
-                        postCommentCount={post?.comment_count}
-                        postShareCount={post?.share_count}
-                        postId={post?.id}
-                        liked={post?.liked}
-                        key={index}
-                        isLoadingPost={false}
-                        postTitle={post?.title}
-                        fileType={post?.file_type}
-                        post={post}
-                        onClickViewPost={() => {
-                          setShowSinglePost(true);
-                          setChosenPost(post);
-                        }}
-                      />
-                    )
-                  )}
-                </Flex>
+                <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2 }}>
+                  <Masonry columnsCount={2} style={{ gap: "9px" }}>
+                    {searchData?.posts?.map((post: any, index: number) =>
+                      post?.question_text ? (
+                        <PollCard
+                          key={index}
+                          post={post}
+                          index={index}
+                          setShowSinglePoll={setShowSinglePoll}
+                          setShowPopover={setShowPopover}
+                          setClickedIndex={setClickedIndex}
+                          setPollIndex={setPollIndex}
+                          setChosenPost={setChosenPost}
+                          showPopover={showPopover}
+                          clickedIndex={clickedIndex}
+                        />
+                      ) : (
+                        <PostCard
+                          postType={post?.post_type}
+                          postImage={post?.author?.image}
+                          postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
+                          timeCreated={post?.created_at}
+                          postBody={post?.body}
+                          postMedia={post?.media}
+                          postLikedAvatars={post.liked_avatars}
+                          postLikeCount={post?.like_count}
+                          postCommentCount={post?.comment_count}
+                          postShareCount={post?.share_count}
+                          postId={post?.id}
+                          liked={post?.liked}
+                          key={index}
+                          isLoadingPost={false}
+                          postTitle={post?.title}
+                          fileType={post?.file_type}
+                          post={post}
+                          onClickViewPost={() => {
+                            setShowSinglePost(true);
+                            setChosenPost(post);
+                          }}
+                        />
+                      )
+                    )}
+                  </Masonry>
+                </ResponsiveMasonry>
               )}
             </TabPanel>
             <TabPanel padding={"unset"} paddingTop="14px">
@@ -338,14 +343,16 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                   <Text>No video found with query: {search_query}!</Text>
                 </Flex>
               ) : (
-                <Flex direction="column" gap="12px" width="100%">
+                <Flex gap="9px" width="100%" flexWrap="wrap">
                   {searchData?.videos?.map((video: any, index: number) => (
-                    <ExploreCard
-                      key={index}
-                      index={index}
-                      post={video}
-                      exploreCardWidth="100%"
-                    />
+                    <Box width={{ base: "100%", md: "calc(50% - 9px)" }}>
+                      <ExploreCard
+                        key={index}
+                        index={index}
+                        post={video}
+                        exploreCardWidth="100%"
+                      />
+                    </Box>
                   ))}
                 </Flex>
               )}
@@ -356,52 +363,54 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                   <Text>No latest found with query: {search_query}!</Text>
                 </Flex>
               ) : (
-                <Flex direction="column" gap="10px">
-                  {searchData?.latest?.map((latest: any, index: number) =>
-                    latest?.question_text ? (
-                      <PollCard
-                        key={index}
-                        post={latest}
-                        index={index}
-                        setShowSinglePoll={setShowSinglePoll}
-                        setShowPopover={setShowPopover}
-                        setClickedIndex={setClickedIndex}
-                        setPollIndex={setPollIndex}
-                        setChosenPost={setChosenPost}
-                        showPopover={showPopover}
-                        clickedIndex={clickedIndex}
-                      />
-                    ) : (
-                      <PostCard
-                        key={index}
-                        postType={latest?.post_type}
-                        postImage={latest?.author?.image}
-                        postAuthor={
-                          latest
-                            ? `${latest?.author?.firstname} ${latest?.author?.lastname}`
-                            : ""
-                        }
-                        timeCreated={latest?.created_at}
-                        postBody={latest?.body}
-                        postMedia={latest?.media}
-                        postLikedAvatars={latest?.liked_avatars}
-                        postLikeCount={latest?.like_count}
-                        postCommentCount={latest?.comment_count}
-                        postShareCount={latest?.share_count}
-                        postId={latest?.id}
-                        liked={latest?.liked}
-                        isLoadingPost={false}
-                        postTitle={latest?.title}
-                        fileType={latest?.file_type}
-                        post={latest}
-                        onClickViewPost={() => {
-                          setShowSinglePost(true);
-                          setChosenPost(latest);
-                        }}
-                      />
-                    )
-                  )}
-                </Flex>
+                <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2 }}>
+                  <Masonry columnsCount={2} style={{ gap: "9px" }}>
+                    {searchData?.latest?.map((latest: any, index: number) =>
+                      latest?.question_text ? (
+                        <PollCard
+                          key={index}
+                          post={latest}
+                          index={index}
+                          setShowSinglePoll={setShowSinglePoll}
+                          setShowPopover={setShowPopover}
+                          setClickedIndex={setClickedIndex}
+                          setPollIndex={setPollIndex}
+                          setChosenPost={setChosenPost}
+                          showPopover={showPopover}
+                          clickedIndex={clickedIndex}
+                        />
+                      ) : (
+                        <PostCard
+                          key={index}
+                          postType={latest?.post_type}
+                          postImage={latest?.author?.image}
+                          postAuthor={
+                            latest
+                              ? `${latest?.author?.firstname} ${latest?.author?.lastname}`
+                              : ""
+                          }
+                          timeCreated={latest?.created_at}
+                          postBody={latest?.body}
+                          postMedia={latest?.media}
+                          postLikedAvatars={latest?.liked_avatars}
+                          postLikeCount={latest?.like_count}
+                          postCommentCount={latest?.comment_count}
+                          postShareCount={latest?.share_count}
+                          postId={latest?.id}
+                          liked={latest?.liked}
+                          isLoadingPost={false}
+                          postTitle={latest?.title}
+                          fileType={latest?.file_type}
+                          post={latest}
+                          onClickViewPost={() => {
+                            setShowSinglePost(true);
+                            setChosenPost(latest);
+                          }}
+                        />
+                      )
+                    )}
+                  </Masonry>
+                </ResponsiveMasonry>
               )}
             </TabPanel>
           </TabPanels>
