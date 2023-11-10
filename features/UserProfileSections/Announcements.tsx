@@ -71,11 +71,7 @@ const MyAnnouncements = () => {
       </div>
 
       {showSingleAnnouncement === true ? (
-        <SingleAnnouncement
-          setShowSingleAnnouncement={setShowSingleAnnouncement}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SingleAnnouncement chosenPost={chosenPost} />
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (

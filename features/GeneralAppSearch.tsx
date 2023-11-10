@@ -232,17 +232,9 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
   return (
     <Box pb="60px">
       {showSinglePost === true ? (
-        <SinglePost
-          setShowSinglePost={setShowSinglePost}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SinglePost chosenPost={chosenPost} />
       ) : showSinglePoll ? (
-        <SinglePoll
-          setShowSinglePoll={setShowSinglePoll}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SinglePoll chosenPost={chosenPost} />
       ) : (
         <Tabs>
           <TabList>
@@ -305,11 +297,9 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                           key={index}
                           post={post}
                           index={index}
-                          setShowSinglePoll={setShowSinglePoll}
                           setShowPopover={setShowPopover}
                           setClickedIndex={setClickedIndex}
                           setPollIndex={setPollIndex}
-                          setChosenPost={setChosenPost}
                           showPopover={showPopover}
                           clickedIndex={clickedIndex}
                         />
@@ -332,10 +322,6 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                           postTitle={post?.title}
                           fileType={post?.file_type}
                           post={post}
-                          onClickViewPost={() => {
-                            setShowSinglePost(true);
-                            setChosenPost(post);
-                          }}
                         />
                       )
                     )}
@@ -381,11 +367,9 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                           key={index}
                           post={latest}
                           index={index}
-                          setShowSinglePoll={setShowSinglePoll}
                           setShowPopover={setShowPopover}
                           setClickedIndex={setClickedIndex}
                           setPollIndex={setPollIndex}
-                          setChosenPost={setChosenPost}
                           showPopover={showPopover}
                           clickedIndex={clickedIndex}
                         />
@@ -412,10 +396,6 @@ const GeneralAppSearch = ({ searchData }: { searchData: any }) => {
                           postTitle={latest?.title}
                           fileType={latest?.file_type}
                           post={latest}
-                          onClickViewPost={() => {
-                            setShowSinglePost(true);
-                            setChosenPost(latest);
-                          }}
                         />
                       )
                     )}

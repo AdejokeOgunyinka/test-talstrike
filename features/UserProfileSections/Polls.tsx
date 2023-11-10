@@ -68,11 +68,7 @@ const MyPolls = () => {
       </div>
 
       {showSinglePoll === true ? (
-        <SinglePoll
-          setShowSinglePoll={setShowSinglePoll}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SinglePoll chosenPost={chosenPost} />
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (

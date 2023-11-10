@@ -89,11 +89,7 @@ const MyPosts = () => {
       </div>
 
       {showSinglePost === true ? (
-        <SinglePost
-          setShowSinglePost={setShowSinglePost}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SinglePost chosenPost={chosenPost} />
       ) : (
         <div className="w-full">
           <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">

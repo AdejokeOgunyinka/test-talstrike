@@ -17,15 +17,7 @@ import { useGetMyProfile } from "@/api/profile";
 
 const Image = styled.img``;
 
-const SingleArticle = ({
-  setShowSingleArticle,
-  seconds,
-  chosenPost,
-}: {
-  setShowSingleArticle: any;
-  seconds: any;
-  chosenPost: any;
-}) => {
+const SingleArticle = ({ chosenPost }: { chosenPost: any }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
@@ -47,6 +39,12 @@ const SingleArticle = ({
     token: TOKEN as string,
     userId: session?.user?.id as string,
   });
+
+  let seconds = 0;
+  function incrementSeconds() {
+    seconds += 1;
+  }
+  setInterval(incrementSeconds, 1000);
 
   return (
     <div className="w-full p-[24px] rounded-[4px]">
@@ -73,9 +71,9 @@ const SingleArticle = ({
                 </h4>
               </div>
             </div>
-            <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]">
-              {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
-              <div
+            {/* <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]"> */}
+            {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
+            {/* <div
                 onClick={() => {
                   if (seconds > 4) {
                     addViewCount({
@@ -89,8 +87,8 @@ const SingleArticle = ({
                 className="cursor-pointer"
               >
                 <img src="/closeIconBlue.svg" alt="close blue" />
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
           <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">
             {chosenPost?.title}
@@ -234,6 +232,8 @@ const SingleArticle = ({
                           queryClient.invalidateQueries([
                             "getAllCommentsOnPost",
                           ]);
+                          queryClient.invalidateQueries(["getSinglePost"]);
+                          queryClient.invalidateQueries(["getNewsfeed"]);
                         },
                       }
                     );
