@@ -24,7 +24,6 @@ import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
 import { axios } from "@/libs/axios";
 import notify from "@/libs/toast";
 import ShareModal from "./ShareModal";
-import EditPost from "./ProfileModals/EditPost";
 import DeletePost from "./ProfileModals/DeletePost";
 
 const Image = styled.img``;
@@ -83,11 +82,6 @@ const PollCard = ({
     setShowPopover(false);
   };
 
-  const handleClickEditModal = () => {
-    setShowEditModal(true);
-    setShowPopover(false);
-  };
-
   const Popover = () => {
     return (
       <div className="absolute w-max top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
@@ -104,12 +98,6 @@ const PollCard = ({
         </p>
         {post?.author?.id === session?.user?.id && (
           <>
-            <p
-              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
-              onClick={handleClickEditModal}
-            >
-              Edit
-            </p>
             <p
               className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
               onClick={handleClickDelete}
@@ -520,9 +508,6 @@ const PollCard = ({
         <ShareModal post={post} onClose={() => setShowShareModal(false)} />
       )}
 
-      {showEditModal && (
-        <EditPost id={post?.id} onClose={() => setShowEditModal(false)} />
-      )}
       {showDeleteModal && (
         <DeletePost
           id={post?.id}
