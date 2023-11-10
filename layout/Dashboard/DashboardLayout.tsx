@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Flex, Image, Link } from "@chakra-ui/react";
 
 import { DashboardSidebar, MobileMenu } from "./DashboardSidebar";
 import SearchBar from "@/components/SearchBar";
@@ -35,58 +35,61 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
 
   const dispatch = useTypedDispatch();
   const { search_query } = useTypedSelector((state) => state.dashboard);
+  const menuLinks = ["Pricing", "About", "Support", "Privacy policy"];
 
   return (
     <div className="w-full min-h-screen lg:flex lg:justify-center">
       <div className="w-full 2xl:w-[70vw] 2xl:h-[85vh] h-[100%] relative flex 2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-brand-500">
-        <Box
-          className="w-[178px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed hidden md:inline-block"
-          borderRight="1px solid #93A3B1"
-          bg="bg-grey"
-        >
-          <DashboardSidebar />
-        </Box>
-        <div className="ml-[unset] md:ml-[178px] w-[100%] md:w-[calc(100%-178px)] relative md:static scrollbar-hidden">
-          <div className="bg-[#343D45] z-[10] h-[60px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[10px] sticky top-0 z-[999]">
-            <div
-              className={`w-[50%] lg:w-[350px] h-[100%] flex items-center ${
-                router.pathname === "/dashboard" && "ml-[15px]"
-              }`}
-            >
-              {router.pathname !== "/dashboard" && (
-                <Image
-                  width={{ base: "15px", md: "25px" }}
-                  height={{ base: "15px", md: "25px" }}
-                  src="/arrowBack.svg"
-                  alt="back"
-                  mr={{ base: "10px", md: "55px" }}
-                  onClick={() => router.back()}
-                  cursor="pointer"
+        <div className="w-[100%]">
+          <div className="bg-[#293137] h-[60px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[21px] sticky top-0 z-[999]">
+            <Flex display={{ base: "none", md: "inline-flex" }}>
+              <Image src="/newTalstrikeLogoWhite.svg" mr="14px" />
+              <Flex gap="26px">
+                {menuLinks?.map((inner, index) => (
+                  <Link
+                    href="#"
+                    key={index}
+                    color="#fff"
+                    fontSize="15px"
+                    lineHeight="24px"
+                    fontWeight="400"
+                    textDecoration="none"
+                    textDecorationLine="none"
+                  >
+                    {inner}
+                  </Link>
+                ))}
+              </Flex>
+            </Flex>
+            <div className="flex items-center justify-end h-[100%]">
+              <div
+                className={`w-[50%] lg:w-[350px] h-[40px] flex items-center mr-[57px] ${
+                  router.pathname === "/dashboard" && "ml-[15px]"
+                }`}
+              >
+                <SearchBar
+                  placeholder="Search"
+                  isLight
+                  isLeftIcon
+                  hasRoundedCorners
+                  differentOnChange={(e: any) => {
+                    dispatch(setSearchQuery(e?.target?.value));
+                    if (router.pathname !== "/dashboard") {
+                      router.push("/dashboard");
+                    }
+                  }}
+                  value={search_query}
+                  hasClearBtn={search_query?.length > 0}
+                  onClickClear={() => dispatch(setSearchQuery(""))}
+                  bgColor="#15191D"
                 />
-              )}
-              <SearchBar
-                placeholder="Search"
-                isLight
-                isLeftIcon
-                hasRoundedCorners
-                differentOnChange={(e: any) => {
-                  dispatch(setSearchQuery(e?.target?.value));
-                  if (router.pathname !== "/dashboard") {
-                    router.push("/dashboard");
-                  }
-                }}
-                value={search_query}
-                hasClearBtn={search_query?.length > 0}
-                onClickClear={() => dispatch(setSearchQuery(""))}
-              />
-            </div>
-            <div className="flex items-center justify-end h-[100%] w-[50%] md:w-[calc(100%-475px)]">
-              <p
+              </div>
+              {/* <p
                 onClick={() => setShowSignOutButton(!showSignOutButton)}
                 className="mr-[9px] cursor-pointer font-normal text-[11px] text-brand-500 lg:text-[14px] 2xl:text-[16px] leading-[16px]"
               >
                 {session?.user?.firstname} {session?.user?.lastname}
-              </p>
+              </p> */}
               <div
                 className="relative"
                 onClick={(e) => {
@@ -114,21 +117,28 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          <div className="w-[100%] min-h-[calc(100vh-60px)] flex scrollbar-hidden">
+          <div className="w-[100%] flex relative md:static scrollbar-hidden">
+            <Box
+              className="w-[175px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed hidden md:inline-block"
+              borderRight="1px solid #93A3B1"
+              bg="bg-grey"
+            >
+              <DashboardSidebar />
+            </Box>
             <div
-              className={`w-[100%] ${
+              className={`ml-[unset] md:ml-[175px] min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] flex ${
                 router.pathname?.startsWith("/profile")
-                  ? "md:w-[calc(100%-23px)]"
+                  ? "md:w-[calc(100%-201px)]"
                   : router.pathname?.startsWith("/messaging")
                   ? "w-[100%]"
-                  : "lg:w-[calc(100%-267px)]"
-              } h-[100%] scrollbar-hidden`}
+                  : "w-[100%] lg:w-[calc(100%-445px)]"
+              } scrollbar-hidden`}
             >
               {children}
             </div>
             {!router.pathname?.startsWith("/profile") &&
               !router.pathname?.startsWith("/messaging") && (
-                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[267px] px-[20px] scrollbar-hidden hidden md:inline-block">
+                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] px-[20px] scrollbar-hidden hidden md:inline-block">
                   <DashboardAside />
                 </aside>
               )}

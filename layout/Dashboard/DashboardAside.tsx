@@ -32,18 +32,22 @@ const DashboardAside = () => {
   };
 
   return (
-    <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline h-[100%] lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
+    <div className="bg-brand-500 scrollbar-hidden h-[100vh] hidden lg:inline lg:relative md:translate-x-0 transform translate-x-full transition duration-200 ease-in-out flex-shrink-0 inset-x-0">
       <div className="sticky z-[99] bg-brand-500">
-        <div className="h-[40px] mb-[26px] mt-[100px]">
-          <SearchBar placeholder="Search for players" />
+        <div className="h-[40px] mb-[26px] mt-[81px]">
+          <SearchBar
+            placeholder="Search for players"
+            hasRoundedCorners
+            bgColor="#F6F6F6"
+          />
         </div>
         <div className="flex justify-between items-center mb-[12px]">
-          <h4 className="text-brand-90 text-[11px] lg:text-[14px] 2xl:text-[16px] leading-[16px] font-semibold">
+          <h4 className="text-[11px] lg:text-[18px] leading-[116%] font-semibold">
             Coaches near me
           </h4>
           <a
             href="/coaches"
-            className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+            className="text-[#93A3B1] flex gap-x-[1px] text-[15px] font-normal cursor-pointer"
           >
             <p>VIEW ALL</p>
             <img src="/arrow-forward.svg" alt="forward arrow" />
@@ -83,7 +87,7 @@ const DashboardAside = () => {
                 >
                   <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
                     <img
-                      src={coach?.user?.image}
+                      src={coach?.user?.image || "/user_placeholder.svg"}
                       alt="coach"
                       style={{
                         width: "40px",
@@ -101,12 +105,12 @@ const DashboardAside = () => {
           )}
         </div>
         <div className="mt-[27px] mb-[12px] flex justify-between items-center">
-          <h4 className="text-brand-90 text-[11px] lg:text-[14px] 2xl:text-[16px] leading-[16px] font-semibold">
-            My Friends
+          <h4 className="text-[11px] lg:text-[18px] leading-[116%] font-semibold">
+            Friends
           </h4>
           <a
             href="/players"
-            className="text-[#94AEC5] flex gap-x-[5px] text-[10px] leading-[16px] font-normal cursor-pointer"
+            className="text-[#93A3B1] flex gap-x-[5px] text-[15px] leading-[16px] font-normal cursor-pointer"
           >
             <p>VIEW ALL</p>
             <img src="/arrow-forward.svg" alt="forward arrow" />
@@ -127,7 +131,7 @@ const DashboardAside = () => {
             >
               <div className="flex gap-[20px] items-center">
                 <img
-                  src={follower?.users?.image}
+                  src={follower?.users?.image || "/user_placeholder.svg"}
                   alt="player"
                   style={{
                     width: "40px",
@@ -137,7 +141,7 @@ const DashboardAside = () => {
                   }}
                   onError={handleOnError}
                 />
-                <p className="text-brand-50 text-[11px] lg:text-[14px] 2xl:text-[15px] leading-[16px] font-semibold">
+                <p className="text-[#293137] text-[11px] lg:text-[16px] leading-[16px] font-semibold">
                   {follower?.users?.firstname} {follower?.users?.lastname}
                 </p>
               </div>
