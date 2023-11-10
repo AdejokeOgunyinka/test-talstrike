@@ -173,7 +173,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="w-full h-[100%] gap-x-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
+    <div className="w-full h-[100%] gap-x-[7px] px-[15px] md:px-[7px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
       {showCreatePostModal && (
         <CreatePost onClose={() => setShowCreatePostModal(false)} />
       )}
@@ -206,7 +206,7 @@ const Dashboard = () => {
         ) : search_query !== "" && !isSearching ? (
           <GeneralAppSearch searchData={searchData} />
         ) : (
-          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[10px]">
+          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[7px]">
             <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px] border border-l-[#CDCDCD] border-r-[#CDCDCD]">
               <Box w="full">
                 <div className="w-[100%] py-[12px] px-[14px] border border-b-[#CDCDCD] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] bg-brand-500">
@@ -512,7 +512,7 @@ const Dashboard = () => {
               ) : (
                 <></>
               )}
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] border border-[#CDCDCD] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] rounded-[12px] mt-[19px]">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Talent openings
@@ -543,7 +543,7 @@ const Dashboard = () => {
                       ?.slice(0, 2)
                       .map((talentOpening: any, index: number) => (
                         <div
-                          className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                          className="w-[100%] h-[130px] md:h-[116px] bg-[#F4F4F4] rounded-[10px] border border-[#CDCDCD]"
                           key={index}
                         >
                           <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">
@@ -599,7 +599,7 @@ const Dashboard = () => {
                   )}
                 </div>
               </div>
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] border border-[#CDCDCD] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] rounded-[12px] mt-[19px]">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Announcements
@@ -630,7 +630,7 @@ const Dashboard = () => {
                       ?.slice(0, 2)
                       .map((announcement: any, index: number) => (
                         <div
-                          className="w-[100%] h-[130px] md:h-[116px] bg-brand-1250 rounded-[10px] "
+                          className="w-[100%] h-[130px] md:h-[116px] bg-[#F4F4F4] rounded-[10px] border border-[#CDCDCD]"
                           key={index}
                         >
                           <div className="h-[98px] md:h-[81px] w-[100%] pt-[12px] px-[13px] flex items-center">

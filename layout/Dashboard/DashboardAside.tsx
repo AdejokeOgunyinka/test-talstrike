@@ -85,7 +85,7 @@ const DashboardAside = () => {
                   className="flex flex-col items-center cursor-pointer"
                   onClick={() => handleClickUser({ id: coach?.user?.id })}
                 >
-                  <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.5px] border-brand-400 overflow-hidden">
+                  <div className="flex justify-center items-center rounded-[50%] w-[40px] h-[40px] border-[1.092px] border-brand-500 overflow-hidden">
                     <img
                       src={coach?.user?.image || "/user_placeholder.svg"}
                       alt="coach"
@@ -97,8 +97,8 @@ const DashboardAside = () => {
                       onError={handleOnError}
                     />
                   </div>
-                  <p className="text-[9px] mt-[4px] lg:text-[11px] 2xl:text-[13px] leading-[14px] font-medium">
-                    {coach?.user?.firstname} {coach?.user?.lastname}
+                  <p className="text-[9px] text-[#293137] lg:text-[14px] leading-[14px] font-medium">
+                    {coach?.user?.firstname}
                   </p>
                 </div>
               ))
@@ -129,7 +129,7 @@ const DashboardAside = () => {
               className="flex justify-between items-center cursor-pointer"
               onClick={() => handleClickUser({ id: follower?.users?.id })}
             >
-              <div className="flex gap-[20px] items-center">
+              <div className="flex gap-[14px] items-center">
                 <img
                   src={follower?.users?.image || "/user_placeholder.svg"}
                   alt="player"
