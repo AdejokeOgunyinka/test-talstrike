@@ -65,6 +65,22 @@
 
 @font-face {
   font-family: "PolySans";
+  src: url('/font/PolySans/PolySansMedian.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
+  src: url('/font/PolySans/PolySansMedianItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PolySans";
   src: url('/font/PolySans/PolySansBulky.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;

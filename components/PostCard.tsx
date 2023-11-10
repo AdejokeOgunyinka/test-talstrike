@@ -156,14 +156,14 @@ const PostCard = ({
 
   return (
     <>
-      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[9px] shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] rounded-[8px] bg-brand-500">
+      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD]">
         <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px]">
           <div className="flex justify-between mb-[25px]">
             <div className="flex gap-x-[7px] items-center">
               <img
                 src={postImage !== null ? postImage : "/profileIcon.svg"}
                 alt="post image"
-                className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                className="object-cover w-[42px] h-[42px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                 onError={handleOnError}
               />
               <div>
@@ -171,18 +171,18 @@ const PostCard = ({
                   href={`/profile/${post?.author?.id}`}
                   cursor="pointer"
                   _hover={{ textDecoration: "none" }}
-                  className="text-brand-2250 font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]"
+                  className="text-[#293137] font-semibold text-[11px] lg:text-[18px] leading-[16px]"
                 >
                   {postAuthor}
                 </Link>
-                <h4 className="text-[#94AEC5] font-medium text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[15px]">
-                  {moment(timeCreated)?.format("ll")}
+                <h4 className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
+                  {moment(timeCreated)?.format("dddd Do MMM")}
                 </h4>
               </div>
             </div>
             <div
               onClick={(e) => e?.stopPropagation()}
-              className="text-brand-2250 font-semibold text-[27.7232px] relative"
+              className="text-[#293137] font-semibold text-[31px] relative"
             >
               <p
                 onClick={() => {
@@ -196,10 +196,10 @@ const PostCard = ({
             </div>
           </div>
           <div className={`mb-[15px] ${postMedia ? "mb-[15px]" : "mb-0"}`}>
-            <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">
+            <h4 className="mt-[14px] font-medium text-[#293137] text-[11px] lg:text-[18px]">
               {postTitle}
             </h4>
-            <p className="mt-[4px] font-normal leading-[16px] text-[12px]  mb-[9px]">
+            <p className="mt-[4px] font-normal leading-[16px] text-[16px]  mb-[9px]">
               {showFullBody
                 ? postBody
                 : `${slicedBody}${postBody?.length > 200 ? "..." : ""}`}

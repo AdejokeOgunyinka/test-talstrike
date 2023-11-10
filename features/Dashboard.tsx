@@ -173,7 +173,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="w-full h-[100%] gap-x-[20px] py-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
+    <div className="w-full h-[100%] gap-x-[20px] px-[15px] md:px-[26px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
       {showCreatePostModal && (
         <CreatePost onClose={() => setShowCreatePostModal(false)} />
       )}
@@ -206,12 +206,12 @@ const Dashboard = () => {
         ) : search_query !== "" && !isSearching ? (
           <GeneralAppSearch searchData={searchData} />
         ) : (
-          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[20px]">
-            <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px]">
+          <div className="w-full flex flex-col-reverse md:flex-row gap-x-[10px]">
+            <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px] border border-l-[#CDCDCD] border-r-[#CDCDCD]">
               <Box w="full">
-                <div className="w-[100%] py-[12px] px-[14px] mb-[25px] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] bg-brand-500">
+                <div className="w-[100%] py-[12px] px-[14px] border border-b-[#CDCDCD] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] bg-brand-500">
                   <div className="flex items-center">
-                    <div className="w-[40px] h-[40px] overflow-hidden">
+                    <div className="w-[47px] h-[47px] overflow-hidden">
                       <img
                         src={
                           userInfo?.profile?.user?.image !== null
@@ -219,13 +219,13 @@ const Dashboard = () => {
                             : "/profileIcon.svg"
                         }
                         alt="profile"
-                        className="object-cover w-[40px] h-[40px] rounded-[50%] border-2 border-brand-500"
+                        className="object-cover w-[47px] h-[47px] rounded-[50%] border-2 border-brand-500"
                         onError={handleOnError}
                       />
                     </div>
-                    <div className="ml-[10px] h-[30px] bg-brand-1250 rounded-[6px] w-[calc(100%-50px)]">
-                      <div className="w-[100%] h-[100%] pl-[11px] flex items-center focus:outline-0 rounded-[6px]  bg-brand-1250 text-[11px] font-light text-brand-200 leading-[16px]">
-                        <p>Post something interesting...</p>
+                    <div className="ml-[4px] h-[30px] rounded-[6px] w-[calc(100%-50px)]">
+                      <div className="w-[100%] h-[100%] pl-[11px] flex items-center focus:outline-0 rounded-[6px] text-[18px] font-medium text-[#293137] leading-[16px]">
+                        <p>Create a new adventure</p>
                       </div>
                     </div>
                   </div>
@@ -281,73 +281,76 @@ const Dashboard = () => {
                     </button>
                   </div>
                 </div>
-                {isLoadingNewsFeed ? (
-                  Array(6)
-                    ?.fill("")
-                    ?.map((_, index) => <LoadingPosts key={index} />)
-                ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
-                  <p className="bg-brand-1300 px-2 py-2 text-[14px]">
-                    New to the community? Start connecting with fellow athletes
-                    and share your sports journey to populate your news feed!
-                  </p>
-                ) : (
-                  newData
-                    ?.sort(
-                      (a: any, b: any) =>
-                        new Date(a?.updated_at)?.valueOf() -
-                        new Date(b?.updated_at)?.valueOf()
-                    )
-                    ?.map((post: any, index: number) =>
-                      post?.question_text ? (
-                        <PollCard
-                          key={index}
-                          post={post}
-                          index={index}
-                          setShowPopover={setShowPopover}
-                          setClickedIndex={setClickedIndex}
-                          setPollIndex={setPollIndex}
-                          showPopover={showPopover}
-                          clickedIndex={clickedIndex}
-                        />
-                      ) : (
-                        <PostCard
-                          postType={post?.post_type}
-                          postImage={post?.author?.image}
-                          postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
-                          timeCreated={post?.created_at}
-                          postBody={post?.body}
-                          postMedia={post?.media}
-                          postLikedAvatars={post.liked_avatars}
-                          postLikeCount={post?.like_count}
-                          postCommentCount={post?.comment_count}
-                          postShareCount={post?.share_count}
-                          postId={post?.id}
-                          liked={post?.liked}
-                          key={index}
-                          isLoadingPost={isLoadingNewsFeed}
-                          postTitle={post?.title}
-                          fileType={post?.file_type}
-                          post={post}
-                        />
+                <div className="pt-[20px] bg-brand-500 px-[10px]">
+                  {isLoadingNewsFeed ? (
+                    Array(6)
+                      ?.fill("")
+                      ?.map((_, index) => <LoadingPosts key={index} />)
+                  ) : NewsFeedData?.pages?.flat(1)?.length === 0 ? (
+                    <p className="bg-brand-1300 px-2 py-2 text-[14px]">
+                      New to the community? Start connecting with fellow
+                      athletes and share your sports journey to populate your
+                      news feed!
+                    </p>
+                  ) : (
+                    newData
+                      ?.sort(
+                        (a: any, b: any) =>
+                          new Date(a?.updated_at)?.valueOf() -
+                          new Date(b?.updated_at)?.valueOf()
                       )
-                    )
-                )}
-                {!isLoadingNewsFeed &&
-                  !isLoadingPolls &&
-                  (hasNextNewsFeedPage || hasNextPollsPage) && (
-                    <div
-                      ref={ref}
-                      className="flex w-full justify-center items-center mt-[30px]"
-                    >
-                      <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
-                        Loading More...
-                      </button>
-                    </div>
+                      ?.map((post: any, index: number) =>
+                        post?.question_text ? (
+                          <PollCard
+                            key={index}
+                            post={post}
+                            index={index}
+                            setShowPopover={setShowPopover}
+                            setClickedIndex={setClickedIndex}
+                            setPollIndex={setPollIndex}
+                            showPopover={showPopover}
+                            clickedIndex={clickedIndex}
+                          />
+                        ) : (
+                          <PostCard
+                            postType={post?.post_type}
+                            postImage={post?.author?.image}
+                            postAuthor={`${post?.author?.firstname} ${post?.author?.lastname}`}
+                            timeCreated={post?.created_at}
+                            postBody={post?.body}
+                            postMedia={post?.media}
+                            postLikedAvatars={post.liked_avatars}
+                            postLikeCount={post?.like_count}
+                            postCommentCount={post?.comment_count}
+                            postShareCount={post?.share_count}
+                            postId={post?.id}
+                            liked={post?.liked}
+                            key={index}
+                            isLoadingPost={isLoadingNewsFeed}
+                            postTitle={post?.title}
+                            fileType={post?.file_type}
+                            post={post}
+                          />
+                        )
+                      )
                   )}
+                  {!isLoadingNewsFeed &&
+                    !isLoadingPolls &&
+                    (hasNextNewsFeedPage || hasNextPollsPage) && (
+                      <div
+                        ref={ref}
+                        className="flex w-full justify-center items-center mt-[30px]"
+                      >
+                        <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+                          Loading More...
+                        </button>
+                      </div>
+                    )}
+                </div>
               </Box>
             </div>
-            <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] pb-[50px]">
-              <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px]">
+            <div className="basis-[40%] w-[100%] md:w-[40%] h-[88vh] pb-[50px] pt-[18px] px-[17px] bg-brand-500 border border-l-[#CDCDCD] border-r-[#CDCDCD]">
+              <div className="w-[100%] h-[176px] overflow-hidden rounded-[12px] border border-[#CDCDCD]">
                 <img
                   src={"/talentAd1.png"}
                   className="w-full h-[176px] object-cover"
@@ -361,7 +364,7 @@ const Dashboard = () => {
                   </SkeletonTheme>
                 </div>
               ) : SuggestedFollows?.data?.length > 0 ? (
-                <div className="w-[100%] h-[173px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
+                <div className="w-[100%] h-[183px] border border-[#CDCDCD] rounded-[12px] mt-[16px] bg-brand-500 divide-y divide-brand-1150">
                   <div className="h-[34px] flex justify-between items-center pl-[17px] pr-[10px]">
                     <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                       People you might like
@@ -370,7 +373,7 @@ const Dashboard = () => {
                       href="/players"
                       className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                     >
-                      <p>VIEW ALL</p>
+                      <p>View All</p>
                       <img src="/arrow-forward.svg" alt="forward arrow" />
                     </a>
                   </div>
@@ -396,11 +399,11 @@ const Dashboard = () => {
                         href={`/profile/${SuggestedFollows?.data[0]?.id}`}
                         className="cursor-pointer"
                       >
-                        <p className="text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-50">
+                        <p className="text-[11px] lg:text-[18px] leading-[16px] text-[#293137] mb-[5px]">
                           {SuggestedFollows?.data[0]?.firstname}{" "}
                           {SuggestedFollows?.data[0]?.lastname}
                         </p>
-                        <p className="text-[10px] lg:text-[12px] 2xl:text-[14px] text-brand-1200 leading-[15px]">
+                        <p className="text-[10px] lg:text-[16px] text-brand-1200 leading-[15px]">
                           {SuggestedFollows?.data[0]?.roles[0]}
                         </p>
                       </a>
@@ -438,7 +441,7 @@ const Dashboard = () => {
                     </div>
                     <div className="w-full flex justify-between gap-x-[18px]">
                       <button
-                        className="basis-[50%] border border-[#F8FAFB] text-[#343D45] text-[12px] rounded-[7px] h-[32px]"
+                        className="basis-[50%] border border-[[#293137]] text-[[#293137]] text-[18px] rounded-[7px] h-[45px]"
                         onClick={() => {
                           ignoreUser(
                             {
@@ -471,7 +474,7 @@ const Dashboard = () => {
                         )}
                       </button>
                       <button
-                        className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[32px] text-[12px]"
+                        className="basis-[50%] rounded-[7px] bg-brand-600 text-brand-500 h-[45px] text-[18px]"
                         onClick={() => {
                           followUser(
                             {
@@ -509,7 +512,7 @@ const Dashboard = () => {
               ) : (
                 <></>
               )}
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] border border-[#CDCDCD] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Talent openings
@@ -521,7 +524,7 @@ const Dashboard = () => {
                     }}
                     className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                   >
-                    <p>VIEW ALL</p>
+                    <p>View All</p>
                     <img src="/arrow-forward.svg" alt="forward arrow" />
                   </Link>
                 </div>
@@ -596,7 +599,7 @@ const Dashboard = () => {
                   )}
                 </div>
               </div>
-              <div className="w-[100%] max-h-[345px] md:max-h-[324px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
+              <div className="w-[100%] max-h-[345px] md:max-h-[324px] border border-[#CDCDCD] rounded-[12px] mt-[19px] bg-brand-500 divide-y divide-brand-1150">
                 <div className="h-[39px] flex justify-between items-center pl-[16px] pr-[16px]">
                   <h4 className="font-semibold text-[11px] lg:text-[18px] leading-[16px]">
                     Announcements
@@ -608,7 +611,7 @@ const Dashboard = () => {
                     }}
                     className="text-[#293137] flex gap-x-[5px] text-[18px] leading-[16px] font-normal cursor-pointer"
                   >
-                    <p>VIEW ALL</p>
+                    <p>View All</p>
                     <img src="/arrow-forward.svg" alt="forward arrow" />
                   </Link>
                 </div>
