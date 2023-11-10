@@ -119,7 +119,7 @@ const PostCard = ({
 
   return (
     <>
-      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[29px] shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] rounded-[8px] bg-brand-500">
+      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[9px] shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] rounded-[8px] bg-brand-500">
         <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px]">
           <div className="flex justify-between mb-[25px]">
             <div className="flex gap-x-[7px] items-center">
