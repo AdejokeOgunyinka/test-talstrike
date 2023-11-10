@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import BeatLoader from "react-spinners/BeatLoader";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -14,8 +14,16 @@ import InstagramIcon from "@/assets/instagramIcon.svg";
 import PhoneCallIcon from "@/assets/phoneCallIcon.svg";
 import MessageIcon from "@/assets/messageIcon.svg";
 import VideoCameraIcon from "@/assets/videoCameraIcon.svg";
+import PictureIcon from "@/assets/pictureIcon.svg";
+import AnnouncementIcon from "@/assets/announcementIcon.svg";
 import ImageIcon from "@/assets/imageIcon.svg";
 import VideoIcon from "@/assets/videoIcon.svg";
+import ArticleIcon from "@/assets/articleIcon.svg";
+import OpeningIcon from "@/assets/openingIcon.svg";
+import PollIcon from "@/assets/pollIcon.svg";
+import PlusIcon from "@/assets/plusIcon.svg";
+import XIcon from "@/assets/xIcon.svg";
+
 import MoreDropdown from "@/components/DashboardMoreDropdown";
 import PostCard from "@/components/PostCard";
 import CreatePost from "@/components/ProfileModals/CreatePost";
@@ -36,15 +44,21 @@ import { setProfile } from "@/store/slices/profileSlice";
 import { handleMediaPostError, handleOnError } from "@/libs/utils";
 import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import PollCard from "@/components/PollCard";
-import SinglePoll from "@/components/SingleProfilePostComponent/SinglePoll";
-import SinglePost from "@/components/SingleProfilePostComponent/SinglePost";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 import GeneralAppSearch from "./GeneralAppSearch";
 
 export const postWidgets = [
-  { icon: VideoCameraIcon, name: "Live" },
-  { icon: ImageIcon, name: "Photo" },
-  { icon: VideoIcon, name: "Video" },
+  { icon: VideoCameraIcon, name: "live", text: "Go live" },
+  { icon: PictureIcon, name: "picture", text: "Take a picture" },
+  { icon: ImageIcon, name: "image", text: "Post an image" },
+  { icon: VideoIcon, name: "video", text: "Post a video" },
+  { icon: ArticleIcon, name: "article", text: "Write an Article" },
+  { icon: PollIcon, name: "poll", text: "Create a poll" },
+];
+
+export const remainingPostWidgets = [
+  { icon: OpeningIcon, name: "opening", text: "Create an Opening" },
+  { icon: AnnouncementIcon, name: "announcement", text: "Announcement" },
 ];
 
 const Dashboard = () => {
@@ -151,7 +165,6 @@ const Dashboard = () => {
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
   const [, setPollIndex] = useState("");
-  const [chosenPost, setChosenPost] = useState<any>(null);
 
   useEffect(() => {
     if (inView && hasNextNewsFeedPage) {
@@ -209,7 +222,7 @@ const Dashboard = () => {
           <div className="w-full flex flex-col-reverse md:flex-row gap-x-[7px]">
             <div className="basis-[60%] h-[90vh] overflow-y-scroll pb-[100px] md:pb-[20px] border border-l-[#CDCDCD] border-r-[#CDCDCD]">
               <Box w="full">
-                <div className="w-[100%] py-[12px] px-[14px] border border-b-[#CDCDCD] h-[120px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] bg-brand-500">
+                <div className="w-[100%] py-[12px] px-[14px] border border-b-[#CDCDCD]  shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] bg-brand-500">
                   <div className="flex items-center">
                     <div className="w-[47px] h-[47px] overflow-hidden">
                       <img
@@ -233,52 +246,87 @@ const Dashboard = () => {
                     className="mt-[22px] flex justify-between items-center"
                     onClick={(e) => e?.stopPropagation()}
                   >
-                    <div className="flex w-full justify-center gap-x-[10px] md:gap-x-[14px] items-center">
-                      {postWidgets.map((widget, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-col md:flex-row items-center cursor-pointer"
-                          onClick={() => setShowCreatePostModal(true)}
-                        >
-                          <NextImage src={widget.icon} alt="widget" />
-                          <p className="ml-[4px] font-semibold text-[11px] leading-[16px] text-brand-50">
-                            {widget.name}
-                          </p>
-                        </div>
-                      ))}
-                      <div className="relative">
-                        <p
+                    <div className="flex flex-col w-full gap-x-[10px] md:gap-x-[14px]">
+                      <div className="flex gap-x-[10px] md:gap-x-[14px] gap-y-[10px] md:gap-y-[14px] flex-wrap">
+                        {postWidgets.map((widget, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
+                            onClick={() => {
+                              if (
+                                widget.name === "image" ||
+                                widget.name === "video" ||
+                                widget.name === "picture"
+                              ) {
+                                setShowCreatePostModal(true);
+                              } else if (widget.name === "poll") {
+                                setShowCreatePollModal(true);
+                              } else if (widget.name === "article") {
+                                setShowCreateArticleModal(true);
+                              }
+                            }}
+                          >
+                            <NextImage src={widget.icon} alt="widget" />
+                          </div>
+                        ))}
+                        <div className="relative">
+                          {/* <p
                           onClick={() => setOpenMoreDropdown(!openMoreDropdown)}
                           className="font-semibold cursor-pointer text-[11px] leading-[16px] text-brand-50 mr-[5px] md:mr-[0px]"
                         >
                           Others
-                        </p>
-                        {openMoreDropdown && (
-                          <div className="absolute left-[0px] top-[20px] z-[99]">
-                            <MoreDropdown
-                              onClickAnnouncement={() =>
-                                setShowCreateAnnouncementModal(true)
-                              }
-                              onClickArticle={() =>
-                                setShowCreateArticleModal(true)
-                              }
-                              onClickOpening={() =>
-                                setShowCreateOpeningModal(true)
-                              }
-                              onClickPoll={() => setShowCreatePollModal(true)}
+                        </p> */}
+                          {/* {openMoreDropdown && ( */}
+                          {/* <div className="absolute left-[0px] top-[20px] z-[99]">
+                          <MoreDropdown
+                            onClickAnnouncement={() =>
+                              setShowCreateAnnouncementModal(true)
+                            }
+                            onClickArticle={() =>
+                              setShowCreateArticleModal(true)
+                            }
+                            onClickOpening={() =>
+                              setShowCreateOpeningModal(true)
+                            }
+                            onClickPoll={() => setShowCreatePollModal(true)}
+                          />
+                        </div> */}
+                          {/* )} */}
+                          <div
+                            className="w-[48px] h-[48px] cursor-pointer rounded-[100%] flex justify-center items-center bg-[#293137]"
+                            onClick={() =>
+                              setOpenMoreDropdown(!openMoreDropdown)
+                            }
+                          >
+                            <NextImage
+                              src={openMoreDropdown ? XIcon : PlusIcon}
+                              alt="plus"
                             />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-x-[10px] md:gap-x-[14px] mt-[10px]">
+                        {openMoreDropdown && (
+                          <div className="flex w-full gap-x-[10px] md:gap-x-[14px] items-center">
+                            {remainingPostWidgets?.map((widget, index) => (
+                              <div
+                                key={index}
+                                className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
+                                onClick={() => {
+                                  if (widget.name === "opening") {
+                                    setShowCreateOpeningModal(true);
+                                  } else if (widget.name === "announcement") {
+                                    setShowCreateAnnouncementModal(true);
+                                  }
+                                }}
+                              >
+                                <NextImage src={widget.icon} alt="widget" />
+                              </div>
+                            ))}
                           </div>
                         )}
                       </div>
                     </div>
-                    <button
-                      onClick={() =>
-                        setShowCreatePostModal(!showCreatePostModal)
-                      }
-                      className="w-[101px] h-[30px] text-brand-500 bg-brand-600 cursor-pointer rounded-[4px] text-[11px] font-semibold leading-[16px]"
-                    >
-                      Create Post
-                    </button>
                   </div>
                 </div>
                 <div className="pt-[20px] bg-brand-500 px-[10px]">
