@@ -71,11 +71,7 @@ const MyArticles = () => {
       </div>
 
       {showSingleArticle === true ? (
-        <SingleArticle
-          setShowSingleArticle={setShowSingleArticle}
-          seconds={seconds}
-          chosenPost={chosenPost}
-        />
+        <SingleArticle chosenPost={chosenPost} />
       ) : (
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (

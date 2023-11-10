@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export const uppercaseFirsLetter = (word: string) => {
-  return word && word.charAt(0).toUpperCase() + word.slice(1);
+  return word.charAt(0).toUpperCase() + word.slice(1)?.toLowerCase();
 };
 
 export const formatDate = (date: string) => {
