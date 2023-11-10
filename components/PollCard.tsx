@@ -24,6 +24,7 @@ import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
 import { axios } from "@/libs/axios";
 import notify from "@/libs/toast";
 import ShareModal from "./ShareModal";
+import DeletePost from "./ProfileModals/DeletePost";
 
 const Image = styled.img``;
 
@@ -73,6 +74,14 @@ const PollCard = ({
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleClickDelete = () => {
+    setShowDeleteModal(true);
+    setShowPopover(false);
+  };
+
   const Popover = () => {
     return (
       <div className="absolute w-max top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
@@ -85,8 +94,18 @@ const PollCard = ({
           }
           className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
-          View Poll
+          View
         </p>
+        {post?.author?.id === session?.user?.id && (
+          <>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickDelete}
+            >
+              Delete
+            </p>
+          </>
+        )}
       </div>
     );
   };
@@ -487,6 +506,14 @@ const PollCard = ({
 
       {showShareModal && (
         <ShareModal post={post} onClose={() => setShowShareModal(false)} />
+      )}
+
+      {showDeleteModal && (
+        <DeletePost
+          id={post?.id}
+          postType={"Poll"}
+          onClose={() => setShowDeleteModal(false)}
+        />
       )}
     </>
   );

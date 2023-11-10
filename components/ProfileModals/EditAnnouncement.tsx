@@ -142,7 +142,7 @@ const EditAnnouncement = ({
                     highlightColor="#fff"
                   >
                     <section>
-                      <Skeleton height={550} width="100%" />
+                      <Skeleton height={350} width="100%" />
                     </section>
                   </SkeletonTheme>
                 ) : (

@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useInView } from "react-intersection-observer";
 
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
-import SingleArticle from "@/components/SingleProfilePostComponent/SingleArticle";
 import SingleArticleCard from "@/components/SinglePostTypeCards/SingleArticleCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
@@ -70,40 +69,35 @@ const MyArticles = () => {
         </h3>
       </div>
 
-      {showSingleArticle === true ? (
-        <SingleArticle chosenPost={chosenPost} />
-      ) : (
-        <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
-          {isLoadingUserPosts ? (
-            Array(2)
-              ?.fill("")
-              ?.map((_, index) => (
-                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
-              ))
-          ) : userPosts?.pages?.flat(1)?.length === 0 ||
-            !userPosts?.pages?.flat(1) ? (
-            <p>No article available at the moment...</p>
-          ) : (
-            userPosts?.pages
-              ?.flat(1)
-              ?.map((post: any, index: number) => (
-                <SingleArticleCard
-                  key={index}
-                  post={post}
-                  setClickedIndex={setClickedIndex}
-                  setChosenPost={setChosenPost}
-                  setShowPopover={setShowPopover}
-                  setPostIndex={setPostIndex}
-                  index={index}
-                  showPopover={showPopover}
-                  clickedIndex={clickedIndex}
-                  setShowSingleArticle={setShowSingleArticle}
-                  isOther={true}
-                />
-              ))
-          )}
-        </div>
-      )}
+      <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
+        {isLoadingUserPosts ? (
+          Array(2)
+            ?.fill("")
+            ?.map((_, index) => (
+              <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+            ))
+        ) : userPosts?.pages?.flat(1)?.length === 0 ||
+          !userPosts?.pages?.flat(1) ? (
+          <p>No article available at the moment...</p>
+        ) : (
+          userPosts?.pages
+            ?.flat(1)
+            ?.map((post: any, index: number) => (
+              <SingleArticleCard
+                key={index}
+                post={post}
+                setClickedIndex={setClickedIndex}
+                setChosenPost={setChosenPost}
+                setShowPopover={setShowPopover}
+                setPostIndex={setPostIndex}
+                index={index}
+                showPopover={showPopover}
+                clickedIndex={clickedIndex}
+                isOther={true}
+              />
+            ))
+        )}
+      </div>
 
       {!isLoadingUserPosts && hasNextPage && (
         <div
