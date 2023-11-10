@@ -6,6 +6,7 @@ type CustomInputBoxProps = {
   name?: string;
   onChange?: (value: any) => void;
   onBlur?: (value: any) => void;
+  autocomplete?: string;
 };
 
 const CustomInputBox = ({
@@ -16,6 +17,7 @@ const CustomInputBox = ({
   name,
   onChange,
   onBlur,
+  autocomplete,
 }: CustomInputBoxProps) => {
   return (
     <div
@@ -46,6 +48,7 @@ const CustomInputBox = ({
             onChange={onChange}
             onBlur={onBlur}
             className="focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 checked:outline-0"
+            autoComplete={autocomplete}
           />
         )}
 

@@ -106,7 +106,7 @@ const Index = ({
           fill in your basic information to begin.
         </p>
 
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} autoComplete="on">
           <div className="flex gap-x-[13px]">
             <div className="basis-1/2">
               <CustomInputBox
@@ -168,6 +168,7 @@ const Index = ({
               name="password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              autocomplete="on"
             />
             {formik.errors.password && formik.touched.password && (
               <p className="text-brand-warning text-[10px]">
