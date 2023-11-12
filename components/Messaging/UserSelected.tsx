@@ -105,8 +105,8 @@ const UserSelected = () => {
 
   useEffect(() => {
     if(channel){
-      const url = `ws://143.244.179.156:8000/ws/chat/${channel}/`;
-      //const url = `ws://chat.talstrike.com/ws/chat/${channel}/`;
+      //const url = `ws://143.244.179.156:8000/ws/chat/${channel}/`;
+      const url = `ws://chat.talstrike.com:8000/ws/chat/${channel}/`;
       const ws = new WebSocket(url);
       ws.onopen = (event) => {
         console.log("Channel:"+channel+",   URL:"+url)
