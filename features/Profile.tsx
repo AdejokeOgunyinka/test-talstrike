@@ -92,7 +92,7 @@ const Index = () => {
   const value = router.query;
 
   useEffect(() => {
-    if (value && value?.name) {
+    if (value?.name) {
       if (value?.name === "posts") {
         setCurrentSection(2);
       } else if (value?.name === "openings") {

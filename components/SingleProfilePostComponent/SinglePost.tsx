@@ -82,7 +82,11 @@ const SinglePost = ({ chosenPost }: { chosenPost: any }) => {
           {chosenPost?.media && (
             <>
               {chosenPost?.file_type === "VIDEO" ? (
-                <video src={chosenPost?.media} controls className="w-full" />
+                <video
+                  src={chosenPost?.media}
+                  controls
+                  className="w-full max-h-[500px]"
+                />
               ) : (
                 <Image
                   src={chosenPost?.media}
