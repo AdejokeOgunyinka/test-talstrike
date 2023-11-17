@@ -52,7 +52,7 @@ const ExploreCard = ({
         </ModalContainer>
       )}
       <Box
-        width={{ xl: exploreCardWidth || "47%", base: "100%" }}
+        width={{ xl: exploreCardWidth ?? "47%", base: "100%" }}
         className="relative h-[464px]"
       >
         <video
