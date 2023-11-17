@@ -43,7 +43,11 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
         <div className="w-[100%]">
           <div className="bg-[#293137] h-[60px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[21px] sticky top-0 z-[999]">
             <Flex display={{ base: "none", md: "inline-flex" }}>
-              <Image src="/newTalstrikeLogoWhite.svg" mr="14px" />
+              <Image
+                src="/newTalstrikeLogoWhite.svg"
+                mr="14px"
+                onClick={() => router.push("/dashboard")}
+              />
               <Flex gap="26px">
                 {menuLinks?.map((inner, index) => (
                   <Link

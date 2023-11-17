@@ -189,3 +189,22 @@ body, #__next  {
 .masonry > div{
   display: unset !important;
 }
+
+.dashboard-dropdown:hover, .new-active-dashboard-dropdown{
+  background: #ECF5FD !important;
+  width: 156px !important;
+  border-left: 3px solid #000;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  padding-left: 22px !important;
+}
+
+.new-active-dashboard-menu:hover, .new-active-dashboard-menu, .new-inactive-dashboard-menu:hover {
+  background: #ECF5FD !important;
+  border-left: 3px solid #000;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  padding-left: 22px !important;
+}
