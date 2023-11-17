@@ -69,6 +69,7 @@ module.exports = {
           2950: "#E7E9ED",
           3000: "#343D45",
           green: "#00B127",
+          "light-blue-2": "#ECF5FD",
           "blue-rgba": "rgba(177, 253, 240, 0.36)",
           "pink-rgba": "rgba(255, 233, 254, 0.41)",
           "blue2-rgba": "rgba(0, 131, 213, 0.21)",
