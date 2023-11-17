@@ -20,4 +20,23 @@ const ModalContainer = ({
   );
 };
 
+export const Modal = ({
+  children,
+  marginTop,
+  show,
+}: {
+  children: React.ReactNode;
+  marginTop?: string;
+  show: boolean;
+}) => {
+  const hide=(show)?"":"hidden"
+  return (
+    <div className={`h-auto w-screen fixed bg-brand-modal z-[9999] flex justify-center top-0 left-0 right-0 ${hide}`}>
+      <div>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 export default ModalContainer;

@@ -9,6 +9,8 @@ import SearchBar from "../SearchBar";
 import { useEffect, useRef, useState } from "react";
 import { useGetChatChannel, loadMessages, createMessage } from "@/api/messages";
 import { setChatChannel } from "@/store/slices/messagingSlice";
+import Pusher from "pusher-js";
+import { NewEmojiPicker } from "../EmojiPicker";
 
 interface IMessage {
   id: string;
@@ -21,7 +23,7 @@ interface IMessage {
 
 const UserSelected = () => {
   const { messageUserInfo } = useTypedSelector((state) => state.messaging);
-  const [websock, setWebSock] = useState<any>();
+  const [showemojimodal, setShowEmojiModal] = useState(false);
   const [messages, setMessages] = useState<Record<string, IMessage>[]>([]);
   const [message, setMessage] = useState<IMessage | string>("");
   const messagesEndRef = useRef<any>(null);
@@ -50,18 +52,7 @@ const UserSelected = () => {
 
   const handleSendMessage = () => {
     let date = new Date();
-    websock.send(
-      JSON.stringify({
-        message: {
-          id: Date.now(),
-          user_id: session?.user?.id,
-          message: message,
-          img: session?.user?.image,
-          time: formatTime(date.toString()),
-          type: "TEXT",
-        },
-      })
-    );
+    saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id, message.toString(),"TEXT", channel)
 
     setMessage("");
   };
@@ -72,6 +63,8 @@ const UserSelected = () => {
     createMessage({ token, sender: sender_id, receiver:recepient, message:msg, type: msg_type, channel: msg_channel });
 
   }
+
+
 
   const loadPreviousMessages = async()=>{
     const token = session?.user?.access;
@@ -101,56 +94,63 @@ const UserSelected = () => {
     setMessage(e.target.value);
   };
 
- 
+  const onKeyDownHandler = (e: any) => {
+    if (e.keyCode === 13) {
+      handleSendMessage();
+    }
+  };
+
+  const setEmoji = ()=>{
+    console.log("Emoji Selected")
+  }
+
+
 
   useEffect(() => {
     if(channel){
-      const url = `ws://143.244.179.156:8000/ws/chat/${channel}/`;
-      //const url = `ws://chat.talstrike.com/ws/chat/${channel}/`;
-      const ws = new WebSocket(url);
-      ws.onopen = (event) => {
-        console.log("Channel:"+channel+",   URL:"+url)
-        setChatChannel(channel);
-        setWebSock(ws);
-        loadPreviousMessages()
-        
-        
-      };
-  
-      ws.onmessage = function (event) {
-        const json = JSON.parse(event.data);
-        const new_msg = json as IMessage
-        setMessages((prev) => [...prev, json]);
-        console.log(json, "...new message...")
-        const msg_body = new_msg.message as unknown as IMessage
-        if(msg_body.type==="TEXT")
-        saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id,msg_body.message,msg_body.type, channel) 
-      };
-  
-      return () => {
-        if (ws.readyState === 1) {
-          ws.close();
-        } else {
-          ws.addEventListener("open", () => {
-            ws.close();
-          });
-        }
-      };
-    }
-    
+      loadPreviousMessages()
+      const pusher = new Pusher('7790f8bf7c4755473cb0', {
+        cluster: 'mt1',
+      });
+      const msg_channel = pusher.subscribe(channel);
 
-   
+      msg_channel.bind('new-message', function (data: any) {
+            const new_msg = data as IMessage
+            data.time = formatTime(data.time)
+            const new_data =  { message: data }
+            // console.log(new_data, "...new message...")
+             setMessages((prev) => [...prev, new_data]);
+            
+             const msg_body = new_msg.message as unknown as IMessage
+             
+           if(msg_body.type==="TEXT")
+             saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id,new_msg.message,new_msg.type, channel) 
+    
+      });
+    
+    }  
   }, [channel]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const displayEmojiModal = (e:any)=>{
+    if(showemojimodal===true)
+    setShowEmojiModal(false)
+  else
+  setShowEmojiModal(true)
+
+   console.log(e.clientX);
+    console.log(e.clientY);
+  }
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   return (
+    <>
     <Box w="full" h="full" pos="relative">
       <Flex
         w="full"
@@ -243,7 +243,7 @@ const UserSelected = () => {
         padding={{ base: "16px", md: "16px 24px" }}
       >
         <Flex align="center">
-          <Image alt="smile" src="/smile.svg" cursor="pointer" />
+          <Image alt="smile" src="/smile.svg" cursor="pointer" onClick={displayEmojiModal}   />
           <Image
             alt="attachment"
             src="/attachment.svg"
@@ -266,6 +266,7 @@ const UserSelected = () => {
             _focusVisible={{ borderColor: "transparent" }}
             borderRadius="24px"
             onChange={handleTextChange}
+            onKeyDown={onKeyDownHandler}
             value={typeof message === "string" ? message : message?.message}
           />
           <Flex
@@ -275,12 +276,14 @@ const UserSelected = () => {
             align="center"
             justify="center"
           >
-            <SendMessageIcon cursor="pointer" onClick={handleSendMessage} />
+            <SendMessageIcon cursor="pointer" onClick={handleSendMessage}  />
           </Flex>
         </Flex>
         <Image alt="record audio" src="/recordAudio.svg" cursor="pointer" />
       </Flex>
     </Box>
+    <NewEmojiPicker onClose={()=>setShowEmojiModal(false)} onEmojiSelect={setEmoji} isOpen={showemojimodal} />
+    </>
   );
 };
 
