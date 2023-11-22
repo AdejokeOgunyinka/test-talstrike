@@ -47,6 +47,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                 src="/newTalstrikeLogoWhite.svg"
                 mr="14px"
                 onClick={() => router.push("/dashboard")}
+                className="cursor-pointer"
               />
               <Flex gap="26px">
                 {menuLinks?.map((inner, index) => (
