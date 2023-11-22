@@ -54,10 +54,10 @@ export const postWidgets = [
   { icon: VideoIcon, name: "video", text: "Post a video" },
   { icon: ArticleIcon, name: "article", text: "Write an Article" },
   { icon: PollIcon, name: "poll", text: "Create a poll" },
+  { icon: OpeningIcon, name: "opening", text: "Create an Opening" },
 ];
 
 export const remainingPostWidgets = [
-  { icon: OpeningIcon, name: "opening", text: "Create an Opening" },
   { icon: AnnouncementIcon, name: "announcement", text: "Announcement" },
 ];
 
@@ -211,9 +211,9 @@ const Dashboard = () => {
           Array(6)
             ?.fill("")
             ?.map((_, index) => (
-              <Flex w="full" gap="10px" justify="space-between">
-                <LoadingPosts key={index} width="w-full lg:w-[calc(50%-9px)]" />
-                <LoadingPosts key={index} width="w-full lg:w-[calc(50%-9px)]" />
+              <Flex w="full" gap="10px" justify="space-between" key={index}>
+                <LoadingPosts width="w-full lg:w-[calc(50%-9px)]" />
+                <LoadingPosts width="w-full lg:w-[calc(50%-9px)]" />
               </Flex>
             ))
         ) : search_query !== "" && !isSearching ? (
@@ -263,6 +263,8 @@ const Dashboard = () => {
                                 setShowCreatePollModal(true);
                               } else if (widget.name === "article") {
                                 setShowCreateArticleModal(true);
+                              } else if (widget.name === "opening") {
+                                setShowCreateOpeningModal(true);
                               }
                             }}
                           >
@@ -311,14 +313,15 @@ const Dashboard = () => {
                         {openMoreDropdown && (
                           <div className="flex w-full gap-x-[10px] md:gap-x-[14px] items-center">
                             {remainingPostWidgets?.map((widget, index) => (
-                              <Tooltip label={widget.text} placement="top">
+                              <Tooltip
+                                label={widget.text}
+                                placement="top"
+                                key={index}
+                              >
                                 <div
-                                  key={index}
                                   className="flex flex-col md:flex-row items-center justify-center cursor-pointer w-[48px] h-[48px] bg-[#F4F4F4] rounded-[100%]"
                                   onClick={() => {
-                                    if (widget.name === "opening") {
-                                      setShowCreateOpeningModal(true);
-                                    } else if (widget.name === "announcement") {
+                                    if (widget.name === "announcement") {
                                       setShowCreateAnnouncementModal(true);
                                     }
                                   }}

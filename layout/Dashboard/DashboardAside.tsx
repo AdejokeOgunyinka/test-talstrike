@@ -145,13 +145,15 @@ const DashboardAside = () => {
                   {follower?.users?.firstname} {follower?.users?.lastname}
                 </p>
               </div>
-              {/* <div>
-              {player.lastSeen === 'active' ? (
-                <div className="w-[8px] h-[8px] rounded-[50%] bg-brand-1100"></div>
-              ) : (
-                <p className="font-medium text-brand-1050 text-[10px]">{player.lastSeen}</p>
-              )}
-            </div> */}
+              <div>
+                {follower?.users?.last_login === "online" ? (
+                  <div className="w-[8px] h-[8px] rounded-[50%] bg-brand-1100"></div>
+                ) : (
+                  <p className="font-medium text-brand-1050 text-[10px]">
+                    {follower.users?.last_login}
+                  </p>
+                )}
+              </div>
             </div>
           ))
         )}

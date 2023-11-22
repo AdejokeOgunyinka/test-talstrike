@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 import { DashboardLayout } from "@/layout/Dashboard";
-import Star2 from "@/assets/star3.svg";
 import profilePhotos1 from "@/assets/profilePhotos1.png";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import EditProfile from "@/components/ProfileModals/EditProfile";
@@ -16,7 +15,12 @@ import ViewProfileImg from "./ProfileImgModals/ViewProfileImg";
 import EditProfileAndExperience from "./ProfileImgModals/EditProfile";
 import { useGetMyProfile, useGetUserPhotos } from "@/api/profile";
 import { setProfile } from "@/store/slices/profileSlice";
-import { handleMediaPostError, handleOnError } from "@/libs/utils";
+import {
+  handleMediaPostError,
+  handleOnError,
+  uppercaseFirsLetter,
+  userTypeIcon,
+} from "@/libs/utils";
 import { useRouter } from "next/router";
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
@@ -38,19 +42,23 @@ const Index = () => {
   const USERID = session?.user?.id;
   const { userInfo } = useTypedSelector((state) => state.profile);
 
-  const followStatistic = [
-    { name: "Following", val: userInfo?.profile?.following },
-    { name: "Followers", val: userInfo?.profile?.followers },
-    {
-      name: `Year${
-        userInfo?.profile?.years_of_experience &&
-        userInfo?.profile?.years_of_experience > 1
-          ? "s "
-          : " "
-      } Experience`,
-      val: userInfo?.profile?.years_of_experience || 1,
-    },
-  ];
+  const followStatistic = {
+    topStatistic: [
+      { name: "Following", val: userInfo?.profile?.following },
+      { name: "Followers", val: userInfo?.profile?.followers },
+    ],
+    bottomStatistic: [
+      {
+        name: `Year${
+          userInfo?.profile?.years_of_experience &&
+          userInfo?.profile?.years_of_experience > 1
+            ? "s "
+            : " "
+        } Experience`,
+        val: userInfo?.profile?.years_of_experience ?? 1,
+      },
+    ],
+  };
 
   const { data: media } = useGetUserPhotos({
     token: TOKEN as string,
@@ -66,11 +74,6 @@ const Index = () => {
   useEffect(() => {
     dispatch(setProfile(userData));
   }, [dispatch, userData]);
-
-  const profileIcons = [
-    { icon: "/chatbox4.svg", onClick: "" },
-    { icon: "/shareSocial2.svg", onClick: "" },
-  ];
 
   const profileSections = [
     { title: "About Me", href: "/profile" },
@@ -117,14 +120,17 @@ const Index = () => {
           <PageLoader />
         </div>
       ) : (
-        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 px-[0px] lg:px-[31px]">
+        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh]  px-[0px] lg:px-[31px]">
           <div className="flex h-[100%] flex-col lg:flex-row ">
             <Box
               bg="transparent-white"
-              className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px] md:mr-[5px]"
+              className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px] md:mr-[5px] mt-[10px]"
             >
-              <div className="h-[475px] w-[100%] lg:w-[274px] bg-brand-500 md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] flex flex-col items-center pt-[22px] ">
-                <div className="relative w-[163px] profile-pic h-[163px] mb-[13px] border-8 border-brand-500 shadow shadow-[0px_4px_10px_4px_rgba(0, 0, 0, 0.07)] rounded-[50%] overflow-hidden">
+              <div className="h-[503px] w-[100%] border border-1 border-[#CDCDCD] lg:w-[274px]  md:rounded-[12px] flex flex-col items-center pt-[22px] ">
+                <Text color="green" mb="16px" fontSize="16px" fontWeight="500">
+                  online
+                </Text>
+                <div className="relative w-[163px] profile-pic h-[163px] mb-[21px] rounded-[50%] overflow-hidden">
                   <img
                     src={
                       userInfo?.profile?.user?.image !== null
@@ -153,63 +159,81 @@ const Index = () => {
                 <Text color="text" fontSize="20px" fontWeight="500" mb="6px">
                   {session?.user.firstname} {session?.user.lastname}
                 </Text>
-                <Text color="green" mb="16px" fontSize="16px" fontWeight="500">
-                  online
-                </Text>
 
-                <Flex direction="column" align="center" mb="29.5px">
-                  {followStatistic?.map((inner, index) => (
-                    <Flex key={index} columnGap="5px" rowGap="5px">
-                      <Text color="light-blue" fontWeight="500" fontSize="18px">
-                        {inner?.val}
-                      </Text>
-                      <Text color="text-grey" fontSize="16px" fontWeight="400">
-                        {inner?.name}
-                      </Text>
-                    </Flex>
-                  ))}
-                </Flex>
+                <Box mb="31px" w="full">
+                  <Flex w="full" justify="center" gap="22px" mb="8px">
+                    {followStatistic?.topStatistic?.map((inner, index) => (
+                      <Flex
+                        direction="column"
+                        align="center"
+                        key={inner.name}
+                        style={{
+                          borderRight: index === 0 ? "1px solid #CDCDCD" : "",
+                          paddingRight: index === 0 ? "22px" : "",
+                        }}
+                      >
+                        <Text color="#293137" fontSize="20px" fontWeight="600">
+                          {inner.val}
+                        </Text>
+                        <Text color="#758797" fontSize="18px" fontWeight="400">
+                          {inner.name}
+                        </Text>
+                      </Flex>
+                    ))}
+                  </Flex>
+
+                  <Flex justify="center" align="center">
+                    {followStatistic?.bottomStatistic?.map((inner) => (
+                      <Flex key={inner.name} direction="column" align="center">
+                        <Text color="#293137" fontSize="20px" fontWeight="600">
+                          {inner.val}
+                        </Text>
+                        <Text color="#758797" fontSize="18px" fontWeight="400">
+                          {inner.name}
+                        </Text>
+                      </Flex>
+                    ))}
+                  </Flex>
+                </Box>
 
                 <div className="flex gap-x-[14px]">
                   <Flex
-                    bg="#EAF0F2"
-                    borderRadius="5px"
-                    w="74px"
-                    h="50px"
+                    w="108px"
+                    h="49px"
                     align="center"
                     justify="center"
+                    borderRadius="26.703px"
+                    bg="#EAF2EA"
+                    gap="5px"
                   >
-                    <NextImage src={Star2} alt="star" />
-                    <Text
-                      color="text"
-                      fontSize="16px"
-                      fontWeight="600"
-                      className="ml-[5px] leading-[22px]"
-                    >
-                      4.3
+                    <Image
+                      src={
+                        userTypeIcon[
+                          userData?.user?.roles[0]?.toLowerCase() as string
+                        ]?.img
+                      }
+                      alt="user"
+                      w="19.077px"
+                      h="22.058px"
+                    />
+                    <Text fontSize="18px" fontWeight="600" color="#00B127">
+                      {uppercaseFirsLetter(userData?.user?.roles[0])}
                     </Text>
                   </Flex>
-                  {profileIcons.map((icon, index) => (
-                    <Flex
-                      justify="center"
-                      align="center"
-                      key={index}
-                      w="54px"
-                      h="50px"
-                      bg="#EAF0F2"
-                      borderRadius="5px"
-                    >
-                      <NextImage
-                        src={icon.icon}
-                        alt="profile widget"
-                        width="21"
-                        height="21"
-                      />
-                    </Flex>
-                  ))}
+                  <Flex
+                    justify="center"
+                    align="center"
+                    borderRadius="7.121px"
+                    bg="#EAF2EA"
+                    cursor="pointer"
+                    width="48.956px"
+                    height="48.956px"
+                  >
+                    <Image src="/shareSocial2.svg" alt="share" />
+                  </Flex>
                 </div>
               </div>
-              <div className="h-[182px] mt-[5px] md:mt-[24px] bg-brand-500 lg:w-[274px] md:rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] px-[18px] pt-[11px] pb-[18px]">
+              <div className="h-[182px] mt-[5px] md:mt-[24px]  lg:w-[274px] md:rounded-[12px] border border-1 border-[#CDCDCD] px-[18px] pt-[11px] pb-[18px]">
                 <div className="flex justify-between mb-[6px]">
                   <p className="font-semibold text-[14px] leading-[21px] text-brand-50">
                     Media

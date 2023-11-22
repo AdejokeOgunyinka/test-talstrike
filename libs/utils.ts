@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export const uppercaseFirsLetter = (word: string) => {
-  return word.charAt(0).toUpperCase() + word.slice(1)?.toLowerCase();
+  return word?.charAt(0)?.toUpperCase() + word?.slice(1)?.toLowerCase();
 };
 
 export const formatDate = (date: string) => {
@@ -48,6 +48,14 @@ export const months = [
   "November",
   "December",
 ];
+
+export const userTypeIcon: Record<string, any> = {
+  talent: { img: "/playerProfileIcon.svg", name: "Player" },
+  coach: { img: "/coachProfileIcon.svg", name: "Coach" },
+  agent: { img: "/agentProfileIcon.svg", name: "Agent" },
+  fan: { img: "/fanProfileIcon.svg", name: "Fan" },
+  trainer: { img: "/trainerProfileIcon.svg", name: "Trainer" },
+};
 
 export const getFileExtension = function ({ url }: { url: string }) {
   if (url === null) {
