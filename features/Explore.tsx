@@ -8,6 +8,7 @@ import {
   useGetExploreTop,
 } from "@/api/explore";
 import LoadingExplore from "@/components/LoadingStates/loadingExplore";
+import { Flex } from "@chakra-ui/react";
 
 const Index = () => {
   const { data: exploreForMe, isLoading: isLoadingForMe } =
@@ -27,8 +28,15 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full flex flex-col md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px]">
-        <div className="flex z-[99] pl-[30px] flex-wrap lg:flex-nowrap gap-y-[10px] w-full lg:w-[calc(100%-450px)] lg:-mt-[40px] backdrop-blur-[15px] lg:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300">
+      <div className="w-full flex flex-col min-h-[100vh] 2xl:min-h-[calc(85vh-60px)] bg-brand-1000 pt-[28px] 2xl:pt-0 pb-[28px] overflow-y-scroll">
+        <Flex
+          width={{
+            base: "100%",
+            md: "calc(100% - 456px)",
+            "2xl": "calc(80vw - 456px)",
+          }}
+          className="z-[99] pl-[30px] flex-wrap lg:flex-nowrap gap-y-[10px] lg:-mt-[40px] 2xl:mt-[4rem] 2xl:max-w-[calc(70vw - 456px)] backdrop-blur-[15px] lg:pt-[25px] 2xl:pt-[18px] lg:fixed lg:top-[79px] 2xl:top-[120px] gap-x-[20px] lg:gap-x-[54px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
+        >
           {exploreSections?.map((section, index) => (
             <div
               key={index}
@@ -50,7 +58,7 @@ const Index = () => {
               </h3>
             </div>
           ))}
-        </div>
+        </Flex>
         {isLoadingForMe || isLoadingTop || isLoadingLatest ? (
           <div className="w-full md:px-[31px] mt-[13px] md:mt-[53px] flex flex-wrap gap-[12px]">
             {Array(4)

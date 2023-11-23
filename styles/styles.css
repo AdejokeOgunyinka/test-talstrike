@@ -190,6 +190,10 @@ body, #__next  {
   display: unset !important;
 }
 
+.profile-masonry > div {
+  gap: 9px !important;
+}
+
 .dashboard-dropdown:hover, .new-active-dashboard-dropdown{
   background: #ECF5FD !important;
   width: 156px !important;

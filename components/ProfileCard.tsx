@@ -86,7 +86,7 @@ const ProfileCard = ({
   };
 
   return (
-    <div className="w-[100%] md:basis-[25%] md:w-[230px] xl:basis-[33%] xl:w-[250px] min-h-[220px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
+    <div className="w-[100%] min-h-[220px] bg-brand-1400 rounded-[12px] shadow shadow-[0px_5px_14px_rgba(0, 0, 0, 0.09)] p-[18px]">
       <div className="flex gap-x-[18px]">
         <div className="flex flex-col items-center">
           <div
@@ -118,26 +118,26 @@ const ProfileCard = ({
         </div>
         <div className="mt-[11px]">
           <h4
-            className="font-semibold text-brand-50 text-[11px] leading-[16px] cursor-pointer"
+            className="font-semibold text-brand-50 text-[11px] md:text-[14px] leading-[16px] cursor-pointer"
             onClick={() => router.push(`/profile/${id}`)}
           >
             {name}
           </h4>
           {isPlayer && (
-            <h4 className="mt-[2px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)']">
+            <h4 className="mt-[2px] font-medium text-[10px] md:text-[12px] text-['rgba(122, 120, 120, 0.46)']">
               {position}
             </h4>
           )}
           <div className="mt-[16px] flex">
             <NextImage src={Map} width="12" height="12" alt="map" />
-            <p className="ml-[6px] text-[10px] text-brand-200 font-semibold leading-[15px]">
+            <p className="ml-[6px] text-[10px] md:text-[12px] text-brand-200 font-semibold leading-[15px]">
               {location}
             </p>
           </div>
-          <p className="mt-[12px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
+          <p className="mt-[12px] font-medium text-[10px] md:text-[12px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
             {experience} year{parseInt(experience) === 1 ? "" : "s"} experience
           </p>
-          <p className="mt-[1px] font-medium text-[10px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
+          <p className="mt-[1px] font-medium text-[10px] md:text-[12px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
             {appearances?.length} game appearance(s)
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEventHandler, Dispatch, SetStateAction, useState } from "react";
 
 type CustomSelectDropdownType = {
   filterOptions: string[];
@@ -40,7 +40,9 @@ const DashboardFilterDropdown = ({
 
   return (
     <div className="w-full h-full border-r border-brand-greyish">
-      <label className="text-brand-greyish font-medium text-[10px] leading-[15px]">{label}</label>
+      <label className="text-brand-greyish font-medium text-[13px] xl:text-[15px] leading-[15px]">
+        {label}
+      </label>
       <div className="relative h-[40%]">
         {/* <div className="flex justify-between items-center pr-[13px] h-full">
           <p className="font-semibold text-[8px] lg:text-[11px] leading-[11px] xl:leading-[16px]">
@@ -74,7 +76,11 @@ const DashboardFilterDropdown = ({
             ))}
           </fieldset>
         )} */}
-        <select placeholder={placeholder} className="h-[40px] w-[70%]" onChange={onChange}>
+        <select
+          placeholder={placeholder}
+          className="h-[40px] w-[70%] text-[12px]"
+          onChange={onChange}
+        >
           {filterOptions?.map((option, index) => (
             <option value={option} key={index}>
               {option}
