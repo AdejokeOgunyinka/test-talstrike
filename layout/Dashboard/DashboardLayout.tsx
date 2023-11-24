@@ -39,9 +39,9 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
 
   return (
     <div className="w-full min-h-screen lg:flex lg:justify-center">
-      <div className="w-full 2xl:w-[70vw] 2xl:h-[85vh] h-[100%] relative flex 2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-brand-500">
-        <div className="w-[100%]">
-          <div className="bg-[#293137] h-[60px] w-[100%] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[21px] sticky top-0 z-[999]">
+      <div className="w-full 2xl:w-[80vw] 2xl:h-[85vh] h-[100%] relative flex 2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-brand-500">
+        <div className="w-[100%] h-[100%]">
+          <div className="bg-[#293137] h-[60px] w-[100%] 2xl:w-[80vw] flex justify-between py-[15px] pr-[10px] lg:pr-[23px] pl-[21px] fixed top-0 2xl:top-[5vh] z-[999]">
             <Flex display={{ base: "none", md: "inline-flex" }}>
               <Image
                 src="/newTalstrikeLogoWhite.svg"
@@ -122,16 +122,16 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          <div className="w-[100%] flex relative md:static scrollbar-hidden">
+          <div className="w-[100%] 2xl:h-[calc(85vh-60px)] mt-[60px] 2xl:mt-[20px] flex relative md:static scrollbar-hidden">
             <Box
-              className="w-[175px] 2xl:rounded-tl-[29px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[85vh] fixed hidden md:inline-block"
+              className="w-[175px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[calc(85vh-60px)] fixed hidden md:inline-block"
               borderRight="1px solid #93A3B1"
               bg="bg-grey"
             >
               <DashboardSidebar />
             </Box>
             <div
-              className={`ml-[unset] md:ml-[175px] min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] flex ${
+              className={`ml-[unset] md:ml-[175px] min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] 2xl:min-h-[calc(85vh-60px)] 2xl:max-h-[calc(85vh-60px)] flex ${
                 router.pathname?.startsWith("/profile")
                   ? "md:w-[calc(100%-201px)]"
                   : router.pathname?.startsWith("/messaging")
@@ -143,7 +143,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             </div>
             {!router.pathname?.startsWith("/profile") &&
               !router.pathname?.startsWith("/messaging") && (
-                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] scrollbar-hidden hidden md:inline-block lg:border lg:border-l-[#CDCDCD] lg:bg-brand-500 px-[20px]">
+                <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] 2xl:-mt-[60px] min-h-[calc(100vh)] max-h-[calc(100vh)] 2xl:min-h-[calc(85vh-60px)] 2xl:max-h-[calc(85vh-60px)] scrollbar-hidden hidden md:inline-block lg:border lg:border-l-[#CDCDCD] lg:bg-brand-500 px-[20px]">
                   <DashboardAside />
                 </aside>
               )}

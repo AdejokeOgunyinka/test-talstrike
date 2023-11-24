@@ -136,15 +136,6 @@ export const PersonSearchResultComponent = ({
                 ? `${location[1]}, ${location[0]}`
                 : ""}
             </Text>
-            {/* {person?.location !== null && (
-                        <Box
-                          w="3px"
-                          h="3px"
-                          bg="grey-1"
-                          borderRadius="100%"
-                        ></Box>
-                      )} */}
-            {/* <Text>15 miles away</Text> */}
           </Flex>
         </Flex>
       </Flex>

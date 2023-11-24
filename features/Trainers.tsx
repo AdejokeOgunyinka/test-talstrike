@@ -11,6 +11,7 @@ import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetAllTrainers } from "@/api/trainers";
 import { useGetSports } from "@/api/auth";
 import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -77,7 +78,7 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
+      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 pt-[80px] lg:py-[25px] px-[15px] lg:px-[31px]">
         <TitleBar
           titleBarColor="bg-brand-pink-rgba"
           text="Seeking to Get Fit? Absolutely! Discover Experienced Trainers Ready to Guide and Mentor You."
@@ -135,35 +136,50 @@ const Index = () => {
             </div>
           </TrainersSearchBar>
         </div>
-        <div className="mt-[23px] gap-x-[25px] flex flex-wrap justify-center md:justify-start px-[5%] md:px-[2.5%] 2xl:px-[5%] gap-y-[25px]">
-          {isLoadingAllTrainers ? (
-            Array(6)
-              ?.fill("")
-              ?.map((_, index) => <LoadingProfileCards key={index} />)
-          ) : trainersData?.pages?.flat(1)?.length === 0 ? (
-            <div className="w-full h-[60vh] flex justify-center items-center">
-              <p className="text-[#343D45] font-medium text-[18px]">
-                No trainer found! Try and search for something else
-              </p>
-            </div>
-          ) : (
-            trainersData?.pages?.flat(1)?.map((trainer: any, index: number) => (
-              <div key={index} className="w-full md:w-[unset]">
-                <ProfileCard
-                  id={trainer?.user?.id}
-                  img={trainer.user?.image}
-                  skillsArray={trainer.interests || []}
-                  name={`${trainer.user?.firstname} ${trainer.user?.lastname}`}
-                  isPlayer={trainer.isPlayer}
-                  rating={trainer.rating || "2.3"}
-                  location={trainer.location?.join(", ") || "N/A"}
-                  experience={trainer.years_of_experience}
-                  appearances={trainer.appearances || 0}
-                  friend={trainer?.is_following}
-                />
+        <div className="w-full mt-[23px] flex justify-center h-full">
+          <div className="w-full h-full flex flex-wrap gap-y-[25px] gap-x-[25px]">
+            {isLoadingAllTrainers ? (
+              Array(3)
+                ?.fill("")
+                ?.map((_, index) => <LoadingProfileCards key={index} />)
+            ) : trainersData?.pages?.flat(1)?.length === 0 ? (
+              <div className="w-full h-[60vh] flex justify-center items-center">
+                <p className="text-[#343D45] font-medium text-[18px]">
+                  No trainer found! Try and search for something else
+                </p>
               </div>
-            ))
-          )}
+            ) : (
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{ 350: 1, 750: 2, 1250: 3 }}
+                className="w-full gap-[16px]"
+              >
+                <Masonry
+                  columnsCount={3}
+                  style={{ gap: "9px" }}
+                  className="profile-masonry"
+                >
+                  {trainersData?.pages
+                    ?.flat(1)
+                    ?.map((trainer: any, index: number) => (
+                      <div key={index} className="w-full md:w-[unset]">
+                        <ProfileCard
+                          id={trainer?.user?.id}
+                          img={trainer.user?.image}
+                          skillsArray={trainer.interests || []}
+                          name={`${trainer.user?.firstname} ${trainer.user?.lastname}`}
+                          isPlayer={trainer.isPlayer}
+                          rating={trainer.rating || "2.3"}
+                          location={trainer.location?.join(", ") || "N/A"}
+                          experience={trainer.years_of_experience}
+                          appearances={trainer.appearances || 0}
+                          friend={trainer?.is_following}
+                        />
+                      </div>
+                    ))}
+                </Masonry>
+              </ResponsiveMasonry>
+            )}
+          </div>
         </div>
 
         {!isLoadingAllTrainers && hasNextPage && (
