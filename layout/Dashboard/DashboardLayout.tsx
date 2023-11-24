@@ -122,7 +122,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          <div className="w-[100%] 2xl:h-[calc(85vh-60px)] flex relative md:static scrollbar-hidden">
+          <div className="w-[100%] 2xl:h-[calc(85vh-60px)] mt-[60px] 2xl:mt-[20px] flex relative md:static scrollbar-hidden">
             <Box
               className="w-[175px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[calc(85vh-60px)] fixed hidden md:inline-block"
               borderRight="1px solid #93A3B1"
