@@ -78,7 +78,7 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 pt-[80px] lg:py-[42px] px-[15px] lg:px-[31px]">
+      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 pt-[80px] lg:py-[25px] px-[15px] lg:px-[31px]">
         <TitleBar
           titleBarColor="bg-brand-blue-rgba"
           text="Connect with Dedicated Coaches Worldwide, Committed to Enhancing Your Skills."
