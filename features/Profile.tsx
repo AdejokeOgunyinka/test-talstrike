@@ -116,15 +116,15 @@ const Index = () => {
   return (
     <DashboardLayout>
       {isLoadingUserData ? (
-        <div className="w-full flex justify-center items-center md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
+        <div className="w-full flex justify-center items-center md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[11px]">
           <PageLoader />
         </div>
       ) : (
-        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh]  px-[0px] lg:px-[31px]">
+        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] 2xl:min-h-[calc(85vh-60px)]  px-[0px] lg:px-[11px]">
           <div className="flex h-[100%] flex-col lg:flex-row ">
             <Box
               bg="transparent-white"
-              className="lg:w-[274px] h-[100%] lg:sticky lg:top-[99px] md:mr-[5px] mt-[10px]"
+              className="lg:w-[274px] h-[100%] lg:fixed lg:overflow-y-scroll lg:top-[73px] 2xl:top-[100px] md:mr-[5px]"
             >
               <div className="h-[503px] w-[100%] border border-1 border-[#CDCDCD] lg:w-[274px]  md:rounded-[12px] flex flex-col items-center pt-[22px] ">
                 <Text color="green" mb="16px" fontSize="16px" fontWeight="500">
@@ -275,14 +275,14 @@ const Index = () => {
               borderLeft={{ md: "1px solid" }}
               borderLeftColor={{ md: "stroke" }}
               paddingTop="18px"
-              className="w-full lg:w-[calc(100%-274px)] pb-[100px]"
+              className="w-full lg:ml-[274px] pb-[100px]"
             >
               <Box
                 borderBottom="1px solid"
                 borderColor="stroke"
                 overflowX={isMobileView1 ? "scroll" : "unset"}
                 paddingX={isMobileView ? "20px" : "30px"}
-                className="flex z-[99] gap-y-[10px] w-full lg:w-[calc(100%-543px)] lg:-mt-[30px] backdrop-blur-[15px] md:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:pl-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
+                className="flex z-[99] gap-y-[10px] w-full lg:w-[calc(100%-463px)] 2xl:max-w-[calc(70vw-523px)] lg:-mt-[40px] 2xl:mt-[4rem] backdrop-blur-[15px] md:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:pl-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
               >
                 {profileSections?.map((section, index) => (
                   <Box
