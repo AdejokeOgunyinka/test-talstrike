@@ -4,7 +4,7 @@ const nextConfig = {
   swcMinify: true,
   env: {
     TEST_API: process.env.TEST_API,
-    DEVELOPMENT_API: process.env.DEVELOPMENT_API,
+    DEVELOPMENT_API: process.env.DEVELOPMENT_API || "https://api.talstrike.com/api/v1/",
     PRODUCTION_API: process.env.PRODUCTION_API,
     TEST_URL_APP: process.env.TEST_URL_APP,
     DEVELOPMENT_URL_APP: process.env.NEXTAUTH_URL,

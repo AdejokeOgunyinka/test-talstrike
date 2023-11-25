@@ -29,7 +29,7 @@
     "clsx": "^1.2.1",
     "country-state-city": "^3.1.2",
     "dayjs": "^1.11.7",
-    "emoji-picker-react": "^4.4.8",
+    "emoji-picker-react": "^4.5.15",
     "eslint": "8.37.0",
     "eslint-config-next": "13.3.0",
     "formik": "^2.2.9",
@@ -39,6 +39,7 @@
     "next": "13.3.0",
     "next-auth": "^4.22.1",
     "postcss": "^8.4.21",
+    "pusher-js": "^8.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-easy-crop": "^4.7.4",
@@ -56,6 +57,7 @@
     "styled-components": "^5.3.9",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.3",
+    "yarn": "^1.22.19",
     "yup": "^1.0.2"
   },
   "devDependencies": {
