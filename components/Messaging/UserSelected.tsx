@@ -6,11 +6,14 @@ import CircleIcon from "@/assets/svgFiles/Circle.svg.next";
 import SendMessageIcon from "@/assets/svgFiles/SendMessage.svg.next";
 import MessageComponent from "./MessageComponent";
 import SearchBar from "../SearchBar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, createContext } from "react";
 import { useGetChatChannel, loadMessages, createMessage } from "@/api/messages";
 import { setChatChannel } from "@/store/slices/messagingSlice";
 import Pusher from "pusher-js";
 import { NewEmojiPicker } from "../EmojiPicker";
+import { exportToCloudinary } from "@/libs/utils";
+import { mimes } from "@/libs/utils";
+
 
 interface IMessage {
   id: string;
@@ -21,12 +24,24 @@ interface IMessage {
   type: string
 }
 
+
+
+
+
 const UserSelected = () => {
   const { messageUserInfo } = useTypedSelector((state) => state.messaging);
   const [showemojimodal, setShowEmojiModal] = useState(false);
   const [messages, setMessages] = useState<Record<string, IMessage>[]>([]);
   const [message, setMessage] = useState<IMessage | string>("");
   const messagesEndRef = useRef<any>(null);
+  const fileRef: any = useRef()
+  const [recording_started, setRecordingStarted] = useState(false);
+  const [microphone_permission, setPermission] = useState(false);
+  const [stream, setStream] = useState<any>(null);
+  const mediaRecorder: any = useRef(null);
+const [recordingStatus, setRecordingStatus] = useState("inactive");
+const [audioChunks, setAudioChunks] = useState([]);
+const [audio, setAudio] = useState("");
 
   const { data: session } = useSession();
   const token = session?.user?.access;
@@ -35,7 +50,57 @@ const UserSelected = () => {
     token: token as string,
     receiver: messageUserInfo?.id,
   });
+  const mimeType = "audio/webm";
+  const getMicrophonePermission = async () => {
+    if ("MediaRecorder" in window) {
+        try {
+            const streamData = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: false,
+            });
+            setPermission(true);
+            setStream(streamData);
+        } catch (err) {
+            console.log(err, "error with permission");
+        }
+    } else {
+        alert("The MediaRecorder API is not supported in your browser.");
+    }
+};
  
+
+const startRecording = async () => {
+  setRecordingStatus("recording");
+ 
+  //create new Media recorder instance using the stream
+  const media = new MediaRecorder(stream, {mimeType:mimeType});
+  //set the MediaRecorder instance to the mediaRecorder ref
+  mediaRecorder.current = media;
+  //invokes the start method to start the recording process
+  mediaRecorder.current.start();
+  let localAudioChunks: any = [];
+  mediaRecorder.current.ondataavailable = (event:any) => {
+     if (typeof event.data === "undefined") return;
+     if (event.data.size === 0) return;
+     localAudioChunks.push(event.data);
+  };
+  setAudioChunks(localAudioChunks);
+  console.log(localAudioChunks, "...recording started...")
+};
+
+const stopRecording = () => {
+  setRecordingStatus("inactive");
+  //stops the recording instance
+  mediaRecorder.current.stop();
+  mediaRecorder.current.onstop = () => {
+    //creates a blob file from the audiochunks data
+     const audioBlob = new Blob(audioChunks, { type: mimeType });
+    //creates a playable URL from the blob file.
+     const audioUrl = URL.createObjectURL(audioBlob);
+     setAudio(audioUrl);
+     setAudioChunks([]);
+  };
+};
 
  const formatTime = (prevDate: string)=>{
   let date = new Date(prevDate);
@@ -64,14 +129,34 @@ const UserSelected = () => {
 
   }
 
+ 
+  const displayMime = (file_type: string, src: string)=>{
+    var component = null;
+    switch( file_type ) {
+      case 'IMAGE':
+        component = <Image src={src} />;
+        break;
+        case 'AUDIO':
+        component = <audio controls><source src={src} type="audio/ogg" /></audio>;
+        break;
+        case 'VIDEO':
+        component = <video width="320" height="240" controls><source src={src} type="audio/ogg" /></video>;
+        break;
+      default:
+        component = src;
+    }
+
+    return component
+
+  }
+
 
 
   const loadPreviousMessages = async()=>{
     const token = session?.user?.access;
     const previous_messages =  await loadMessages(token as string, channel)
-    console.log(previous_messages, "...load messages...")
-    //const prev_msg = previous_messages.results as unknown as IMessage
      previous_messages.results.map((msg: any)=>{
+      msg.message = displayMime(msg.type, msg.message)    // (msg.type=="IMAGE")?<Image src={msg.message} />:msg.message
 
      const newmsg: any = { message:{
       id: msg.id,
@@ -94,14 +179,42 @@ const UserSelected = () => {
     setMessage(e.target.value);
   };
 
+
   const onKeyDownHandler = (e: any) => {
     if (e.keyCode === 13) {
       handleSendMessage();
     }
+
   };
 
-  const setEmoji = ()=>{
-    console.log("Emoji Selected")
+  const setEmoji = ( emoji: any, e: MouseEvent)=>{
+    e.stopPropagation();
+    setMessage(emoji.emoji + message);
+    
+  }
+
+
+ 
+
+  
+  const handleVoiceRecording = async()=>{
+    await getMicrophonePermission()
+    
+    if(microphone_permission){
+
+      if(!recording_started){
+        startRecording();
+        setRecordingStarted(true)
+      }else{
+        console.log("...recording stopped...")
+        stopRecording();
+        setRecordingStarted(false)
+        console.log(audio);
+      }
+    }
+    
+      
+    
   }
 
 
@@ -117,15 +230,11 @@ const UserSelected = () => {
       msg_channel.bind('new-message', function (data: any) {
             const new_msg = data as IMessage
             data.time = formatTime(data.time)
+            data.message = displayMime(data.type, data.message)
             const new_data =  { message: data }
-            // console.log(new_data, "...new message...")
-             setMessages((prev) => [...prev, new_data]);
+            console.log(new_data, "...new message...")
+            setMessages((prev) => [...prev, new_data]);
             
-             const msg_body = new_msg.message as unknown as IMessage
-             
-           if(msg_body.type==="TEXT")
-             saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id,new_msg.message,new_msg.type, channel) 
-    
       });
     
     }  
@@ -136,13 +245,25 @@ const UserSelected = () => {
   };
 
   const displayEmojiModal = (e:any)=>{
-    if(showemojimodal===true)
-    setShowEmojiModal(false)
-  else
-  setShowEmojiModal(true)
+    setShowEmojiModal(true)
 
    console.log(e.clientX);
     console.log(e.clientY);
+  }
+
+  const handleFileChange = async(event: any) => {
+    const fileObj: any = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+     console.log(fileObj.type, "...file type...")
+     const file_mime: keyof typeof mimes = fileObj.type;
+    const file_type = mimes[file_mime]
+    const fileurl = await exportToCloudinary(fileObj)
+    saveMessage(session?.user.access || "",session?.user?.id || "",messageUserInfo?.id, fileurl,file_type, channel)
+
+    setMessage("");
+    console.log(fileurl, "uploaded file");
   }
 
   useEffect(() => {
@@ -219,7 +340,9 @@ const UserSelected = () => {
         className="h-[calc(88vh-55px)] msgparent"
         overflowY="scroll"
         padding={{ base: "18px 12px 120px 12px", md: "28px 18px 50px 18px" }}
+        
       >
+        <div>
         {messages.map((msg, index) => (
           <MessageComponent
             key={index}
@@ -228,9 +351,11 @@ const UserSelected = () => {
             time={msg?.message?.time}
             status="sent"
           >
-            <Text fontSize="16px">{msg?.message?.message}</Text>
+            <Text fontSize="16px" onClick={()=>setShowEmojiModal(false)}>{msg?.message?.message}</Text>
           </MessageComponent>
         ))}
+        </div>
+       
         <Box ref={messagesEndRef}></Box>
       </Flex>
 
@@ -248,8 +373,10 @@ const UserSelected = () => {
             alt="attachment"
             src="/attachment.svg"
             cursor="pointer"
+            onClick={()=>fileRef.current?.click()}
             ml={{ base: "12px", md: "24px" }}
           />
+          <Input type="file" className="hidden" ref={fileRef} onChange={handleFileChange}  />
         </Flex>
         <Flex
           w={{ base: "60%", md: "70%" }}
@@ -279,10 +406,11 @@ const UserSelected = () => {
             <SendMessageIcon cursor="pointer" onClick={handleSendMessage}  />
           </Flex>
         </Flex>
-        <Image alt="record audio" src="/recordAudio.svg" cursor="pointer" />
+        <Image alt="record audio" src="/recordAudio.svg" cursor="pointer" onClick={handleVoiceRecording} />
       </Flex>
     </Box>
-    <NewEmojiPicker onClose={()=>setShowEmojiModal(false)} onEmojiSelect={setEmoji} isOpen={showemojimodal} />
+    
+    { showemojimodal ? <NewEmojiPicker  onEmojiSelect={setEmoji} onClick={()=>setShowEmojiModal(false)}  /> : null }
     </>
   );
 };

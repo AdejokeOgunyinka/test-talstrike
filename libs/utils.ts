@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import config from "./config";
 
 export const uppercaseFirsLetter = (word: string) => {
   return word && word.charAt(0).toUpperCase() + word.slice(1);
@@ -48,6 +49,28 @@ export const months = [
   "November",
   "December",
 ];
+
+export const mimes = {
+  "image/apng": "IMAGE",
+  "image/avif" :"IMAGE",
+  "image/gif": "IMAGE",
+"image/jpeg": "IMAGE",
+"image/png": "IMAGE",
+"image/svg+xml": "IMAGE",
+"image/webp": "IMAGE",
+"audio/wave": "AUDIO",
+"audio/wav": "AUDIO",
+"audio/mp4": "AUDIO", 
+"audio/mp3": "AUDIO",
+"audio/aac": "AUDIO",
+"audio/ogg": "AUDIO",
+"audio/mpeg": "AUDIO",
+"video/mp4" : "VIDEO",
+"video/ogg": "VIDEO",
+"video/webm": "VIDEO",
+"video/x-m4v": "VIDEO",
+"video/quicktime": "VIDEO"
+}
 
 export const getFileExtension = function ({ url }: { url: string }) {
   if (url === null) {
@@ -177,3 +200,38 @@ export const handleOnError = (e: any) => {
 export const handleMediaPostError = (e: any) => {
   e.target.src = "/no-image-icon.jpeg";
 };
+
+export const exportToCloudinary = async(file: string)=>{
+
+  const url = `https://api.cloudinary.com/v1_1/dblqvlycm/upload`;
+  const fd = new FormData();
+  const unsignedUploadPreset = 'talstrike_chat_preset';
+
+  fd.append('upload_preset', unsignedUploadPreset);
+  fd.append('tags', 'browser_upload'); // Optional - add tags for image admin in Cloudinary
+  fd.append('file', file);
+  let returned_image = ""
+
+  returned_image = await fetch(url, {
+    method: 'POST',
+    body: fd,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // File uploaded successfully
+      const url = data.secure_url;
+      // Create a thumbnail of the uploaded image, with 150px width
+      const tokens = url.split('/');
+      tokens.splice(-3, 0, 'w_150,c_scale');
+      const img = new Image();
+      img.src = tokens.join('/');
+      img.alt = data.public_id;
+      return data.secure_url;
+    })
+    .catch((error) => {
+      console.error('Error uploading the file:', error);
+    });
+  console.log(returned_image);
+  return returned_image
+}
+

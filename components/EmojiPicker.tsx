@@ -1,10 +1,16 @@
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, {EmojiClickData, Theme } from 'emoji-picker-react';
 
-export const NewEmojiPicker=({ onClose, onEmojiSelect, isOpen=false }: { onClose: () => void; onEmojiSelect: () => void; isOpen: boolean }) => {
-    const hide=(isOpen)?"":"hidden"
+
+
+export const NewEmojiPicker=({ onClick, onEmojiSelect }: { onClick: ()=> void, onEmojiSelect: (emojiData: EmojiClickData, event: MouseEvent)=> void }) => {
+   
+    
     return (
-      <div className={`${hide} absolute inset-0 flex justify-center items-center z-10`}>
-        <EmojiPicker />
+      <div  className={`absolute inset-0 flex justify-center items-center z-10`} onClick={onClick} >
+        <div className={`z-40`}>
+          <EmojiPicker theme={Theme.DARK} onEmojiClick={onEmojiSelect}  />
+        </div>
+        
       </div>
     );
   }
