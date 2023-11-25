@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import config from "./config";
 
 export const uppercaseFirsLetter = (word: string) => {
-  return word && word.charAt(0).toUpperCase() + word.slice(1);
+  return word?.charAt(0)?.toUpperCase() + word?.slice(1)?.toLowerCase();
 };
 
 export const formatDate = (date: string) => {
@@ -50,6 +50,7 @@ export const months = [
   "December",
 ];
 
+
 export const mimes = {
   "image/apng": "IMAGE",
   "image/avif" :"IMAGE",
@@ -71,6 +72,15 @@ export const mimes = {
 "video/x-m4v": "VIDEO",
 "video/quicktime": "VIDEO"
 }
+
+export const userTypeIcon: Record<string, any> = {
+  talent: { img: "/playerProfileIcon.svg", name: "Player" },
+  coach: { img: "/coachProfileIcon.svg", name: "Coach" },
+  agent: { img: "/agentProfileIcon.svg", name: "Agent" },
+  fan: { img: "/fanProfileIcon.svg", name: "Fan" },
+  trainer: { img: "/trainerProfileIcon.svg", name: "Trainer" },
+};
+
 
 export const getFileExtension = function ({ url }: { url: string }) {
   if (url === null) {

@@ -5,10 +5,10 @@ import ExploreSection from "./ExploreSection";
 import {
   useGetExploreForYou,
   useGetExploreLatest,
-  useGetExploreLive,
   useGetExploreTop,
 } from "@/api/explore";
 import LoadingExplore from "@/components/LoadingStates/loadingExplore";
+import { Flex } from "@chakra-ui/react";
 
 const Index = () => {
   const { data: exploreForMe, isLoading: isLoadingForMe } =
@@ -28,30 +28,37 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full flex flex-col md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px]">
-        <div className="flex z-[99] pl-[30px] flex-wrap lg:flex-nowrap gap-y-[10px] w-full lg:w-[calc(100%-450px)] lg:-mt-[30px] backdrop-blur-[15px] lg:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300">
+      <div className="w-full flex flex-col min-h-[100vh] 2xl:min-h-[calc(85vh-60px)] bg-brand-1000 pt-[28px] 2xl:pt-0 pb-[28px] overflow-y-scroll">
+        <Flex
+          width={{
+            base: "100%",
+            md: "calc(100% - 456px)",
+            "2xl": "calc(80vw - 456px)",
+          }}
+          className="z-[99] pl-[30px] flex-wrap lg:flex-nowrap gap-y-[10px] lg:-mt-[40px] 2xl:mt-[4rem] 2xl:max-w-[calc(70vw - 456px)] backdrop-blur-[15px] lg:pt-[25px] 2xl:pt-[18px] lg:fixed lg:top-[79px] 2xl:top-[120px] gap-x-[20px] lg:gap-x-[54px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
+        >
           {exploreSections?.map((section, index) => (
             <div
               key={index}
               onClick={() => setCurrentSection(index + 1)}
               className={`border-t-0 border-[3px] border-x-0 z-[66] -mb-[3px] lg:-mb-[3px] ${
                 currentSection === index + 1
-                  ? "border-b-brand-2250"
+                  ? "border-b-brand-600"
                   : "border-b-brand-300"
               } cursor-pointer`}
             >
               <h3
                 className={`${
                   currentSection === index + 1
-                    ? "text-brand-2250"
+                    ? "text-brand-600"
                     : "text-brand-2200"
-                } mb-[11px] text-[11px] lg:text-[14px] font-semibold`}
+                } mb-[11px] text-[11px] lg:text-[18px] font-semibold`}
               >
                 {section.title}
               </h3>
             </div>
           ))}
-        </div>
+        </Flex>
         {isLoadingForMe || isLoadingTop || isLoadingLatest ? (
           <div className="w-full md:px-[31px] mt-[13px] md:mt-[53px] flex flex-wrap gap-[12px]">
             {Array(4)

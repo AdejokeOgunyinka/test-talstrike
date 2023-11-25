@@ -14,23 +14,23 @@ const SignupIndicators = ({ active }: { active: number }) => {
                 style={{
                   background:
                     active > index
-                      ? "#003D72"
+                      ? "#00B127"
                       : active === index
                       ? "#ff"
                       : "#E3E2E2",
                   border: `1.5057px solid ${
                     active > index
-                      ? "#003D72"
+                      ? "#00B127"
                       : active === index
-                      ? "#003D72"
+                      ? "#00B127"
                       : "#E3E2E2"
                   }`,
                   color:
                     active > index
                       ? "#fff"
                       : active === index
-                      ? "#003D72"
-                      : "#94AEC5",
+                      ? "#00B127"
+                      : "#93A3B1",
                 }}
               >
                 {index + 1}
@@ -63,7 +63,7 @@ const SignupIndicators = ({ active }: { active: number }) => {
         {indicators?.map((indicator, index) => (
           <p
             style={{
-              color: active === index || active > index ? "#003D72" : "#94AEC5",
+              color: active === index || active > index ? "#00B127" : "#93A3B1",
             }}
             key={index}
             className="text-[14px] leading-[21px] font-medium"
@@ -111,14 +111,14 @@ export const SetupIndicator = ({
                       ? "#00B127"
                       : active - 1 === index
                       ? "#ACE3B9"
-                      : "#94AEC5"
+                      : "#93A3B1"
                   }`,
                   color:
                     active - 1 > index
                       ? "#fff"
                       : active - 1 === index
-                      ? "#003D72"
-                      : "#94AEC5",
+                      ? "#00B127"
+                      : "#93A3B1",
                 }}
               ></div>
             </div>
@@ -152,10 +152,10 @@ export const SetupIndicator = ({
               color:
                 active - 1 === index || active - 1 > index
                   ? "#00B127"
-                  : "#94AEC5",
+                  : "#93A3B1",
             }}
             key={index}
-            className="text-[14px] leading-[21px] font-medium"
+            className="text-[16px] leading-[21px] font-medium"
           >
             {indicator}
           </p>

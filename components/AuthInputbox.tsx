@@ -6,6 +6,7 @@ type CustomInputBoxProps = {
   name?: string;
   onChange?: (value: any) => void;
   onBlur?: (value: any) => void;
+  autocomplete?: string;
 };
 
 const CustomInputBox = ({
@@ -16,13 +17,14 @@ const CustomInputBox = ({
   name,
   onChange,
   onBlur,
+  autocomplete,
 }: CustomInputBoxProps) => {
   return (
     <div
       className={
         type === "checkbox"
           ? "w-full flex"
-          : "relative w-full rounded-[7px] border-[#94AEC5] border-[1px] pl-[13px] pt-[8.2px] pb-[8.2px]"
+          : "relative w-full rounded-[4px] border-[#293137] border-[1px] pl-[13px] pt-[8.2px] pb-[8.2px]"
       }
     >
       {/* {type !== "checkbox" && (
@@ -38,7 +40,7 @@ const CustomInputBox = ({
             name={name}
             onChange={onChange}
             onBlur={onBlur}
-            className="w-full py-0 border-none text-[12px] placeholder:text-[12px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 bg:unset"
+            className="w-full h-[50px] py-0 border-none text-[16px] placeholder:text-[18px] placeholder:font-light placeholder:text-[#93A3B1] placeholder: leading-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 bg:unset"
           />
         ) : (
           <input
@@ -46,6 +48,7 @@ const CustomInputBox = ({
             onChange={onChange}
             onBlur={onBlur}
             className="focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 checked:outline-0"
+            autoComplete={autocomplete}
           />
         )}
 

@@ -122,16 +122,17 @@ const LandingPageLayout = () => {
           position="absolute"
           top={{ base: "157px", xl: "299px" }}
           w="full"
+          align="center"
           px={{ base: "29px", lg: "unset" }}
           direction="column"
         >
           <Text
             color="primary-white-3"
             textAlign="center"
-            fontSize="36px"
+            fontSize="40px"
             fontWeight="600"
             lineHeight="normal"
-            mb={{ base: "30px", md: "24px" }}
+            mb={{ base: "31px", md: "25px" }}
           >
             {slideShowImages[activeIndex].sloganHeader}
           </Text>
@@ -140,8 +141,10 @@ const LandingPageLayout = () => {
             color="primary-white-3"
             textAlign="center"
             wordBreak="break-word"
-            fontWeight="500"
+            width="70%"
+            fontWeight="400"
             lineHeight="166%"
+            fontSize={{ base: "18px", md: "20px" }}
           >
             {slideShowImages[activeIndex].sloganText}
           </Text>
@@ -153,8 +156,8 @@ const LandingPageLayout = () => {
                   w="141px"
                   h="40px"
                   color="primary-white-3"
-                  fontSize="14px"
-                  fontWeight="500"
+                  fontSize="18px"
+                  fontWeight="400"
                   border="1.5px solid #fff"
                   bg="transparent"
                   borderRadius="4px"
@@ -168,8 +171,8 @@ const LandingPageLayout = () => {
                   w="141px"
                   h="40px"
                   color="primary-white-3"
-                  fontSize="14px"
-                  fontWeight="500"
+                  fontSize="18px"
+                  fontWeight="400"
                   bg="light-blue"
                   borderRadius="4px"
                 >

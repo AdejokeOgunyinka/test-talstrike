@@ -11,6 +11,7 @@ import { DashboardLayout } from "@/layout/Dashboard";
 import { useGetSports } from "@/api/auth";
 import { useGetAllPlayers } from "@/api/players";
 import LoadingProfileCards from "@/components/LoadingStates/loadingProfileCards";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 const Index = () => {
   const { data: session } = useSession();
@@ -100,7 +101,7 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] bg-brand-1000 py-[28px] px-[15px] lg:px-[31px]">
+      <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] 2xl:min-h-[calc(85vh-60px)] bg-brand-1000 pt-[80px] lg:py-[25px] px-[15px] lg:px-[31px]">
         <TitleBar
           titleBarColor="bg-[#D1E6F8]"
           text="Interact, engage, and connect with athletes from diverse disciplines."
@@ -168,10 +169,10 @@ const Index = () => {
             </div>
           </PlayersSearchBar>
         </div>
-        <div className="w-full mt-[23px] flex justify-center">
-          <div className="flex flex-wrap gap-y-[25px] gap-x-[25px] px-[5%] md:px-[2.5%] 2xl:px-[5%]">
+        <div className="w-full mt-[23px] flex justify-center h-full">
+          <div className="w-full h-full flex flex-wrap gap-y-[25px] gap-x-[25px]">
             {isLoadingAllPlayers ? (
-              Array(6)
+              Array(3)
                 ?.fill("")
                 ?.map((_, index) => <LoadingProfileCards key={index} />)
             ) : playersData?.pages?.flat(1)?.length === 0 ? (
@@ -181,23 +182,36 @@ const Index = () => {
                 </p>
               </div>
             ) : (
-              playersData?.pages?.flat(1)?.map((player: any, index: number) => (
-                <div key={index} className="w-full md:w-[unset]">
-                  <ProfileCard
-                    id={player?.user?.id}
-                    img={player?.user?.image}
-                    skillsArray={player?.interests || []}
-                    name={`${player?.user?.firstname} ${player?.user?.lastname}`}
-                    position={player?.position}
-                    isPlayer={true}
-                    rating={player?.rating || "4.3"}
-                    location={player?.location?.join(", ") || "N/A"}
-                    experience={player?.years_of_experience}
-                    appearances={player?.appearances || 0}
-                    friend={player?.is_following}
-                  />
-                </div>
-              ))
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{ 350: 1, 750: 2, 1250: 3 }}
+                className="w-full gap-[16px]"
+              >
+                <Masonry
+                  columnsCount={3}
+                  style={{ gap: "9px" }}
+                  className="profile-masonry"
+                >
+                  {playersData?.pages
+                    ?.flat(1)
+                    ?.map((player: any, index: number) => (
+                      <div className="w-full" key={index}>
+                        <ProfileCard
+                          id={player?.user?.id}
+                          img={player?.user?.image}
+                          skillsArray={player?.interests || []}
+                          name={`${player?.user?.firstname} ${player?.user?.lastname}`}
+                          position={player?.position}
+                          isPlayer={true}
+                          rating={player?.rating || "4.3"}
+                          location={player?.location?.join(", ") || "N/A"}
+                          experience={player?.years_of_experience}
+                          appearances={player?.appearances || 0}
+                          friend={player?.is_following}
+                        />
+                      </div>
+                    ))}
+                </Masonry>
+              </ResponsiveMasonry>
             )}
           </div>
         </div>

@@ -17,6 +17,7 @@
     "incremental": true,
     "paths": {
       "@/*": ["./*"],
+      "@/fonts": ["./styles/fonts"],
       "react": ["./node_modules/@types/react"]
     }
   },

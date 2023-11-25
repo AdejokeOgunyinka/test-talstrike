@@ -1,6 +1,7 @@
 import NextImage from "next/image";
 import moment from "moment";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import { handleOnError } from "@/libs/utils";
 import { useState } from "react";
@@ -19,7 +20,6 @@ const SingleOpeningCard = ({
   setChosenPost,
   handleClickDeleteModal,
   handleClickEditModal,
-  setShowSingleOpening,
   isOther,
 }: {
   post: any;
@@ -31,18 +31,21 @@ const SingleOpeningCard = ({
   setShowPopover: any;
   setChosenPost: any;
   showPopover: boolean;
-  setShowSingleOpening: any;
   handleClickEditModal?: any;
   handleClickDeleteModal?: any;
 }) => {
+  const router = useRouter();
+
   const Popover = () => {
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[113px] h-[83px] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSingleOpening(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Opening
@@ -67,10 +70,12 @@ const SingleOpeningCard = ({
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[113px] py-[10px] px-[15px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSingleOpening(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Opening

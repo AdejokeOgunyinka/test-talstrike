@@ -1,4 +1,4 @@
-import { UserRole } from '@/libs/types/user';
+import { NewUserRole } from '@/libs/types/user';
 
 export type Profile = {
   id: string;
@@ -91,7 +91,7 @@ export type IUser = {
   username: string;
   email: string;
   imageUrl: string;
-  role: UserRole;
+  role: NewUserRole;
   languages: Partial<Languages[]>;
   specializations: Partial<Specialization[]>;
   profile: Partial<Profile> | null;

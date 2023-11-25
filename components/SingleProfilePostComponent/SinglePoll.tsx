@@ -21,15 +21,7 @@ import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
 
 const Image = styled.img``;
 
-const SinglePoll = ({
-  setShowSinglePoll,
-  seconds,
-  chosenPost,
-}: {
-  setShowSinglePoll: any;
-  seconds: number;
-  chosenPost: any;
-}) => {
+const SinglePoll = ({ chosenPost }: { chosenPost: any }) => {
   const [inputComment, setInputComment] = useState("");
   const [emptyComment, setEmptyComment] = useState(false);
 
@@ -50,6 +42,13 @@ const SinglePoll = ({
     token: TOKEN as string,
     userId: session?.user?.id as string,
   });
+
+  let seconds = 0;
+  function incrementSeconds() {
+    seconds += 1;
+  }
+  setInterval(incrementSeconds, 1000);
+
   return (
     <div className="w-full p-[24px] rounded-[4px]">
       <div className="w-full bg-brand-500 divide-y divide-brand-1150">
@@ -75,9 +74,9 @@ const SinglePoll = ({
                 </h4>
               </div>
             </div>
-            <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]">
-              {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
-              <div
+            {/* <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]"> */}
+            {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
+            {/* <div
                 onClick={() => {
                   if (seconds > 4) {
                     addViewCount({
@@ -91,8 +90,8 @@ const SinglePoll = ({
                 className="cursor-pointer"
               >
                 <img src="/closeIconBlue.svg" alt="close blue" />
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
         </div>
         <div className="w-full">
@@ -260,6 +259,8 @@ const SinglePoll = ({
                           queryClient.invalidateQueries([
                             "getAllCommentsOnPoll",
                           ]);
+                          queryClient.invalidateQueries(["getSinglePoll"]);
+                          queryClient.invalidateQueries(["getNewsfeed"]);
                         },
                       }
                     );

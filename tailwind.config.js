@@ -68,6 +68,8 @@ module.exports = {
           2900: "#F4F5F7",
           2950: "#E7E9ED",
           3000: "#343D45",
+          green: "#00B127",
+          "light-blue-2": "#ECF5FD",
           "blue-rgba": "rgba(177, 253, 240, 0.36)",
           "pink-rgba": "rgba(255, 233, 254, 0.41)",
           "blue2-rgba": "rgba(0, 131, 213, 0.21)",
@@ -79,7 +81,7 @@ module.exports = {
           warning: "red",
           love: "#FF0000",
           "comment-send": "rgba(0, 116, 217, 0.18)",
-          "profile-header": "rgba(248, 250, 251, 0.8)",
+          "profile-header": "rgba(255, 255, 255, 0.80)",
         },
       },
       backgroundImage: {

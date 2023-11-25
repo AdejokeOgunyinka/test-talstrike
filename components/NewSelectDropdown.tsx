@@ -38,7 +38,7 @@ const Dropdown = ({
   return (
     <div className="w-full">
       {title && (
-        <p className="text-[#94AEC5] text-[14px] leading-[21px] font-medium mb-[13px]">
+        <p className="text-[#293137] text-[18px] leading-[21px] mb-[13px]">
           {title}
         </p>
       )}

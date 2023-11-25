@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
-import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import CreatableSelect from "react-select/creatable";
 import { ErrorMessage, FieldArray, FormikProvider, useFormik } from "formik";
@@ -34,7 +33,6 @@ import { useCreateHashtag, useGetAllHashtags } from "@/api/dashboard";
 
 const Index = ({ providers }: any) => {
   const session = useSession();
-  const router = useRouter();
 
   const [token, setToken] = useState<any>("");
   const [userId, setUserId] = useState("");
@@ -85,7 +83,7 @@ const Index = ({ providers }: any) => {
 
   const [chosenSpecialty, setChosenSpecialty] = useState("");
   const [hoverSpecialty, setHoverSpecialty] = useState("");
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<number>(1);
 
   const { data: sports } = useGetSports();
 
@@ -144,7 +142,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step3Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(4);
     },
   });
 
@@ -157,20 +155,20 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step4Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(5);
     },
   });
 
-  const step5Validation = yup.object().shape({
-    phone_number: yup.string().required("Phone Number is required."),
-  });
+  // const step5Validation = yup.object().shape({
+  //   phone_number: yup.string().required("Phone Number is required."),
+  // });
   const step5Formik = useFormik({
     initialValues: {
       phone_number: "",
     },
-    validationSchema: step5Validation,
+    // validationSchema: step5Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(6);
     },
   });
 
@@ -188,7 +186,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step6Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(7);
     },
   });
 
@@ -243,48 +241,6 @@ const Index = ({ providers }: any) => {
     );
   }, [chosenCountryCode, chosenStateCode]);
 
-  const SubstepController = () => {
-    return (
-      <div className="w-full">
-        <div className="w-full flex gap-[20px] mt-[30px] md:mt-[70px] mb-[10px] justify-center">
-          {substep > 1 && (
-            <button
-              onClick={() => setSubstep(substep - 1)}
-              className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
-            >
-              <NextImage
-                src="/arrowLeft.svg"
-                alt="left-arrow"
-                width="10"
-                height="10"
-              />
-            </button>
-          )}
-          {substep < 8 && (
-            <button
-              type="submit"
-              className="flex w-[35.85px] h-[35.85px] justify-center items-center border-[1.19px] border-brand-600 rounded-[4.78px]"
-            >
-              <NextImage
-                src="/arrowRight.svg"
-                alt="left-arrow"
-                width="10"
-                height="10"
-              />
-            </button>
-          )}
-        </div>
-        <div className="w-full">
-          <Alert status="info" className="text-[12px]">
-            <AlertIcon />
-            Click one of the arrows above to either proceed or go back to the
-            previous step!
-          </Alert>
-        </div>
-      </div>
-    );
-  };
-
   const step7Validation = yup.object().shape({
     years_of_experience: yup
       .string()
@@ -296,7 +252,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step7Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(8);
     },
   });
 
@@ -315,7 +271,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step8Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(9);
     },
   });
 
@@ -361,7 +317,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step9Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(10);
     },
   });
 
@@ -390,7 +346,7 @@ const Index = ({ providers }: any) => {
     },
     validationSchema: step10Validation,
     onSubmit: (values: any) => {
-      setSubstep(substep + 1);
+      setStep(11);
     },
   });
 
@@ -464,9 +420,12 @@ const Index = ({ providers }: any) => {
           type: "success",
           text: "Registration Successful! Please login to continue",
         });
-        userId
-          ? signOut({ callbackUrl: "/starter-video" })
-          : router.push("/starter-video");
+        signIn("credentials", {
+          email: "",
+          password: "",
+          user: JSON.stringify({ ...updateUserRole?.data, access: localToken }),
+          callbackUrl: "/dashboard",
+        });
       } else {
         notify({
           type: "error",
@@ -481,12 +440,26 @@ const Index = ({ providers }: any) => {
     }
   };
 
+  const handleSubmitStep = (step: number) => {
+    const submitFunction: Record<number, any> = {
+      3: step3Formik.handleSubmit,
+      4: step4Formik.handleSubmit,
+      5: step5Formik.handleSubmit,
+      6: step6Formik.handleSubmit,
+      7: step7Formik.handleSubmit,
+      8: step8Formik.handleSubmit,
+      9: step9Formik.handleSubmit,
+    };
+
+    return submitFunction[step]();
+  };
+
   return (
-    <div className="pt-[30px] w-full h-full lg:pt-[76px] ">
+    <div className="w-full h-full pt-[5px]">
       {step === 1 && (
         <div className="w-full h-full flex flex-col items-center">
-          <h3 className="text-brand-600 text-[20px] leading-[168.5%] font-bold">
-            What is your specialty?
+          <h3 className="text-[22px] leading-[168.5%] font-semibold">
+            Select your role in the field of sport
           </h3>
           <div className="flex gap-[15px] justify-center md:justify-start flex-wrap mt-[56px]">
             {specialties?.map((specialty, index) => (
@@ -495,11 +468,11 @@ const Index = ({ providers }: any) => {
                 onClick={() => setChosenSpecialty(specialty?.name)}
                 onMouseOver={() => setHoverSpecialty(specialty?.name)}
                 onMouseOut={() => setHoverSpecialty("")}
-                className={`cursor-pointer border-2 border-brand-600 ${
+                className={`cursor-pointer border-2 ${
                   chosenSpecialty === specialty?.name ||
                   hoverSpecialty === specialty?.name
-                    ? "bg-brand-600"
-                    : "bg-brand-500"
+                    ? "bg-brand-600 border-brand-600"
+                    : "bg-brand-500 border-[#293137]"
                 } w-[153px] h-[126px] flex flex-col gap-[16px] justify-center items-center rounded-[12px]`}
               >
                 <NextImage
@@ -517,7 +490,7 @@ const Index = ({ providers }: any) => {
                     chosenSpecialty === specialty?.name ||
                     hoverSpecialty === specialty?.name
                       ? "text-brand-500"
-                      : "text-brand-600"
+                      : "text-[#293137]"
                   }`}
                 >
                   {specialty?.name}
@@ -527,7 +500,7 @@ const Index = ({ providers }: any) => {
           </div>
           <button
             onClick={() => setStep(2)}
-            className="mt-[56px] w-[139px] h-[40px] bg-brand-600 rounded-[4px] text-brand-500 text-[14px] font-medium disabled:bg-[#E3E2E2] disabled:text-[#94AEC5]"
+            className="mt-[56px] w-[139px] h-[45px] bg-brand-600 rounded-[4px] text-brand-500 text-[16px] font-medium disabled:bg-[#E3E2E2] disabled:text-[#94AEC5]"
             disabled={chosenSpecialty === ""}
           >
             Continue
@@ -538,9 +511,10 @@ const Index = ({ providers }: any) => {
       {step === 2 && (
         <div className="w-full h-full flex justify-between">
           <div className="w-[100%] lg:w-[309px]">
-            <h3 className="text-[20px] text-brand-600 font-bold leading-[168.5%] mb-[30px]">
-              Please select your preferred sport as a{" "}
-              <b className="font-bold text-brand-1650">
+            <h3 className="text-[22px] font-semibold leading-[168.5%] mb-[18px]">
+              Select your sport type as{" "}
+              {chosenSpecialty?.toLowerCase() === "agent" ? "an " : "a "}
+              <b className="font-semibold text-brand-600">
                 {chosenSpecialty?.toLowerCase()}
               </b>
             </h3>
@@ -597,12 +571,12 @@ const Index = ({ providers }: any) => {
                 <div className="flex gap-[16px] mt-[42px]">
                   <button
                     onClick={() => setStep(1)}
-                    className="basis-1/2 w-[100%] border-[1.5px] border-brand-1650 h-[40px] rounded-[4px] text-brand-1650"
+                    className="basis-1/2 w-[100%] text-[18px] border-[1.5px] border-[#293137] h-[45px] rounded-[4px] text-[#293137]"
                   >
                     Back
                   </button>
                   <button
-                    className="basis-1/2 w-[100%] h-[40px] rounded-[4px] bg-brand-600 text-brand-500 disabled:bg-[#E3E2E2] disabled:text-[#94AEC5]"
+                    className="basis-1/2 w-[100%] h-[45px] text-[18px] rounded-[4px] bg-brand-600 text-brand-500 disabled:bg-[#E3E2E2] disabled:text-[#94AEC5]"
                     type="submit"
                     disabled={
                       chosenSpecialty === "Player"
@@ -613,7 +587,7 @@ const Index = ({ providers }: any) => {
                         : step2Formik?.values?.sport === ""
                     }
                   >
-                    Next
+                    Continue
                   </button>
                 </div>
               </form>
@@ -625,117 +599,118 @@ const Index = ({ providers }: any) => {
         </div>
       )}
 
-      {step === 3 && (
+      {step >= 3 && (
         <div className="w-full h-full">
           <div className="w-full py-[30px] md:pt-[40px] md:py-[51px] flex justify-center bg-brand-500 shadow shadow-[0px_0px_16px_4px_rgba(0, 0, 0, 0.08)] rounded-[8px] pt-[38px]">
             <div className="w-[80%] flex flex-col items-center">
-              <h3 className="font-semibold text-[20px] leading-[30px] text-brand-600 mb-[30px] text-center">
-                {substep > 4
+              <h3 className="font-semibold text-[22px] leading-[30px] mb-[30px] text-center">
+                {step > 5
                   ? "Professional Expertise"
                   : "Personal Information & Location"}
               </h3>
               <SetupIndicator
-                active={substep > 4 ? substep - 4 : substep}
-                isExperience={substep > 4}
+                active={step < 7 ? step - 2 : step - 6}
+                isExperience={step > 6}
               />
-              {substep === 1 && (
+              {step === 3 && (
                 <div className="w-full md:mt-[41px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     What’s your Date of Birth?
                   </p>
                   <FormikProvider value={step3Formik}>
                     <form onSubmit={step3Formik.handleSubmit}>
-                      <div className="flex flex-col md:flex-row w-full gap-[20px]">
-                        <div className="w-full">
-                          <Dropdown
-                            placeholder="Day"
-                            options={Array.from(
-                              { length: 31 },
-                              (_, i) => i + 1
-                            )?.map((val: number) => {
-                              return {
-                                value: val?.toString(),
-                                label: val?.toString(),
-                              };
-                            })}
-                            name="day"
-                            className="auth-dropdown"
-                            onChange={(val: any) =>
-                              step3Formik?.setFieldValue("day", val?.value)
-                            }
-                            value={{
-                              value: step3Formik.values.day,
-                              label: step3Formik.values.day,
-                            }}
-                          />
-                          <ErrorMessage
-                            name="day"
-                            component="p"
-                            className="text-brand-warning text-[12px]"
-                          />
-                        </div>
-                        <div className="w-full">
-                          <Dropdown
-                            placeholder="Month"
-                            options={[
-                              { value: "Jan", label: "Jan" },
-                              { value: "Feb", label: "Feb" },
-                              { value: "Mar", label: "Mar" },
-                              { value: "Apr", label: "Apr" },
-                              { value: "May", label: "May" },
-                              { value: "Jun", label: "Jun" },
-                              { value: "Jul", label: "Jul" },
-                              { value: "Aug", label: "Aug" },
-                              { value: "Sep", label: "Sep" },
-                              { value: "Oct", label: "Oct" },
-                              { value: "Nov", label: "Nov" },
-                              { value: "Dec", label: "Dec" },
-                            ]}
-                            name="month"
-                            className="auth-dropdown"
-                            onChange={(val: any) =>
-                              step3Formik?.setFieldValue("month", val?.value)
-                            }
-                            value={{
-                              value: step3Formik.values.month,
-                              label: step3Formik.values.month,
-                            }}
-                          />
-                          <ErrorMessage
-                            name="month"
-                            component="p"
-                            className="text-brand-warning text-[12px]"
-                          />
-                        </div>
-                        <div className="w-full">
-                          <Dropdown
-                            placeholder="Year"
-                            options={getYears(1980)?.map((year: string) => {
-                              return { value: year, label: year };
-                            })}
-                            name="year"
-                            className="auth-dropdown"
-                            onChange={(val: any) =>
-                              step3Formik?.setFieldValue("year", val?.value)
-                            }
-                            value={{
-                              value: step3Formik.values.year,
-                              label: step3Formik.values.year,
-                            }}
-                          />
-                          <ErrorMessage
-                            name="year"
-                            component="p"
-                            className="text-brand-warning text-[12px]"
-                          />
+                      <div className="flex justify-center w-full">
+                        <div className="w-full flex flex-col md:flex-row md:w-[70%] gap-[20px]">
+                          <div className="w-full md:w-[30%]">
+                            <Dropdown
+                              placeholder="Day"
+                              options={Array.from(
+                                { length: 31 },
+                                (_, i) => i + 1
+                              )?.map((val: number) => {
+                                return {
+                                  value: val?.toString(),
+                                  label: val?.toString(),
+                                };
+                              })}
+                              name="day"
+                              className="auth-dropdown"
+                              onChange={(val: any) =>
+                                step3Formik?.setFieldValue("day", val?.value)
+                              }
+                              value={{
+                                value: step3Formik.values.day,
+                                label: step3Formik.values.day,
+                              }}
+                            />
+                            <ErrorMessage
+                              name="day"
+                              component="p"
+                              className="text-brand-warning text-[12px]"
+                            />
+                          </div>
+                          <div className="w-full md:w-[30%]">
+                            <Dropdown
+                              placeholder="Month"
+                              options={[
+                                { value: "Jan", label: "Jan" },
+                                { value: "Feb", label: "Feb" },
+                                { value: "Mar", label: "Mar" },
+                                { value: "Apr", label: "Apr" },
+                                { value: "May", label: "May" },
+                                { value: "Jun", label: "Jun" },
+                                { value: "Jul", label: "Jul" },
+                                { value: "Aug", label: "Aug" },
+                                { value: "Sep", label: "Sep" },
+                                { value: "Oct", label: "Oct" },
+                                { value: "Nov", label: "Nov" },
+                                { value: "Dec", label: "Dec" },
+                              ]}
+                              name="month"
+                              className="auth-dropdown"
+                              onChange={(val: any) =>
+                                step3Formik?.setFieldValue("month", val?.value)
+                              }
+                              value={{
+                                value: step3Formik.values.month,
+                                label: step3Formik.values.month,
+                              }}
+                            />
+                            <ErrorMessage
+                              name="month"
+                              component="p"
+                              className="text-brand-warning text-[12px]"
+                            />
+                          </div>
+                          <div className="w-full md:w-[30%]">
+                            <Dropdown
+                              placeholder="Year"
+                              options={getYears(1980)?.map((year: string) => {
+                                return { value: year, label: year };
+                              })}
+                              name="year"
+                              className="auth-dropdown"
+                              onChange={(val: any) =>
+                                step3Formik?.setFieldValue("year", val?.value)
+                              }
+                              value={{
+                                value: step3Formik.values.year,
+                                label: step3Formik.values.year,
+                              }}
+                            />
+                            <ErrorMessage
+                              name="year"
+                              component="p"
+                              className="text-brand-warning text-[12px]"
+                            />
+                          </div>
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 2 && (
+              {step === 4 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     Select your Gender
@@ -767,12 +742,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 3 && (
+              {step === 5 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     Phone Number
@@ -791,12 +765,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 4 && (
+              {step === 6 && (
                 <div className="w-full md:mt-[44px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     Where do you live?
@@ -876,12 +849,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 5 && (
+              {step === 7 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     Years of Experience
@@ -899,12 +871,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 6 && (
+              {step === 8 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     What are your professional skills?
@@ -991,12 +962,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 7 && (
+              {step === 9 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     What interests you in your preferred sport?
@@ -1032,12 +1002,11 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
               )}
-              {substep === 8 && (
+              {step === 10 && (
                 <div className="w-full md:mt-[46px]">
                   <p className="text-center font-normal text-[14px] color-[#343D45] mb-[26px]">
                     What do you aim to achieve in your preferred sport?
@@ -1124,7 +1093,6 @@ const Index = ({ providers }: any) => {
                           />
                         </div>
                       </div>
-                      <SubstepController />
                     </form>
                   </FormikProvider>
                 </div>
@@ -1132,17 +1100,45 @@ const Index = ({ providers }: any) => {
             </div>
           </div>
           <div className="flex justify-center gap-[16px] w-full mt-[46px]">
-            <button
-              onClick={() => setStep(2)}
-              className="w-[128px] h-[40px] border-[1.5px] border-brand-1650 text-brand-1650 text-[14px] rounded-[4px]"
-            >
-              Back
-            </button>
-            {substep === 8 && (
+            {step > 1 && (
+              <button
+                onClick={() => {
+                  setStep(step - 1);
+                }}
+                className="w-[128px] h-[40px] border-[1.5px] border-brand-1650 text-brand-1650 text-[14px] rounded-[4px]"
+              >
+                Back
+              </button>
+            )}
+            {step < 10 && (
+              <button
+                onClick={(e) => {
+                  e?.preventDefault();
+                  handleSubmitStep(step);
+                }}
+                disabled={
+                  substep === 1
+                    ? !step3Formik.isValid
+                    : substep === 2
+                    ? !step4Formik.isValid
+                    : substep === 3
+                    ? !step5Formik.isValid
+                    : substep === 4
+                    ? !step6Formik.isValid
+                    : substep === 5
+                    ? !step7Formik.isValid
+                    : !step8Formik.isValid
+                }
+                className="w-[128px] h-[40px] border-[1.5px] border-brand-1650 text-brand-1650 text-[14px] rounded-[4px]"
+              >
+                Next
+              </button>
+            )}
+            {step === 10 && (
               <button
                 disabled={step10Formik.values.career_goals.length === 0}
                 onClick={onUpdateProfile}
-                className="w-[128px] bg-brand-600 h-[40px] rounded-[4px] text-brand-500 text-[14px] disabled:bg-[#E3E2E2] disabled:text-[#94AEC5] "
+                className="w-[128px] bg-brand-green h-[45px] rounded-[4px] text-brand-500 text-[18px] disabled:bg-[#E3E2E2] disabled:text-[#94AEC5] "
               >
                 {updatingProfile ? (
                   <BeatLoader
@@ -1152,7 +1148,7 @@ const Index = ({ providers }: any) => {
                     data-testid="loader"
                   />
                 ) : (
-                  "Complete"
+                  "Finish"
                 )}
               </button>
             )}

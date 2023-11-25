@@ -1,4 +1,5 @@
 import NextImage from "next/image";
+import { useRouter } from "next/router";
 import moment from "moment";
 import styled from "styled-components";
 
@@ -11,7 +12,6 @@ const Image = styled.img``;
 const SinglePostCard = ({
   post,
   setShowPopover,
-  setShowSinglePost,
   showPopover,
   setShowDeleteModal,
   setShowEditModal,
@@ -26,7 +26,6 @@ const SinglePostCard = ({
   setClickedIndex: any;
   setShowPopover: any;
   showPopover: boolean;
-  setShowSinglePost: any;
   showSinglePost: boolean;
   setShowDeleteModal?: any;
   setShowEditModal?: any;
@@ -46,14 +45,18 @@ const SinglePostCard = ({
     setShowPopover(false);
   };
 
+  const router = useRouter();
+
   const Popover = () => {
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] h-[83px] py-[11px] px-[15px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSinglePost(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Post
@@ -79,10 +82,12 @@ const SinglePostCard = ({
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            setShowSinglePost(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: post?.post_type?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px]"
         >
           View Post
