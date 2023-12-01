@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import moment from "moment";
 
 import SearchBar from "@/components/SearchBar";
 import { useGetAllCoaches } from "@/api/coaches";
@@ -149,8 +150,10 @@ const DashboardAside = () => {
                 {follower?.users?.last_login === "online" ? (
                   <div className="w-[8px] h-[8px] rounded-[50%] bg-brand-1100"></div>
                 ) : (
-                  <p className="font-medium text-brand-1050 text-[10px]">
-                    {follower.users?.last_login}
+                  <p className="font-medium text-[#93A3B1] text-[10px]">
+                    {follower.users?.last_login !== null
+                      ? moment(follower.users?.last_login).fromNow()
+                      : ""}
                   </p>
                 )}
               </div>

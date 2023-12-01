@@ -8,6 +8,7 @@ import { Flex, Text, Image } from "@chakra-ui/react";
 import { useGetMyProfile, useGetPostsByType } from "@/api/profile";
 import SingleOpeningCard from "@/components/SinglePostTypeCards/SingleOpeningCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
+import NoOpeningSvgIcon from "@/assets/svgFiles/NoOpeningSvg";
 
 const MyOpenings = () => {
   const { data: session } = useSession();
@@ -95,7 +96,28 @@ const MyOpenings = () => {
               ))
           ) : userPosts?.pages?.flat(1)?.length === 0 ||
             !userPosts?.pages?.flat(1) ? (
-            <p>No opening available at the moment...</p>
+            <div className="w-full h-[50vh] flex flex-col gap-[11px] justify-center items-center">
+              <NoOpeningSvgIcon />
+              <Text
+                fontSize="24px"
+                fontWeight="600"
+                lineHeight="186.5%"
+                color="#293137"
+              >
+                No Opening
+              </Text>
+              <Text
+                color="#93A3B1"
+                fontSize="18px"
+                fontWeight="400"
+                lineHeight="186.5%"
+                w="60%"
+                textAlign="center"
+              >
+                You have not published any opening yet. Openings you create and
+                publish will show up here.
+              </Text>
+            </div>
           ) : (
             userPosts?.pages
               ?.flat(1)

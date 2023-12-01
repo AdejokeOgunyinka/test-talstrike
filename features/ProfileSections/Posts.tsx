@@ -11,6 +11,7 @@ import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditPost from "@/components/ProfileModals/EditPost";
 import SinglePostCard from "@/components/SinglePostTypeCards/SinglePostCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
+import NoPostSvgIcon from "@/assets/svgFiles/NoPostSvg";
 
 const MyPosts = () => {
   const { data: session } = useSession();
@@ -118,7 +119,28 @@ const MyPosts = () => {
               ))
           ) : userPosts?.pages?.flat(1)?.length === 0 ||
             !userPosts?.pages?.flat(1) ? (
-            <p>No post available at the moment...</p>
+            <div className="w-full h-[50vh] flex flex-col gap-[11px] justify-center items-center">
+              <NoPostSvgIcon />
+              <Text
+                fontSize="24px"
+                fontWeight="600"
+                lineHeight="186.5%"
+                color="#293137"
+              >
+                No Post
+              </Text>
+              <Text
+                color="#93A3B1"
+                fontSize="18px"
+                fontWeight="400"
+                lineHeight="186.5%"
+                w="60%"
+                textAlign="center"
+              >
+                You have not published any post yet. Posts you create and
+                publish will show up here.
+              </Text>
+            </div>
           ) : (
             userPosts?.pages
               ?.flat(1)

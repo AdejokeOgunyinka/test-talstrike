@@ -11,6 +11,7 @@ import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditArticle from "@/components/ProfileModals/EditArticle";
 import SingleArticleCard from "@/components/SinglePostTypeCards/SingleArticleCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
+import NoArticleSvgIcon from "@/assets/svgFiles/NoArticleSvg";
 
 const MyArticles = () => {
   const { data: session } = useSession();
@@ -129,7 +130,28 @@ const MyArticles = () => {
               ))
           ) : userPosts?.pages?.flat(1)?.length === 0 ||
             !userPosts?.pages?.flat(1) ? (
-            <p>No article available at the moment...</p>
+            <div className="w-full h-[50vh] flex flex-col gap-[11px] justify-center items-center">
+              <NoArticleSvgIcon />
+              <Text
+                fontSize="24px"
+                fontWeight="600"
+                lineHeight="186.5%"
+                color="#293137"
+              >
+                No Article
+              </Text>
+              <Text
+                color="#93A3B1"
+                fontSize="18px"
+                fontWeight="400"
+                lineHeight="186.5%"
+                w="60%"
+                textAlign="center"
+              >
+                You have not published any article yet. Articles you create and
+                publish will show up here.
+              </Text>
+            </div>
           ) : (
             userPosts?.pages
               ?.flat(1)

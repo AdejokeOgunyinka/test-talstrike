@@ -4,7 +4,7 @@ import NextImage from "next/image";
 import moment from "moment";
 import styled from "styled-components";
 
-import { handleOnError } from "@/libs/utils";
+import { handleOnError, uppercaseFirsLetter } from "@/libs/utils";
 import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
 import { useState } from "react";
 import ShareModal from "../ShareModal";
@@ -55,25 +55,26 @@ const SinglePollCard = ({
 
   return (
     <>
-      <div className="relative rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[250px]">
+      <div className="relative rounded-[8px] bg-brand-500 border border-1 border-brand-stroke basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[250px]">
         <div className="flex items-center justify-between mb-[35px]">
           <div className="flex items-center">
-            <div className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]">
+            <div className="mr-[7px] rounded-[100%] w-[42px] h-[42px] border-[2.11px] border-brand-500">
               <NextImage
                 src={post?.author?.image as string}
                 alt="post creator"
-                width="39"
-                height="39"
-                className="mr-[7px] object-cover rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                width="42"
+                height="42"
+                className="mr-[7px] object-cover rounded-[100%] w-[42px] h-[42px] border-[2.11px] border-brand-500"
                 onError={handleOnError}
               />
             </div>
 
             <div>
-              <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
+              <p className="mb-[6.18px] font-semibold text-[18px] leading-[16px] text-brand-text">
                 {post?.author?.firstname} {post?.author?.lastname}
               </p>
-              <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
+              <p className="font-medium text-[10px] leading-[15px] text-brand-grey-1">
+                {uppercaseFirsLetter(post?.author?.roles[0])} |{" "}
                 {moment(post?.created_at).format("dddd Do MMMM")}
               </p>
             </div>
@@ -83,7 +84,7 @@ const SinglePollCard = ({
             onClick={(e) => e?.stopPropagation()}
           >
             <p
-              className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+              className="text-brand-text text-[27.7px] leading-[0px] pb-[10px] font-semibold"
               onClick={() => {
                 setClickedIndex(index);
                 setChosenPost(post);
@@ -96,7 +97,7 @@ const SinglePollCard = ({
           </div>
         </div>
 
-        <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
+        <p className="text-brand-text mb-[9px] text-[18px] font-semibold leading-[21px]">
           {post?.question_text}
         </p>
 
