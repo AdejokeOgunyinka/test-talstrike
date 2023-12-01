@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
+import { Flex, Text, Image, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { useGetPostsByType } from "@/api/profile";
 import CreateAnnouncements from "@/components/ProfileModals/CreateAnnouncement";
@@ -72,8 +74,10 @@ const MyAnnouncements = () => {
     setInterval(incrementSeconds, 1000);
   }
 
+  const router = useRouter();
+
   return (
-    <div className="mt-[21px] w-full">
+    <div className="w-full">
       {showEditModal && (
         <EditAnnouncement
           onClose={() => setShowEditModal(false)}
@@ -93,61 +97,79 @@ const MyAnnouncements = () => {
         />
       )}
 
-      <div className="flex justify-between mb-[32px] bg-brand-500 py-[20px] px-[35px]">
-        <h3 className="text-brand-600 font-semibold text-[21.25px] leading-[32px]">
-          My Announcements
-        </h3>
-        <button
+      <Flex
+        border="1px solid"
+        borderColor="#CDCDCD"
+        width="full"
+        justify="space-between"
+        align="center"
+        p="9px 19px"
+        marginTop="17px"
+      >
+        <Flex gap="15px" align="center">
+          <Image
+            src="/arrow-back.svg"
+            alt="arrow back"
+            onClick={() => router.back()}
+          />
+          <Text fontWeight="600" lineHeight="30.03px" fontSize="22px">
+            My Announcements
+          </Text>
+        </Flex>
+        <Button
+          bg="#293137"
+          color="#fff"
           onClick={() =>
             setOpenCreateAnnouncementModal(!openCreateAnnouncementModal)
           }
-          className="bg-brand-600  w-[214px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500"
         >
-          Create Announcement
-        </button>
-      </div>
+          Add New
+        </Button>
+      </Flex>
 
-      <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
-        {isLoadingUserPosts ? (
-          Array(2)
-            ?.fill("")
-            ?.map((_, index) => (
-              <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
-            ))
-        ) : userPosts?.pages?.flat(1)?.length === 0 ||
-          !userPosts?.pages?.flat(1) ? (
-          <p>No announcement available at the moment...</p>
-        ) : (
-          userPosts?.pages
-            ?.flat(1)
-            ?.map((post: any, index: number) => (
-              <SingleAnnouncementCard
-                key={index}
-                setShowPopover={setShowPopover}
-                post={post}
-                setClickedIndex={setClickedIndex}
-                setPostIndex={setPostIndex}
-                setChosenPost={setChosenPost}
-                index={index}
-                clickedIndex={clickedIndex}
-                showPopover={showPopover}
-                handleClickDelete={handleClickDelete}
-                handleClickEditModal={handleClickEditModal}
-              />
-            ))
+      <div className="w-full pl-[31px] pr-[26px] pt-[16px]">
+        <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
+          {isLoadingUserPosts ? (
+            Array(2)
+              ?.fill("")
+              ?.map((_, index) => (
+                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+              ))
+          ) : userPosts?.pages?.flat(1)?.length === 0 ||
+            !userPosts?.pages?.flat(1) ? (
+            <p>No announcement available at the moment...</p>
+          ) : (
+            userPosts?.pages
+              ?.flat(1)
+              ?.map((post: any, index: number) => (
+                <SingleAnnouncementCard
+                  key={index}
+                  setShowPopover={setShowPopover}
+                  post={post}
+                  setClickedIndex={setClickedIndex}
+                  setPostIndex={setPostIndex}
+                  setChosenPost={setChosenPost}
+                  index={index}
+                  clickedIndex={clickedIndex}
+                  showPopover={showPopover}
+                  handleClickDelete={handleClickDelete}
+                  handleClickEditModal={handleClickEditModal}
+                />
+              ))
+          )}
+        </div>
+
+        {!isLoadingUserPosts && hasNextPage && (
+          <div
+            ref={ref}
+            className="flex w-full justify-center items-center mt-[30px]"
+          >
+            <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
+              Loading More...
+            </button>
+          </div>
         )}
       </div>
-
-      {!isLoadingUserPosts && hasNextPage && (
-        <div
-          ref={ref}
-          className="flex w-full justify-center items-center mt-[30px]"
-        >
-          <button className="flex justify-center items-center w-[188px] h-[47px] bg-brand-600 text-brand-500">
-            Loading More...
-          </button>
-        </div>
-      )}
     </div>
   );
 };

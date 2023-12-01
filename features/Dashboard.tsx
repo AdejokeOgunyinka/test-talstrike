@@ -24,7 +24,6 @@ import PollIcon from "@/assets/pollIcon.svg";
 import PlusIcon from "@/assets/plusIcon.svg";
 import XIcon from "@/assets/xIcon.svg";
 
-import MoreDropdown from "@/components/DashboardMoreDropdown";
 import PostCard from "@/components/PostCard";
 import CreatePost from "@/components/ProfileModals/CreatePost";
 import CreateArticle from "@/components/ProfileModals/CreateArticle";
@@ -67,6 +66,7 @@ const Dashboard = () => {
 
   const { ref, inView } = useInView();
   const { userInfo } = useTypedSelector((state) => state.profile);
+  // const { feed } = useTypedSelector((state) => state.dashboard);
 
   const TOKEN = session?.user?.access;
   const USER_ID = session?.user?.id;
@@ -274,28 +274,6 @@ const Dashboard = () => {
                           </div>
                         ))}
                         <div className="relative">
-                          {/* <p
-                          onClick={() => setOpenMoreDropdown(!openMoreDropdown)}
-                          className="font-semibold cursor-pointer text-[11px] leading-[16px] text-brand-50 mr-[5px] md:mr-[0px]"
-                        >
-                          Others
-                        </p> */}
-                          {/* {openMoreDropdown && ( */}
-                          {/* <div className="absolute left-[0px] top-[20px] z-[99]">
-                          <MoreDropdown
-                            onClickAnnouncement={() =>
-                              setShowCreateAnnouncementModal(true)
-                            }
-                            onClickArticle={() =>
-                              setShowCreateArticleModal(true)
-                            }
-                            onClickOpening={() =>
-                              setShowCreateOpeningModal(true)
-                            }
-                            onClickPoll={() => setShowCreatePollModal(true)}
-                          />
-                        </div> */}
-                          {/* )} */}
                           <div
                             className="w-[48px] h-[48px] cursor-pointer rounded-[100%] flex justify-center items-center bg-[#293137]"
                             onClick={() =>

@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import styled from "styled-components";
 
-import { handleMediaPostError, handleOnError } from "@/libs/utils";
+import {
+  handleMediaPostError,
+  handleOnError,
+  uppercaseFirsLetter,
+} from "@/libs/utils";
 import { useState } from "react";
 import ShareModal from "../ShareModal";
 
@@ -100,25 +104,26 @@ const SinglePostCard = ({
 
   return (
     <>
-      <div className="rounded-[8px] relative bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[230px]">
+      <div className="rounded-[8px] relative bg-brand-500 border border-1 border-brand-stroke basis-[100%] md:basis-[48%] pt-[21px] px-[23px] w-full md:w-[45%] min-h-[300px]">
         <div className="flex items-center justify-between mb-[25px]">
           <div className="flex items-center">
             <div className="mr-[7px] ">
               <NextImage
                 src={post?.author?.image}
                 alt="post creator"
-                width="39"
-                height="39"
-                className="mr-[7px] rounded-[100%] w-[39px] h-[39px] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                width="42"
+                height="42"
+                className="mr-[7px] rounded-[100%] w-[42px] h-[42px]"
                 onError={handleOnError}
               />
             </div>
 
             <div>
-              <p className="mb-[3px] font-semibold text-[11px] leading-[16px] text-brand-2250">
+              <p className="mb-[6.18px] font-semibold text-[18px] leading-[16px] text-brand-text">
                 {post?.author?.firstname} {post?.author?.lastname}
               </p>
-              <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
+              <p className="font-medium text-[10px] leading-[15px] text-brand-grey-1">
+                {uppercaseFirsLetter(post?.author?.roles[0])} |{" "}
                 {moment(post?.created_at).format("dddd Do MMMM")}
               </p>
             </div>
@@ -128,7 +133,7 @@ const SinglePostCard = ({
             onClick={(e) => e?.stopPropagation()}
           >
             <p
-              className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+              className="text-brand-text text-[27.7px] leading-[0px] pb-[10px] font-semibold"
               onClick={() => {
                 setPostIndex(post?.id);
                 setChosenPost(post);
@@ -143,7 +148,7 @@ const SinglePostCard = ({
           </div>
         </div>
 
-        <p className="font-normal  text-[10px] mb-[18px] leading-[15px] text-brand-50">
+        <p className="font-normal  text-[18px] mb-[18px] leading-[26.16px] text-brand-text">
           {post?.body}
         </p>
 
@@ -172,7 +177,7 @@ const SinglePostCard = ({
           </div>
         )}
 
-        <div className="h-[78px] w-full bg-brand-500 absolute bottom-0  px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
+        <div className="h-[78px] w-full absolute bottom-0  px-[19px] border -mx-[22px] border-b-0 border-x-0 border-t-1 border-brand-2500 flex items-center justify-between">
           <div className="flex flex-col items-center">
             <div className="flex gap-x-[3px] mb-[5px]">
               <NextImage src="/heart.svg" width="15" height="15" alt="heart" />

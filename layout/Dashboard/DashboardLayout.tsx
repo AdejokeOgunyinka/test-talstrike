@@ -1,17 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Box, Flex, Image, Link } from "@chakra-ui/react";
 
-import { DashboardSidebar, MobileMenu } from "./DashboardSidebar";
+import {
+  DashboardSidebar,
+  MobileMenu,
+  MobileSideBarLink,
+} from "./DashboardSidebar";
 import SearchBar from "@/components/SearchBar";
 import { useTypedDispatch, useTypedSelector } from "@/hooks/hooks";
 import { handleOnError, isActivePath } from "@/libs/utils";
 import { setSearchQuery } from "@/store/slices/dashboardSlice";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
-import { MobileSideBarLink } from "./DashboardSidebar";
 
 export type LayoutProps = {
   children?: React.ReactNode;
@@ -20,8 +22,6 @@ export type LayoutProps = {
 export const DashboardLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const [showSignOutButton, setShowSignOutButton] = useState(false);
-
-  const { data: session } = useSession();
 
   const { userInfo } = useTypedSelector((state) => state.profile);
 
@@ -133,7 +133,7 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             <div
               className={`ml-[unset] md:ml-[175px] min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] 2xl:min-h-[calc(85vh-60px)] 2xl:max-h-[calc(85vh-60px)] flex ${
                 router.pathname?.startsWith("/profile")
-                  ? "md:w-[calc(100%-201px)]"
+                  ? "md:w-[calc(100%-175px)]"
                   : router.pathname?.startsWith("/messaging")
                   ? "w-[100%]"
                   : "w-[100%] lg:w-[calc(100%-445px)]"
