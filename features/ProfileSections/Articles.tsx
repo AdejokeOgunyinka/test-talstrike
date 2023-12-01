@@ -76,7 +76,7 @@ const MyArticles = () => {
   const router = useRouter();
 
   return (
-    <div className="mt-[21px] w-full">
+    <div className="w-full">
       {showEditModal && (
         <EditArticle onClose={() => setShowEditModal(false)} id={postIndex} />
       )}
