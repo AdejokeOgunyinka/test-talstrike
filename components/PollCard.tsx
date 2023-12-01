@@ -8,85 +8,104 @@ import moment from "moment";
 import styled from "styled-components";
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
-import GifPicker from "gif-picker-react";
-import EmojiPicker from "emoji-picker-react";
+import { useRouter } from "next/router";
+// import GifPicker from "gif-picker-react";
+// import EmojiPicker from "emoji-picker-react";
 
-import GifIcon from "@/assets/gifIcon.svg";
-import SmallImageIcon from "@/assets/smallImgIcon.svg";
-import SmileyIcon from "@/assets/smileyIcon.svg";
-import SendIcon from "@/assets/send.svg";
+// import GifIcon from "@/assets/gifIcon.svg";
+// import SmallImageIcon from "@/assets/smallImgIcon.svg";
+// import SmileyIcon from "@/assets/smileyIcon.svg";
+// import SendIcon from "@/assets/send.svg";
 import HeartIcon from "@/assets/heartIcon.svg";
 import { handleOnError } from "@/libs/utils";
 import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
-import { useCommentOnPoll, useGetAllCommentsOnPoll } from "@/api/profile";
-import { useTypedSelector } from "@/hooks/hooks";
+// import { useCommentOnPoll, useGetAllCommentsOnPoll } from "@/api/profile";
+// import { useTypedSelector } from "@/hooks/hooks";
 import { axios } from "@/libs/axios";
 import notify from "@/libs/toast";
 import ShareModal from "./ShareModal";
+import DeletePost from "./ProfileModals/DeletePost";
 
 const Image = styled.img``;
 
 const PollCard = ({
   post,
   index,
-  setShowSinglePoll,
   setShowPopover,
   setClickedIndex,
   setPollIndex,
-  setChosenPost,
   showPopover,
   clickedIndex,
 }: {
   post: any;
   index: number;
-  setShowSinglePoll: any;
   setShowPopover: any;
   setClickedIndex: any;
   setPollIndex: any;
-  setChosenPost: any;
   showPopover: boolean;
   clickedIndex: number;
 }) => {
-  const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
+  // const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
 
   const { data: session } = useSession();
 
   const TOKEN = session?.user?.access;
-  const { userInfo } = useTypedSelector((state) => state.profile);
+  // const { userInfo } = useTypedSelector((state) => state.profile);
 
-  const { mutate: commentOnPoll, isLoading: isCommentingOnPoll } =
-    useCommentOnPoll();
+  // const { mutate: commentOnPoll, isLoading: isCommentingOnPoll } =
+  //   useCommentOnPoll();
 
-  const { data: commentsOnPoll } = useGetAllCommentsOnPoll({
-    token: TOKEN as string,
-    pollId: post?.id,
-  });
+  // const { data: commentsOnPoll } = useGetAllCommentsOnPoll({
+  //   token: TOKEN as string,
+  //   pollId: post?.id,
+  // });
 
-  const [inputComment, setInputComment] = useState("");
-  const [emptyComment, setEmptyComment] = useState(false);
+  // const [inputComment, setInputComment] = useState("");
+  // const [emptyComment, setEmptyComment] = useState(false);
 
-  const [showComments, setShowComments] = useState(false);
-  const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const [openGifPicker, setOpenGifPicker] = useState(false);
+  // const [showComments, setShowComments] = useState(false);
+  // const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
+  // const [openGifPicker, setOpenGifPicker] = useState(false);
 
   const [isLikingOrUnlikingPoll, setIsLikingOrUnlikingPoll] = useState(false);
 
   const queryClient = useQueryClient();
 
   const [showShareModal, setShowShareModal] = useState(false);
+  const router = useRouter();
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleClickDelete = () => {
+    setShowDeleteModal(true);
+    setShowPopover(false);
+  };
 
   const Popover = () => {
     return (
-      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
+      <div className="absolute w-max top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
         <p
-          onClick={() => {
-            setShowSinglePoll(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: "poll" },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
-          View Poll
+          View
         </p>
+        {post?.author?.id === session?.user?.id && (
+          <>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickDelete}
+            >
+              Delete
+            </p>
+          </>
+        )}
       </div>
     );
   };
@@ -99,7 +118,7 @@ const PollCard = ({
 
   return (
     <>
-      <div className="w-full mb-[25px] rounded-[8px] bg-brand-500 shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
+      <div className="w-full mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD] basis-[100%] md:basis-[48%] pt-[21px] px-[23px]">
         <div className="flex items-center justify-between mb-[35px]">
           <div className="flex items-center">
             <div className="mr-[7px]">
@@ -110,7 +129,7 @@ const PollCard = ({
                     : "/profileIcon.svg"
                 }
                 alt="post image"
-                className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                className="object-cover w-[42px] h-[42px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                 onError={handleOnError}
               />
             </div>
@@ -120,12 +139,12 @@ const PollCard = ({
                 href={`/profile/${post?.author?.id}`}
                 cursor="pointer"
                 _hover={{ textDecoration: "none" }}
-                className="mb-[3px] font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px] text-brand-2250"
+                className="mb-[3px] font-semibold text-[11px] lg:text-[18px] text-[#293137]"
               >
                 {post?.author?.firstname} {post?.author?.lastname}
               </Link>
-              <p className="font-medium text-[10px] leading-[15px] text-brand-2450">
-                {moment(post?.created_at).format("dddd Do MMMM")}
+              <p className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
+                {moment(post?.created_at).format("dddd Do MMM")}
               </p>
             </div>
           </div>
@@ -134,11 +153,10 @@ const PollCard = ({
             onClick={(e) => e?.stopPropagation()}
           >
             <p
-              className="text-brand-2250 text-[27.7px] leading-[0px] pb-[10px] font-semibold"
+              className="text-[#293137] font-semibold text-[31px] relative pb-[10px]"
               onClick={() => {
                 setClickedIndex(index);
                 setPollIndex(post?.id);
-                setChosenPost(post);
                 setShowPopover(!showPopover);
               }}
             >
@@ -148,7 +166,7 @@ const PollCard = ({
           </div>
         </div>
 
-        <p className="text-brand-1750 mb-[9px] text-[14px] font-semibold leading-[21px]">
+        <p className="mb-[9px] font-medium text-[#293137] text-[11px] lg:text-[18px] leading-[21px]">
           {post?.question_text}
         </p>
 
@@ -242,6 +260,7 @@ const PollCard = ({
                   queryClient.invalidateQueries(["getNewsfeed"]);
                   queryClient.invalidateQueries(["getPolls"]);
                   queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                  queryClient.invalidateQueries(["getMyPosts"]);
                 })
                 .catch((err) => {
                   notify({ type: "error", text: err?.response?.data?.message });
@@ -299,7 +318,12 @@ const PollCard = ({
           </div>
           <div
             className="flex flex-col items-center cursor-pointer"
-            onClick={() => setShowComments(!showComments)}
+            onClick={() =>
+              router.push({
+                pathname: `/posts/${post?.id}`,
+                query: { type: "poll" },
+              })
+            }
           >
             <div className="flex gap-x-[3px] mb-[5px]">
               <NextImage
@@ -340,7 +364,7 @@ const PollCard = ({
             </p>
           </div>
         </div>
-        {showComments && commentsOnPoll?.results?.length > 0 && (
+        {/* {showComments && commentsOnPoll?.results?.length > 0 && (
           <div className="w-full h-[125px] overflow-x-scroll bg-brand-1000 flex flex-col gap-y-[10px] pt-[10px] px-[12px] py-[12px]">
             {commentsOnPoll?.results?.map((comment: any, index: number) => (
               <div className="flex items-center" key={index}>
@@ -363,8 +387,8 @@ const PollCard = ({
               </div>
             ))}
           </div>
-        )}
-        <div className="py-[12px] md:py-[21px] flex w-full items-center">
+        )} */}
+        {/* <div className="py-[12px] md:py-[21px] flex w-full items-center">
           <div className="mr-[9px]">
             <img
               src={
@@ -458,6 +482,7 @@ const PollCard = ({
                         queryClient.invalidateQueries(["getNewsfeed"]);
                         queryClient.invalidateQueries(["getPolls"]);
                         queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                        queryClient.invalidateQueries(["getMyPosts"]);
                       },
                     }
                   );
@@ -476,11 +501,19 @@ const PollCard = ({
               <NextImage src={SendIcon} alt="send" />
             )}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {showShareModal && (
         <ShareModal post={post} onClose={() => setShowShareModal(false)} />
+      )}
+
+      {showDeleteModal && (
+        <DeletePost
+          id={post?.id}
+          postType={"Poll"}
+          onClose={() => setShowDeleteModal(false)}
+        />
       )}
     </>
   );

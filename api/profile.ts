@@ -217,6 +217,27 @@ export const useGetSinglePost = ({
     { refetchOnWindowFocus: false }
   );
 
+  export const useGetSinglePoll = ({
+    token,
+    pollId,
+  }: {
+    token: string;
+    pollId: string;
+  }) =>
+    useQuery(
+      ["getSinglePoll", token, pollId],
+      () =>
+        axios
+          .get(`/poll/${pollId}`, {
+            headers: { Authorization: "Bearer " + token },
+          })
+          .then((res) => res.data)
+          .catch((err) => {
+            throw err.response.data;
+          }),
+      { refetchOnWindowFocus: false }
+    );
+
 export const useGetMyProfile = ({ token, userId }: IGetPosts) =>
   useQuery(
     ["getMyProfile", token, userId],

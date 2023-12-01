@@ -4,28 +4,35 @@ import NextImage from "next/image";
 import { Link } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
-import BounceLoader from "react-spinners/BounceLoader";
+// import BounceLoader from "react-spinners/BounceLoader";
 import moment from "moment";
 import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
 import { useQueryClient } from "@tanstack/react-query";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import EmojiPicker from "emoji-picker-react";
-import GifPicker from "gif-picker-react";
+// import EmojiPicker from "emoji-picker-react";
+// import GifPicker from "gif-picker-react";
 
 import HeartIcon from "@/assets/heartIcon.svg";
-import GifIcon from "@/assets/gifIcon.svg";
-import SmallImageIcon from "@/assets/smallImgIcon.svg";
-import SmileyIcon from "@/assets/smileyIcon.svg";
-import SendIcon from "@/assets/send.svg";
+import { useRouter } from "next/router";
+// import GifIcon from "@/assets/gifIcon.svg";
+// import SmallImageIcon from "@/assets/smallImgIcon.svg";
+// import SmileyIcon from "@/assets/smileyIcon.svg";
+// import SendIcon from "@/assets/send.svg";
 
 import {
   useLikeUnlikePost,
-  useCommentOnPost,
-  useGetAllCommentsOnPost,
+  // useCommentOnPost,
+  // useGetAllCommentsOnPost,
 } from "@/api/dashboard";
-import { useTypedSelector } from "@/hooks/hooks";
-import { handleMediaPostError, handleOnError } from "@/libs/utils";
+// import { useTypedSelector } from "@/hooks/hooks";
+import {
+  handleMediaPostError,
+  handleOnError,
+  uppercaseFirsLetter,
+} from "@/libs/utils";
 import ShareModal from "./ShareModal";
+import EditPost from "./ProfileModals/EditPost";
+import DeletePost from "./ProfileModals/DeletePost";
 
 const PostCard = ({
   postType,
@@ -34,7 +41,7 @@ const PostCard = ({
   timeCreated,
   postBody,
   postMedia,
-  postLikedAvatars,
+  // postLikedAvatars,
   postLikeCount,
   postCommentCount,
   postShareCount,
@@ -44,7 +51,6 @@ const PostCard = ({
   postTitle,
   fileType,
   post,
-  onClickViewPost,
 }: {
   postType: string;
   postImage: string;
@@ -62,49 +68,80 @@ const PostCard = ({
   postTitle: string;
   fileType: string;
   post: any;
-  onClickViewPost: any;
 }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
-  const { userInfo } = useTypedSelector((state) => state.profile);
+  // const { userInfo } = useTypedSelector((state) => state.profile);
 
   const { mutate: likeUnlikePost, isLoading: isLikingOrUnlikingPost } =
     useLikeUnlikePost();
-  const { mutate: commentOnPost, isLoading: isCommenting } = useCommentOnPost();
+  // const { mutate: commentOnPost, isLoading: isCommenting } = useCommentOnPost();
 
-  const [inputComment, setInputComment] = useState("");
-  const [emptyComment, setEmptyComment] = useState(false);
-  const [showComments, setShowComments] = useState(false);
+  // const [inputComment, setInputComment] = useState("");
+  // const [emptyComment, setEmptyComment] = useState(false);
+  // const [showComments, setShowComments] = useState(false);
 
-  const { data: commentsOnPost } = useGetAllCommentsOnPost({
-    token: TOKEN as string,
-    postId: postId,
-  });
+  // const { data: commentsOnPost } = useGetAllCommentsOnPost({
+  //   token: TOKEN as string,
+  //   postId: postId,
+  // });
 
   const queryClient = useQueryClient();
-  const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const [openGifPicker, setOpenGifPicker] = useState(false);
+  // const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
+  // const [openGifPicker, setOpenGifPicker] = useState(false);
 
   const slicedBody = postBody?.slice(0, 200);
   const [showFullBody, setShowFullBody] = useState(false);
 
-  const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
+  // const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
 
   const [showPopover, setShowPopover] = useState(false);
+  const router = useRouter();
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleClickDelete = () => {
+    setShowDeleteModal(true);
+    setShowPopover(false);
+  };
+
+  const handleClickEditModal = () => {
+    setShowEditModal(true);
+    setShowPopover(false);
+  };
 
   const Popover = () => {
     return (
-      <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
+      <div className="absolute w-max top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] py-[14px] px-[17px] flex flex-col gap-y-[6px]">
         <p
-          onClick={() => {
-            onClickViewPost();
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${postId}`,
+              query: { type: postType?.toLowerCase() },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
-          View {postType}
+          View
         </p>
+        {post?.author?.id === session?.user?.id && (
+          <>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickEditModal}
+            >
+              Edit
+            </p>
+            <p
+              className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
+              onClick={handleClickDelete}
+            >
+              Delete
+            </p>
+          </>
+        )}
       </div>
     );
   };
@@ -119,14 +156,14 @@ const PostCard = ({
 
   return (
     <>
-      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[29px] shadow shadow-[0px_5.2951px_14.8263px_rgba(0, 0, 0, 0.09)] rounded-[8px] bg-brand-500">
+      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD]">
         <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px]">
           <div className="flex justify-between mb-[25px]">
             <div className="flex gap-x-[7px] items-center">
               <img
                 src={postImage !== null ? postImage : "/profileIcon.svg"}
                 alt="post image"
-                className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
+                className="object-cover w-[42px] h-[42px] rounded-[50%] border-[2.11px] border-brand-500 shadow shadow-[0px_4.23608px_10.5902px_4.23608px_rgba(0, 0, 0, 0.07)]"
                 onError={handleOnError}
               />
               <div>
@@ -134,18 +171,18 @@ const PostCard = ({
                   href={`/profile/${post?.author?.id}`}
                   cursor="pointer"
                   _hover={{ textDecoration: "none" }}
-                  className="text-brand-2250 font-semibold text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[16px]"
+                  className="text-[#293137] font-semibold text-[11px] lg:text-[18px] leading-[16px]"
                 >
                   {postAuthor}
                 </Link>
-                <h4 className="text-[#94AEC5] font-medium text-[11px] lg:text-[13px] 2xl:text-[15px] leading-[15px]">
-                  {moment(timeCreated)?.format("ll")}
+                <h4 className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
+                  {moment(timeCreated)?.format("dddd Do MMM")}
                 </h4>
               </div>
             </div>
             <div
               onClick={(e) => e?.stopPropagation()}
-              className="text-brand-2250 font-semibold text-[27.7232px] relative"
+              className="text-[#293137] font-semibold text-[31px] relative"
             >
               <p
                 onClick={() => {
@@ -159,10 +196,10 @@ const PostCard = ({
             </div>
           </div>
           <div className={`mb-[15px] ${postMedia ? "mb-[15px]" : "mb-0"}`}>
-            <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">
+            <h4 className="mt-[14px] font-medium text-[#293137] text-[11px] lg:text-[18px]">
               {postTitle}
             </h4>
-            <p className="mt-[4px] font-normal leading-[16px] text-[12px]  mb-[9px]">
+            <p className="mt-[4px] font-normal leading-[16px] text-[16px]  mb-[9px]">
               {showFullBody
                 ? postBody
                 : `${slicedBody}${postBody?.length > 200 ? "..." : ""}`}
@@ -227,6 +264,8 @@ const PostCard = ({
                     queryClient.invalidateQueries(["getNewsfeed"]);
                     queryClient.invalidateQueries(["getPolls"]);
                     queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                    queryClient.invalidateQueries(["getNewsfeed"]);
+                    queryClient.invalidateQueries(["getMyPosts"]);
                   },
                 }
               );
@@ -280,7 +319,12 @@ const PostCard = ({
           </div>
           <div
             className="flex flex-col items-center cursor-pointer"
-            onClick={() => setShowComments(!showComments)}
+            onClick={() =>
+              router.push({
+                pathname: `/posts/${postId}`,
+                query: { type: postType?.toLowerCase() },
+              })
+            }
           >
             <div className="flex gap-x-[3px] mb-[5px]">
               <NextImage
@@ -318,7 +362,7 @@ const PostCard = ({
             </p>
           </div>
         </div>
-        {showComments && commentsOnPost?.results?.length > 0 && (
+        {/* {showComments && commentsOnPost?.results?.length > 0 && (
           <div className="w-full h-[125px] overflow-x-scroll bg-brand-1000 flex flex-col gap-y-[10px] pt-[10px] px-[12px] py-[12px]">
             {commentsOnPost?.results?.map((comment: any, index: number) => (
               <div className="flex items-center" key={index}>
@@ -436,6 +480,7 @@ const PostCard = ({
                         queryClient.invalidateQueries(["getNewsfeed"]);
                         queryClient.invalidateQueries(["getPolls"]);
                         queryClient.invalidateQueries(["getAllCommentsOnPost"]);
+                        queryClient.invalidateQueries(["getMyPosts"]);
                       },
                     }
                   );
@@ -454,11 +499,23 @@ const PostCard = ({
               <NextImage src={SendIcon} alt="send" />
             )}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {showShareModal && (
         <ShareModal post={post} onClose={() => setShowShareModal(false)} />
+      )}
+
+      {showEditModal && (
+        <EditPost id={post?.id} onClose={() => setShowEditModal(false)} />
+      )}
+
+      {showDeleteModal && (
+        <DeletePost
+          id={post?.id}
+          postType={uppercaseFirsLetter(post?.post_type)}
+          onClose={() => setShowDeleteModal(false)}
+        />
       )}
     </>
   );

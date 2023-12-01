@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import NextImage from "next/image";
 import moment from "moment";
 import styled from "styled-components";
@@ -18,7 +19,6 @@ const SinglePollCard = ({
   showPopover,
   index,
   clickedIndex,
-  setShowSinglePoll,
 }: {
   post: any;
   setClickedIndex: any;
@@ -27,19 +27,22 @@ const SinglePollCard = ({
   showPopover: boolean;
   index: number;
   clickedIndex: number;
-  setShowSinglePoll: any;
 }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
+
+  const router = useRouter();
 
   const Popover = () => {
     return (
       <div className="absolute top-[16px] rounded-[4px] backdrop-blur-[7.5px] shadow shadow-[5px_19px_25px_-1px rgba(0, 0, 0, 0.15)] bg-brand-whitish z-[55] border border-[0.5px] border-brand-1950 right-[0] w-[94px] py-[10px] px-[15px] flex flex-col gap-y-[7px]">
         <p
-          onClick={() => {
-            setShowSinglePoll(true);
-            setShowPopover(false);
-          }}
+          onClick={() =>
+            router.push({
+              pathname: `/posts/${post?.id}`,
+              query: { type: "poll" },
+            })
+          }
           className="text-brand-600 text-[10px] font-medium leading-[15px] cursor-pointer"
         >
           View Poll

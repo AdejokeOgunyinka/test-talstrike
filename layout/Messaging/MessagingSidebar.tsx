@@ -142,7 +142,7 @@ const MessagingSidebar = () => {
               ?.map((coach: any, index: number) => (
                 <PeopleComponent
                   key={index}
-                  img={coach?.user?.image}
+                  img={coach?.user?.image || "/user_placeholder.svg"}
                   name={coach?.user?.firstname}
                   id={coach?.user?.id}
                 />
@@ -207,7 +207,7 @@ const MessagingSidebar = () => {
                 ?.map((coach: any, index: number) => (
                   <PeopleComponent
                     key={index}
-                    img={coach?.user?.image}
+                    img={coach?.user?.image || "/user_placeholder.svg"}
                     name={coach?.user?.firstname}
                     id={coach?.user?.id}
                   />

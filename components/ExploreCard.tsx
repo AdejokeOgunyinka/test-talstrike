@@ -47,16 +47,12 @@ const ExploreCard = ({
       {showMoreAboutVideo && (
         <ModalContainer marginTop="md:mt-[0px]">
           <div className="w-[750px] h-screen overflow-scroll bg-brand-500">
-            <SinglePost
-              chosenPost={post}
-              setShowSinglePost={setShowMoreAboutVideo}
-              seconds={seconds}
-            />
+            <SinglePost chosenPost={post} />
           </div>
         </ModalContainer>
       )}
       <Box
-        width={{ xl: exploreCardWidth || "47%", base: "100%" }}
+        width={{ xl: exploreCardWidth ?? "47%", base: "100%" }}
         className="relative h-[464px]"
       >
         <video

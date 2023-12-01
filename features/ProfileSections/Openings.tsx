@@ -7,7 +7,6 @@ import { useGetPostsByType } from "@/api/profile";
 import CreateOpening from "@/components/ProfileModals/CreateOpening";
 import DeletePost from "@/components/ProfileModals/DeletePost";
 import EditOpening from "@/components/ProfileModals/EditOpening";
-import SingleOpening from "@/components/SingleProfilePostComponent/SingleOpening";
 import SingleOpeningCard from "@/components/SinglePostTypeCards/SingleOpeningCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 
@@ -100,45 +99,36 @@ const MyOpenings = () => {
         </button>
       </div>
 
-      {showSingleOpening === true ? (
-        <SingleOpening
-          setShowSingleOpening={setShowSingleOpening}
-          chosenPost={chosenPost}
-          seconds={seconds}
-        />
-      ) : (
-        <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
-          {isLoadingUserPosts ? (
-            Array(2)
-              ?.fill("")
-              ?.map((_, index) => (
-                <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
-              ))
-          ) : userPosts?.pages?.flat(1)?.length === 0 ||
-            !userPosts?.pages?.flat(1) ? (
-            <p>No opening available at the moment...</p>
-          ) : (
-            userPosts?.pages
-              ?.flat(1)
-              ?.map((post: any, index: number) => (
-                <SingleOpeningCard
-                  key={index}
-                  index={index}
-                  post={post}
-                  clickedIndex={clickedIndex}
-                  setClickedIndex={setClickedIndex}
-                  setPostIndex={setPostIndex}
-                  setShowPopover={setShowPopover}
-                  showPopover={showPopover}
-                  setChosenPost={setChosenPost}
-                  handleClickDeleteModal={handleClickDelete}
-                  handleClickEditModal={handleClickEditModal}
-                  setShowSingleOpening={setShowSingleOpening}
-                />
-              ))
-          )}
-        </div>
-      )}
+      <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
+        {isLoadingUserPosts ? (
+          Array(2)
+            ?.fill("")
+            ?.map((_, index) => (
+              <LoadingPosts key={index} width={"w-100% md:w-[45%]"} />
+            ))
+        ) : userPosts?.pages?.flat(1)?.length === 0 ||
+          !userPosts?.pages?.flat(1) ? (
+          <p>No opening available at the moment...</p>
+        ) : (
+          userPosts?.pages
+            ?.flat(1)
+            ?.map((post: any, index: number) => (
+              <SingleOpeningCard
+                key={index}
+                index={index}
+                post={post}
+                clickedIndex={clickedIndex}
+                setClickedIndex={setClickedIndex}
+                setPostIndex={setPostIndex}
+                setShowPopover={setShowPopover}
+                showPopover={showPopover}
+                setChosenPost={setChosenPost}
+                handleClickDeleteModal={handleClickDelete}
+                handleClickEditModal={handleClickEditModal}
+              />
+            ))
+        )}
+      </div>
 
       {!isLoadingUserPosts && hasNextPage && (
         <div

@@ -27,6 +27,7 @@ export default NextAuth({
       credentials: {
         email: { label: "Email", type: "email", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
+        user: {label: "User", type: "text"}
       },
 
       async authorize(credentials, req) {
@@ -35,18 +36,25 @@ export default NextAuth({
           password: credentials?.password,
         };
 
-        try {
-          const response = await login(body);
-          const { user, access } = response?.data;
+        if(credentials?.user) {
+          const newUser = JSON.parse(credentials?.user);
 
-          const userInfo = await ProfileApi(access).getUser({ id: user.id });
-          const { data: userData } = userInfo;
-
-          const userObj = { ...userData, ...userData, access };
+          const userObj = { ...newUser };
           return userObj;
-        } catch (error) {
-          const data = (error as any).response.data;
-          throw new Error(data.message);
+        } else {
+          try {
+            const response = await login(body);
+            const { user, access } = response?.data;
+  
+            const userInfo = await ProfileApi(access).getUser({ id: user.id });
+            const { data: userData } = userInfo;
+  
+            const userObj = { ...userData, ...userData, access };
+            return userObj;
+          } catch (error) {
+            const data = (error as any).response.data;
+            throw new Error(data.message);
+          }
         }
       },
     }),

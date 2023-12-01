@@ -17,15 +17,7 @@ import { useGetMyProfile } from "@/api/profile";
 
 const Image = styled.img``;
 
-const SinglePost = ({
-  setShowSinglePost,
-  seconds,
-  chosenPost,
-}: {
-  setShowSinglePost: any;
-  seconds: number;
-  chosenPost: any;
-}) => {
+const SinglePost = ({ chosenPost }: { chosenPost: any }) => {
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
   const { mutate: addViewCount } = useAddViewCount();
@@ -46,6 +38,12 @@ const SinglePost = ({
   });
 
   const queryClient = useQueryClient();
+
+  let seconds = 0;
+  function incrementSeconds() {
+    seconds += 1;
+  }
+  setInterval(incrementSeconds, 1000);
 
   return (
     <div className="w-full rounded-[4px]">
@@ -72,25 +70,6 @@ const SinglePost = ({
                 </h4>
               </div>
             </div>
-            <div className="text-brand-2250 font-semibold flex items-center align-center gap-x-[5px]">
-              {/* <p className="text-[27.7232px] pb-[10px]">...</p> */}
-
-              <div
-                onClick={() => {
-                  if (seconds > 4) {
-                    addViewCount({
-                      view_time: seconds,
-                      post: chosenPost?.id,
-                      token: TOKEN as string,
-                    });
-                  }
-                  setShowSinglePost(false);
-                }}
-                className="cursor-pointer"
-              >
-                <img src="/closeIconBlue.svg" alt="close blue" />
-              </div>
-            </div>
           </div>
           <h4 className="mt-[14px] font-semibold text-brand-1650 text-[11px] lg:text-[16px] ">
             {chosenPost?.title}
@@ -103,7 +82,11 @@ const SinglePost = ({
           {chosenPost?.media && (
             <>
               {chosenPost?.file_type === "VIDEO" ? (
-                <video src={chosenPost?.media} controls className="w-full" />
+                <video
+                  src={chosenPost?.media}
+                  controls
+                  className="w-full max-h-[500px]"
+                />
               ) : (
                 <Image
                   src={chosenPost?.media}
@@ -234,7 +217,8 @@ const SinglePost = ({
                           queryClient.invalidateQueries([
                             "getAllCommentsOnPost",
                           ]);
-                          queryClient.invalidateQueries(["getMyPosts"]);
+                          queryClient.invalidateQueries(["getSinglePost"]);
+                          queryClient.invalidateQueries(["getNewsfeed"]);
                         },
                       }
                     );
