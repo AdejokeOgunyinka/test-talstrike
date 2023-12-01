@@ -12,6 +12,8 @@ import { setChatChannel } from "@/store/slices/messagingSlice";
 import Pusher from "pusher-js";
 import { NewEmojiPicker } from "../EmojiPicker";
 import { exportToCloudinary, mimes } from "@/libs/utils";
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
+import { generateRandomValue } from "@/libs/utils";
 
 interface IMessage {
   id: string;
@@ -36,6 +38,7 @@ const UserSelected = () => {
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState("");
+  
 
   const { data: session } = useSession();
   const token = session?.user?.access;
@@ -221,22 +224,35 @@ const UserSelected = () => {
       };
     }
   }, []);
+  
+  const recorderControls = useAudioRecorder()
 
-  const handleVoiceRecording = async () => {
-    await getMicrophonePermission();
+  const handleVoiceRecording = async (blob: any) => {
+    console.log(blob, "...blob file ...")
+    
+    const file_name = generateRandomValue(12); 
+    const fileObj = new File([blob],`${file_name}.webm`);
+    const url = URL.createObjectURL(fileObj);
+    
+    
+    // console.log(fileObj.type, "...file type...");
+    // const file_mime: keyof typeof mimes = fileObj.type;
+    // const file_type = mimes[file_mime];
+    const fileurl = await exportToCloudinary(blob);
+    console.log(fileurl, "..file url ..");
+    saveMessage(
+      session?.user.access || "",
+      session?.user?.id || "",
+      messageUserInfo?.id,
+      fileurl,
+      "AUDIO",
+      channel
+    );
 
-    if (microphone_permission) {
-      if (!recording_started) {
-        startRecording();
-        setRecordingStarted(true);
-      } else {
-        console.log("...recording stopped...");
-        stopRecording();
-        setRecordingStarted(false);
-        console.log(audio);
-      }
-    }
+  
   };
+
+
 
   useEffect(() => {
     if (channel) {
@@ -441,12 +457,14 @@ const UserSelected = () => {
               <SendMessageIcon cursor="pointer" onClick={handleSendMessage} />
             </Flex>
           </Flex>
-          <Image
-            alt="record audio"
-            src="/recordAudio.svg"
-            cursor="pointer"
-            onClick={handleVoiceRecording}
-          />
+          <AudioRecorder onRecordingComplete={(blob) => handleVoiceRecording(blob)}
+        recorderControls={recorderControls} />
+          {/* // <Image
+          //   alt="record audio"
+          //   src="/recordAudio.svg"
+          //   cursor="pointer"
+          //   onClick={handleVoiceRecording}
+          // /> */}
         </Flex>
       </Box>
 
