@@ -137,10 +137,10 @@ const stopRecording = () => {
         component = <Image src={src} />;
         break;
         case 'AUDIO':
-        component = <audio controls><source src={src} type="audio/ogg" /></audio>;
+        component = <audio controls><source src={src}  /></audio>;
         break;
         case 'VIDEO':
-        component = <video width="320" height="240" controls><source src={src} type="audio/ogg" /></video>;
+        component = <video width="320" height="240" controls><source src={src}  /></video>;
         break;
       default:
         component = src;
