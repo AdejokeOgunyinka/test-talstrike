@@ -146,6 +146,7 @@ const PostCard = ({
                   {postAuthor}
                 </Link>
                 <h4 className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
+                  {uppercaseFirsLetter(post?.author?.roles[0] as string)} |{" "}
                   {moment(timeCreated)?.format("dddd Do MMM")}
                 </h4>
               </div>

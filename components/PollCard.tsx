@@ -2,25 +2,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { BeatLoader, BounceLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
 import moment from "moment";
 import styled from "styled-components";
 import { useSession } from "next-auth/react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
-// import GifPicker from "gif-picker-react";
-// import EmojiPicker from "emoji-picker-react";
 
-// import GifIcon from "@/assets/gifIcon.svg";
-// import SmallImageIcon from "@/assets/smallImgIcon.svg";
-// import SmileyIcon from "@/assets/smileyIcon.svg";
-// import SendIcon from "@/assets/send.svg";
 import HeartIcon from "@/assets/heartIcon.svg";
-import { handleOnError } from "@/libs/utils";
+import { handleOnError, uppercaseFirsLetter } from "@/libs/utils";
 import { ActivePoll, InactivePoll } from "@/features/ProfileSections/Polls";
-// import { useCommentOnPoll, useGetAllCommentsOnPoll } from "@/api/profile";
-// import { useTypedSelector } from "@/hooks/hooks";
 import { axios } from "@/libs/axios";
 import notify from "@/libs/toast";
 import ShareModal from "./ShareModal";
@@ -45,27 +37,9 @@ const PollCard = ({
   showPopover: boolean;
   clickedIndex: number;
 }) => {
-  // const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
-
   const { data: session } = useSession();
 
   const TOKEN = session?.user?.access;
-  // const { userInfo } = useTypedSelector((state) => state.profile);
-
-  // const { mutate: commentOnPoll, isLoading: isCommentingOnPoll } =
-  //   useCommentOnPoll();
-
-  // const { data: commentsOnPoll } = useGetAllCommentsOnPoll({
-  //   token: TOKEN as string,
-  //   pollId: post?.id,
-  // });
-
-  // const [inputComment, setInputComment] = useState("");
-  // const [emptyComment, setEmptyComment] = useState(false);
-
-  // const [showComments, setShowComments] = useState(false);
-  // const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  // const [openGifPicker, setOpenGifPicker] = useState(false);
 
   const [isLikingOrUnlikingPoll, setIsLikingOrUnlikingPoll] = useState(false);
 
@@ -74,7 +48,6 @@ const PollCard = ({
   const [showShareModal, setShowShareModal] = useState(false);
   const router = useRouter();
 
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleClickDelete = () => {
@@ -144,7 +117,8 @@ const PollCard = ({
                 {post?.author?.firstname} {post?.author?.lastname}
               </Link>
               <p className="text-[#93A3B1] mt-[6px] font-medium text-[11px] lg:text-[15px]">
-                {moment(post?.created_at).format("dddd Do MMM")}
+                {uppercaseFirsLetter(post?.author?.roles[0] as string)} |{" "}
+                {moment(post?.created_at)?.format("dddd Do MMM")}
               </p>
             </div>
           </div>
