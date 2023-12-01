@@ -63,7 +63,7 @@ const MyArticles = () => {
   const [, setPostIndex] = useState("");
 
   return (
-    <div className="mt-[21px] w-full">
+    <div className="w-full">
       <Flex
         border="1px solid"
         borderColor="#CDCDCD"
