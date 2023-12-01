@@ -8,6 +8,7 @@ import { Flex, Text, Image } from "@chakra-ui/react";
 import { useGetMyProfile, useGetPollsByUserId } from "@/api/profile";
 import SinglePollCard from "@/components/SinglePostTypeCards/SinglePollCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
+import NoPollSvgIcon from "@/assets/svgFiles/NoPollSvg";
 
 const MyPolls = () => {
   const { data: session } = useSession();
@@ -92,7 +93,28 @@ const MyPolls = () => {
               ))
           ) : userPolls?.pages?.flat(1)?.length === 0 ||
             !userPolls?.pages?.flat(1) ? (
-            <p>No poll available at the moment...</p>
+            <div className="w-full h-[50vh] flex flex-col gap-[11px] justify-center items-center">
+              <NoPollSvgIcon />
+              <Text
+                fontSize="24px"
+                fontWeight="600"
+                lineHeight="186.5%"
+                color="#293137"
+              >
+                No Poll
+              </Text>
+              <Text
+                color="#93A3B1"
+                fontSize="18px"
+                fontWeight="400"
+                lineHeight="186.5%"
+                w="60%"
+                textAlign="center"
+              >
+                You have not published any poll yet. Polls you create and
+                publish will show up here.
+              </Text>
+            </div>
           ) : (
             userPolls?.pages
               ?.flat(1)
