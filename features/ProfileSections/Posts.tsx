@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
+import { Flex, Text, Image, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import { useGetPosts } from "@/api/profile";
 import CreatePost from "@/components/ProfileModals/CreatePost";
@@ -60,8 +62,10 @@ const MyPosts = () => {
     setInterval(incrementSeconds, 1000);
   }
 
+  const router = useRouter();
+
   return (
-    <div className="mt-[21px] w-full">
+    <div className="w-full">
       {showEditModal && (
         <EditPost id={postIndex} onClose={() => setShowEditModal(false)} />
       )}
@@ -75,19 +79,36 @@ const MyPosts = () => {
       {openCreatePostModal && (
         <CreatePost onClose={() => setOpenCreatePostModal(false)} />
       )}
-      <div className="flex justify-between items-center mb-[32px] bg-brand-500 py-[20px] px-[35px]">
-        <h3 className="text-brand-600 font-semibold text-[21.25px] leading-[32px]">
-          My Posts
-        </h3>
-        <button
-          onClick={() => setOpenCreatePostModal(!openCreatePostModal)}
-          className="bg-brand-600  w-[142px] h-[41px] rounded-[19px] font-semibold text-[12px] leading-[18px] text-brand-500"
-        >
-          Create Post
-        </button>
-      </div>
 
-      <div className="w-full">
+      <Flex
+        border="1px solid"
+        borderColor="#CDCDCD"
+        width="full"
+        justify="space-between"
+        align="center"
+        p="9px 19px"
+        marginTop="17px"
+      >
+        <Flex gap="15px" align="center">
+          <Image
+            src="/arrow-back.svg"
+            alt="arrow back"
+            onClick={() => router.back()}
+          />
+          <Text fontWeight="600" lineHeight="30.03px" fontSize="22px">
+            My Posts
+          </Text>
+        </Flex>
+        <Button
+          bg="#293137"
+          color="#fff"
+          onClick={() => setOpenCreatePostModal(!openCreatePostModal)}
+        >
+          Add New
+        </Button>
+      </Flex>
+
+      <div className="w-full pl-[31px] pr-[26px] pt-[16px]">
         <div className="flex flex-col flex-wrap md:flex-row gap-x-[23px] gap-y-[15px] w-full">
           {isLoadingUserPosts ? (
             Array(2)
