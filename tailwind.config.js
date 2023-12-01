@@ -80,6 +80,7 @@ module.exports = {
           divider: "rgba(122, 120, 120, 0.46)",
           warning: "red",
           love: "#FF0000",
+          text: "#293137",
           "comment-send": "rgba(0, 116, 217, 0.18)",
           "profile-header": "rgba(255, 255, 255, 0.80)",
         },

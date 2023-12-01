@@ -42,6 +42,7 @@ const DeletePost = ({
                   onSuccess: () => {
                     queryClient.invalidateQueries(["getMyPosts"]);
                     queryClient.invalidateQueries(["getMyPostsByType"]);
+                    queryClient.invalidateQueries(["getNewsfeed"]);
                     onClose();
                   },
                   onError: (err: any) => {

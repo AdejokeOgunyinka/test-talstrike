@@ -4,27 +4,14 @@ import NextImage from "next/image";
 import { Link } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
-// import BounceLoader from "react-spinners/BounceLoader";
 import moment from "moment";
 import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
 import { useQueryClient } from "@tanstack/react-query";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-// import EmojiPicker from "emoji-picker-react";
-// import GifPicker from "gif-picker-react";
+import { useRouter } from "next/router";
 
 import HeartIcon from "@/assets/heartIcon.svg";
-import { useRouter } from "next/router";
-// import GifIcon from "@/assets/gifIcon.svg";
-// import SmallImageIcon from "@/assets/smallImgIcon.svg";
-// import SmileyIcon from "@/assets/smileyIcon.svg";
-// import SendIcon from "@/assets/send.svg";
-
-import {
-  useLikeUnlikePost,
-  // useCommentOnPost,
-  // useGetAllCommentsOnPost,
-} from "@/api/dashboard";
-// import { useTypedSelector } from "@/hooks/hooks";
+import { useLikeUnlikePost } from "@/api/dashboard";
 import {
   handleMediaPostError,
   handleOnError,
@@ -41,7 +28,6 @@ const PostCard = ({
   timeCreated,
   postBody,
   postMedia,
-  // postLikedAvatars,
   postLikeCount,
   postCommentCount,
   postShareCount,
@@ -72,29 +58,11 @@ const PostCard = ({
   const { data: session } = useSession();
   const TOKEN = session?.user?.access;
 
-  // const { userInfo } = useTypedSelector((state) => state.profile);
-
   const { mutate: likeUnlikePost, isLoading: isLikingOrUnlikingPost } =
     useLikeUnlikePost();
-  // const { mutate: commentOnPost, isLoading: isCommenting } = useCommentOnPost();
-
-  // const [inputComment, setInputComment] = useState("");
-  // const [emptyComment, setEmptyComment] = useState(false);
-  // const [showComments, setShowComments] = useState(false);
-
-  // const { data: commentsOnPost } = useGetAllCommentsOnPost({
-  //   token: TOKEN as string,
-  //   postId: postId,
-  // });
-
-  const queryClient = useQueryClient();
-  // const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  // const [openGifPicker, setOpenGifPicker] = useState(false);
 
   const slicedBody = postBody?.slice(0, 200);
   const [showFullBody, setShowFullBody] = useState(false);
-
-  // const tenorAPIKey = "AIzaSyDD20z7z4I7LitEK4TZzYyY9nXwkKind1A";
 
   const [showPopover, setShowPopover] = useState(false);
   const router = useRouter();
@@ -153,6 +121,8 @@ const PostCard = ({
       setShowPopover(false);
     });
   }, []);
+
+  const queryClient = useQueryClient();
 
   return (
     <>
@@ -264,7 +234,6 @@ const PostCard = ({
                     queryClient.invalidateQueries(["getNewsfeed"]);
                     queryClient.invalidateQueries(["getPolls"]);
                     queryClient.invalidateQueries(["getAllCommentsOnPost"]);
-                    queryClient.invalidateQueries(["getNewsfeed"]);
                     queryClient.invalidateQueries(["getMyPosts"]);
                   },
                 }
@@ -362,144 +331,6 @@ const PostCard = ({
             </p>
           </div>
         </div>
-        {/* {showComments && commentsOnPost?.results?.length > 0 && (
-          <div className="w-full h-[125px] overflow-x-scroll bg-brand-1000 flex flex-col gap-y-[10px] pt-[10px] px-[12px] py-[12px]">
-            {commentsOnPost?.results?.map((comment: any, index: number) => (
-              <div className="flex items-center" key={index}>
-                <img
-                  src={
-                    comment?.author?.image !== null
-                      ? comment?.author?.image
-                      : "/profileIcon.svg"
-                  }
-                  alt="author"
-                  className="object-cover w-[40px] h-[40px] rounded-[50%] border-[2.5px] border-brand-500"
-                  onError={handleOnError}
-                />
-                <div className="pl-[15px]">
-                  <p className="text-[11px]">
-                    {comment?.author?.firstname} {comment?.author?.lastname}
-                  </p>
-                  <p className="text-[14px]">{comment?.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px] flex w-full items-center">
-          <div className="mr-[9px]">
-            <img
-              src={
-                userInfo?.profile?.user?.image !== null
-                  ? userInfo?.profile?.user?.image
-                  : "/profileIcon.svg"
-              }
-              alt="session image"
-              className="object-cover w-[40px] h-[40px] rounded-[50%]"
-              onError={handleOnError}
-            />
-          </div>
-
-          <div className="w-[calc(100%-90px)] relative h-[30px] bg-brand-1600 rounded-[6px] flex">
-            <div className="w-[80%]">
-              <input
-                className="focus:outline-0 w-full rounded-[6px] h-[30px] bg-inherit ml-[10px] focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 text-[16px] placeholder:text-[11px] md:placeholder:text-[13px] placeholder:font-light placeholder:text-brand-200 placeholder: leading-[16px]"
-                placeholder="Write a comment.."
-                onChange={(e) => setInputComment(e?.target?.value)}
-                value={inputComment}
-              />
-              {emptyComment && (
-                <p className="text-[11px] text-red">
-                  Please write a comment before you hit send
-                </p>
-              )}
-            </div>
-
-            <div className="absolute flex right-[0px] h-[100%] mr-[10px] gap-x-[4px]">
-              <div className="flex justify-center align-center">
-                <NextImage
-                  src={GifIcon}
-                  alt="gif"
-                  className="cursor-pointer"
-                  onClick={() => setOpenGifPicker(true)}
-                />
-                {openGifPicker && (
-                  <div className="absolute z-[999] top-[25px]">
-                    <GifPicker
-                      tenorApiKey={tenorAPIKey}
-                      onGifClick={(e) => {
-                        setInputComment(inputComment + e?.shortTenorUrl);
-                        setOpenGifPicker(false);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-              <NextImage
-                src={SmallImageIcon}
-                alt="img small"
-                className="cursor-pointer"
-              />
-              <div className="flex justify-center align-center">
-                <NextImage
-                  src={SmileyIcon}
-                  alt="smiley"
-                  className="cursor-pointer"
-                  onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
-                />
-                {openEmojiPicker && (
-                  <div className="absolute z-[999] top-[25px]">
-                    <EmojiPicker
-                      onEmojiClick={(e) => {
-                        setInputComment(inputComment + e?.emoji);
-                        setOpenEmojiPicker(false);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div
-            onClick={() => {
-              setEmptyComment(false);
-              if (!inputComment) {
-                setEmptyComment(true);
-              } else {
-                inputComment &&
-                  commentOnPost(
-                    {
-                      postId: postId,
-                      body: inputComment,
-                      token: TOKEN as string,
-                    },
-                    {
-                      onSuccess: () => {
-                        setInputComment("");
-                        queryClient.invalidateQueries(["getNewsfeed"]);
-                        queryClient.invalidateQueries(["getPolls"]);
-                        queryClient.invalidateQueries(["getAllCommentsOnPost"]);
-                        queryClient.invalidateQueries(["getMyPosts"]);
-                      },
-                    }
-                  );
-              }
-            }}
-            className="w-[30px] h-[30px] bg-brand-comment-send flex justify-center items-center cursor-pointer rounded-[6px] ml-[11px]"
-          >
-            {isCommenting ? (
-              <BounceLoader
-                color={"white"}
-                size={10}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            ) : (
-              <NextImage src={SendIcon} alt="send" />
-            )}
-          </div>
-        </div> */}
       </div>
 
       {showShareModal && (
