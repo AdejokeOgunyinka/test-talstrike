@@ -5,12 +5,13 @@ import { Link } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import BeatLoader from "react-spinners/BeatLoader";
 import moment from "moment";
-import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/solid";
 import { useQueryClient } from "@tanstack/react-query";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { useRouter } from "next/router";
 
 import HeartIcon from "@/assets/heartIcon.svg";
+import HeartIconFilled from "@/assets/heartIconDashboard.svg";
+import CommentIcon from "@/assets/chatbox2.svg";
 import { useLikeUnlikePost } from "@/api/dashboard";
 import {
   handleMediaPostError,
@@ -126,7 +127,7 @@ const PostCard = ({
 
   return (
     <>
-      <div className="relative  w-[100%] divide-y divide-brand-1150 mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD]">
+      <div className="relative  w-[100%] mb-[9px] rounded-[8px] bg-brand-500 border-[1.059px] border-[#CDCDCD]">
         <div className="py-[12px] md:py-[21px] px-[14px] md:px-[23px]">
           <div className="flex justify-between mb-[25px]">
             <div className="flex gap-x-[7px] items-center">
@@ -224,7 +225,7 @@ const PostCard = ({
             </div>
           )}
         </div>
-        <div className="flex w-full justify-between py-[12px] md:py-[21px] px-[14px] md:px-[23px]">
+        <div className="flex w-full justify-center gap-[30px] lg:gap-[80px] py-[13px]">
           <div
             className="flex flex-col cursor-pointer items-center"
             onClick={() => {
@@ -253,18 +254,18 @@ const PostCard = ({
                 <div className="mb-[5px] flex">
                   <div>
                     {liked?.status === true ? (
-                      <HeartIcon2 className="h-[20px] w-[20px] text-brand-love" />
+                      <NextImage src={HeartIconFilled} alt="heart-filled" />
                     ) : (
                       <NextImage src={HeartIcon} alt="heart" />
                     )}
                   </div>
                   <p
                     className={
-                      "font-medium text-[13px] ml-[3px] " +
+                      "font-medium text-[20px] ml-[3px] " +
                       `${
                         liked?.status === true
                           ? "text-brand-love"
-                          : "text-brand-2550"
+                          : "text-[#93A3B1]"
                       }`
                     }
                   >
@@ -274,11 +275,11 @@ const PostCard = ({
 
                 <p
                   className={
-                    "text-[9px] font-medium leading-[14px] " +
+                    "text-[16px] font-medium leading-[14px] " +
                     `${
                       liked?.status === true
                         ? "text-brand-love"
-                        : "text-brand-2550"
+                        : "text-[#93A3B1]"
                     }`
                   }
                 >
@@ -298,16 +299,16 @@ const PostCard = ({
           >
             <div className="flex gap-x-[3px] mb-[5px]">
               <NextImage
-                src="/chatbox2.svg"
-                width="15"
-                height="15"
+                src={"/chatbox2.svg"}
+                width="26"
+                height="23"
                 alt="chatbox"
               />
-              <p className="text-brand-2250 font-medium text-[13px]">
+              <p className="text-[#93A3B1] font-medium text-[20px]">
                 {postCommentCount}
               </p>
             </div>
-            <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
+            <p className="text-[#93A3B1] text-[16px] font-medium leading-[14px]">
               Comments
             </p>
           </div>
@@ -319,15 +320,12 @@ const PostCard = ({
               <NextImage
                 className="cursor-pointer"
                 src="/arrow2.svg"
-                width="15"
-                height="15"
+                width="26"
+                height="23"
                 alt="arrow"
               />
-              <p className="text-brand-2250 font-medium text-[13px]">
-                {postShareCount}
-              </p>
             </div>
-            <p className="text-brand-2550 text-[9px] font-medium leading-[14px]">
+            <p className="text-[#93A3B1] text-[16px] font-medium leading-[14px]">
               Shares
             </p>
           </div>
