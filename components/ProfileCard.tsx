@@ -138,7 +138,8 @@ const ProfileCard = ({
             {experience} year{parseInt(experience) === 1 ? "" : "s"} experience
           </p>
           <p className="mt-[1px] font-medium text-[10px] md:text-[12px] text-['rgba(122, 120, 120, 0.46)'] leading-[15px]">
-            {appearances?.length} game appearance(s)
+            {appearances?.length} game appearance
+            {appearances?.length > 0 ? "s" : ""}
           </p>
         </div>
       </div>
