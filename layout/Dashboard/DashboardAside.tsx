@@ -150,7 +150,7 @@ const DashboardAside = () => {
                 {follower?.users?.last_login === "online" ? (
                   <div className="w-[8px] h-[8px] rounded-[50%] bg-brand-1100"></div>
                 ) : (
-                  <p className="font-medium text-brand-1050 text-[10px]">
+                  <p className="font-medium text-[#93A3B1] text-[10px]">
                     {follower.users?.last_login !== null
                       ? moment(follower.users?.last_login).fromNow()
                       : ""}
