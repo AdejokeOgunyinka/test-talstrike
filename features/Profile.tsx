@@ -120,12 +120,12 @@ const Index = () => {
           <PageLoader />
         </div>
       ) : (
-        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh] 2xl:min-h-[calc(85vh-60px)]">
+        <div className="w-full md:rounded-tl-[15px] md:rounded-tr-[15px] min-h-[100vh]">
           <div className="flex h-[100%] flex-col lg:flex-row">
             <div className="px-[0px] lg:px-[11px] min-h-[100vh]">
               <Box
                 bg="transparent-white"
-                className="lg:w-[274px] h-[100%] lg:fixed lg:overflow-y-scroll lg:top-[73px] 2xl:top-[100px] md:mr-[5px]"
+                className="lg:w-[274px] h-[100%] lg:fixed lg:overflow-y-scroll lg:top-[73px] md:mr-[5px]"
               >
                 <div className="h-[503px] w-[100%] border border-1 border-[#CDCDCD] lg:w-[274px]  md:rounded-[12px] flex flex-col items-center pt-[22px] ">
                   <Text
@@ -309,7 +309,7 @@ const Index = () => {
                 borderColor="stroke"
                 overflowX={isMobileView1 ? "scroll" : "unset"}
                 paddingX={isMobileView ? "20px" : "30px"}
-                className="flex z-[99] gap-y-[10px] w-full lg:w-[calc(100%-463px)] 2xl:max-w-[calc(70vw-523px)] lg:-mt-[40px] 2xl:mt-[4rem] backdrop-blur-[15px] md:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:pl-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
+                className="flex z-[99] gap-y-[10px] w-full lg:w-[calc(100%-463px)] lg:-mt-[40px] backdrop-blur-[15px] md:pt-[29px] lg:fixed lg: top-[99px] gap-x-[20px] lg:gap-x-[54px] lg:pl-[26px] mr-[31px] bg-brand-profile-header border-t-0 border-[3px] border-x-0 lg:border-b-brand-300"
               >
                 {profileSections?.map((section, index) => (
                   <Box

@@ -3,7 +3,7 @@ import SignupIndicators from "@/features/Auth/Signup/SignupIndicators";
 const AuthSetupLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
-      className={`relative w-full min-h-screen 2xl:w-[70vw] h-full 2xl:h-[85vh] bg-brand-500  2xl: mx-auto 2xl: my-auto 2xl:rounded-[29px] 2xl:overflow-hidden bg-plain bg-no-repeat bg-cover bg-center bg-fixed flex justify-center`}
+      className={`relative w-full min-h-screen h-full bg-brand-500  bg-plain bg-no-repeat bg-cover bg-center bg-fixed flex justify-center`}
     >
       <div className="w-[75%] h-full flex flex-col items-center">
         <div className="mt-[62px] md:mx-[100px]">
