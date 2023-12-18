@@ -88,6 +88,7 @@ const Dashboard = () => {
   } = useGetNewsfeed({
     token: TOKEN as string,
   });
+
   const {
     data: PollsData,
     isLoading: isLoadingPolls,
@@ -164,7 +165,7 @@ const Dashboard = () => {
 
   const [showPopover, setShowPopover] = useState(false);
   const [clickedIndex, setClickedIndex] = useState(0);
-  const [, setPollIndex] = useState("");
+  const [_, setPollIndex] = useState("");
 
   useEffect(() => {
     if (inView && hasNextNewsFeedPage) {
@@ -187,9 +188,11 @@ const Dashboard = () => {
 
   return (
     <div className="w-full h-[100%] gap-x-[7px] px-[15px] md:px-[7px] bg-brand-1000 md:rounded-tl-[15px] md:rounded-tr-[15px]">
-      {showCreatePostModal && (
-        <CreatePost onClose={() => setShowCreatePostModal(false)} />
-      )}
+      <CreatePost
+        onClose={() => setShowCreatePostModal(false)}
+        isOpen={showCreatePostModal}
+      />
+
       {showCreateAnnouncementModal && (
         <CreateAnnouncements
           onClose={() => setShowCreateAnnouncementModal(false)}

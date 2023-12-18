@@ -79,7 +79,7 @@ export const TextBox = ({
         placeholder={placeholder}
         className={`w-[100%] mt-[11px] h-[121px] rounded-[4px] ${
           withoutBorder ? "border-none" : "border-2 border-brand-2850"
-        } p-[25px] placeholder:text-brand-200 placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 ${className}`}
+        } p-[25px] placeholder:text-[#93A3B1] placeholder:text-[18px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 ${className}`}
         id={id}
         onChange={onChange}
         onBlur={onBlur}
