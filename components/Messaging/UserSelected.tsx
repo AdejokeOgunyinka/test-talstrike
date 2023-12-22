@@ -157,7 +157,7 @@ const UserSelected = () => {
   };
 
   const displayMime = (file_type: string, src: string) => {
-    var component = null;
+    let component;
     switch (file_type) {
       case "IMAGE":
         component = <Image src={src} />;

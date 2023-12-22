@@ -15,11 +15,11 @@ import { setSearchQuery } from "@/store/slices/dashboardSlice";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
 
-export type LayoutProps = {
+type LayoutProps = {
   children?: React.ReactNode;
 };
 
-export const DashboardLayout = ({ children }: LayoutProps) => {
+export const DashboardVideoLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const [showSignOutButton, setShowSignOutButton] = useState(false);
 
@@ -123,13 +123,6 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             </div>
           </div>
           <div className="w-[100%] 2xl:h-[calc(85vh-60px)] mt-[60px] 2xl:mt-[20px] flex relative md:static scrollbar-hidden">
-            <Box
-              className="w-[175px] 2xl:rounded-bl-[29px] h-[100%] 2xl:h-[calc(85vh-60px)] fixed hidden md:inline-block"
-              borderRight="1px solid #93A3B1"
-              bg="bg-grey"
-            >
-              <DashboardSidebar />
-            </Box>
             <div
               className={`ml-[unset] md:ml-[175px] min-h-[calc(100vh-60px)] max-h-[calc(100vh-60px)] 2xl:min-h-[calc(85vh-60px)] 2xl:max-h-[calc(85vh-60px)] flex ${
                 router.pathname?.startsWith("/profile")
@@ -141,56 +134,15 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
             >
               {children}
             </div>
-            {!router.pathname?.startsWith("/profile") &&
-              !router.pathname?.startsWith("/messaging") && !router.pathname?.startsWith("/livestream") && (
+           
                 <aside className="fixed 2xl:relative right-0 top-0 bottom-0 md:w-[281px] 2xl:-mt-[60px] min-h-[calc(100vh)] max-h-[calc(100vh)] 2xl:min-h-[calc(85vh-60px)] 2xl:max-h-[calc(85vh-60px)] scrollbar-hidden hidden md:inline-block lg:border lg:border-l-[#CDCDCD] lg:bg-brand-500 px-[20px]">
                   <DashboardAside />
                 </aside>
-              )}
+            
           </div>
         </div>
-        <Box
-          borderTop="1px solid"
-          borderColor="stroke"
-          h="64px"
-          w="full"
-          bg="primary-white-3"
-          className="inline-block md:hidden fixed bottom-0 left-0 right-0 w-full z-[9999] overflow-y-scroll"
-        >
-          <MobileMenu show={showMore} setShow={setShowMore} />
-        </Box>
-
-        {showMore && (
-          <div className="w-full flex justify-center fixed bottom-0 left-0 right-0">
-            <div className="absolute w-[327px] rounded-[15px] shadow shadow-[2px_19px_27px_-1px_rgba(0, 0, 0, 0.1)] h-[81px] items-center bg-brand-500 -top-[170px] flex">
-              <MobileSideBarLink
-                path="/trainers"
-                active={isActivePath("/trainers", router.pathname)}
-                Icon={"/trainersInactiveIcon.svg"}
-                title="Trainers"
-              />
-
-              <MobileSideBarLink
-                path="/agents"
-                active={isActivePath("/agents", router.pathname)}
-                Icon={"/agentsInactiveIcon.svg"}
-                title="Agents"
-              />
-              <MobileSideBarLink
-                path="/profile"
-                active={isActivePath("/profile", router.pathname)}
-                Icon={"/profileInactiveIcon.svg"}
-                title="Profile"
-              />
-              <MobileSideBarLink
-                path="/explore"
-                active={isActivePath("/explore", router.pathname)}
-                Icon={"/exploreInactiveIcon.svg"}
-                title="Explore"
-              />
-            </div>
-          </div>
-        )}
+      
+      
       </div>
     </div>
   );

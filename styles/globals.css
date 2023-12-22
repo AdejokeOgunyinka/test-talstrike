@@ -280,3 +280,36 @@ span:has(.ad-img), span:has(.post-img), .span:has(.profile-img) {
 .PhoneInputCountryIcon {
   margin-left: 10px
 }
+
+.vidContainer {
+  align-items: center;
+  min-height: 100vh;
+  margin: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.vidButton {
+  margin-top: 10px;
+  padding: 10px 40px;
+  border: none;
+  background-color: rgb(6, 191, 233);
+  color: #fff;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.vidImg {
+  width: 400px;
+  object-fit: cover;
+  height: 400px;
+}
+
+/* .App {
+  display: flex;
+  align-items: center;
+  width: 150vw;
+  justify-content: center;
+  background-color: #262b36;
+} */

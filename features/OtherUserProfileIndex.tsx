@@ -256,6 +256,8 @@ const Index = () => {
                       borderRadius="23.232px"
                       w="126.852px"
                       h="42.593px"
+                      cursor="pointer"
+                      onClick={startMessaging}
                     >
                       <Image src="/send.svg" />
                       <Text fontSize="16px" fontWeight="600">
