@@ -5,7 +5,7 @@ import { DashboardLayout, LayoutProps } from "../Dashboard";
 const MessagingLayout = ({ children }: LayoutProps) => {
   return (
     <DashboardLayout>
-      <Flex w="100%" className="h-[calc(100vh-60px)] 2xl:h-[calc(85vh-60px)]">
+      <Flex w="100%" className="h-[calc(100vh-60px)]">
         <Box
           borderRight="1px solid"
           borderColor="stroke"

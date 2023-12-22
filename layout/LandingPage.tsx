@@ -68,14 +68,7 @@ const LandingPageLayout = () => {
       justify="center"
       bg="linear-gradient(180deg, rgba(0, 0, 0, 0.00) 13.86%, rgba(0, 0, 0, 0.90) 79.09%), url(<path-to-image>), lightgray 50% / cover no-repeat"
     >
-      <Box
-        w={{ base: "full", "2xl": "85vw" }}
-        minH={{ base: "full", "2xl": "85vh" }}
-        mx={{ "2xl": "auto" }}
-        my={{ "2xl": "auto" }}
-        borderRadius={{ "2xl": "29px" }}
-        overflow="hidden"
-      >
+      <Box w="full" minH="full" overflow="hidden">
         <Flex
           justify="center"
           zIndex="999"
