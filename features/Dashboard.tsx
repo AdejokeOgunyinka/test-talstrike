@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import NextImage from "next/image";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -45,6 +46,8 @@ import CreatePoll from "@/components/ProfileModals/CreatePoll";
 import PollCard from "@/components/PollCard";
 import LoadingPosts from "@/components/LoadingStates/loadingPost";
 import GeneralAppSearch from "./GeneralAppSearch";
+import CameraImageComponent from "@/components/CameraImageComponent";
+import CameraVideoComponent from "@/components/CameraVideoComponent";
 
 export const postWidgets = [
   { icon: VideoCameraIcon, name: "live", text: "Go live" },
@@ -75,6 +78,14 @@ const Dashboard = () => {
     token: TOKEN as string,
     userId: USER_ID as string,
   });
+
+  const router = useRouter()
+
+
+  const startVideo = ()=>{
+   router.push("/livestream")
+  }
+
 
   useEffect(() => {
     dispatch(setProfile(userData));
@@ -153,7 +164,7 @@ const Dashboard = () => {
   const [showCreateArticleModal, setShowCreateArticleModal] = useState(false);
   const [showCreateOpeningModal, setShowCreateOpeningModal] = useState(false);
   const [showCreatePollModal, setShowCreatePollModal] = useState(false);
-
+  const [showImageCaptureModal, setShowImageCaptureModal] = useState(false);
   const [openMoreDropdown, setOpenMoreDropdown] = useState(false);
 
   useEffect(() => {
@@ -206,6 +217,12 @@ const Dashboard = () => {
         <CreatePoll onClose={() => setShowCreatePollModal(false)} />
       )}
 
+      {showImageCaptureModal && (
+        <CameraImageComponent  />
+      )}
+
+
+
       <div className="w-full">
         {isSearching ? (
           Array(6)
@@ -255,8 +272,7 @@ const Dashboard = () => {
                             onClick={() => {
                               if (
                                 widget.name === "image" ||
-                                widget.name === "video" ||
-                                widget.name === "picture"
+                                widget.name === "video" 
                               ) {
                                 setShowCreatePostModal(true);
                               } else if (widget.name === "poll") {
@@ -265,6 +281,10 @@ const Dashboard = () => {
                                 setShowCreateArticleModal(true);
                               } else if (widget.name === "opening") {
                                 setShowCreateOpeningModal(true);
+                              }else if (widget.name === "picture") {
+                                setShowImageCaptureModal(true)
+                              }else if (widget.name === "live") {
+                                startVideo();
                               }
                             }}
                           >
