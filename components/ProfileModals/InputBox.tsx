@@ -28,15 +28,11 @@ const InputBox = ({
 }) => {
   return (
     <div className="w-[100%]">
-      {title && (
-        <label className="text-brand-3000 font-medium text-[18px] leading-[162%]">
-          {title}
-        </label>
-      )}
+      {title && <label className="text-brand-text text-[20px]">{title}</label>}
       <input
         placeholder={placeholder}
         type={type}
-        className={`${className} w-[100%] mt-[11px] h-[46px] rounded-[4px] border-2 border-brand-2850 pl-[10px] placeholder:text-brand-200 placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0`}
+        className={`${className} w-[100%] mt-[11px] h-[52px] rounded-[4px] border bg-none border-brand-text pl-[10px] placeholder:text-brand-200 placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0`}
         id={id}
         onChange={onChange}
         onBlur={onBlur}
@@ -70,16 +66,12 @@ export const TextBox = ({
 }) => {
   return (
     <div className="w-[100%]">
-      {title && (
-        <label className="text-brand-3000 font-medium text-[18px] leading-[162%]">
-          {title}
-        </label>
-      )}
+      {title && <label className="text-brand-text text-[20px]">{title}</label>}
       <textarea
         placeholder={placeholder}
         className={`w-[100%] mt-[11px] h-[121px] rounded-[4px] ${
-          withoutBorder ? "border-none" : "border-2 border-brand-2850"
-        } p-[25px] placeholder:text-[#93A3B1] placeholder:text-[18px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 ${className}`}
+          withoutBorder ? "border-none" : "border border-brand-text"
+        } px-[32px] py-[19px] placeholder:text-brand-200 text-[18px] placeholder:text-[16px] focus:outline-0 focus:ring-offset-0 focus:ring-shadow-0 focus:outline-offset-0 ${className}`}
         id={id}
         onChange={onChange}
         onBlur={onBlur}

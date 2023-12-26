@@ -50,28 +50,27 @@ export const months = [
   "December",
 ];
 
-
 export const mimes = {
   "image/apng": "IMAGE",
-  "image/avif" :"IMAGE",
+  "image/avif": "IMAGE",
   "image/gif": "IMAGE",
-"image/jpeg": "IMAGE",
-"image/png": "IMAGE",
-"image/svg+xml": "IMAGE",
-"image/webp": "IMAGE",
-"audio/wave": "AUDIO",
-"audio/wav": "AUDIO",
-"audio/mp4": "AUDIO", 
-"audio/mp3": "AUDIO",
-"audio/aac": "AUDIO",
-"audio/ogg": "AUDIO",
-"audio/mpeg": "AUDIO",
-"video/mp4" : "VIDEO",
-"video/ogg": "VIDEO",
-"video/webm": "VIDEO",
-"video/x-m4v": "VIDEO",
-"video/quicktime": "VIDEO"
-}
+  "image/jpeg": "IMAGE",
+  "image/png": "IMAGE",
+  "image/svg+xml": "IMAGE",
+  "image/webp": "IMAGE",
+  "audio/wave": "AUDIO",
+  "audio/wav": "AUDIO",
+  "audio/mp4": "AUDIO",
+  "audio/mp3": "AUDIO",
+  "audio/aac": "AUDIO",
+  "audio/ogg": "AUDIO",
+  "audio/mpeg": "AUDIO",
+  "video/mp4": "VIDEO",
+  "video/ogg": "VIDEO",
+  "video/webm": "VIDEO",
+  "video/x-m4v": "VIDEO",
+  "video/quicktime": "VIDEO",
+};
 
 export const userTypeIcon: Record<string, any> = {
   talent: { img: "/playerProfileIcon.svg", name: "Player" },
@@ -80,7 +79,6 @@ export const userTypeIcon: Record<string, any> = {
   fan: { img: "/fanProfileIcon.svg", name: "Fan" },
   trainer: { img: "/trainerProfileIcon.svg", name: "Trainer" },
 };
-
 
 export const getFileExtension = function ({ url }: { url: string }) {
   if (url === null) {
@@ -211,19 +209,18 @@ export const handleMediaPostError = (e: any) => {
   e.target.src = "/no-image-icon.jpeg";
 };
 
-export const exportToCloudinary = async(file: string)=>{
-
+export const exportToCloudinary = async (file: string) => {
   const url = `https://api.cloudinary.com/v1_1/dblqvlycm/upload`;
   const fd = new FormData();
-  const unsignedUploadPreset = 'talstrike_chat_preset';
+  const unsignedUploadPreset = "talstrike_chat_preset";
 
-  fd.append('upload_preset', unsignedUploadPreset);
-  fd.append('tags', 'browser_upload'); // Optional - add tags for image admin in Cloudinary
-  fd.append('file', file);
-  let returned_image = ""
+  fd.append("upload_preset", unsignedUploadPreset);
+  fd.append("tags", "browser_upload"); // Optional - add tags for image admin in Cloudinary
+  fd.append("file", file);
+  let returned_image = "";
 
   returned_image = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     body: fd,
   })
     .then((response) => response.json())
@@ -231,17 +228,44 @@ export const exportToCloudinary = async(file: string)=>{
       // File uploaded successfully
       const url = data.secure_url;
       // Create a thumbnail of the uploaded image, with 150px width
-      const tokens = url.split('/');
-      tokens.splice(-3, 0, 'w_150,c_scale');
+      const tokens = url.split("/");
+      tokens.splice(-3, 0, "w_150,c_scale");
       const img = new Image();
-      img.src = tokens.join('/');
+      img.src = tokens.join("/");
       img.alt = data.public_id;
       return data.secure_url;
     })
     .catch((error) => {
-      console.error('Error uploading the file:', error);
+      console.error("Error uploading the file:", error);
     });
   console.log(returned_image);
-  return returned_image
-}
+  return returned_image;
+};
 
+export const generateRandomValue = (length: number) => {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+};
+
+export const monthOfBirth: Record<string, string> = {
+  "01": "Jan",
+  "02": "Feb",
+  "03": "Mar",
+  "04": "Apr",
+  "05": "May",
+  "06": "Jun",
+  "07": "Jul",
+  "08": "Aug",
+  "09": "Sep",
+  "10": "Oct",
+  "11": "Nov",
+  "12": "Dec",
+};

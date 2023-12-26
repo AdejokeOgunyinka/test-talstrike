@@ -46,7 +46,8 @@ const config = {
   TALSTRIKE_CONFIG: talstrikeConfig(process.env.NODE_ENV),
   SECRET: talstrikeConfig("SECRET"),
   NEXTAUTH_SECRET: talstrikeConfig("NEXTAUTH_SECRET"),
-  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_LIVESTREAM_UPLOAD_PRESET: process.env.CLOUDINARY_LIVESTREAM_UPLOAD_PRESET,
 };
 
 export default config;

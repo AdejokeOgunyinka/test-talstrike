@@ -28,6 +28,12 @@ import {
 } from "@/libs/utils";
 import { useFollowUser } from "@/api/players";
 import notify from "@/libs/toast";
+import {
+  setMessagingUserId,
+  setMessagingUserInfo,
+} from "@/store/slices/messagingSlice";
+import { useTypedDispatch } from "@/hooks/hooks";
+
 
 const PageLoader = dynamic(() => import("@/components/Loader"));
 const MyPosts = dynamic(() => import("./UserProfileSections/Posts"));
@@ -37,6 +43,7 @@ const MyAnnouncements = dynamic(
 );
 const MyArticles = dynamic(() => import("./UserProfileSections/Articles"));
 const MyPolls = dynamic(() => import("./UserProfileSections/Polls"));
+
 
 const Index = () => {
   const { data: session } = useSession();
@@ -93,6 +100,21 @@ const Index = () => {
   ];
 
   const [currentSection, setCurrentSection] = useState(1);
+  const dispatch = useTypedDispatch();
+
+
+  const startMessaging = () => {
+    dispatch(setMessagingUserId(id));
+    dispatch(
+      setMessagingUserInfo({
+        id: userProfile?.user?.id,
+        name: `${userProfile?.user?.firstname} ${userProfile?.user?.lastname}`,
+        img: userProfile?.user?.image,
+      })
+    );
+
+    router.push("/messaging");
+  };
 
   const [isMobileView] = useMediaQuery("(max-width: 1200px)");
   const [isMobileView1] = useMediaQuery("(max-width: 769px)");
@@ -234,6 +256,8 @@ const Index = () => {
                       borderRadius="23.232px"
                       w="126.852px"
                       h="42.593px"
+                      cursor="pointer"
+                      onClick={startMessaging}
                     >
                       <Image src="/send.svg" />
                       <Text fontSize="16px" fontWeight="600">
