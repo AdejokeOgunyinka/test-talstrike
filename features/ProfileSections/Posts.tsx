@@ -77,9 +77,11 @@ const MyPosts = () => {
           onClose={() => setShowDeleteModal(false)}
         />
       )}
-      {openCreatePostModal && (
-        <CreatePost onClose={() => setOpenCreatePostModal(false)} />
-      )}
+
+      <CreatePost
+        onClose={() => setOpenCreatePostModal(false)}
+        isOpen={openCreatePostModal}
+      />
 
       <Flex
         border="1px solid"

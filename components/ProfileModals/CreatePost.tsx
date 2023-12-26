@@ -173,7 +173,6 @@ const CreatePost = ({
   const [deleteElement, setDeleteElement] = useState(false);
   const [isLessThan769] = useMediaQuery("(max-width: 768px)");
 
-  console.log({ currImgIndex });
   useEffect(() => {
     if (deleteElement) {
       setSelectedMedia(
@@ -273,6 +272,7 @@ const CreatePost = ({
                           display={
                             currImgIndex === index ? "inline-flex" : "none"
                           }
+                          key={index}
                         >
                           <Box pos="absolute" top="10px" right="12px">
                             <DeleteMediaIcon />
@@ -510,6 +510,7 @@ const CreatePost = ({
                             currImgIndex === index ? "inline-flex" : "none"
                           }
                           pos="relative"
+                          key={index}
                         >
                           <Box
                             pos="absolute"
