@@ -282,6 +282,7 @@ const CreatePost = ({
                             h="full"
                             src={mediaUrl}
                             objectFit="cover"
+                            alt="media"
                           />
                         </Flex>
                       ))}
@@ -525,6 +526,7 @@ const CreatePost = ({
                             h="full"
                             src={mediaUrl}
                             objectFit="cover"
+                            alt="new media"
                           />
                         </Flex>
                       ))}

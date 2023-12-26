@@ -1,4 +1,4 @@
-import Index from "@/features/LiveStreamView";
+import Index from "@/features/LiveStream";
 import { getSession } from "next-auth/react";
 
 const LiveStreamView = () => {
