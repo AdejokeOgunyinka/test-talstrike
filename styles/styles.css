@@ -212,3 +212,8 @@ body, #__next  {
   border-bottom-color: transparent;
   padding-left: 22px !important;
 }
+
+.special-creatable .css-13cymwt-control{
+  border: 1px solid #293137 !important;
+  height: 52px;
+}
