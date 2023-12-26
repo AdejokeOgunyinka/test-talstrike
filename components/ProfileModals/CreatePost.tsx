@@ -1,4 +1,27 @@
 import { useEffect, useState } from "react";
+import {
+  Button,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Image,
+  Box,
+  Input,
+  useMediaQuery,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerCloseButton,
+  DrawerBody,
+  DrawerFooter,
+} from "@chakra-ui/react";
 import NextImage from "next/image";
 import CreatableSelect from "react-select/creatable";
 import { useSession } from "next-auth/react";
@@ -21,24 +44,37 @@ import {
   useGetAllHashtags,
 } from "@/api/dashboard";
 import { handleOnError } from "@/libs/utils";
-
-const Image = styled.img``;
+import CreatePostImgIcon from "@/assets/svgFiles/CreatePostImg.svg.next";
+import CreatePostVidIcon from "@/assets/svgFiles/CreatePostVid.svg.next";
+import CreatePostCamIcon from "@/assets/svgFiles/CreatePostCam.svg.next";
+import AddMediaIcon from "@/assets/svgFiles/AddMedia.svg.next";
+import {
+  ArrowSmallLeftIcon,
+  ArrowSmallRightIcon,
+} from "@heroicons/react/24/solid";
+import ArrowBackMobileIcon from "@/assets/svgFiles/ArrowBackMobile.svg.next";
+import MobileDrawerHeaderIcon from "@/assets/svgFiles/MobileDrawerHeader.svg.next";
+import DeleteMediaIcon from "@/assets/svgFiles/DeleteMedia.svg.next";
 
 export interface Option {
   readonly label: string;
   readonly value: string;
 }
 
-const CreatePost = ({ onClose }: { onClose: () => void }) => {
+const CreatePost = ({
+  onClose,
+  isOpen,
+}: {
+  onClose: () => void;
+  isOpen: boolean;
+}) => {
   const { data: session } = useSession();
   const { userInfo } = useTypedSelector((state) => state.profile);
 
   const TOKEN = session?.user?.access;
 
-  const [selectedMedia, setSelectedMedia] = useState<any>(null);
-  const [selectedMediaUrl, setSelectedMediaUrl] = useState("");
-  const [openChooseMedia, setOpenChooseMedia] = useState(false);
-  const [fileType, setFileType] = useState("NIL");
+  const [selectedMedia, setSelectedMedia] = useState<File[]>([]);
+  const [selectedMediaUrls, setSelectedMediaUrls] = useState<string[]>([]);
 
   const createPostValidationSchema = yup.object().shape({
     description: yup.string().required("Description is required"),
@@ -78,23 +114,21 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
       hashtags: [],
     },
     validationSchema: createPostValidationSchema,
-    onSubmit: (values) => {
-      const initialBody: Record<string, string> = {
+    onSubmit: (values, { resetForm }) => {
+      const initialBody: Record<string, any> = {
         body: values?.description,
-        post_type:
-          fileType === "IMAGE"
-            ? "PHOTO"
-            : fileType === "VIDEO"
-            ? "VIDEO"
-            : "ARTICLE",
-        ...(selectedMedia && { media: selectedMedia }),
-        file_type: fileType,
       };
 
       const body = new FormData();
 
       for (let key in initialBody) {
         body.append(key, initialBody[key]);
+      }
+
+      if (selectedMedia.length > 0) {
+        for (let i = 0; i < selectedMedia.length; i++) {
+          body.append(`media[${i}]`, selectedMedia[i]);
+        }
       }
 
       body.append("hashtags", JSON.stringify(values.hashtags));
@@ -110,6 +144,9 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
             queryClient.invalidateQueries(["getMyPostsByType"]);
             queryClient.invalidateQueries(["getNewsfeed"]);
             queryClient.invalidateQueries(["getMyPosts"]);
+            resetForm({});
+            setSelectedMedia([]);
+            setSelectedMediaUrls([]);
             onClose();
           },
           onError: (err: any) =>
@@ -132,85 +169,217 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
     // eslint-disable-next-line
   }, [value]);
 
+  const [currImgIndex, setCurrImgIndex] = useState(0);
+  const [deleteElement, setDeleteElement] = useState(false);
+  const [isLessThan769] = useMediaQuery("(max-width: 768px)");
+
+  useEffect(() => {
+    if (deleteElement) {
+      setSelectedMedia(
+        selectedMedia?.filter((media) => media !== selectedMedia[currImgIndex])
+      );
+      setSelectedMediaUrls(
+        selectedMediaUrls?.filter(
+          (url) => url !== selectedMediaUrls[currImgIndex]
+        )
+      );
+      setDeleteElement(false);
+    }
+  }, [deleteElement, selectedMedia, selectedMediaUrls]);
+
   return (
-    <ModalContainer>
-      {openChooseMedia ? (
-        <ChooseMedia
-          fileType={fileType}
-          setSelectedMedia={setSelectedMedia}
-          setSelectedMediaUrl={setSelectedMediaUrl}
-          onClose={() => setOpenChooseMedia(false)}
-          onClickCloseIcon={() => {
-            setOpenChooseMedia(false);
-            setFileType("NIL");
-          }}
-          formik={formik}
-        />
-      ) : (
-        <div className="relative w-[90%] lg:w-[751px] pb-[100px] h-[450px] bg-brand-500 rounded-[8px] shadow shadow-[0px_4px_15px_1px_rgba(0, 0, 0, 0.15)]">
+    <>
+      {isLessThan769 ? (
+        <Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
+          <DrawerOverlay />
+
           <FormikProvider value={formik}>
             <form onSubmit={formik.handleSubmit}>
-              <div className="h-[61px] border border-brand-2800 border-t-transparent border-x-transparent flex justify-between items-center">
-                <h3 className="text-brand-600 ml-[28px] text-[20px] leading-[30px] font-medium">
-                  Create Post
-                </h3>
-                <NextImage
-                  src={"/closeIcon.svg"}
-                  className="cursor-pointer"
-                  onClick={onClose}
-                  alt="close"
-                  width="66"
-                  height="61"
-                />
-              </div>
-              <div className="w-full px-[32px] pt-[28px] pb-[80px] overflow-y-scroll h-[350px]">
-                <div className="flex items-center gap-x-[8px] mb-[36px]">
-                  <NextImage
-                    src={
-                      userInfo?.profile?.user?.image !== null
-                        ? userInfo?.profile?.user?.image
-                        : ProfileImg
-                    }
-                    alt="profile"
-                    width="50"
-                    height="50"
-                    onError={handleOnError}
-                    className="object-cover w-[50px] h-[50px] rounded-[50%] border border-[3px] border-brand-500 shadow shadow-[0px_1.275px_12.75px_rgba(0, 0, 0, 0.2)]"
+              <DrawerContent fontFamily="PolySans" borderTopRadius="8px">
+                <Flex w="full" justify="center" pt="24px">
+                  <MobileDrawerHeaderIcon />
+                </Flex>
+                <DrawerHeader display="flex" justifyContent="center">
+                  <ArrowBackMobileIcon
+                    onClick={onClose}
+                    style={{ position: "absolute", left: "19px" }}
                   />
-                  <div>
-                    <p className="font-semibold text-[16px] leading-[24px] text-brand-2250">
-                      {session?.user?.firstname} {session?.user?.lastname}
-                    </p>
-                    <p className="font-medium text-[14px] leading-[21px] text-brand-2450">
-                      {userInfo?.profile?.position}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-y-[35px]">
-                  <div className="w-full -ml-[20px] -mt-[30px]">
-                    <TextBox
-                      title=""
-                      onChange={formik.handleChange}
-                      onBlur={() => ""}
-                      value={formik.values.description}
-                      id="description"
-                      placeholder="Type something interesting..."
-                      withoutBorder
+                  <Text fontSize="22px" fontWeight="600" color="#293137">
+                    Create Post
+                  </Text>
+                </DrawerHeader>
+                <DrawerBody overflowY="scroll" padding="12px 21px">
+                  <Flex align="center">
+                    <Image
+                      src={
+                        userInfo?.profile?.user?.image !== null
+                          ? userInfo?.profile?.user?.image
+                          : ProfileImg
+                      }
+                      alt="profile"
+                      mr="8.16px"
+                      boxSize="56px"
+                      borderRadius="56px"
                     />
-                  </div>
-                  <ErrorMessage
-                    name="description"
-                    component="p"
-                    className="text-brand-warning text-[12px] pb-[12px]"
-                  />
-                </div>
+                  </Flex>
 
-                <div className="w-full">
-                  <h2 className="text-[16px] text-brand-600 font-semibold mb-[7px]">
-                    Add Hashtags
-                  </h2>
+                  <Box mt="33px">
+                    <Box>
+                      <div className="w-full -ml-[20px] -mt-[30px]">
+                        <TextBox
+                          title=""
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.description}
+                          id="description"
+                          placeholder="Express your thoughts"
+                          withoutBorder
+                        />
+                      </div>
+                      <ErrorMessage
+                        name="description"
+                        component="p"
+                        className="text-brand-warning text-[12px] pb-[12px]"
+                      />
+                    </Box>
+                  </Box>
 
+                  {selectedMediaUrls?.length > 0 ? (
+                    <Flex w="full" h="347px" pos="relative" cursor="pointer">
+                      {currImgIndex > 0 && (
+                        <Flex
+                          h="full"
+                          align="center"
+                          pos="absolute"
+                          left="0"
+                          onClick={() => setCurrImgIndex(currImgIndex - 1)}
+                        >
+                          <Flex
+                            w="40px"
+                            bg="#f1f1f1"
+                            h="100px"
+                            align="center"
+                            justify="center"
+                          >
+                            <ArrowSmallLeftIcon width="20px" height="20px" />
+                          </Flex>
+                        </Flex>
+                      )}
+                      {selectedMediaUrls?.map((mediaUrl, index) => (
+                        <Flex
+                          w="full"
+                          h="full"
+                          display={
+                            currImgIndex === index ? "inline-flex" : "none"
+                          }
+                          key={index}
+                        >
+                          <Box pos="absolute" top="10px" right="12px">
+                            <DeleteMediaIcon />
+                          </Box>
+                          <Image
+                            w="full"
+                            h="full"
+                            src={mediaUrl}
+                            objectFit="cover"
+                            alt="media"
+                          />
+                        </Flex>
+                      ))}
+                      {currImgIndex < selectedMediaUrls?.length - 1 && (
+                        <Flex
+                          h="full"
+                          align="center"
+                          pos="absolute"
+                          right="0"
+                          cursor="pointer"
+                        >
+                          <Flex
+                            w="40px"
+                            bg="#f1f1f1"
+                            h="100px"
+                            align="center"
+                            justify="center"
+                            onClick={() => setCurrImgIndex(currImgIndex + 1)}
+                          >
+                            <ArrowSmallRightIcon width="20px" height="20px" />
+                          </Flex>
+                        </Flex>
+                      )}
+                    </Flex>
+                  ) : (
+                    <Flex
+                      w="full"
+                      h="229px"
+                      direction="column"
+                      borderRadius="8px"
+                      border="1px solid #CDCDCD"
+                      justify="center"
+                      align="center"
+                      mb="29px"
+                      cursor="pointer"
+                      className="relative"
+                      onClick={() =>
+                        document.getElementById("media-file-input")?.click()
+                      }
+                    >
+                      <AddMediaIcon />
+                      <Text
+                        mt="41px"
+                        fontSize="18px"
+                        fontWeight="600"
+                        color="#293137"
+                      >
+                        Add Media
+                      </Text>
+                      <Input
+                        type="file"
+                        accept="image/*,video/*"
+                        width="100%"
+                        height="100%"
+                        pos="absolute"
+                        className="invisible"
+                        multiple
+                        id="media-file-input"
+                        onChange={(e) => {
+                          const fileList = e.target.files;
+                          if (fileList) {
+                            const fileSizesArray = Array.from(fileList)?.map(
+                              (file: File) => file.size
+                            );
+                            const totalFileSizes = fileSizesArray?.reduce(
+                              (a: any, b: any) => a + b
+                            );
+
+                            if (totalFileSizes < 10485760) {
+                              setSelectedMedia([...Array.from(fileList)]);
+                              setSelectedMediaUrls(
+                                Array.from(fileList)?.map((file: File) =>
+                                  URL.createObjectURL(file)
+                                )
+                              );
+                            } else {
+                              notify({
+                                type: "error",
+                                text: "Total media size should not exceed 10MB",
+                              });
+                            }
+                          }
+                        }}
+                      />
+                    </Flex>
+                  )}
+                  {formik.values.hashtags.length > 0 && (
+                    <Text
+                      mb="16px"
+                      color="#0074D9"
+                      fontSize="18px"
+                      fontWeight="600"
+                      lineHeight="163.5%"
+                    >
+                      Add Hashtag
+                    </Text>
+                  )}
                   <CreatableSelect
                     isClearable
                     isMulti
@@ -220,111 +389,298 @@ const CreatePost = ({ onClose }: { onClose: () => void }) => {
                     onCreateOption={handleCreate}
                     options={dropdownOfHashtags}
                     value={value}
+                    className="creatable-select-talstrike"
+                    placeholder="Add Hashtags"
                   />
-
-                  <ErrorMessage
-                    name="hashtags"
-                    component="p"
-                    className="text-brand-warning text-[12px]"
-                  />
-                </div>
-
-                <ErrorMessage
-                  name="media"
-                  component="p"
-                  className="text-brand-warning text-[12px]"
-                />
-                {selectedMediaUrl && (
-                  <div className="mt-[15px] w-[50%] h-[240px] pb-[80px]">
-                    {fileType?.toLowerCase() === "image" ? (
-                      <Image src={selectedMediaUrl} alt="media" />
-                    ) : (
-                      <video
-                        controls
-                        src={selectedMediaUrl}
-                        width="100%"
-                        className="w-full h-full"
-                      ></video>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="absolute bottom-0 w-[100%] lg:w-[751px] rounded-bl-[8px] rounded-br-[8px]  bg-brand-500 flex justify-between items-center fixed h-[98px] border border-brand-2800 border-b-transparent border-x-transparent">
-                {fileType === "VIDEO" && isCreatingPost && (
-                  <div className="absolute top-0 w-[100%]">
-                    <BarLoader color="#0074D9" width="100%" />
-                  </div>
-                )}
-                <div className="flex gap-x-[10px] lg:gap-x-[48px]">
-                  <div
-                    className="flex ml-[10px] lg:ml-[48px] cursor-pointer"
-                    onClick={() => {
-                      setFileType("IMAGE");
-                      setOpenChooseMedia(true);
-                    }}
+                </DrawerBody>
+                <DrawerFooter
+                  paddingBottom="80px"
+                  display="flex"
+                  justifyContent="space-between"
+                  borderTop="1px solid #CDCDCD"
+                >
+                  <Flex gap="19px" align="center">
+                    <CreatePostImgIcon />
+                    <CreatePostVidIcon />
+                    <CreatePostCamIcon />
+                  </Flex>
+                  <Button
+                    w="100px"
+                    h="38.139px"
+                    bg="#00B127"
+                    color="#fff"
+                    onClick={() => formik.handleSubmit()}
+                    disabled={formik.values.description?.length === 0}
+                    isLoading={isCreatingPost}
                   >
-                    <NextImage
-                      src="/image.svg"
-                      alt="img"
-                      width="19"
-                      height="16"
-                    />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
-                      Photo
-                    </p>
-                  </div>
-                  <div
-                    className="flex cursor-pointer"
-                    onClick={() => {
-                      setFileType("VIDEO");
-                      setOpenChooseMedia(true);
-                    }}
-                  >
-                    <NextImage
-                      src="/video.svg"
-                      alt="video"
-                      width="22"
-                      height="16"
-                    />
-                    <p className="ml-[7.89px] text-[12px] lg:text-[18px] font-semibold leading-[27px] text-brand-600 hidden md:inline-flex">
-                      Video
-                    </p>
-                  </div>
-                </div>
-                <div className=" mr-[10px] lg:mr-[36px] flex gap-x-[14px]">
-                  <button
-                    onClick={() => {
-                      setSelectedMedia("");
-                      formik.resetForm();
-                      onClose();
-                    }}
-                    className="border border-[2px] border-brand-600 rounded-[4px] h-[41px] w-[80px] lg:w-[127px] text-brand-600 text-[14px] lg:text-[18px] font-semibold"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="h-[41px] w-[80px] lg:w-[127px] rounded-[4px] bg-brand-600 text-brand-500 text-[14px] lg:text-[18px] font-semibold"
-                    disabled={isCreatingPost}
-                  >
-                    {isCreatingPost ? (
-                      <BeatLoader
-                        color={"white"}
-                        size={10}
-                        aria-label="Loading Spinner"
-                        data-testid="loader"
-                      />
-                    ) : (
-                      "Post"
-                    )}
-                  </button>
-                </div>
-              </div>
+                    Publish
+                  </Button>
+                </DrawerFooter>
+              </DrawerContent>
             </form>
           </FormikProvider>
-        </div>
+        </Drawer>
+      ) : (
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+
+          <FormikProvider value={formik}>
+            <form onSubmit={formik.handleSubmit}>
+              <ModalContent
+                maxW={{ base: "90%", lg: "751px" }}
+                minH={{ base: "90%", lg: "80%", xl: "759px" }}
+                maxH={{ base: "90%", lg: "759px" }}
+                fontFamily="PolySans"
+              >
+                <ModalHeader borderBottom="1px solid #CDCDCD">
+                  <Text fontSize="22px" fontWeight="600" color="#293137">
+                    Create Post
+                  </Text>
+                  <ModalCloseButton bg="unset" />
+                </ModalHeader>
+                <ModalBody p="23px 26px" overflowY="scroll">
+                  <Flex align="center">
+                    <Image
+                      src={
+                        userInfo?.profile?.user?.image !== null
+                          ? userInfo?.profile?.user?.image
+                          : ProfileImg
+                      }
+                      alt="profile"
+                      mr="8.16px"
+                      boxSize="56px"
+                      borderRadius="56px"
+                    />
+                    <Box>
+                      <Text fontSize="20px" fontWeight="600" color="#293137">
+                        {session?.user?.firstname} {session?.user?.lastname}
+                      </Text>
+                      <Text color="#93A3B1" fontSize="16px" fontWeight="400">
+                        {userInfo?.profile?.position}
+                      </Text>
+                    </Box>
+                  </Flex>
+
+                  <Box mt="29.83px">
+                    <Box>
+                      <div className="w-full -ml-[20px] -mt-[30px]">
+                        <TextBox
+                          title=""
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.description}
+                          id="description"
+                          placeholder="Express your thoughts"
+                          withoutBorder
+                        />
+                      </div>
+                      <ErrorMessage
+                        name="description"
+                        component="p"
+                        className="text-brand-warning text-[12px] pb-[12px]"
+                      />
+                    </Box>
+                  </Box>
+
+                  {selectedMediaUrls?.length > 0 ? (
+                    <Flex w="full" h="347px" pos="relative" cursor="pointer">
+                      {currImgIndex > 0 && (
+                        <Flex
+                          h="full"
+                          align="center"
+                          pos="absolute"
+                          left="0"
+                          onClick={() => setCurrImgIndex(currImgIndex - 1)}
+                        >
+                          <Flex
+                            w="40px"
+                            bg="#f1f1f1"
+                            h="100px"
+                            align="center"
+                            justify="center"
+                          >
+                            <ArrowSmallLeftIcon width="20px" height="20px" />
+                          </Flex>
+                        </Flex>
+                      )}
+                      {selectedMediaUrls?.map((mediaUrl, index) => (
+                        <Flex
+                          w="full"
+                          h="full"
+                          display={
+                            currImgIndex === index ? "inline-flex" : "none"
+                          }
+                          pos="relative"
+                          key={index}
+                        >
+                          <Box
+                            pos="absolute"
+                            top="14px"
+                            right="15px"
+                            onClick={() => setDeleteElement(true)}
+                          >
+                            <DeleteMediaIcon />
+                          </Box>
+                          <Image
+                            w="full"
+                            h="full"
+                            src={mediaUrl}
+                            objectFit="cover"
+                            alt="new media"
+                          />
+                        </Flex>
+                      ))}
+                      {currImgIndex < selectedMediaUrls?.length - 1 && (
+                        <Flex
+                          h="full"
+                          align="center"
+                          pos="absolute"
+                          right="0"
+                          cursor="pointer"
+                        >
+                          <Flex
+                            w="40px"
+                            bg="#f1f1f1"
+                            h="100px"
+                            align="center"
+                            justify="center"
+                            onClick={() => setCurrImgIndex(currImgIndex + 1)}
+                          >
+                            <ArrowSmallRightIcon width="20px" height="20px" />
+                          </Flex>
+                        </Flex>
+                      )}
+                    </Flex>
+                  ) : (
+                    <Flex
+                      w="full"
+                      h="300px"
+                      direction="column"
+                      borderRadius="8px"
+                      border="1px solid #CDCDCD"
+                      justify="center"
+                      align="center"
+                      mb="29px"
+                      cursor="pointer"
+                      className="relative"
+                      onClick={() =>
+                        document.getElementById("media-file-input")?.click()
+                      }
+                    >
+                      <AddMediaIcon />
+                      <Text
+                        mt="41px"
+                        fontSize="22px"
+                        fontWeight="600"
+                        color="#293137"
+                      >
+                        Add Media
+                      </Text>
+                      <Input
+                        type="file"
+                        accept="image/*,video/*"
+                        width="100%"
+                        height="100%"
+                        pos="absolute"
+                        className="invisible"
+                        multiple
+                        id="media-file-input"
+                        onChange={(e) => {
+                          const fileList = e.target.files;
+                          if (fileList) {
+                            const fileSizesArray = Array.from(fileList)?.map(
+                              (file: File) => file.size
+                            );
+                            const totalFileSizes = fileSizesArray?.reduce(
+                              (a: any, b: any) => a + b
+                            );
+
+                            if (totalFileSizes < 10485760) {
+                              setSelectedMedia([...Array.from(fileList)]);
+                              setSelectedMediaUrls(
+                                Array.from(fileList)?.map((file: File) =>
+                                  URL.createObjectURL(file)
+                                )
+                              );
+                            } else {
+                              notify({
+                                type: "error",
+                                text: "Total media size should not exceed 10MB",
+                              });
+                            }
+                          }
+                        }}
+                      />
+                    </Flex>
+                  )}
+                  {formik.values.hashtags.length > 0 && (
+                    <Text
+                      mb="16px"
+                      color="#0074D9"
+                      fontSize="18px"
+                      fontWeight="600"
+                      lineHeight="163.5%"
+                    >
+                      Add Hashtag
+                    </Text>
+                  )}
+                  <CreatableSelect
+                    isClearable
+                    isMulti
+                    isDisabled={isCreatingHashtag}
+                    isLoading={isCreatingHashtag}
+                    onChange={(newValue) => setValue(newValue)}
+                    onCreateOption={handleCreate}
+                    options={dropdownOfHashtags}
+                    value={value}
+                    className="creatable-select-talstrike"
+                    placeholder="Add Hashtags"
+                  />
+                </ModalBody>
+
+                <ModalFooter
+                  borderTop="1px solid #CDCDCD"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Flex gap="24px">
+                    <Flex gap="8px" alignItems="center">
+                      <CreatePostImgIcon />
+                      <Text fontSize="20px" fontWeight="600" color="#293137">
+                        Image
+                      </Text>
+                    </Flex>
+                    <Flex gap="8px" alignItems="center">
+                      <CreatePostVidIcon />
+                      <Text fontSize="20px" fontWeight="600" color="#293137">
+                        Video
+                      </Text>
+                    </Flex>
+                    <Flex gap="8px" alignItems="center">
+                      <CreatePostCamIcon />
+                      <Text fontSize="20px" fontWeight="600" color="#293137">
+                        Camera
+                      </Text>
+                    </Flex>
+                  </Flex>
+                  <Button
+                    w="133px"
+                    h="48.688px"
+                    bg="#00B127"
+                    color="#fff"
+                    onClick={() => formik.handleSubmit()}
+                    disabled={formik.values.description?.length === 0}
+                    isLoading={isCreatingPost}
+                  >
+                    Publish
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </form>
+          </FormikProvider>
+        </Modal>
       )}
-    </ModalContainer>
+    </>
   );
 };
 

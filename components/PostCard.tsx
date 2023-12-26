@@ -201,7 +201,7 @@ const PostCard = ({
                   </SkeletonTheme>
                 ) : (
                   <>
-                    {fileType === "VIDEO" && postMedia ? (
+                    {/* {fileType === "VIDEO" && postMedia ? (
                       <video
                         src={postMedia}
                         controls
@@ -210,15 +210,15 @@ const PostCard = ({
                       />
                     ) : (
                       fileType === "IMAGE" &&
-                      postMedia && (
-                        <img
-                          src={postMedia}
-                          alt="post img"
-                          onError={handleMediaPostError}
-                          className="w-full h-[170px] object-cover"
-                        />
-                      )
-                    )}
+                      postMedia && ( */}
+                    <img
+                      src={postMedia}
+                      alt="post img"
+                      onError={handleMediaPostError}
+                      className="w-full h-[170px] object-cover"
+                    />
+                    {/* )
+                    )} */}
                   </>
                 )}
               </div>

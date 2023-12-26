@@ -213,6 +213,45 @@ body, #__next  {
   padding-left: 22px !important;
 }
 
+.creatable-select-talstrike, .creatable-select-talstrike  .css-13cymwt-control {
+  border-color: transparent !important;
+}
+
+.creatable-select-talstrike .css-1hb7zxy-IndicatorsContainer {
+  display: none;
+}
+
+.creatable-select-talstrike .css-1jqq78o-placeholder {
+  color: #0074D9;
+  font-size: 18px !important;
+}
+
+.creatable-select-talstrike .css-1fdsijx-ValueContainer {
+  cursor: pointer !important;
+}
+
+.creatable-select-talstrike .css-t3ipsp-control:focus-visible, .css-t3ipsp-control,.css-t3ipsp-control:hover,  .css-t3ipsp-control::selection{
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+} 
+
+.creatable-select-talstrike .css-qbdosj-Input input {
+  border: none !important;
+  border-color: transparent !important;
+  min-width: 100px;
+}
+
+.creatable-select-talstrike .css-1p3m7a8-multiValue {
+  background-color: #F4F4F4 !important;
+}
+
+.creatable-select-talstrike .css-wsp0cs-MultiValueGeneric {
+  font-size: 16px;
+  font-weight: 400;
+  color: #293137;
+}
+
 .special-creatable .css-13cymwt-control{
   border: 1px solid #293137 !important;
   height: 52px;
