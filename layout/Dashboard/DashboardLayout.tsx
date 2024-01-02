@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Box, Flex, Image, Link } from "@chakra-ui/react";
-
+import NextImage from "next/image";
 import {
   DashboardSidebar,
   MobileMenu,
@@ -14,6 +14,9 @@ import { handleOnError, isActivePath } from "@/libs/utils";
 import { setSearchQuery } from "@/store/slices/dashboardSlice";
 import DashboardAside from "./DashboardAside";
 import DashboardTopBarModal from "./DashboardTopModal";
+import NotificationIcon from "@/assets/notification.svg";
+import NotificationModal from "@/components/Notification/NotificationModal";
+
 
 export type LayoutProps = {
   children?: React.ReactNode;
@@ -22,6 +25,7 @@ export type LayoutProps = {
 export const DashboardLayout = ({ children }: LayoutProps) => {
   const router = useRouter();
   const [showSignOutButton, setShowSignOutButton] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   const { userInfo } = useTypedSelector((state) => state.profile);
 
@@ -88,6 +92,18 @@ export const DashboardLayout = ({ children }: LayoutProps) => {
                   onClickClear={() => dispatch(setSearchQuery(""))}
                   bgColor="#15191D"
                 />
+              </div>
+              <div   onClick={(e) => {
+                  e?.stopPropagation();
+                  // setShowNotification(!showNotification);
+                  setShowNotification(true);
+                }}>
+                <NextImage src={NotificationIcon} alt="notification" className="mr-4 cursor-pointer"/>
+                <div className="inline-table align-middle w-[25px] h-[25px] bg-red-500 rounded-[50%] absolute ml-3 top-3 cursor-pointer">
+                  <span className="table-cell align-middle text-center text-[9px] text-white">20</span>
+                </div>
+                
+                {showNotification && <NotificationModal />}
               </div>
 
               <div
